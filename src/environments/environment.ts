@@ -4,7 +4,7 @@ import { environmentDefault } from "./default";
 export const environment = {
     ...environmentDefault,
     production: false ,
-     backend: 'http://www.vertexhost.cloud/api',  // ← Cambiado
-    Socket: 'http://www.vertexhost.cloud',       // ← Cambiado
+     backend: 'http://localhost:3000/api',  // ← Cambiado
+    Socket: 'http://localhost:3000',       // ← Cambiado
     jwtKey: 'jwtToken' // Key para localStorage
   };
