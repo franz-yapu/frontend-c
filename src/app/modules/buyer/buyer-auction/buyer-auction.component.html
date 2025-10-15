@@ -1,0 +1,438 @@
+<div class="min-h-screen bg-gradient-to-br from-amber-50 via-amber-50/80 to-amber-100/60 py-8 px-4">
+  <div class="max-w-8xl mx-auto">
+    <!-- Header Principal - Ultra Premium -->
+    <div class="relative bg-gradient-to-br from-amber-900 via-amber-800 to-amber-900 rounded-3xl shadow-2xl p-10 mb-6 border border-amber-600/20 overflow-hidden">
+      <!-- Elementos decorativos de fondo -->
+      <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PHBhdGggZD0iTTM2IDM0YzIuMjEgMCA0LTEuNzkgNC00cy0xLjc5LTQtNC00LTQgMS43OS00IDQgMS43OSA0IDQgNHptMC02YzEuMSAwIDIgLjkgMiAycz0uOSAyLTIgMi0yLS45LTItMiAuOS0yIDItMnptLTYtNGMyLjIxIDAgNC0xLjc5IDQtNHMtMS43OS00LTQtNC00IDEuNzktNCA0IDEuNzkgNCA0IDR6bTAtNmMxLjEgMCAyIC45IDIgMnMtLjkgMi0yIDItMi0uOS0yLTIgLjktMiAyLTJ6bS0xMiA2YzIuMjEgMCA0LTEuNzkgNC00cy0xLjc5LTQtNC00LTQgMS43OS00IDQgMS43OSA0IDQgNHptMC02YzEuMSAwIDIgLjkgMiAycz0uOSAyLTIgMi0yLS45LTItMiAuOS0yIDItMnptLTYtNGMyLjIxIDAgNC0xLjc5IDQtNHMtMS43OS00LTQtNC00IDEuNzktNCA0IDEuNzkgNCA0IDR6bTAtNmMxLjEgMCAyIC45IDIgMnMtLjkgMi0yIDItMi0uOS0yLTIgLjktMiAyLTJ6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-10"></div>
+      <div class="absolute -right-20 -top-20 w-60 h-60 rounded-full bg-amber-600/5 blur-xl"></div>
+      <div class="absolute -left-20 -bottom-20 w-48 h-48 rounded-full bg-amber-600/5 blur-xl"></div>
+
+      <div class="relative z-10">
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8">
+          <div class="flex-1">
+            <div class="flex items-center gap-5 mb-5">
+              <div class="relative">
+                <div class="w-16 h-16 bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl flex items-center justify-center shadow-2xl">
+                  <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"/>
+                  </svg>
+                </div>
+                <div class="absolute -inset-2 bg-amber-400/20 rounded-2xl blur-sm -z-10"></div>
+              </div>
+              <div>
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-3 tracking-tight">Subastas de Café Premium</h1>
+                <p class="text-amber-100/90 text-xl font-light">Lotes exclusivos de productores especializados</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Contador regresivo premium -->
+          @if (auctionData.length > 0) {
+            <div class="bg-green-800 backdrop-blur-xl rounded-2xl p-7 border border-amber-600/30 shadow-2xl min-w-[320px]">
+              @if (calculateTimeRemaining(auctionData[0]).hasEnded) {
+                <div class="text-center">
+                  <div class="w-14 h-14 bg-gradient-to-br from-amber-600 to-amber-700 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                    <svg class="w-7 h-7 text-amber-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                  </div>
+                  <p class="text-xl font-semibold text-white mb-2">Subasta Finalizada</p>
+                  <p class="text-white text-sm">Resultados disponibles</p>
+                </div>
+              } @else {
+                <div class="flex flex-col items-center">
+                  <span class="text-sm text-white mb-4 uppercase tracking-wider font-medium">
+                    {{ calculateTimeRemaining(auctionData[0]).hasStarted ? 'Finaliza en:' : 'Comienza en:' }}
+                  </span>
+                  <div class="grid grid-cols-4 gap-3">
+                    <div class="bg-gradient-to-br from-amber-700 to-amber-800  text-white px-4 py-5 rounded-xl text-center min-w-[75px] backdrop-blur-sm border border-amber-600/30 shadow-lg">
+                      <span class="block text-3xl font-bold tracking-tight">{{ calculateTimeRemaining(auctionData[0]).days }}</span>
+                      <span class="block text-xs mt-2 opacity-90 font-medium">Días</span>
+                    </div>
+                    <div class="bg-gradient-to-br from-amber-700 to-amber-800  text-white px-4 py-5 rounded-xl text-center min-w-[75px] backdrop-blur-sm border border-amber-600/30 shadow-lg">
+                      <span class="block text-3xl font-bold tracking-tight">{{ calculateTimeRemaining(auctionData[0]).hours | number:'2.0' }}</span>
+                      <span class="block text-xs mt-2 opacity-90 font-medium">Horas</span>
+                    </div>
+                    <div class="bg-gradient-to-br from-amber-700 to-amber-800  text-white px-4 py-5 rounded-xl text-center min-w-[75px] backdrop-blur-sm border border-amber-600/30 shadow-lg">
+                      <span class="block text-3xl font-bold tracking-tight">{{ calculateTimeRemaining(auctionData[0]).minutes | number:'2.0' }}</span>
+                      <span class="block text-xs mt-2 opacity-90 font-medium">Min</span>
+                    </div>
+                    <div class="bg-gradient-to-br from-amber-700 to-amber-800  text-white px-4 py-5 rounded-xl text-center min-w-[75px] backdrop-blur-sm border border-amber-600/30 shadow-lg">
+                      <span class="block text-3xl font-bold tracking-tight">{{ calculateTimeRemaining(auctionData[0]).seconds | number:'2.0' }}</span>
+                      <span class="block text-xs mt-2 opacity-90 font-medium">Seg</span>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+    
+    <!-- Barra de búsqueda y filtros - Ultra Premium -->
+    <!-- <div class="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-7 mb-10 border border-amber-200/60">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+        <div class="flex items-center space-x-5">
+          <span class="text-amber-900 font-semibold whitespace-nowrap text-lg">Ordenar por:</span>
+          <div class="relative">
+            <select 
+              [(ngModel)]="sortBy" 
+              (change)="changeSort(sortBy)"
+              class="appearance-none border border-amber-300 bg-white/90 text-amber-900 rounded-xl pl-4 pr-10 py-3.5 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 backdrop-blur-sm font-medium shadow-sm hover:shadow-md transition-shadow"
+            >
+              <option value="name">Nombre</option>
+              <option value="score">Puntuación</option>
+              <option value="price">Precio</option>
+              <option value="quantity">Cantidad</option>
+            </select>
+            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+              <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </div>
+          </div>
+          
+          <button 
+            (click)="sortDirection = sortDirection === 'asc' ? 'desc' : 'asc'; sortLots()"
+            class="p-3.5 border border-amber-300 bg-white/90 rounded-xl hover:bg-amber-50 text-amber-700 transition-all duration-300 shadow-sm hover:shadow-md"
+          >
+            <svg 
+              [class.transform]="sortDirection === 'desc' ? 'rotate-180' : ''" 
+              class="w-5 h-5 transition-transform duration-300" 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div> -->
+    
+    <!-- Información de la subasta - Ultra Premium -->
+    @if (auctionData.length > 0) {
+      <div class="mb-10">
+        <div class="bg-gradient-to-br from-white to-amber-50/80 rounded-2xl shadow-xl p-9 border border-amber-200/60 backdrop-blur-sm">
+          <h2 class="text-3xl font-bold text-amber-900 mb-6 tracking-tight">{{ auctionData[0].title }}</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-7">
+            <div class="flex items-center text-amber-800">
+              <div class="w-12 h-12 bg-gradient-to-br from-amber-100 to-amber-200 rounded-xl flex items-center justify-center mr-4 shadow-sm border border-amber-200">
+                <svg class="w-6 h-6 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+              </div>
+              <div>
+                <p class="text-amber-600 text-sm font-medium mb-1">Inicio</p>
+                <p class="font-semibold text-amber-900">{{ auctionData[0].startDate | date:'medium' }}</p>
+              </div>
+            </div>
+            
+            <div class="flex items-center text-amber-800">
+              <div class="w-12 h-12 bg-gradient-to-br from-amber-100 to-amber-200 rounded-xl flex items-center justify-center mr-4 shadow-sm border border-amber-200">
+                <svg class="w-6 h-6 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </div>
+              <div>
+                <p class="text-amber-600 text-sm font-medium mb-1">Fin</p>
+                <p class="font-semibold text-amber-900">{{ auctionData[0].endDate | date:'medium' }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+    
+    <!-- Lista de lotes de café - Ultra Premium -->
+    <div class="mb-10">
+      <div class="flex items-center gap-4 mb-8">
+        <div class="w-3 h-3 bg-gradient-to-br from-amber-500 to-amber-600 rounded-full shadow-lg"></div>
+        <h3 class="text-3xl font-bold text-amber-900 tracking-tight">Lotes en Subasta</h3>
+        <span class="px-5 py-2.5 bg-gradient-to-r from-amber-700 to-amber-800 text-amber-50 rounded-full text-sm font-bold border border-amber-600/30 shadow-lg">
+          {{ filteredLots.length }} disponibles
+        </span>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7">
+        @for (detail of filteredLots; track detail.id) {
+          <div class="group bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-amber-200/60 hover:border-amber-300/80 overflow-hidden hover:-translate-y-1">
+            <!-- Header con nombre y puntuación -->
+            <div class="relative p-7 bg-gradient-to-br from-green-900 via-green-800 to-green-900 border-b border-green-700/30 overflow-hidden">
+              <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTE2IDE2YzAgLjkxLS40NSAxLjcxLTEuMjggMi4yNGwtLjAyLjAxQTQuNDUgNC40NSAwIDAwMTAgMjBhNC40NSA0LjQ1IDAgMDAtNC43LTQuN2MxLjAzLS42MyAyLjI5LTEuMDEgMy43LTEuMDFzMy42Ny4zOCA0LjcgMS4wMUE0LjQ1IDQuNDUgMCAwMDE2IDE2em0tOSAwYTQuNDUgNC40NSAwIDAwNC43LTQuN2MtMS4wMy0uNjMtMi4yOS0xLjAxLTMuNy0xLjAxUzMuNjcgMTAuNjUgMi43IDExLjI5QTQuNDUgNC40NSAwIDAwNyAxNnptMzAgMGE0LjQ1IDQuNDUgMCAwMDQuNy00LjdjLTEuMDMtLjYzLTIuMjktMS4wMS0zLjctMS4wMXMtMy42Ny4zOC00LjcgMS4wMUE0LjQ1IDQuNDUgMCAwMDM3IDE2em0tOSAwYTQuNDUgNC40NSAwIDAwNC43LTQuN2MtMS4wMy0uNjMtMi4yOS0xLjAxLTMuNy0xLjAxcy0zLjY3LjM4LTQuNyAxLjAxQTQuNDUgNC40NSAwIDAwMjggMTZ6bS02IDBjMCAuOTEtLjQ1IDEuNzEtMS4yOCAyLjI0bC0uMDIuMDFBNC40NSA0LjQ1IDAgMDExNiAyMGE0LjQ1IDQuNDUgMCAwMTQuNy00LjdjLTEuMDMtLjYzLTIuMjktMS4wMS0zLjctMS4wMXMtMy42Ny4zOC00LjcgMS4wMUE0LjQ1IDQuNDUgMCAwMTIyIDE2eiIvPjwvZz48L2c+PC9zdmc+')] opacity-10"></div>
+              <div class="flex justify-between items-start mb-4">
+                <h4 class="text-xl font-bold text-white leading-tight pr-4">{{ detail.coffeeLot.name }}</h4>
+                <span class="px-3.5 py-1.5 rounded-full text-sm font-bold bg-gradient-to-r from-amber-500 to-amber-600 text-amber-50 border border-amber-400/30 shadow-lg">
+                  {{ detail.coffeeLot.cupScore }} pts
+                </span>
+              </div>
+              <p class="text-amber-100/90 text-sm font-medium">
+                {{ detail.coffeeLot.producerName || 'Productor' }} • {{ detail.coffeeLot.harvestYear }}
+              </p>
+            </div>
+            
+            <!-- Información del lote -->
+            <div class="p-7">
+              <div class="grid grid-cols-2 gap-4 mb-6 text-sm">
+                <div class="flex items-center ">
+                  <div class="w-7 h-7 bg-gradient-to-br from-amber-100 to-amber-200 rounded-lg flex items-center justify-center mr-3 shadow-sm border border-amber-200">
+                    <svg class="w-3.5 h-3.5 text-amber-700" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd"></path>
+                    </svg>
+                  </div>
+                  <span class="truncate font-medium">{{ detail.coffeeLot.variety }}</span>
+                </div>
+                
+                <div class="flex items-center ">
+                  <div class="w-7 h-7 bg-gradient-to-br from-amber-100 to-amber-200 rounded-lg flex items-center justify-center mr-3 shadow-sm border border-amber-200">
+                    <svg class="w-3.5 h-3.5 text-amber-700" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
+                      <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path>
+                    </svg>
+                  </div>
+                  <span class="truncate font-medium">{{ detail.coffeeLot.process }}</span>
+                </div>
+                
+                <div class="flex items-center ">
+                  <div class="w-7 h-7 bg-gradient-to-br from-amber-100 to-amber-200 rounded-lg flex items-center justify-center mr-3 shadow-sm border border-amber-200">
+                    <svg class="w-3.5 h-3.5 text-amber-700" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                    </svg>
+                  </div>
+                  <span class="font-medium">{{ detail.coffeeLot.altitude }} m</span>
+                </div>
+                
+                <div class="flex items-center ">
+                  <div class="w-7 h-7 bg-gradient-to-br from-amber-100 to-amber-200 rounded-lg flex items-center justify-center mr-3 shadow-sm border border-amber-200">
+                    <svg class="w-3.5 h-3.5 text-amber-700" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd"></path>
+                    </svg>
+                  </div>
+                  <span class="font-medium">{{ detail.coffeeLot.quantityLbs }} lbs</span>
+                </div>
+              </div>
+              
+              <div class="flex items-center text-sm text-amber-700 mb-6 bg-gradient-to-r from-amber-50 to-amber-100/80 p-4 rounded-xl border border-amber-200 shadow-sm">
+                <svg class="w-5 h-5 text-amber-600 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="truncate font-medium">{{ detail.coffeeLot.region }}, {{ detail.coffeeLot.country }}</span>
+              </div>
+              
+              <!-- Información de precios mejorada -->
+              <div class="space-y-5 mb-6">
+                <!-- Precio base -->
+                <div class="bg-gradient-to-br from-amber-50 to-amber-100/60 rounded-xl p-5 border border-amber-200 shadow-sm">
+                  <h5 class="text-xs font-bold text-amber-700 uppercase tracking-wider mb-4">Precio Base</h5>
+                  <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                      <span class="text-sm  font-medium">Por libra</span>
+                      <span class="font-semibold text-amber-900">{{ detail.startingPrice | currency:'USD':'symbol' }}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                      <span class="text-sm  font-medium">Cantidad total</span>
+                      <span class="font-medium text-amber-900">{{ detail.coffeeLot.quantityLbs }} lbs</span>
+                    </div>
+                    <div class="pt-3 border-t border-amber-200/60 mt-3">
+                      <div class="flex justify-between items-center">
+                        <span class="text-sm font-bold text-amber-800">Valor total:</span>
+                        <span class="text-lg font-bold text-amber-900">
+                          {{ (detail.startingPrice * detail.coffeeLot.quantityLbs) | currency:'USD':'symbol' }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Precios de subasta -->
+                <div class="bg-gradient-to-br from-green-50 to-green-100/60 rounded-xl p-5 border border-green-200 shadow-sm">
+                  <h5 class="text-xs font-bold text-green-700 uppercase tracking-wider mb-4">Oferta Actual</h5>
+                  <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                      <span class="text-sm  font-medium">Por libra</span>
+                      <span class="text-lg font-bold text-green-900">{{ detail.currentPrice | currency:'USD':'symbol' }}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                      <span class="text-sm font-medium">Valor actual</span>
+                      <span class="font-semibold text-green-900">{{ (detail.currentPrice * detail.coffeeLot.quantityLbs) | currency:'USD':'symbol' }}</span>
+                    </div>
+                    @if (detail.reservePrice) {
+                      <div class="pt-3 border-t border-green-200/60 mt-3">
+                        <div class="flex justify-between items-center text-xs">
+                          <span class="text-green-600 font-bold">Precio de reserva</span>
+                          <span class="font-semibold text-green-800">{{ detail.reservePrice | currency:'USD':'symbol' }}</span>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Historial de pujas -->
+              @if ((lastBids.get(detail.coffeeLot.id) || []).length > 0) {
+                <div class="mt-6">
+                  <div class="flex items-center justify-between mb-4">
+                    <h5 class="text-sm font-bold text-amber-800 uppercase tracking-wider">Últimas pujas</h5>
+                    <span class="text-xs text-amber-600 bg-amber-100 px-2.5 py-1 rounded-full font-semibold border border-amber-200">
+                      {{ (lastBids.get(detail.coffeeLot.id) || []).length }}
+                    </span>
+                  </div>
+                  
+                  <div class="space-y-3 max-h-36 overflow-y-auto pr-2">
+                    @for (bid of lastBids.get(detail.coffeeLot.id); track bid.id) {
+                      <div class="bg-white rounded-lg p-3 border border-amber-100 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-center">
+                          <span class="font-bold text-green-700">{{ bid.amount | currency:'USD':'symbol':'1.2-2' }}</span>
+                          <span class="text-amber-700 text-xs font-semibold">
+                            {{ bid.user?.firstName }} {{ bid.user?.lastName?.charAt(0) }}.
+                          </span>
+                        </div>
+                        <div class="text-amber-500 text-xs mt-1 font-medium">
+                         {{ bid.createdAt | date:'dd MMM YYYY' }} {{ bid.createdAt | date:'shortTime' }}
+                        </div>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+              
+              <!-- Botones de estado -->
+              <div class="mt-7">
+                @if (auctionData.length > 0 && calculateTimeRemaining(auctionData[0]).hasStarted && !calculateTimeRemaining(auctionData[0]).hasEnded) {
+                  <button 
+                    (click)="openBidModal(detail)"
+                    class="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 flex items-center justify-center shadow-lg hover:shadow-xl border border-green-500/30 hover:scale-[1.02]"
+                  >
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                    </svg>
+                    Realizar Puja
+                  </button>
+                }
+                
+                @if (auctionData.length > 0 && !calculateTimeRemaining(auctionData[0]).hasStarted) {
+                  <div class="text-center text-amber-700 bg-gradient-to-r from-amber-50 to-amber-100 py-4 px-4 rounded-xl border border-amber-200 shadow-sm">
+                    <svg class="w-5 h-5 inline-block mr-2 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span class="font-semibold">Subasta no iniciada</span>
+                  </div>
+                }
+                
+                @if (auctionData.length > 0 && calculateTimeRemaining(auctionData[0]).hasEnded) {
+                  <div class="text-center text-amber-700 bg-gradient-to-r from-amber-50 to-amber-100 py-4 px-4 rounded-xl border border-amber-200 shadow-sm">
+                    <svg class="w-5 h-5 inline-block mr-2 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span class="font-semibold">Subasta finalizada</span>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+    
+    <!-- Mensaje cuando no hay resultados -->
+    @if (filteredLots.length === 0) {
+      <div class="text-center py-20 bg-gradient-to-br from-white to-amber-50/80 rounded-2xl shadow-xl border border-amber-200/60">
+        <div class="w-24 h-24 bg-gradient-to-br from-amber-100 to-amber-200 rounded-2xl flex items-center justify-center mx-auto mb-7 shadow-sm border border-amber-200">
+          <svg class="w-12 h-12 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </div>
+        <h3 class="text-2xl font-bold text-amber-900 mb-4 tracking-tight">No se encontraron lotes</h3>
+        <p class="text-amber-600 max-w-md mx-auto text-lg font-medium">Intenta ajustar los términos de búsqueda o filtros</p>
+      </div>
+    }
+  </div>
+</div>
+
+<!-- Modal de puja - Ultra Premium -->
+@if (showBidModal) {
+  <div class="fixed inset-0 bg-black/50 backdrop-blur-md flex items-center justify-center z-50 p-4">
+    <div class="bg-gradient-to-br from-white to-amber-50/90 rounded-3xl shadow-2xl max-w-md w-full p-9 border border-amber-200/60 backdrop-blur-lg">
+      <div class="flex justify-between items-center mb-7">
+        <h3 class="text-2xl font-bold text-amber-900 tracking-tight">Realizar Puja</h3>
+        <button 
+          (click)="closeBidModal()" 
+          class="text-amber-500 hover:text-amber-700 transition-colors p-2 hover:bg-amber-100 rounded-xl"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      @if (selectedLot) {
+        <div class="mb-7">
+          <h4 class="text-lg font-bold text-green-800 mb-2">{{ selectedLot.coffeeLot.name }}</h4>
+          <p class="text-sm text-amber-600 font-medium">{{ selectedLot.coffeeLot.variety }} • {{ selectedLot.coffeeLot.region }}</p>
+          
+          <div class="mt-5 p-5 bg-gradient-to-br from-amber-50 to-amber-100/60 rounded-xl border border-amber-200 shadow-sm">
+            <div class="space-y-3">
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-amber-700 font-medium">Precio actual:</span>
+                <span class="font-semibold text-green-700">{{ selectedLot.currentPrice | currency:'USD':'symbol':'1.2-2' }}</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-amber-700 font-medium">Incremento mínimo:</span>
+                <span class="font-semibold text-amber-800">{{ auctionData[0].minIncrement | currency:'USD':'symbol':'1.2-2' }}</span>
+              </div>
+              <div class="flex justify-between items-center pt-3 border-t border-amber-200/60">
+                <span class="text-sm font-bold text-green-700">Monto mínimo requerido:</span>
+                <span class="font-bold text-green-800">{{ calculateMinBidAmount(selectedLot) | currency:'USD':'symbol':'1.2-2' }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <div class="mb-7">
+        <label class="block text-sm font-bold text-amber-800 mb-3">Tu oferta</label>
+        <div class="relative">
+          <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-amber-600 font-bold">$</span>
+          <input
+            type="number"
+            [(ngModel)]="bidAmount"
+            [min]="calculateMinBidAmount(selectedLot!)"
+            step="0.01"
+            class="w-full p-4 pl-8 border border-amber-300 bg-white/80 text-amber-900 rounded-xl focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 font-medium shadow-sm"
+            placeholder="0.00"
+          />
+        </div>
+      </div>
+
+      @if (bidError) {
+        <div class="mb-7 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl font-medium">
+          {{ bidError }}
+        </div>
+      }
+
+      <div class="flex space-x-4">
+        <button
+          (click)="closeBidModal()"
+          class="flex-1 py-4 px-6 border border-amber-300 text-amber-700 rounded-xl hover:bg-amber-50 transition-colors font-semibold shadow-sm hover:shadow-md"
+        >
+          Cancelar
+        </button>
+        <button
+          (click)="placeBid()"
+          [disabled]="isLoading || bidAmount < calculateMinBidAmount(selectedLot!)"
+          class="flex-1 py-4 px-6 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl hover:from-green-700 hover:to-green-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-bold shadow-lg hover:shadow-xl"
+        >
+          @if (!isLoading) {
+            <span>Confirmar Puja</span>
+          } @else {
+            <div class="flex items-center justify-center">
+              <div class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+              <span>Procesando...</span>
+            </div>
+          }
+        </button>
+      </div>
+    </div>
+  </div>
+}

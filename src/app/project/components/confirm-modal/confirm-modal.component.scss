@@ -1,0 +1,18 @@
+  .confirm-modal {
+      min-width: 400px;
+      max-width: 500px;
+    }
+
+    :host ::ng-deep .confirm-modal-dialog .p-dialog {
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+ 
+
+   .text-7xl {
+    text-align: center;      
+    font-size: 4.5rem !important;
+    height: 4.5rem !important;
+    width: 4.5rem !important;
+   }

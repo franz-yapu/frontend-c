@@ -1,59 +1,292 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <ng-container *ngFor="let field of fields">
-      <div *ngIf="field.type === 'title'">
-        <h3 [ngClass]="field.style">{{ field.text  }}</h3>
-      </div>
-  
-      <div *ngIf="field.type === 'column'" class="flex gap-4">
-        <ng-container *ngFor="let column of field.columns">
-          <div class="flex-1">
-            <ng-container *ngFor="let f of column.fields">
-              <ng-container *ngIf="isFieldVisible(f)">
-                <label>{{ f.label }}</label>
-  
-                <!-- Text / Number Input -->
-                <input
-                  *ngIf="['text', 'number'].includes(f.type)"
-                  [type]="f.type"
-                  [formControlName]="f.key"
-                  [readonly]="f.readonly"
-                  class="form-control"
-                />
-                
-                <!-- Select -->
-                <select *ngIf="f.type === 'select'" [formControlName]="f.key" class="form-control">
-                  <option *ngFor="let opt of f.options" [value]="opt.code">{{ opt.label }}</option>
-                </select>
-  
-                <!-- Radio -->
-                <div *ngIf="f.type === 'radio'" class="form-radio-group">
-                  <label *ngFor="let opt of f.options">
-                    <input type="radio" [value]="opt.code" [formControlName]="f.key" /> {{ opt.label  }}
-                  </label>
+<div class=" ">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="mx-auto  backdrop-blur-sm  overflow-hidden ">
+    <!-- Cuerpo del formulario -->
+    <div class="p-6 space-y-8">
+      @for (field of fields; track $index + (field.key || 'title')) {
+      @if (field.type === 'title') {
+      <h3 class="text-xl font-semibold mb-4 text-amber-900 border-b border-amber-200 pb-2">{{ field.text }}</h3>
+      }
+
+         @if (field.type === 'title') {
+          <h3 [class]="{
+            'text-xl font-semibold mb-4 text-amber-900 border-b border-amber-200 pb-2': !field.style,
+            'text-2xl font-bold mb-6 text-amber-900 border-b-2 border-amber-300 pb-3': field.style === 'main'
+          }">
+            {{ field.text }}
+          </h3>
+        }
+        
+        <!-- Subtítulo para secciones -->
+        @if (field.type === 'subtitle') {
+         <h4 class="text-md font-semibold mb-1 text-amber-900 pl-2 border-b-2 border-amber-700">
+            {{ field.text }}
+          </h4>
+        }
+
+      @if (field.type === 'column' && field.columns) {
+      <div [ngClass]="{
+            'grid grid-cols-1 gap-6': field.columns.length === 1,
+            'grid grid-cols-1 md:grid-cols-2 gap-6': (field?.columns?.length ?? 0) > 1
+          }">
+        @for (column of field.columns; track column.id || $index) {
+        <div class="space-y-4">
+          @for (f of column.fields; track f.key || $index) {
+          @if (isFieldVisible(f)) {
+          <div class="flex flex-col">
+            <label class="text-amber-950 font-medium mb-1">
+              {{ f.label }}
+              @if (f.validators?.required) {
+              <span class="text-red-700">*</span>
+              }
+            </label>
+
+            @if (f.type === 'subtitle') {
+          <h4 class="text-md font-semibold mb-2 text-amber-700 pl-2 border-l-4 border-green-600">
+         
+            {{ f.text }}
+          </h4>
+        }
+
+            <!-- Input (text, number) -->
+            @if (f.type && ['text'].includes(f.type)) {
+            <input [type]="f.type" [formControlName]="f.key" [readonly]="f.readonly || false"
+              class="w-full px-4 py-2 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition duration-200 bg-white/70" />
+            }
+
+            @if (f.type === 'number') {
+            <input type="number" [formControlName]="f.key" [readonly]="f.readonly || false"
+              [step]="getStepValue(f.validators)"
+              class="w-full px-4 py-2 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition duration-200 bg-white/70" />
+
+            <!-- Mensajes de error específicos para números -->
+            <div class="text-red-700 text-xs mt-1" *ngIf="getControl(f.key)?.touched && getControl(f.key)?.invalid">
+              <div *ngIf="getControl(f.key)?.errors?.['notANumber']">Debe ser un número válido.</div>
+              <div *ngIf="getControl(f.key)?.errors?.['noDecimalsAllowed']">No se permiten decimales en este campo.
+              </div>
+              <div *ngIf="getControl(f.key)?.errors?.['tooManyDecimals']">
+                Máximo {{getControl(f.key)?.errors?.['tooManyDecimals'].required}} decimales permitidos.
+              </div>
+            </div>
+            }
+
+            <!-- Email -->
+            @if (f.type === 'email') {
+            <div class="relative">
+              <input type="email" [formControlName]="f.key" placeholder="ejemplo@dominio.com"
+                class="w-full px-4 py-2 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition duration-200 bg-white/70" />
+              @if (getControl(f.key)?.touched && getControl(f.key)?.errors?.['email']) {
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 absolute right-3 top-2.5" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              }
+            </div>
+            }
+
+            <!-- Password -->
+            @if (f.type === 'password') {
+            <div class="relative">
+              <input [type]="showPassword[f.key] ? 'text' : 'password'" [formControlName]="f.key"
+                class="w-full px-4 py-2 pr-10 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition duration-200 bg-white/70" />
+              <button type="button" (click)="togglePasswordVisibility(f.key)"
+                class="absolute right-3 top-2.5 text-amber-600 hover:text-amber-800">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor">
+                  @if (showPassword[f.key]) {
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                  } @else {
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  }
+                </svg>
+              </button>
+            </div>
+            }
+
+            <!-- Select -->
+            @if (f.type === 'select') {
+            <select [formControlName]="f.key"
+              class="w-full px-4 py-2 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 bg-white/70">
+              <option value="" disabled selected>Seleccione una opción</option>
+              @for (opt of f.options || []; track opt.value) {
+              <option [value]="opt.value">{{ opt.label }}</option>
+              }
+            </select>
+            }
+
+            <!-- Radio -->
+            @if (f.type === 'radio') {
+            <div class="flex flex-col space-y-2">
+              @for (opt of f.options || []; track opt.value) {
+              <label class="inline-flex items-center">
+                <input type="radio" [value]="opt.value" [formControlName]="f.key"
+                  class="form-radio text-green-600 focus:ring-green-600" />
+                <span class="ml-2 text-amber-800">{{ opt.label }}</span>
+              </label>
+              }
+            </div>
+            }
+
+            <!-- Date -->
+            @if (f.type === 'datetime') {
+            <div class="relative">
+              <!-- Input de fecha personalizado -->
+              <div class="relative">
+                <input type="date" [formControlName]="f.key"
+                  class="w-full px-4 py-2 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 bg-white/70 appearance-none"
+                  [min]="f.minDate | date:'yyyy-MM-dd'" [max]="f.maxDate | date:'yyyy-MM-dd'" />
+                <!-- Icono de calendario -->
+                <div class="absolute right-3 top-2.5 pointer-events-none text-amber-600">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
                 </div>
-  
-                <!-- DateTime -->
-                <input *ngIf="f.type === 'datetime'" type="date" [formControlName]="f.key" class="form-control" />
-  
-                <!-- Validation Errors -->
-                <div class="error" *ngIf="getControl(f.key)?.touched && getControl(f.key)?.invalid">
-                  <div *ngIf="getControl(f.key)?.errors?.['required']">Este campo es obligatorio.</div>
-                  <div *ngIf="getControl(f.key)?.errors?.['email']">Formato de correo inválido.</div>
-                  <div *ngIf="getControl(f.key)?.errors?.['pattern']">Formato inválido.</div>
-                  <div *ngIf="getControl(f.key)?.errors?.['minlength']">
-                    Mínimo {{ f.validators?.minLength }} caracteres.
-                  </div>
-                  <div *ngIf="getControl(f.key)?.errors?.['maxlength']">
-                    Máximo {{ f.validators?.maxLength }} caracteres.
-                  </div>
+              </div>
+
+              <!-- Selector de fecha personalizado (alternativa visual) -->
+              <div *ngIf="showDatepicker[f.key]"
+                class="absolute z-10 mt-1 w-full bg-white border border-amber-200 rounded-lg shadow-lg p-3">
+                <div class="flex justify-between items-center mb-2">
+                  <button (click)="prevMonth(f.key)" class="p-1 rounded-full hover:bg-amber-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-amber-600" fill="none"
+                      viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+                  <span class="font-medium text-amber-900">{{ currentMonth[f.key] | date:'MMMM yyyy' }}</span>
+                  <button (click)="nextMonth(f.key)" class="p-1 rounded-full hover:bg-amber-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-amber-600" fill="none"
+                      viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
                 </div>
-              </ng-container>
-            </ng-container>
+
+                <div class="grid grid-cols-7 gap-1 text-center text-sm text-amber-900 font-medium mb-1">
+                  <div>L</div>
+                  <div>M</div>
+                  <div>X</div>
+                  <div>J</div>
+                  <div>V</div>
+                  <div>S</div>
+                  <div>D</div>
+                </div>
+
+                <div class="grid grid-cols-7 gap-1">
+                  @for (day of getDaysForMonth(f.key); track day.date) {
+                  <button type="button" (click)="selectDate(f.key, day.date)" [class]="getDayClasses(f.key, day)"
+                    [disabled]="day.disabled">
+                    {{ day.date | date:'d' }}
+                  </button>
+                  }
+                </div>
+              </div>
+            </div>
+            }
+
+            <!-- File -->
+            @if (f.type === 'file') {
+            <div class="w-full">
+              <!-- Dropzone / Card input -->
+              <div
+                class="relative border-2 border-dashed border-amber-300 rounded-lg p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:border-green-600 transition duration-300 bg-amber-50/50"
+                (click)="triggerFileInput(f.key)">
+                <svg class="w-10 h-10 text-amber-500 mb-2" fill="none" stroke="currentColor" stroke-width="2"
+                  viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M12 12v6m0 0l3-3m-3 3l-3-3M16 8a4 4 0 10-8 0v4" />
+                </svg>
+                <p class="text-amber-700 font-medium">Haga clic para cargar o arrastre y suelte</p>
+                <p class="text-xs text-amber-600 mt-1">SVG, PNG, JPG o JPEG (MÁX. 2MB)</p>
+              </div>
+
+              <input type="file" class="hidden" [attr.accept]="f.validators?.fileType?.join(',')"
+                (change)="onFileChange($event, f.key)" [attr.id]="'fileInput_' + f.key" />
+
+              <!-- Error de validación -->
+              <div *ngIf="fileErrors[f.key]" class="text-green-700 text-sm mt-1 font-medium">
+                {{ fileErrors[f.key] }}
+              </div>
+
+              <!-- Preview -->
+              @if(f.key && previewFiles[f.key]){
+              <div class="mt-3 rounded-md overflow-hidden border border-amber-200 bg-amber-50/30">
+                <img *ngIf="isImage(previewFiles[f.key] ?? '')" [src]="previewFiles[f.key]" alt="Preview"
+                  class="w-full object-contain max-h-60" />
+                <a *ngIf="f.key && previewFiles[f.key] && !isImage(previewFiles[f.key])" [href]="previewFiles[f.key]"
+                  target="_blank" class="block text-green-600 hover:text-green-700 underline text-center p-2">Ver
+                  documento</a>
+              </div>
+              }
+            </div>
+            }
+
+            <!-- Password Confirmation -->
+            @if (f.type === 'password' && f.key === 'password') {
+            <div class="flex flex-col mt-4">
+              <label class="text-amber-950 font-medium mb-1">
+                Repetir contraseña
+                <span class="text-red-700">*</span>
+              </label>
+              <div class="relative">
+                <input [type]="showRepeatPassword ? 'text' : 'password'" formControlName="repeatPassword"
+                  class="w-full px-4 py-2 pr-10 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 bg-white/70" />
+                <button type="button" (click)="showRepeatPassword = !showRepeatPassword"
+                  class="absolute right-3 top-2.5 text-amber-600 hover:text-amber-800">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    @if (showRepeatPassword) {
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                    } @else {
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    }
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Mensaje de error para repeatPassword -->
+              <div class="text-red-700 text-xs mt-1 "
+                *ngIf="getControl('repeatPassword')?.touched && getControl('repeatPassword')?.invalid">
+                <div *ngIf="getControl('repeatPassword')?.errors?.['required']">Este campo es obligatorio.</div>
+                <div *ngIf="getControl('repeatPassword')?.errors?.['passwordMismatch']">Las contraseñas no coinciden.
+                </div>
+              </div>
+            </div>
+            }
+
+            <!-- Validation Errors -->
+            <div class="text-red-700 text-xs mt-1 " *ngIf="getControl(f.key)?.touched && getControl(f.key)?.invalid">
+              <div *ngIf="getControl(f.key)?.errors?.['required']">Este campo es obligatorio.</div>
+              <div *ngIf="getControl(f.key)?.errors?.['email']">Por favor ingrese un correo electrónico válido.</div>
+              <div *ngIf="getControl(f.key)?.errors?.['pattern']">Formato inválido.</div>
+              <div *ngIf="getControl(f.key)?.errors?.['minlength']">Mínimo {{ f.validators?.minLength }} caracteres.
+              </div>
+              <div *ngIf="getControl(f.key)?.errors?.['maxlength']">Máximo {{ f.validators?.maxLength }} caracteres.
+              </div>
+              <div *ngIf="getControl(f.key)?.errors?.['fileType']">Tipo de archivo no permitido.</div>
+              <div *ngIf="getControl(f.key)?.errors?.['fileSize']">Archivo demasiado grande.</div>
+            </div>
           </div>
-        </ng-container>
+          }
+          }
+        </div>
+        }
       </div>
-    </ng-container>
-  
-    <button type="submit">Enviar</button>
+      }
+      }
+
+      <!-- Botón de submit -->
+
+    </div>
   </form>
-  
+</div>

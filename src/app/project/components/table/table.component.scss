@@ -1,0 +1,16 @@
+/* Clases para botones */
+.btn-primary {
+  @apply bg-amber-600 text-white hover:bg-amber-700 focus:ring-amber-500;
+}
+
+.btn-secondary {
+  @apply bg-green-600 text-white hover:bg-green-700 focus:ring-green-500;
+}
+
+.btn-danger {
+  @apply bg-red-600 text-white hover:bg-red-700 focus:ring-red-500;
+}
+
+.btn-success {
+  @apply bg-green-600 text-white hover:bg-green-700 focus:ring-green-500;
+}

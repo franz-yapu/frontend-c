@@ -1,0 +1,8 @@
+@layer components {
+  .text {
+    &-primary-2xl {
+      @apply text-primary-500 text-2xl;
+    }
+  
+}
+}

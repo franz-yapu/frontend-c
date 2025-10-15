@@ -1,0 +1,37 @@
+<div class="container mx-auto px-4 py-8">
+    <h2 class="text-2xl font-bold mb-6 text-gray-800">Lista de categoria</h2> 
+    <button (click)="openAddProductModal()" class="bg-green-500 text-white px-4 py-2 rounded mb-4">
+      Agregar categoria
+    </button>
+    <div class="overflow-x-auto">
+        <div class="flex justify-between">
+            @for (item of category; track $index) {
+       <a  (click)="openEditProductModal(item)" class="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow-sm md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+     
+      <div class="flex flex-col justify-between p-4 leading-normal">
+        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{item.name}}</h5>
+     </div>
+     </a>
+     }
+        </div>
+     
+   
+    <!--   <table class="min-w-full bg-white rounded-lg overflow-hidden">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
+           
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+          @for (cat of category; track $index) {
+          <tr class="hover:bg-gray-100 transition-colors" (click)="openEditProductModal(cat)" >
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ cat.name }}</td>
+         
+          </tr>
+          }
+          
+        </tbody>
+      </table> -->
+    </div>
+  </div>

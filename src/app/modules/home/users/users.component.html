@@ -1,0 +1,14 @@
+ <app-data-table
+      [columns]="columns"
+      [data]="users"
+      [totalItems]="totalUsers"
+      [pageSize]="10"
+      [currentPage]="currentPage"
+      [actionButtons]="actionButtons"
+      (pageChange)="onPageChange($event)"
+      (rowClick)="onRowClick($event)"
+      (reload)="onReloadData()"
+      (action)="onTableAction($event)
+      ">
+      
+    </app-data-table>

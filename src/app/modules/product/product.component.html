@@ -1,6 +1,8 @@
 <div class="container mx-auto px-4 py-8">
-    <h2 class="text-2xl font-bold mb-6 text-gray-800">Lista de Productos</h2>
-    
+    <h2 class="text-2xl font-bold mb-6 text-gray-800">Lista de Productos</h2> 
+    <button (click)="openAddProductModal()" class="bg-green-500 text-white px-4 py-2 rounded mb-4">
+      Agregar Producto
+    </button>
     <div class="overflow-x-auto">
       <table class="min-w-full bg-white rounded-lg overflow-hidden">
         <thead class="bg-gray-100">
@@ -11,8 +13,9 @@
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-primary-700">
-          <tr *ngFor="let product of products" class="hover:bg-gray-50 transition-colors">
+        <tbody class="divide-y divide-gray-200">
+          @for (product of products; track $index) {
+          <tr class="hover:bg-gray-100 transition-colors" (click)="openEditProductModal(product)" >
             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ product.name }}</td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ product.description || 'N/A' }}</td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ product.price  }}</td>
@@ -22,6 +25,8 @@
               </span>
             </td>
           </tr>
+          }
+          
         </tbody>
       </table>
     </div>

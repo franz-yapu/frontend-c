@@ -1,0 +1,45 @@
+<div class="min-h-screen flex flex-col md:flex-row">
+    <!-- Sección de imagen (oculta en móviles) -->
+    <div class="hidden md:block md:w-1/2 bg-cover bg-center" style="background-image: url('assets/img/fondo.jpg');">
+        <div class="h-full bg-amber-900/30 flex items-center justify-center p-12">
+            <div class="text-white text-center max-w-md">
+                <h1 class="text-4xl font-bold mb-4">Bienvenido </h1>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección del formulario -->
+    <div class="w-full md:w-1/2 flex items-center justify-center  md:p-8 bg-white">
+        <div class="max-w-md w-full  rounded-lg">
+            <!-- Botón para volver atrás -->
+            <button (click)="home()" class="flex items-center text-amber-700 hover:text-amber-900 ">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Volver atrás
+            </button>
+
+            <div class="text-center ">
+                <h2 class="text-3xl font-bold text-amber-900">Registro</h2>
+               
+            </div>
+
+            <dynamic-form [fields]="PatientsFormFields(catalogs)" [initialData]="initiaData"
+                [askfor]="onFormCreated" (onFormChange)="handleFormChange($event)">
+            </dynamic-form>
+
+            <!-- Contenedor de botones -->
+            <div class="mx-5 px-2 flex flex-col space-y-4">
+                <button 
+                    (click)="save()" 
+                    [disabled]="!formData?.valid" 
+                    class="w-full py-3 px-5 rounded-lg transition duration-200 font-medium
+                        disabled:bg-gray-400 disabled:cursor-not-allowed
+                        bg-green-700 hover:bg-green-800 text-white shadow-md hover:shadow-lg">
+                    Registrarse
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>

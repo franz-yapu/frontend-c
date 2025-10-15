@@ -1,0 +1,128 @@
+
+  <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden">
+    <!-- Header -->
+    <div class="bg-amber-900 px-6 py-8 text-center">
+      <div class="mx-auto h-24 w-24 rounded-full bg-green-800 flex items-center justify-center mb-4">
+        <span class="text-3xl font-bold text-white">
+          {{ user?.firstName.charAt(0) }}{{ user?.lastName.charAt(0) }}
+        </span>
+      </div>
+      
+      <h2 class="text-2xl font-bold text-white">
+        {{ user?.firstName }} {{ user?.lastName }}
+      </h2>
+      
+      <span class="inline-block mt-2 px-3 py-1 rounded-full text-white text-xs font-semibold 
+                @if (user.role.name === 'ADMIN') {
+                  bg-green-700 
+                } @else {
+                  bg-gray-200 text-gray-800
+                }">
+        {{ user?.role?.name }}
+      </span>
+    </div>
+
+    <!-- Body -->
+    <div class="p-6 space-y-8">
+      <!-- Información Básica -->
+      <div>
+        <h3 class="text-lg font-semibold text-amber-900 border-b border-gray-200 pb-2 mb-4">
+          Información Básica
+        </h3>
+        <div class="space-y-3">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <span class="text-sm font-medium text-gray-500">Email:</span>
+            <span class="md:col-span-2 text-gray-800">{{ user?.email }}</span>
+          </div>
+        <!--   <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <span class="text-sm font-medium text-gray-500">ID:</span>
+            <span class="md:col-span-2 text-gray-800 font-mono text-sm">{{ user.id }}</span>
+          </div> -->
+        <!--   <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <span class="text-sm font-medium text-gray-500">Estado:</span>
+            <span class="md:col-span-2">
+              @if (user.isVerified) {
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                  <svg class="-ml-0.5 mr-1.5 h-2 w-2 text-green-800" fill="currentColor" viewBox="0 0 8 8">
+                    <circle cx="4" cy="4" r="3" />
+                  </svg>
+                  Verificado
+                </span>
+              } @else {
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                  <svg class="-ml-0.5 mr-1.5 h-2 w-2 text-red-800" fill="currentColor" viewBox="0 0 8 8">
+                    <circle cx="4" cy="4" r="3" />
+                  </svg>
+                  No verificado
+                </span>
+              }
+            </span>
+          </div> -->
+        </div>
+      </div>
+
+      <!-- Información de Contacto -->
+      @if (user?.companyName || user?.phone || user?.address || user?.city || user?.country) {
+        <div>
+          <h3 class="text-lg font-semibold text-amber-900 border-b border-gray-200 pb-2 mb-4">
+            Información de Contacto
+          </h3>
+          <div class="space-y-3">
+            @if (user.companyName) {
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <span class="text-sm font-medium text-gray-500">Empresa:</span>
+                <span class="md:col-span-2 text-gray-800">{{ user.companyName }}</span>
+              </div>
+            }
+            @if (user.phone) {
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <span class="text-sm font-medium text-gray-500">Teléfono:</span>
+                <span class="md:col-span-2 text-gray-800">{{ user.phone }}</span>
+              </div>
+            }
+            @if (user.address || user.city || user.country) {
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <span class="text-sm font-medium text-gray-500">Dirección:</span>
+                <span class="md:col-span-2 text-gray-800">
+                  {{ user.address }} {{ user.city }} {{ user.country }}
+                </span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Registro -->
+      <div>
+        <h3 class="text-lg font-semibold text-amber-900 border-b border-gray-200 pb-2 mb-4">
+          Registro
+        </h3>
+        <div class="space-y-3">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <span class="text-sm font-medium text-gray-500">Creado:</span>
+            <span class="md:col-span-2 text-gray-800">{{ user?.createdAt | date:'medium' }}</span>
+          </div>
+         <!--  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <span class="text-sm font-medium text-gray-500">Actualizado:</span>
+            <span class="md:col-span-2 text-gray-800">{{ user.updatedAt | date:'medium' }}</span>
+          </div> -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="bg-gray-50 px-6 py-4 flex flex-col sm:flex-row justify-end gap-3">
+      <button (click)="openUserDialog()" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-800 hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500">
+        <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+        </svg>
+        Editar Perfil
+      </button>
+      <button (click)="openChangeDialog()" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500">
+        <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+        </svg>
+        Cambiar Contraseña
+      </button>
+    </div>
+  </div>

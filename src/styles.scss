@@ -1,1 +1,9 @@
-/* You can add global styles to this file, and also import other style files */
+@forward 'theme/buttons.scss';
+@forward 'theme/texts.scss';
+@forward 'theme/modal.scss';
+
+@layer tw {
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+}

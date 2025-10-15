@@ -1,0 +1,169 @@
+<!-- auction-list.component.html -->
+<div class=" bg-gray-50 p-4 md:p-6">
+  <!-- Header con buscador -->
+  <div class="mb-8 md:mb-10">
+    <!-- Título y acciones superiores -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6 gap-3 sm:gap-4">
+      <div class="w-full sm:w-auto">
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">Gestión de Subastas</h1>
+        <p class="text-xs sm:text-sm text-gray-500 mt-1">Administra y busca todas las subastas activas</p>
+      </div>
+
+      <button (click)="openAddModal()"
+        class="w-full sm:w-auto px-4 py-2.5 bg-amber-700 text-white font-medium rounded-lg hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 transition-all duration-200 flex items-center justify-center shadow-md hover:shadow-lg">
+        <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+        </svg>
+        <span class="text-sm sm:text-base">Nueva Subasta</span>
+      </button>
+    </div>
+
+    <!-- Barra de búsqueda mejorada -->
+    <div class="flex flex-col md:flex-row gap-3 items-start md:items-center">
+      <div class="relative flex-grow w-full max-w-2xl">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <svg class="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd"
+              d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+              clip-rule="evenodd"></path>
+          </svg>
+        </div>
+        <input type="text" [(ngModel)]="searchTerm" (input)="filterAuctions()"
+          class="block w-full pl-9 sm:pl-10 pr-4 py-2.5 sm:py-3 border border-gray-200 rounded-lg leading-5 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-300 text-sm sm:text-base shadow-sm transition-all duration-150"
+          placeholder="Buscar subastas..." />
+        <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+          <button *ngIf="searchTerm" (click)="clearSearch()" class="text-gray-400 hover:text-gray-500">
+            <svg class="h-4 w-4 sm:h-5 sm:w-5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filtros por estado - Versión móvil mejorada -->
+  <div class="mb-6">
+    <div class="flex flex-wrap gap-2">
+      <button *ngFor="let filter of statusFilters" [class.bg-green-700]="activeFilter === filter.value"
+        [class.text-white]="activeFilter === filter.value" [class.bg-amber-100]="activeFilter !== filter.value"
+        [class.text-amber-800]="activeFilter !== filter.value"
+        class="px-3 py-1.5 sm:px-4 sm:py-2 rounded-md font-medium text-xs sm:text-sm transition-colors whitespace-nowrap"
+        (click)="setFilter(filter.value)">
+        {{ filter.label }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Lista de subastas -->
+  <div class="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-4">
+    @for (auction of filteredAuctions; track auction.id) {
+    <div
+      class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-all duration-300">
+      <div class="p-4 sm:p-6">
+        <!-- Título y estado -->
+        <div class="flex justify-between items-start mb-3 sm:mb-4">
+          <h3 class="text-lg sm:text-xl font-bold text-gray-800 truncate max-w-[65%]">{{ auction.title }}</h3>
+          <span [class.bg-amber-50]="auction.status === 'DRAFT'" [class.text-amber-700]="auction.status === 'DRAFT'"
+            [class.border-amber-200]="auction.status === 'DRAFT'" [class.bg-green-50]="auction.status === 'ACTIVE'"
+            [class.text-green-700]="auction.status === 'ACTIVE'" [class.border-green-200]="auction.status === 'ACTIVE'"
+            [class.bg-gray-50]="auction.status === 'CLOSED'" [class.text-gray-700]="auction.status === 'CLOSED'"
+            [class.border-gray-200]="auction.status === 'CLOSED'"
+            class="px-2 py-0.5 sm:px-3 sm:py-1 text-xs rounded-full border flex items-center">
+            @if (auction.status === 'DRAFT') {
+            <svg class="w-3 h-3 mr-1 hidden sm:block" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                clip-rule="evenodd"></path>
+            </svg>
+            }
+            @if (auction.status === 'ACTIVE') {
+            <svg class="w-3 h-3 mr-1 hidden sm:block" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                clip-rule="evenodd"></path>
+            </svg>
+            }
+            @if (auction.status === 'CLOSED') {
+            <svg class="w-3 h-3 mr-1 hidden sm:block" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                clip-rule="evenodd"></path>
+            </svg>
+            }
+            {{ getStatusLabel(auction.status) }}
+          </span>
+        </div>
+
+        <!-- Línea divisoria -->
+        <div class="border-t border-gray-100 my-3 sm:my-4"></div>
+
+        <!-- Detalles de la subasta -->
+        <div class="space-y-2 sm:space-y-3 text-xs sm:text-sm text-gray-600">
+          <div class="flex items-center">
+            <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            <span><span class="font-medium text-gray-700">Inicio:</span> {{ auction.startDate | date:'dd MMM yyyy' }}</span>
+          </div>
+          <div class="flex items-center">
+            <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7"></path>
+            </svg>
+            <span><span class="font-medium text-gray-700">Fin:</span> {{ auction.endDate | date:'dd MMM yyyy' }}</span>
+          </div>
+          <div class="flex items-center">
+            <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6">
+              </path>
+            </svg>
+            <span><span class="font-medium text-gray-700">Incremento:</span> {{ auction.minIncrement | currency }}</span>
+          </div>
+        </div>
+
+        <!-- Pie de tarjeta - Botones apilados en móvil -->
+        <div class="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-gray-100">
+          <div class="text-xs text-gray-500 flex items-center mb-3 sm:mb-0">
+            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                clip-rule="evenodd"></path>
+            </svg>
+            Creado: {{ auction.createdAt | date:'dd MMM yyyy' }}
+          </div>
+          
+          <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-3">
+            <button (click)="editAddModal(auction)"
+              class="flex-1 px-3 py-2 bg-amber-700 text-white text-xs sm:text-sm font-medium rounded-lg hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all duration-200 flex items-center justify-center">
+              <span class="material-symbols-outlined text-sm sm:text-base mr-1 sm:mr-2">
+                edit
+              </span>
+              <span class="truncate">Editar</span>
+            </button>
+            
+            <button (click)="viewDetails(auction.id)"
+              class="flex-1 px-3 py-2 bg-green-700 text-white text-xs sm:text-sm font-medium rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all duration-200 flex items-center justify-center">
+              <span class="truncate">Detalles</span>
+              <svg class="w-3 h-3 sm:w-4 sm:h-4 ml-1 sm:ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    } @empty {
+    <div class="col-span-full text-center py-8 sm:py-12">
+      <svg class="mx-auto h-10 w-10 sm:h-12 sm:w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      <h3 class="mt-2 text-base sm:text-lg font-medium text-gray-900">No se encontraron subastas</h3>
+      <p class="mt-1 text-xs sm:text-sm text-gray-500">Intenta con otro término de búsqueda o filtro.</p>
+    </div>
+    }
+  </div>
+</div>

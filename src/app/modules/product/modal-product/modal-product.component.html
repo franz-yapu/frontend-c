@@ -1,0 +1,26 @@
+<div class="p-4">
+   
+    <div>
+        <dynamic-form
+            [fields]="PatientsFormFields(catalogs)"
+            [initialData]="initiaData"
+            [askfor]="onFormCreated"
+            (onFormChange)="handleFormChange($event)">
+        </dynamic-form>
+    </div>
+    <div class="flex  justify-end">
+         <button (click)="close()" class="bg-secondary-500 text-white px-4 py-2 mr-4 rounded">cancel</button>
+        <button (click)="save()"
+               [disabled]="!formData?.valid" 
+               [ngClass]="formData?.valid 
+                          ? 'bg-blue-500 text-white' 
+                         : 'bg-gray-400 cursor-not-allowed'"
+               class="bg-blue-500 text-white px-4 py-2  rounded">
+               Guardar 
+            </button>
+       
+    </div>
+   
+   
+  
+</div>

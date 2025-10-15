@@ -1,0 +1,31 @@
+// Estilos globales para p-dialog
+.p-dialog {
+  border: 2px solid #d1d5db !important; /* gris claro */
+  border-radius: 0.75rem !important; /* 12px */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+  padding: 1.5rem !important; /* 25px */
+  background: #ffffff !important;
+  
+  // Opcional: estilos para el header
+  .p-dialog-header {
+    border-bottom: 1px solid #e5e7eb !important;
+    padding: 1rem 1.5rem !important;
+  }
+  
+  // Opcional: estilos para el contenido
+  .p-dialog-content {
+    padding: 1.5rem !important;
+  }
+  
+  // Opcional: estilos para el footer
+  .p-dialog-footer {
+    border-top: 1px solid #e5e7eb !important;
+    padding: 1rem 1.5rem !important;
+  }
+  .p-dialog-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: rgb(146 64 14 / var(--tw-text-opacity, 1));
+  }
+  
+}
