@@ -75,9 +75,11 @@ export class NewAuctionComponent implements OnInit {
 
   async save() {
     if (this.formData?.valid) {
+      console.log(this.formData);
+      
       this.formData.data.startDate = this.convertToUTCDate(this.formData.data.startDate)
       this.formData.data.endDate = this.convertToUTCDate(this.formData.data.endDate)
-      this.formData.data.minIncrement= parseInt(this.formData.data.minIncrement)
+      this.formData.data.minIncrement= this.formData.data.minIncrement
       this.formData.data.adminId = this.user?.id;
       console.log(this.formData);
       

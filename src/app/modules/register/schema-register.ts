@@ -1,3 +1,4 @@
+import { min } from "rxjs"
 
 
 export const registerFormFields = (catalogs: any) => {
@@ -32,7 +33,7 @@ export const registerFormFields = (catalogs: any) => {
                             key: 'phone',
                             label: 'Telefono',
                             type: 'number',
-                            validators: { required: true },
+                            validators: { required: true  ,minLength:8 ,maxLength: 30 },
 
                         },
                        /*  {
@@ -55,7 +56,7 @@ export const registerFormFields = (catalogs: any) => {
                             label: 'Contraseña',
                             type: 'password',
 
-                            validators: { required: true },
+                            validators: { required: true,   maxLength: 30 ,minLength:6},
 
                         },
 

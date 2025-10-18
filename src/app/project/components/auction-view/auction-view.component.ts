@@ -1,14 +1,15 @@
-import { Component, OnInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, PLATFORM_ID, HostListener } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { Subscription, catchError, of } from 'rxjs';
 import { BuyerService } from '../../../modules/buyer/buyer.service';
+import { LotDetailComponent } from './lot-detail/lot-detail.component';
 
 @Component({
   selector: 'app-auction-view',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule,LotDetailComponent],
   templateUrl: './auction-view.component.html',
   styleUrls: ['./auction-view.component.scss']
 })
@@ -20,12 +21,11 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
   isConnected = false;
   isBrowser: boolean;
   currentTime: Date = new Date();
-  searchTerm: string = ''; // AÑADIR ESTA PROPIEDAD
-  sortBy: string = 'name';
+  searchTerm: string = '';
+  sortBy: string = 'position'; // CAMBIADO A 'position' POR DEFECTO
   sortDirection: 'asc' | 'desc' = 'asc';
-  
-  // Hacer públicas las propiedades que se usan en el template
-  lastBids: Map<string, any[]> = new Map(); // CAMBIAR DE PRIVATE A PUBLIC
+  selectedLot: any = null;
+  lastBids: Map<string, any[]> = new Map();
   
   private subscriptions: Subscription[] = [];
   private timerSubscription: Subscription | null = null;
@@ -40,10 +40,8 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     await this.loadAuctionData();
     
-    // Iniciar el contador de tiempo
     this.startTimer();
     
-    // Solo configurar WebSocket en el navegador
     if (this.isBrowser) {
       this.setupWebSocketListeners();
       this.setupConnectionMonitoring();
@@ -51,7 +49,6 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
   }
 
   private startTimer() {
-    // Usar setInterval directamente en lugar de Subscription para el timer
     if (this.timerSubscription) {
       this.timerSubscription.unsubscribe();
     }
@@ -64,7 +61,6 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
     this.timerSubscription.add(() => clearInterval(intervalId));
   }
 
-  // MÉTODO QUE FALTABA - Calculate Time Remaining
   calculateTimeRemaining(auction: any): { 
     days: number, 
     hours: number, 
@@ -95,7 +91,7 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
     return { days, hours, minutes, seconds, hasStarted, hasEnded };
   }
 
-  // Método para cambiar ordenamiento
+  // Método para cambiar ordenamiento - AGREGADO CASE PARA 'position'
   changeSort(criteria: string) {
     if (this.sortBy === criteria) {
       this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
@@ -113,11 +109,11 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
 
       const data = await this.buyerService.getAutionsLotsActive();
       this.auctionData = Array.isArray(data) ? data : [];
-      
+       console.log(data);
+       
       if (this.auctionData.length > 0 && this.auctionData[0].auctionDetails) {
         this.filteredLots = [...this.auctionData[0].auctionDetails];
         
-        // Unirse a la sala solo en browser y después de cargar datos
         if (this.isBrowser) {
           setTimeout(() => {
             if (this.auctionData[0]?.id) {
@@ -199,7 +195,11 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
             })
           ).toPromise();
 
-          this.lastBids.set(lot.coffeeLot.id, bids || []);
+          // FILTRAR DUPLICADOS ANTES DE ASIGNAR
+          const uniqueBids = this.removeDuplicateBids(bids || []);
+         console.log('Unique bids for lot', lot.coffeeLot.id, uniqueBids);
+         
+          this.lastBids.set(lot.coffeeLot.id, uniqueBids);
         }
       } catch (error) {
         console.error('Error loading bid history:', error);
@@ -208,20 +208,46 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
     }
   }
 
+  // NUEVO MÉTODO PARA ELIMINAR DUPLICADOS EN PUJAS
+  private removeDuplicateBids(bids: any[]): any[] {
+    const uniqueBids: any[] = [];
+    const seen = new Set();
+
+    bids.forEach(bid => {
+      // Crear una clave única basada en monto, usuario y fecha (sin los milisegundos)
+      const bidKey = `${bid.amount}_${bid.user?.id}_${new Date(bid.createdAt).toISOString().slice(0, 16)}`;
+      
+      if (!seen.has(bidKey)) {
+        seen.add(bidKey);
+        uniqueBids.push(bid);
+      }
+    });
+
+    return uniqueBids;
+  }
+
   private updateBidHistory(newBid: any) {
     if (!newBid.coffeeLotId) return;
     
     const currentBids = this.lastBids.get(newBid.coffeeLotId) || [];
-    const updatedBids = [newBid, ...currentBids].slice(0, 5);
+    
+    // FILTRAR DUPLICADOS ANTES DE AGREGAR LA NUEVA PUJA
+    const allBids = this.removeDuplicateBids([newBid, ...currentBids]);
+    const updatedBids = allBids.slice(0, 5);
+    
     this.lastBids.set(newBid.coffeeLotId, updatedBids);
   }
 
-  // Métodos para ordenamiento y filtrado
+  // Métodos para ordenamiento y filtrado - AGREGADO CASE PARA 'position'
   sortLots() {
     this.filteredLots.sort((a, b) => {
       let valueA: any, valueB: any;
       
       switch (this.sortBy) {
+        case 'position': // NUEVO CASE PARA POSITION
+          valueA = a.coffeeLot.position;
+          valueB = b.coffeeLot.position;
+          break;
         case 'name':
           valueA = a.coffeeLot.name;
           valueB = b.coffeeLot.name;
@@ -239,8 +265,8 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
           valueB = b.coffeeLot.quantityLbs;
           break;
         default:
-          valueA = a.coffeeLot.name;
-          valueB = b.coffeeLot.name;
+          valueA = a.coffeeLot.position; // CAMBIADO A POSITION COMO DEFAULT
+          valueB = b.coffeeLot.position;
       }
       
       if (typeof valueA === 'string' && typeof valueB === 'string') {
@@ -272,16 +298,30 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
     this.loadAuctionData();
   }
 
+    openLotDetail(lot: any) {
+    this.selectedLot = lot;
+    document.body.style.overflow = 'hidden';
+  }
+
+    closeLotDetail() {
+    this.selectedLot = null;
+    document.body.style.overflow = 'auto';
+  }
+
+  @HostListener('document:keydown.escape', ['$event'])
+  onKeydownHandler(event: KeyboardEvent) {
+    if (this.selectedLot) {
+      this.closeLotDetail();
+    }
+  }
+
   ngOnDestroy() {
-    // Limpiar todas las suscripciones
     this.subscriptions.forEach(sub => sub.unsubscribe());
     
-    // Detener el timer
     if (this.timerSubscription) {
       this.timerSubscription.unsubscribe();
     }
     
-    // Salir de la sala de subasta solo en browser
     if (this.isBrowser && this.auctionData.length > 0 && this.auctionData[0].id) {
       this.buyerService.leaveAuctionRoom(this.auctionData[0].id);
     }

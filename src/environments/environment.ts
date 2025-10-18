@@ -8,3 +8,4 @@ export const environment = {
     Socket: 'http://localhost:3000',       // ← Cambiado
     jwtKey: 'jwtToken' // Key para localStorage
   };
+  

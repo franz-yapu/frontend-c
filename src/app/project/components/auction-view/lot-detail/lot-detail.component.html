@@ -1,0 +1,356 @@
+<div class="fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50 backdrop-blur-sm transition-opacity duration-300"
+     [class]="lot ? 'opacity-100' : 'opacity-0 pointer-events-none'">
+     
+  <div class="bg-white rounded-3xl shadow-2xl max-w-7xl w-full max-h-[96vh] overflow-hidden transform transition-all duration-300 scale-100"
+       [class]="lot ? 'scale-100 opacity-100' : 'scale-95 opacity-0'">
+    
+    <!-- Header del Modal Mejorado -->
+    <div class="bg-gradient-to-br from-green-900 via-green-800 to-emerald-900 text-white p-8 relative overflow-hidden">
+      <!-- Elementos decorativos de fondo -->
+      <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PHBhdGggZD0iTTM2IDM0YzIuMjEgMCA0LTEuNzkgNC00cy0xLjc5LTQtNC00LTQgMS43OS00IDQgMS43OSA0IDQgNHptMC02YzEuMSAwIDIgLjkgMiAycz0uOSAyLTIgMi0yLS45LTItMiAuOS0yIDItMnptLTYtNGMyLjIxIDAgNC0xLjc5IDQtNHMtMS43OS00LTQtNC00IDEuNzktNCA0IDEuNzkgNCA0IDR6bTAtNmMxLjEgMCAyIC45IDIgMnMtLjkgMi0yIDItMi0uOS0yLTIgLjktMiAyLTJ6bS0xMiA2YzIuMjEgMCA0LTEuNzkgNC00cy0xLjc5LTQtNC00LTQgMS43OS00IDQgMS43OSA0IDQgNHptMC02YzEuMSAwIDIgLjkgMiAycz0uOSAyLTIgMi0yLS45LTItMiAuOS0yIDItMnptLTYtNGMyLjIxIDAgNC0xLjc5IDQtNHMtMS43OS00LTQtNC00IDEuNzktNCA0IDEuNzkgNCA0IDR6bTAtNmMxLjEgMCAyIC45IDIgMnMtLjkgMi0yIDItMi0uOS0yLTIgLjktMiAyLTJ6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-40"></div>
+      <div class="absolute -right-20 -top-20 w-60 h-60 rounded-full bg-white/5"></div>
+      <div class="absolute -left-20 -bottom-20 w-40 h-40 rounded-full bg-white/5"></div>
+
+      <div class="relative z-10">
+        <div class="flex justify-between items-start mb-4">
+          <div class="flex-1">
+            <h2 class="text-4xl font-bold mb-3 tracking-tight bg-gradient-to-r from-white to-green-100 bg-clip-text text-transparent">
+              {{ lot.coffeeLot.name }}
+            </h2>
+            <div class="flex flex-wrap items-center gap-3 text-green-100">
+              <span class="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium border border-white/10">
+                🏷️ Lote #{{ lot.coffeeLot.position }}
+              </span>
+              <span class="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium border border-white/10">
+                📅 Cosecha {{ lot.coffeeLot.harvestYear }}
+              </span>
+              <span class="bg-gradient-to-r from-amber-500 to-amber-600 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
+                ⭐ {{ lot.coffeeLot.cupScore }} Puntos
+              </span>
+            </div>
+          </div>
+          <button 
+            (click)="closeModal()"
+            class="text-white/80 hover:text-white hover:bg-white/10 transition-all duration-200 p-3 rounded-2xl backdrop-blur-sm border border-white/10 ml-6">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+        
+      
+      </div>
+    </div>
+
+    <!-- Contenido del Modal -->
+    <div class="overflow-y-auto max-h-[calc(96vh-180px)] bg-gray-50/30">
+      <div class="p-8">
+        
+        <!-- Sección Superior: Resumen Rápido -->
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-8 mb-8">
+          
+          <!-- Información Principal del Café -->
+          <div class="xl:col-span-2">
+            <div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300">
+              <div class="flex items-center mb-6">
+                <div class="w-12 h-12 bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl flex items-center justify-center mr-4">
+                  <span class="text-white font-bold text-lg">☕</span>
+                </div>
+                <div>
+                  <h3 class="text-2xl font-bold text-gray-900">Información del Café</h3>
+                  <p class="text-gray-600">Detalles específicos del lote</p>
+                </div>
+              </div>
+              
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-4">
+                  <div class="bg-amber-50/50 rounded-xl p-4 border border-amber-100">
+                    <label class="block text-sm font-semibold text-amber-800 mb-2 uppercase tracking-wide">Variedad</label>
+                    <p class="text-amber-900 text-lg font-medium">{{ lot.coffeeLot.variety }}</p>
+                  </div>
+                  <div class="bg-amber-50/50 rounded-xl p-4 border border-amber-100">
+                    <label class="block text-sm font-semibold text-amber-800 mb-2 uppercase tracking-wide">Proceso</label>
+                    <p class="text-amber-900 text-lg font-medium">{{ lot.coffeeLot.process }}</p>
+                  </div>
+                  <div class="bg-amber-50/50 rounded-xl p-4 border border-amber-100">
+                    <label class="block text-sm font-semibold text-amber-800 mb-2 uppercase tracking-wide">Altitud</label>
+                    <p class="text-amber-900 text-lg font-medium">{{ lot.coffeeLot.altitude }} m.s.n.m</p>
+                  </div>
+                </div>
+                
+                <div class="space-y-4">
+                  <div class="bg-green-50/50 rounded-xl p-4 border border-green-100">
+                    <label class="block text-sm font-semibold text-green-800 mb-2 uppercase tracking-wide">Cantidad Total</label>
+                    <p class="text-green-900 text-lg font-medium">{{ lot.coffeeLot.quantityLbs }} lbs</p>
+                    <p class="text-green-700 text-sm">{{ lot.coffeeLot.quantity }} kg</p>
+                  </div>
+                  <div class="bg-blue-50/50 rounded-xl p-4 border border-blue-100">
+                    <label class="block text-sm font-semibold text-blue-800 mb-2 uppercase tracking-wide">Secado</label>
+                    <p class="text-blue-900 text-lg font-medium">{{ lot.coffeeLot.dryingSystem }}</p>
+                  </div>
+                  <div class="bg-purple-50/50 rounded-xl p-4 border border-purple-100">
+                    <label class="block text-sm font-semibold text-purple-800 mb-2 uppercase tracking-wide">Sombra</label>
+                    <p class="text-purple-900 text-lg font-medium">{{ lot.coffeeLot.shadeType }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel de Precios Mejorado -->
+          <div class="space-y-6">
+            <!-- Precio Base -->
+            <div class="bg-gradient-to-br from-amber-50 to-amber-100 rounded-2xl p-6 border border-amber-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+              <div class="text-center">
+               <!--  <div class="w-16 h-16 bg-amber-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <span class="text-white text-2xl">💰</span>
+                </div> -->
+                <h4 class="font-bold text-amber-900 mb-2 text-md">Precio Base</h4>
+                <p class="text-3xl font-black text-amber-900 mb-1">
+                  {{ lot.startingPrice | currency:'USD':'symbol' }}
+                </p>
+                <p class="text-amber-600 text-sm mb-3">por libra</p>
+                <div class="bg-white/80 rounded-lg p-3 border border-amber-200">
+                  <p class="text-lg font-bold text-amber-800">
+                    {{ (lot.startingPrice * lot.coffeeLot.quantityLbs) | currency:'USD':'symbol' }}
+                  </p>
+                  <p class="text-xs text-amber-500 font-medium">VALOR TOTAL</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Oferta Actual -->
+            <div class="bg-gradient-to-br from-green-50 to-emerald-100 rounded-2xl p-6 border border-green-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+              <div class="text-center">
+                <!-- <div class="w-16 h-16 bg-green-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <span class="text-white text-2xl">⚡</span>
+                </div> -->
+                <h4 class="font-bold text-green-900 mb-2 text-md">Oferta Actual</h4>
+                <p class="text-4xl font-black text-green-900 mb-1">
+                  {{ lot.currentPrice | currency:'USD':'symbol' }}
+                </p>
+                <p class="text-green-600 text-sm mb-3">por libra</p>
+                <div class="bg-white/80 rounded-lg p-3 border border-green-200">
+                  <p class="text-xl font-black text-green-800">
+                    {{ (lot.currentPrice * lot.coffeeLot.quantityLbs) | currency:'USD':'symbol' }}
+                  </p>
+                  <p class="text-xs text-green-500 font-medium">VALOR ACTUAL</p>
+                </div>
+              </div>
+            </div>
+
+            
+          </div>
+        </div>
+
+        <!-- Sección Media: Detalles Geográficos y Técnicos -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          
+          <!-- Ubicación con Mapa Visual -->
+          <div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+            <div class="flex items-center mb-6">
+              <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mr-4">
+                <span class="text-white text-xl">📍</span>
+              </div>
+              <div>
+                <h3 class="text-2xl font-bold text-gray-900">Ubicación Geográfica</h3>
+                <p class="text-gray-600">Origen del café</p>
+              </div>
+            </div>
+            
+            <div class="space-y-4">
+              <div class="grid grid-cols-2 gap-4">
+                <div class="bg-green-50 rounded-xl p-4 text-center">
+              
+                  <p class="font-semibold text-green-900">{{ lot.coffeeLot.country }}</p>
+                  <p class="text-green-600 text-sm">País</p>
+                </div>
+                <div class="bg-green-50 rounded-xl p-4 text-center">
+                
+                  <p class="font-semibold text-green-900">{{ lot.coffeeLot.region }}</p>
+                  <p class="text-green-600 text-sm">Región</p>
+                </div>
+              </div>
+              
+              <div class="bg-gray-50 rounded-xl p-4">
+                <div class="space-y-3">
+                  <div class="flex justify-between items-center py-2 border-b border-gray-200">
+                    <span class="font-medium text-gray-700">Provincia</span>
+                    <span class="text-gray-900 font-semibold">{{ lot.coffeeLot.province }}</span>
+                  </div>
+                  <div class="flex justify-between items-center py-2 border-b border-gray-200">
+                    <span class="font-medium text-gray-700">Municipio</span>
+                    <span class="text-gray-900 font-semibold">{{ lot.coffeeLot.municipality }}</span>
+                  </div>
+                  <div class="flex justify-between items-center py-2">
+                    <span class="font-medium text-gray-700">Comunidad</span>
+                    <span class="text-gray-900 font-semibold">{{ lot.coffeeLot.community }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sistema de Producción -->
+          <div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+            <div class="flex items-center mb-6">
+              <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mr-4">
+                <span class="text-white text-xl">🌱</span>
+              </div>
+              <div>
+                <h3 class="text-2xl font-bold text-gray-900">Sistema de Producción</h3>
+                <p class="text-gray-600">Métodos de cultivo</p>
+              </div>
+            </div>
+            
+            <div class="space-y-4">
+              <div class="bg-blue-50 rounded-xl p-4">
+                <label class="block text-sm font-semibold text-blue-800 mb-2 uppercase tracking-wide">Sistema de Cultivo</label>
+                <p class="text-blue-900 text-xl font-bold">{{ lot.coffeeLot.productionSystem }}</p>
+              </div>
+              
+              <div class="grid grid-cols-2 gap-4">
+                <div class="bg-indigo-50 rounded-xl p-4 text-center">
+               
+                  <p class="font-semibold text-indigo-900">{{ lot.coffeeLot.dryingSystem }}</p>
+                  <p class="text-indigo-600 text-sm">Secado</p>
+                </div>
+                <div class="bg-purple-50 rounded-xl p-4 text-center">
+             
+                  <p class="font-semibold text-purple-900">{{ lot.coffeeLot.shadeType }}</p>
+                  <p class="text-purple-600 text-sm">Sombra</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Perfil de Cata Mejorado -->
+        <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-8 mb-8 shadow-lg border border-purple-100">
+          <div class="flex items-center mb-8">
+            <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mr-4">
+              <span class="text-white text-2xl">👃</span>
+            </div>
+            <div>
+              <h3 class="text-3xl font-bold text-gray-900">Perfil de Cata</h3>
+              <p class="text-gray-600">Características sensoriales</p>
+            </div>
+          </div>
+          
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="space-y-6">
+              <div class="bg-white/80 rounded-xl p-6 border border-purple-100 shadow-sm">
+                <h4 class="font-bold text-purple-900 mb-3 text-lg flex items-center">
+                  <span class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center mr-3">👃</span>
+                  Fragrancia y Aroma
+                </h4>
+                <p class="text-purple-800 leading-relaxed text-lg">
+                  {{ lot.coffeeLot.fragranceAroma }}
+                </p>
+              </div>
+              
+              <div class="bg-white/80 rounded-xl p-6 border border-pink-100 shadow-sm">
+                <h4 class="font-bold text-pink-900 mb-3 text-lg flex items-center">
+                  <span class="w-8 h-8 bg-pink-100 rounded-lg flex items-center justify-center mr-3">🍋</span>
+                  Acidez
+                </h4>
+                <p class="text-pink-800 leading-relaxed text-lg">
+                  {{ lot.coffeeLot.acidity }}
+                </p>
+              </div>
+            </div>
+            
+            <div class="space-y-6">
+              <div class="bg-white/80 rounded-xl p-6 border border-orange-100 shadow-sm">
+                <h4 class="font-bold text-orange-900 mb-3 text-lg flex items-center">
+                  <span class="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center mr-3">👅</span>
+                  Sabor
+                </h4>
+                <p class="text-orange-800 leading-relaxed text-lg">
+                  {{ lot.coffeeLot.flavor }}
+                </p>
+              </div>
+              
+              <div class="grid grid-cols-2 gap-4">
+                @if (lot.coffeeLot.body) {
+                  <div class="bg-white/80 rounded-xl p-4 border border-amber-100 text-center">
+                    <h4 class="font-semibold text-amber-900 mb-2">Cuerpo</h4>
+                    <p class="text-amber-800 font-medium">{{ lot.coffeeLot.body }}</p>
+                  </div>
+                }
+                @if (lot.coffeeLot.aftertaste) {
+                  <div class="bg-white/80 rounded-xl p-4 border border-red-100 text-center">
+                    <h4 class="font-semibold text-red-900 mb-2">Retrogusto</h4>
+                    <p class="text-red-800 font-medium">{{ lot.coffeeLot.aftertaste }}</p>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Historial de Pujas Mejorado -->
+        <div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+          <div class="flex items-center justify-between mb-8">
+            <div class="flex items-center">
+              <div class="w-12 h-12 bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl flex items-center justify-center mr-4">
+                <span class="text-white text-xl">💰</span>
+              </div>
+              <div>
+                <h3 class="text-2xl font-bold text-gray-900">Historial de Pujas</h3>
+                <p class="text-gray-600">Ofertas recientes</p>
+              </div>
+            </div>
+            <div class="bg-amber-100 text-amber-800 px-4 py-2 rounded-full font-semibold">
+              {{ getCurrentBids().length }} ofertas
+            </div>
+          </div>
+          
+          @if (getCurrentBids().length > 0) {
+            <div class="space-y-4">
+              @for (bid of getCurrentBids(); track bid.id; let i = $index) {
+                <div class="flex items-center justify-between p-6 bg-gradient-to-r from-amber-50 to-yellow-50 rounded-2xl border border-amber-100 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                  <div class="flex items-center space-x-6">
+                    <div class="flex flex-col items-center justify-center w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl text-white font-bold text-xl shadow-lg">
+                      <span>#{{ getCurrentBids().length - i }}</span>
+                    </div>
+                    <div>
+                      <p class="text-3xl font-black text-green-700 mb-1">
+                        {{ bid.amount | currency:'USD':'symbol':'1.2-2' }}
+                      </p>
+                      <p class="text-amber-600 text-sm font-medium">
+                        {{ lot.coffeeLot.quantityLbs }} lbs • {{ (bid.amount * lot.coffeeLot.quantityLbs) | currency:'USD':'symbol' }} total
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div class="text-right">
+                    <p class="font-bold text-gray-900 text-lg mb-1">
+                      {{ getUserDisplayName(bid.user) }}
+                    </p>
+                    <p class="text-gray-500 text-sm">
+                      {{ bid.createdAt | date:'dd/MM/yyyy' }} a las {{ bid.createdAt | date:'HH:mm' }}
+                    </p>
+                  </div>
+                  
+                  <div class="bg-green-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
+                    OFERTA
+                  </div>
+                </div>
+              }
+            </div>
+          } @else {
+            <div class="text-center py-16 bg-gradient-to-br from-amber-50 to-amber-100 rounded-2xl border-2 border-dashed border-amber-200">
+              <div class="w-24 h-24 bg-amber-200 rounded-3xl flex items-center justify-center mx-auto mb-6">
+                <span class="text-amber-600 text-4xl">💸</span>
+              </div>
+              <h4 class="text-2xl font-bold text-amber-900 mb-3">Sin ofertas aún</h4>
+              <p class="text-amber-700 text-lg max-w-md mx-auto">Sé el primero en hacer una oferta por este excepcional lote de café</p>
+            </div>
+          }
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

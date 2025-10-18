@@ -33,13 +33,28 @@ export const auctionFormFields=(catalogs: any)=> {
                   type: 'datetime',
                   validators: { required: true},
                 },
-                {
+                /* {
                   key: 'minIncrement',
                   label: 'Incremento Mínimo',
                   type: 'number',
-                  validators: { required: true },
+                  validators: { 
+                    required: true,
+                    min: 0,
+                   decimalPlaces: 2,
+                   allowDecimals: true,
+                  isNumber: true},
 
-                },
+                }, */
+                {
+              key: 'minIncrement',
+              label: 'Incremento Mínimo',
+              type: 'number',
+              validators: {
+                required: true,
+                min: 0,
+                decimalPlaces: 2
+              }
+            },
                
               ]
             },
