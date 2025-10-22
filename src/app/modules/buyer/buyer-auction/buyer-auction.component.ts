@@ -63,7 +63,7 @@ interface Bid {
   styleUrl: './buyer-auction.component.scss'
 })
 export class BuyerAuctionComponent implements OnInit, OnDestroy {
-   userId: string = ''; 
+  userId: string = ''; 
   auctionData: Auction[] = [];
   currentTime: Date = new Date();
   filteredLots: AuctionDetail[] = [];
@@ -72,27 +72,35 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
   sortDirection: 'asc' | 'desc' = 'asc';
   private timerSubscription!: Subscription;
   private bidSubscription!: Subscription;
+  private auctionExtendedSubscription!: Subscription;
   private highestBids: Map<string, number> = new Map();
   userBidAmounts: Map<string, number> = new Map();
-    lastBids: Map<string, any[]> = new Map(); // Inicializar el mapa
+  lastBids: Map<string, any[]> = new Map();
   showBidModal: boolean = false;
   selectedLot: AuctionDetail | null = null;
   bidAmount: number = 0;
   bidError: string = '';
   isLoading: boolean = false;
+  showExtensionNotification: boolean = false;
+  extensionMessage: string = '';
+  private notificationTimeout: any;
 
- constructor(
+  private auctionClosedSubscription!: Subscription; // NUEVO
+  auctionEnded: boolean = false; // NUEVO: para controlar el estado
+
+  constructor(
     private buyerService: BuyerService,
-    private generalService: GeneralService, // Servicio de autenticación
+    private generalService: GeneralService,
     @Inject(PLATFORM_ID) private platformId: any
   ) {}
 
   async ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
-      const dataUser:any =this.generalService.getUser();
+      const dataUser: any = this.generalService.getUser();
       this.userId = dataUser.id;
-      await this.loadAuctionData();
-      this.setupWebSocket();
+      // PRIMERO configurar WebSocket, LUEGO cargar datos
+    this.setupWebSocket();
+    await this.loadAuctionData();
     }
   }
 
@@ -123,46 +131,87 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
     }
   }
 
- async loadHighestBids() {
-  for (const lot of this.filteredLots) {
-    try {
-      // Usar el nuevo endpoint por lote específico
-      const highestBid = await this.buyerService
-        .getHighestBidForCoffeeLot(lot.auctionId, lot.coffeeLot.id)
-        .toPromise();
-      
-      if (highestBid) {
-        this.highestBids.set(lot.coffeeLot.id, highestBid.amount);
-        lot.currentPrice = highestBid.amount;
-      }
-    } catch (error) {
-      console.error('Error loading highest bid for lot:', error);
-      // Si falla, intentar con el endpoint general como fallback
+  async loadHighestBids() {
+    for (const lot of this.filteredLots) {
       try {
-        const generalBid = await this.buyerService
+        const highestBid = await this.buyerService
           .getHighestBidForCoffeeLot(lot.auctionId, lot.coffeeLot.id)
           .toPromise();
         
-        if (generalBid && generalBid.coffeeLotId === lot.coffeeLot.id) {
-          this.highestBids.set(lot.coffeeLot.id, generalBid.amount);
-          lot.currentPrice = generalBid.amount;
+        if (highestBid) {
+          this.highestBids.set(lot.coffeeLot.id, highestBid.amount);
+          lot.currentPrice = highestBid.amount;
         }
-      } catch (fallbackError) {
-        console.error('Error loading general highest bid:', fallbackError);
+      } catch (error) {
+        console.error('Error loading highest bid for lot:', error);
+        try {
+          const generalBid = await this.buyerService
+            .getHighestBidForCoffeeLot(lot.auctionId, lot.coffeeLot.id)
+            .toPromise();
+          
+          if (generalBid && generalBid.coffeeLotId === lot.coffeeLot.id) {
+            this.highestBids.set(lot.coffeeLot.id, generalBid.amount);
+            lot.currentPrice = generalBid.amount;
+          }
+        } catch (fallbackError) {
+          console.error('Error loading general highest bid:', fallbackError);
+        }
       }
     }
   }
-}
+
   setupWebSocket() {
-  if (this.bidSubscription) {
-    return; // Ya existe una suscripción, no volver a crearla
+    if (this.bidSubscription) {
+      return;
+    }
+    console.log('🔌 Configurando WebSocket listeners...');
+    // Suscripción a nuevas pujas
+    this.bidSubscription = this.buyerService.getNewBids().subscribe((newBid: Bid) => {
+      console.log('New bid received via WebSocket:', newBid);
+      this.handleNewBid(newBid);
+    });
+
+    // Suscripción a extensiones de subasta
+    this.auctionExtendedSubscription = this.buyerService.getAuctionExtended().subscribe((extensionData: any) => {
+      console.log('Auction extended received:', extensionData);
+      this.handleAuctionExtension(extensionData);
+    });
+
+     // NUEVO: Suscripción a cierre de subasta
+    this.auctionClosedSubscription = this.buyerService.getAuctionClosed().subscribe((closeData: any) => {
+      console.log('Auction closed received:', closeData);
+      this.handleAuctionClosed(closeData);
+    });
+
+     // Verificar estado de conexión
+  this.buyerService.getConnectionStatus().subscribe((connected: boolean) => {
+    console.log('📡 WebSocket connection status:', connected);
+  });
   }
 
-  this.bidSubscription = this.buyerService.getNewBids().subscribe((newBid: Bid) => {
-    console.log('New bid received via WebSocket:', newBid);
+  handleAuctionClosed(closeData: any) {
+  if (this.auctionData.length > 0 && this.auctionData[0].id === closeData.auctionId) {
+    this.auctionEnded = true;
     
-    this.handleNewBid(newBid);
-  });
+    // Actualizar el estado de la subasta
+    this.auctionData[0].status = 'CLOSED';
+    
+    // Mostrar notificación de cierre
+    this.showExtensionNotification = true;
+    this.extensionMessage = '¡Subasta finalizada definitivamente!';
+    
+    if (this.notificationTimeout) {
+      clearTimeout(this.notificationTimeout);
+    }
+    this.notificationTimeout = setTimeout(() => {
+      this.showExtensionNotification = false;
+    }, 5000);
+
+    // Forzar actualización inmediata
+    this.currentTime = new Date();
+    
+    console.log('🔚 Subasta cerrada definitivamente');
+  }
 }
 
   handleNewBid(bid: Bid) {
@@ -184,33 +233,52 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
     this.updateBidHistory(bid);
   }
 
-async loadBidHistory() {
-  for (const lot of this.filteredLots) {
-    try {
-      const bids = await this.buyerService
-        .getLastBids(lot.auctionId, lot.coffeeLot.id, 5)
-        .toPromise();
-      console.log(bids);
-      
-      // Asegurar que siempre sea un array
-      this.lastBids.set(lot.coffeeLot.id, bids || []);
-    } catch (error) {
-      console.error('Error loading bid history for lot', lot.coffeeLot.id, error);
-      // Asegurar que siempre haya un array, incluso en caso de error
-      this.lastBids.set(lot.coffeeLot.id, []);
+  // En buyer-auction.component.ts - modifica el método handleAuctionExtension
+handleAuctionExtension(extensionData: any) {
+  // Actualizar la fecha de fin de la subasta en los datos locales
+  if (this.auctionData.length > 0 && this.auctionData[0].id === extensionData.auctionId) {
+    this.auctionData[0].endDate = extensionData.newEndDate;
+    console.log(`¡Subasta extendida! Nueva hora de cierre: ${new Date(extensionData.newEndDate).toLocaleTimeString()}`);
+    
+    // Mostrar notificación
+    this.showExtensionNotification = true;
+    this.extensionMessage = `¡Subasta extendida! Nueva hora de cierre: ${new Date(extensionData.newEndDate).toLocaleTimeString()}`;
+    
+    // Ocultar notificación después de 5 segundos
+    if (this.notificationTimeout) {
+      clearTimeout(this.notificationTimeout);
     }
+    this.notificationTimeout = setTimeout(() => {
+      this.showExtensionNotification = false;
+    }, 5000);
+
+    // Forzar actualización del timer inmediatamente
+    this.currentTime = new Date();
+    
+    console.log('🔄 Subasta extendida - Nuevo endDate:', extensionData.newEndDate);
   }
 }
 
-// También actualiza el método que maneja nuevas pujas
-updateBidHistory(newBid: any) {
-  const currentBids = this.lastBids.get(newBid.coffeeLotId) || [];
-  
-  // Añadir la nueva puja al inicio y mantener solo las últimas 5
-  const updatedBids = [newBid, ...currentBids].slice(0, 5);
-  
-  this.lastBids.set(newBid.coffeeLotId, updatedBids);
-}
+  async loadBidHistory() {
+    for (const lot of this.filteredLots) {
+      try {
+        const bids = await this.buyerService
+          .getLastBids(lot.auctionId, lot.coffeeLot.id, 5)
+          .toPromise();
+        
+        this.lastBids.set(lot.coffeeLot.id, bids || []);
+      } catch (error) {
+        console.error('Error loading bid history for lot', lot.coffeeLot.id, error);
+        this.lastBids.set(lot.coffeeLot.id, []);
+      }
+    }
+  }
+
+  updateBidHistory(newBid: any) {
+    const currentBids = this.lastBids.get(newBid.coffeeLotId) || [];
+    const updatedBids = [newBid, ...currentBids].slice(0, 5);
+    this.lastBids.set(newBid.coffeeLotId, updatedBids);
+  }
 
   openBidModal(lot: AuctionDetail) {
     this.selectedLot = lot;
@@ -232,38 +300,48 @@ updateBidHistory(newBid: any) {
     return currentHighest + auction.minIncrement;
   }
 
- async placeBid() {
-  if (!this.selectedLot || this.isLoading) return; // evitar doble ejecución
+  async placeBid() {
+    if (!this.selectedLot || this.isLoading) return;
 
-  this.isLoading = true;
-  this.bidError = '';
+    this.isLoading = true;
+    this.bidError = '';
 
-  try {
-    const bidData = {
-      amount: this.bidAmount,
-      auctionId: this.selectedLot.auctionId,
-      coffeeLotId: this.selectedLot.coffeeLot.id,
-      userId: this.userId
-    };
+    try {
+      const bidData = {
+        amount: this.bidAmount,
+        auctionId: this.selectedLot.auctionId,
+        coffeeLotId: this.selectedLot.coffeeLot.id,
+        userId: this.userId
+      };
 
-    const response = await this.buyerService.placeBid(bidData).toPromise();
+      const response = await this.buyerService.placeBid(bidData).toPromise();
 
-    this.userBidAmounts.set(this.selectedLot.coffeeLot.id, this.bidAmount);
+      this.userBidAmounts.set(this.selectedLot.coffeeLot.id, this.bidAmount);
 
-    if (response.data && response.lastBids) {
-      this.lastBids.set(this.selectedLot.coffeeLot.id, response.lastBids);
+      if (response.data && response.lastBids) {
+        this.lastBids.set(this.selectedLot.coffeeLot.id, response.lastBids);
+      }
+
+      // Verificar si la subasta fue extendida
+      if (response.auctionExtended) {
+        this.showExtensionNotification = true;
+        this.extensionMessage = '¡Subasta extendida por 3 minutos!';
+        
+        if (this.notificationTimeout) {
+          clearTimeout(this.notificationTimeout);
+        }
+        this.notificationTimeout = setTimeout(() => {
+          this.showExtensionNotification = false;
+        }, 5000);
+      }
+
+      this.closeBidModal();
+    } catch (error: any) {
+      this.bidError = error.message || 'Error al realizar la puja';
+    } finally {
+      this.isLoading = false;
     }
-
-    this.closeBidModal();
-  } catch (error: any) {
-    this.bidError = error.message || 'Error al realizar la puja';
-  } finally {
-    this.isLoading = false;
   }
-}
-
-
-
 
   // Filtrar lotes según término de búsqueda
   filterLots() {
@@ -331,6 +409,9 @@ updateBidHistory(newBid: any) {
 
   // Calcular el tiempo restante para el inicio o fin de la subasta
   calculateTimeRemaining(auction: Auction): { days: number, hours: number, minutes: number, seconds: number, hasStarted: boolean, hasEnded: boolean } {
+     if (this.auctionEnded) {
+      return { days: 0, hours: 0, minutes: 0, seconds: 0, hasStarted: true, hasEnded: true };
+    }
     const startDate = new Date(auction.startDate);
     const endDate = new Date(auction.endDate);
     const now = this.currentTime;
@@ -358,23 +439,41 @@ updateBidHistory(newBid: any) {
     }
   }
 
-  // Método para realizar una puja (a implementar)
-
-
- 
-
- ngOnDestroy() {
-  if (this.timerSubscription) {
-    this.timerSubscription.unsubscribe();
+  // Cerrar notificación de extensión manualmente
+  closeExtensionNotification() {
+    this.showExtensionNotification = false;
+    if (this.notificationTimeout) {
+      clearTimeout(this.notificationTimeout);
+    }
   }
 
-  if (this.bidSubscription) {
-    this.bidSubscription.unsubscribe();
-    this.bidSubscription = undefined!; // resetear para que setupWebSocket sepa
-  }
+  ngOnDestroy() {
+    if (this.timerSubscription) {
+      this.timerSubscription.unsubscribe();
+    }
 
-  if (this.auctionData.length > 0) {
-    this.buyerService.leaveAuctionRoom(this.auctionData[0].id);
+    if (this.bidSubscription) {
+      this.bidSubscription.unsubscribe();
+      this.bidSubscription = undefined!;
+    }
+
+    if (this.auctionExtendedSubscription) {
+      this.auctionExtendedSubscription.unsubscribe();
+      this.auctionExtendedSubscription = undefined!;
+    }
+
+       // NUEVO: Desuscribirse del cierre de subasta
+    if (this.auctionClosedSubscription) {
+      this.auctionClosedSubscription.unsubscribe();
+      this.auctionClosedSubscription = undefined!;
+    }
+
+    if (this.notificationTimeout) {
+      clearTimeout(this.notificationTimeout);
+    }
+
+    if (this.auctionData.length > 0) {
+      this.buyerService.leaveAuctionRoom(this.auctionData[0].id);
+    }
   }
-}
 }

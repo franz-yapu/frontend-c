@@ -1,12 +1,40 @@
 <div class="min-h-screen bg-amber-50 py-4 px-4">
-  <div class="max-w-[1800px] mx-auto"> <!-- Cambiado a pantalla más ancha -->
-    <!-- Header Principal (sin cambios) -->
-    <div
-      class="bg-gradient-to-r from-amber-900 to-amber-950 rounded-2xl shadow-2xl overflow-hidden mb-6 border border-amber-700/30">
+  <div class="max-w-[1800px] mx-auto">
+    
+    <!-- NOTIFICACIÓN DE EXTENSIÓN O CIERRE -->
+  <!--   @if (showExtensionNotification) {
+      <div class="fixed top-4 right-4 z-50 animate-fade-in">
+        <div class="bg-gradient-to-r from-green-500 to-green-600 text-white p-4 rounded-xl shadow-2xl border border-green-400/30 backdrop-blur-sm max-w-sm">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center mr-3">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </div>
+              <div>
+                <p class="font-bold text-sm">{{ extensionMessage.includes('extendida') ? '¡Subasta Extendida!' : '¡Subasta Finalizada!' }}</p>
+                <p class="text-white/90 text-xs mt-1">{{ extensionMessage }}</p>
+              </div>
+            </div>
+            <button 
+              (click)="closeExtensionNotification()"
+              class="text-white/80 hover:text-white transition-colors p-1"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+ -->
+    <!-- Header Principal -->
+    <div class="bg-gradient-to-r from-amber-900 to-amber-950 rounded-2xl shadow-2xl overflow-hidden mb-6 border border-amber-700/30">
       <div class="p-6 text-white relative overflow-hidden">
         <!-- Elementos decorativos de fondo -->
-        <div
-          class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDM0YzIuMjEgMCA0LTEuNzkgNC00cy0xLjc5LTQtNC00LTQgMS43OS00IDQgMS43OSA0IDQgNHptMC02YzEuMSAwIDIgLjkgMiAycz0uOSAyLTIgMi0yLS45LTItMiAuOS0yIDItMnptLTYtNGMyLjIxIDAgNC0xLjc5IDQtNHMtMS43OS00LTQtNC00IDEuNzktNCA0IDEuNzkgNCA0IDR6bTAtNmMxLjEgMCAyIC45IDIgMnMtLjkgMi0yIDItMi0uOS0yLTIgLjktMiAyLTJ6bS0xMiA2YzIuMjEgMCA0LTEuNzkgNC00cy0xLjc5LTQtNC00LTQgMS43OS00IDQgMS43OSA0IDQgNHptMC02YzEuMSAwIDIgLjkgMiAycz0uOSAyLTIgMi0yLS45LTItMiAuOS0yIDItMnptLTYtNGMyLjIxIDAgNC0xLjc5IDQtNHMtMS43OS00LTQtNC00IDEuNzktNCA0IDEuNzkgNCA0IDR6bTAtNmMxLjEgMCAyIC45IDIgMnMtLjkgMi0yIDItMi0uOS0yLTIgLjktMiAyLTJ6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-10">
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDM0YzIuMjEgMCA0LTEuNzkgNC00cy0xLjc5LTQtNC00LTQgMS43OS00IDQgMS43OSA0IDQgNHptMC02YzEuMSAwIDIgLjkgMiAycz0uOSAyLTIgMi0yLS45LTItMiAuOS0yIDItMnptLTYtNGMyLjIxIDAgNC0xLjc5IDQtNHMtMS43OS00LTQtNC00IDEuNzktNCA0IDEuNzkgNCA0IDR6bTAtNmMxLjEgMCAyIC45IDIgMnMtLjkgMi0yIDItMi0uOS0yLTIgLjktMiAyLTJ6bS0xMiA2YzIuMjEgMCA0LTEuNzkgNC00cy0xLjc5LTQtNC00LTQgMS43OS00IDQgMS43OSA0IDQgNHptMC02YzEuMSAwIDIgLjkgMiAycz0uOSAyLTIgMi0yLS45LTItMiAuOS0yIDItMnptLTYtNGMyLjIxIDAgNC0xLjc5IDQtNHMtMS43OS00LTQtNC00IDEuNzktNCA0IDEuNzkgNCA0IDR6bTAtNmMxLjEgMCAyIC45IDIgMnMtLjkgMi0yIDItMi0uOS0yLTIgLjktMiAyLTJ6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-10">
         </div>
         <div class="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-amber-600/10"></div>
         <div class="absolute -left-10 -bottom-10 w-32 h-32 rounded-full bg-amber-600/10"></div>
@@ -15,8 +43,7 @@
           <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
             <div class="flex-1">
               <h1 class="text-2xl md:text-3xl font-bold mb-2 tracking-tight">Subasta de Café Especial</h1>
-              <p class="text-amber-100 text-base mb-3 max-w-2xl">Sigue en tiempo real el desarrollo de nuestra subasta
-                de cafés premium</p>
+              <p class="text-amber-100 text-base mb-3 max-w-2xl">Sigue en tiempo real el desarrollo de nuestra subasta de cafés premium</p>
 
               <!-- Información de la subasta -->
               @if (auctionData.length > 0) {
@@ -24,9 +51,7 @@
                 <div class="flex items-center">
                   <div class="w-8 h-8 bg-amber-700/30 rounded-lg flex items-center justify-center mr-3">
                     <svg class="w-4 h-4 text-amber-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
-                      </path>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                     </svg>
                   </div>
                   <div>
@@ -38,8 +63,7 @@
                 <div class="flex items-center">
                   <div class="w-8 h-8 bg-amber-700/30 rounded-lg flex items-center justify-center mr-3">
                     <svg class="w-4 h-4 text-amber-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                   </div>
                   <div>
@@ -58,8 +82,7 @@
               <div class="text-center">
                 <div class="w-10 h-10 bg-amber-600/30 rounded-full flex items-center justify-center mx-auto mb-2">
                   <svg class="w-5 h-5 text-amber-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                   </svg>
                 </div>
                 <p class="text-base font-medium text-amber-50">Subasta Finalizada</p>
@@ -71,27 +94,20 @@
                   {{ calculateTimeRemaining(auctionData[0]).hasStarted ? 'Finaliza en:' : 'Comienza en:' }}
                 </span>
                 <div class="grid grid-cols-4 gap-1">
-                  <div
-                    class="bg-amber-800/80 text-white px-2 py-2 rounded-lg text-center min-w-[60px] backdrop-blur-sm">
+                  <div class="bg-amber-800/80 text-white px-2 py-2 rounded-lg text-center min-w-[60px] backdrop-blur-sm">
                     <span class="block text-xl font-bold">{{ calculateTimeRemaining(auctionData[0]).days }}</span>
                     <span class="block text-xs mt-1 opacity-80">Días</span>
                   </div>
-                  <div
-                    class="bg-amber-800/80 text-white px-2 py-2 rounded-lg text-center min-w-[60px] backdrop-blur-sm">
-                    <span class="block text-xl font-bold">{{ calculateTimeRemaining(auctionData[0]).hours | number:'2.0'
-                      }}</span>
+                  <div class="bg-amber-800/80 text-white px-2 py-2 rounded-lg text-center min-w-[60px] backdrop-blur-sm">
+                    <span class="block text-xl font-bold">{{ calculateTimeRemaining(auctionData[0]).hours | number:'2.0' }}</span>
                     <span class="block text-xs mt-1 opacity-80">Horas</span>
                   </div>
-                  <div
-                    class="bg-amber-800/80 text-white px-2 py-2 rounded-lg text-center min-w-[60px] backdrop-blur-sm">
-                    <span class="block text-xl font-bold">{{ calculateTimeRemaining(auctionData[0]).minutes |
-                      number:'2.0' }}</span>
+                  <div class="bg-amber-800/80 text-white px-2 py-2 rounded-lg text-center min-w-[60px] backdrop-blur-sm">
+                    <span class="block text-xl font-bold">{{ calculateTimeRemaining(auctionData[0]).minutes | number:'2.0' }}</span>
                     <span class="block text-xs mt-1 opacity-80">Min</span>
                   </div>
-                  <div
-                    class="bg-amber-800/80 text-white px-2 py-2 rounded-lg text-center min-w-[60px] backdrop-blur-sm">
-                    <span class="block text-xl font-bold">{{ calculateTimeRemaining(auctionData[0]).seconds |
-                      number:'2.0' }}</span>
+                  <div class="bg-amber-800/80 text-white px-2 py-2 rounded-lg text-center min-w-[60px] backdrop-blur-sm">
+                    <span class="block text-xl font-bold">{{ calculateTimeRemaining(auctionData[0]).seconds | number:'2.0' }}</span>
                     <span class="block text-xs mt-1 opacity-80">Seg</span>
                   </div>
                 </div>
@@ -114,9 +130,7 @@
         <div class="mt-3 md:mt-0">
           <span class="inline-flex items-center px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-medium">
             <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
-                clip-rule="evenodd"></path>
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"></path>
             </svg>
             {{ filteredLots.length }} Lotes
           </span>
@@ -124,10 +138,9 @@
       </div>
 
       <!-- Grid de Lotes optimizado para más cards -->
-      <div   class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
         @for (detail of filteredLots; track detail.id) {
-        <div (click)="openLotDetail(detail)" 
-          class="bg-white rounded-xl shadow-lg overflow-hidden border border-green-300 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+        <div (click)="openLotDetail(detail)" class="bg-white rounded-xl shadow-lg overflow-hidden border border-green-300 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer">
           <!-- Header compacto -->
           <div class="h-24 bg-gradient-to-br from-green-800 to-green-900 relative overflow-hidden">
             <div class="flex justify-between p-3">
@@ -139,8 +152,7 @@
               </span>
             </div>
             <div class="absolute bottom-2 left-3">
-              <h3 class="text-base font-bold text-white drop-shadow-md truncate max-w-[140px]">{{ detail.coffeeLot.name
-                }}</h3>
+              <h3 class="text-base font-bold text-white drop-shadow-md truncate max-w-[140px]">{{ detail.coffeeLot.name }}</h3>
               <p class="text-amber-100 text-xs">{{ detail.coffeeLot.harvestYear }}</p>
             </div>
           </div>
@@ -152,9 +164,7 @@
               <div class="flex items-center">
                 <div class="w-4 h-4 bg-amber-100 rounded-full flex items-center justify-center mr-1 flex-shrink-0">
                   <svg class="w-2 h-2 text-amber-700" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd"
-                      d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z"
-                      clip-rule="evenodd"></path>
+                    <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd"></path>
                   </svg>
                 </div>
                 <span class="truncate text-xs">{{ detail.coffeeLot.variety }}</span>
@@ -164,9 +174,7 @@
                 <div class="w-4 h-4 bg-amber-100 rounded-full flex items-center justify-center mr-1 flex-shrink-0">
                   <svg class="w-2 h-2 text-amber-700" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
-                    <path fill-rule="evenodd"
-                      d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
-                      clip-rule="evenodd"></path>
+                    <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path>
                   </svg>
                 </div>
                 <span class="truncate text-xs">{{ detail.coffeeLot.process }}</span>
@@ -175,9 +183,7 @@
               <div class="flex items-center">
                 <div class="w-4 h-4 bg-amber-100 rounded-full flex items-center justify-center mr-1 flex-shrink-0">
                   <svg class="w-2 h-2 text-amber-700" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd"
-                      d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                      clip-rule="evenodd"></path>
+                    <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
                   </svg>
                 </div>
                 <span class="text-xs">{{ detail.coffeeLot.altitude }}m</span>
@@ -186,9 +192,7 @@
               <div class="flex items-center">
                 <div class="w-4 h-4 bg-amber-100 rounded-full flex items-center justify-center mr-1 flex-shrink-0">
                   <svg class="w-2 h-2 text-amber-700" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd"
-                      d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z"
-                      clip-rule="evenodd"></path>
+                    <path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd"></path>
                   </svg>
                 </div>
                 <span class="text-xs">{{ detail.coffeeLot.quantityLbs }}lbs</span>
@@ -198,9 +202,7 @@
             <!-- Ubicación compacta -->
             <div class="flex items-center text-xs mb-3 bg-amber-50 p-2 rounded-lg">
               <svg class="w-3 h-3 text-amber-700 mr-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd"
-                  d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                  clip-rule="evenodd"></path>
+                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
               </svg>
               <span class="truncate">{{ detail.coffeeLot.region }}</span>
             </div>
@@ -211,8 +213,7 @@
               <div class="bg-amber-50 rounded-lg p-2 border border-amber-200">
                 <div class="flex justify-between items-center mb-1">
                   <span class="text-xs text-amber-700">Base/libra:</span>
-                  <span class="text-sm font-semibold text-amber-900">{{ detail.startingPrice | currency:'USD':'symbol'
-                    }}</span>
+                  <span class="text-sm font-semibold text-amber-900">{{ detail.startingPrice | currency:'USD':'symbol' }}</span>
                 </div>
                 <div class="flex justify-between items-center text-xs">
                   <span class="text-amber-600">Total:</span>
@@ -226,8 +227,7 @@
               <div class="bg-green-50 rounded-lg p-2 border border-green-200">
                 <div class="flex justify-between items-center mb-1">
                   <span class="text-xs text-green-700">Oferta/libra:</span>
-                  <span class="text-sm font-bold text-green-900">{{ detail.currentPrice | currency:'USD':'symbol'
-                    }}</span>
+                  <span class="text-sm font-bold text-green-900">{{ detail.currentPrice | currency:'USD':'symbol' }}</span>
                 </div>
                 <div class="flex justify-between items-center text-xs">
                   <span class="text-green-600">Total:</span>
@@ -242,9 +242,6 @@
             <div class="mt-3">
               <div class="flex items-center justify-between mb-2">
                 <h5 class="text-xs font-semibold text-amber-800">Últimas ofertas</h5>
-                <!--  <span class="text-xs text-amber-600 bg-amber-100 px-1.5 py-0.5 rounded-full">
-                    {{ (lastBids.get(detail.coffeeLot.id) || []).length }}
-                  </span> -->
               </div>
 
               @if ((lastBids.get(detail.coffeeLot.id) || []).length > 0) {
@@ -267,10 +264,6 @@
                 </div>
                 }
               </div>
-              } @else {
-             <!--  <div class="text-center py-2 bg-amber-50 rounded border border-amber-200">
-                <p class="text-amber-600 text-xs">Sin ofertas</p>
-              </div> -->
               }
             </div>
           </div>
@@ -284,8 +277,7 @@
     <div class="text-center py-12 bg-white rounded-2xl shadow-lg border border-amber-100">
       <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-3">
         <svg class="w-8 h-8 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
         </svg>
       </div>
       <h3 class="text-lg font-semibold text-amber-800 mb-1">No hay lotes disponibles</h3>

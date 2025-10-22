@@ -28,44 +28,44 @@
           
           <!-- Contador regresivo premium -->
           @if (auctionData.length > 0) {
-            <div class="bg-green-800 backdrop-blur-xl rounded-2xl p-7 border border-amber-600/30 shadow-2xl min-w-[320px]">
-              @if (calculateTimeRemaining(auctionData[0]).hasEnded) {
-                <div class="text-center">
-                  <div class="w-14 h-14 bg-gradient-to-br from-amber-600 to-amber-700 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                    <svg class="w-7 h-7 text-amber-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                  </div>
-                  <p class="text-xl font-semibold text-white mb-2">Subasta Finalizada</p>
-                  <p class="text-white text-sm">Resultados disponibles</p>
-                </div>
-              } @else {
-                <div class="flex flex-col items-center">
-                  <span class="text-sm text-white mb-4 uppercase tracking-wider font-medium">
-                    {{ calculateTimeRemaining(auctionData[0]).hasStarted ? 'Finaliza en:' : 'Comienza en:' }}
-                  </span>
-                  <div class="grid grid-cols-4 gap-3">
-                    <div class="bg-gradient-to-br from-amber-700 to-amber-800  text-white px-4 py-5 rounded-xl text-center min-w-[75px] backdrop-blur-sm border border-amber-600/30 shadow-lg">
-                      <span class="block text-3xl font-bold tracking-tight">{{ calculateTimeRemaining(auctionData[0]).days }}</span>
-                      <span class="block text-xs mt-2 opacity-90 font-medium">Días</span>
-                    </div>
-                    <div class="bg-gradient-to-br from-amber-700 to-amber-800  text-white px-4 py-5 rounded-xl text-center min-w-[75px] backdrop-blur-sm border border-amber-600/30 shadow-lg">
-                      <span class="block text-3xl font-bold tracking-tight">{{ calculateTimeRemaining(auctionData[0]).hours | number:'2.0' }}</span>
-                      <span class="block text-xs mt-2 opacity-90 font-medium">Horas</span>
-                    </div>
-                    <div class="bg-gradient-to-br from-amber-700 to-amber-800  text-white px-4 py-5 rounded-xl text-center min-w-[75px] backdrop-blur-sm border border-amber-600/30 shadow-lg">
-                      <span class="block text-3xl font-bold tracking-tight">{{ calculateTimeRemaining(auctionData[0]).minutes | number:'2.0' }}</span>
-                      <span class="block text-xs mt-2 opacity-90 font-medium">Min</span>
-                    </div>
-                    <div class="bg-gradient-to-br from-amber-700 to-amber-800  text-white px-4 py-5 rounded-xl text-center min-w-[75px] backdrop-blur-sm border border-amber-600/30 shadow-lg">
-                      <span class="block text-3xl font-bold tracking-tight">{{ calculateTimeRemaining(auctionData[0]).seconds | number:'2.0' }}</span>
-                      <span class="block text-xs mt-2 opacity-90 font-medium">Seg</span>
-                    </div>
-                  </div>
-                </div>
-              }
-            </div>
-          }
+  <div class="bg-green-800 backdrop-blur-xl rounded-2xl p-7 border border-amber-600/30 shadow-2xl min-w-[320px]">
+    @if (calculateTimeRemaining(auctionData[0]).hasEnded || auctionEnded) { <!-- NUEVO: agregar auctionEnded -->
+      <div class="text-center">
+        <div class="w-14 h-14 bg-gradient-to-br from-amber-600 to-amber-700 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+          <svg class="w-7 h-7 text-amber-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </div>
+        <p class="text-xl font-semibold text-white mb-2">Subasta Finalizada</p>
+        <p class="text-white text-sm">Resultados disponibles</p>
+      </div>
+    } @else {
+      <div class="flex flex-col items-center">
+        <span class="text-sm text-white mb-4 uppercase tracking-wider font-medium">
+          {{ calculateTimeRemaining(auctionData[0]).hasStarted ? 'Finaliza en:' : 'Comienza en:' }}
+        </span>
+        <div class="grid grid-cols-4 gap-3">
+          <div class="bg-gradient-to-br from-amber-700 to-amber-800  text-white px-4 py-5 rounded-xl text-center min-w-[75px] backdrop-blur-sm border border-amber-600/30 shadow-lg">
+            <span class="block text-3xl font-bold tracking-tight">{{ calculateTimeRemaining(auctionData[0]).days }}</span>
+            <span class="block text-xs mt-2 opacity-90 font-medium">Días</span>
+          </div>
+          <div class="bg-gradient-to-br from-amber-700 to-amber-800  text-white px-4 py-5 rounded-xl text-center min-w-[75px] backdrop-blur-sm border border-amber-600/30 shadow-lg">
+            <span class="block text-3xl font-bold tracking-tight">{{ calculateTimeRemaining(auctionData[0]).hours | number:'2.0' }}</span>
+            <span class="block text-xs mt-2 opacity-90 font-medium">Horas</span>
+          </div>
+          <div class="bg-gradient-to-br from-amber-700 to-amber-800  text-white px-4 py-5 rounded-xl text-center min-w-[75px] backdrop-blur-sm border border-amber-600/30 shadow-lg">
+            <span class="block text-3xl font-bold tracking-tight">{{ calculateTimeRemaining(auctionData[0]).minutes | number:'2.0' }}</span>
+            <span class="block text-xs mt-2 opacity-90 font-medium">Min</span>
+          </div>
+          <div class="bg-gradient-to-br from-amber-700 to-amber-800  text-white px-4 py-5 rounded-xl text-center min-w-[75px] backdrop-blur-sm border border-amber-600/30 shadow-lg">
+            <span class="block text-3xl font-bold tracking-tight">{{ calculateTimeRemaining(auctionData[0]).seconds | number:'2.0' }}</span>
+            <span class="block text-xs mt-2 opacity-90 font-medium">Seg</span>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+}
         </div>
       </div>
     </div>
@@ -284,8 +284,14 @@
                       <div class="bg-white rounded-lg p-3 border border-amber-100 shadow-sm hover:shadow-md transition-shadow">
                         <div class="flex justify-between items-center">
                           <span class="font-bold text-green-700">{{ bid.amount | currency:'USD':'symbol':'1.2-2' }}</span>
+
+                          
                           <span class="text-amber-700 text-xs font-semibold">
-                            {{ bid.user?.firstName }} {{ bid.user?.lastName?.charAt(0) }}.
+                             @if (bid.user?.companyName) {
+                      {{ bid.user.companyName }}
+                      } @else {
+                      {{ bid.user?.firstName }} {{ bid.user?.lastName?.charAt(0) }}.
+                      }
                           </span>
                         </div>
                         <div class="text-amber-500 text-xs mt-1 font-medium">

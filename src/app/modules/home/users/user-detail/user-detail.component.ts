@@ -13,8 +13,8 @@ import { BreadCrumbComponent } from '../../../../project/components/bread-crumb/
 })
 export class UserDetailComponent implements OnInit { 
  public breadcrumbItems = [
-    { label: 'Usuarios', icon: 'school', routerLink: '/home/users' },
-    { label: 'Estudiantes', icon: 'groups', routerLink: '/students' }
+    { label: 'Usuarios', icon: 'groups', routerLink: '/home/users' },
+    { label: 'Usuario', icon: 'person', routerLink: '/students' }
   ];
   public userId: any;
   public userData: any;

@@ -10,6 +10,8 @@ import { io, Socket } from 'socket.io-client';
 export class BuyerService {
   private socket: Socket | null = null;
   private bidSubject = new Subject<any>();
+  private auctionExtendedSubject = new Subject<any>();
+  private auctionClosedSubject = new Subject<any>(); // NUEVO
   private connectionStatus = new BehaviorSubject<boolean>(false);
   private isInitialized = false;
 
@@ -73,6 +75,20 @@ export class BuyerService {
     this.socket.on('newBid', (bid: any) => {
       this.ngZone.run(() => {
         this.bidSubject.next(bid);
+      });
+    });
+
+    this.socket.on('auctionExtended', (data: any) => {
+      this.ngZone.run(() => {
+        console.log('🔄 Subasta extendida:', data);
+        this.auctionExtendedSubject.next(data);
+      });
+    });
+
+       this.socket.on('auctionClosed', (data: any) => {
+      this.ngZone.run(() => {
+        console.log('🔚 Subasta cerrada:', data);
+        this.auctionClosedSubject.next(data);
       });
     });
 
@@ -161,6 +177,14 @@ export class BuyerService {
     return this.bidSubject.asObservable();
   }
 
+  // Observable para extensiones de subasta
+  getAuctionExtended(): Observable<any> {
+    return this.auctionExtendedSubject.asObservable();
+  }
+
+    getAuctionClosed(): Observable<any> {
+    return this.auctionClosedSubject.asObservable();
+  }
   // Limpiar recursos
   disconnect() {
     if (this.socket) {
@@ -170,7 +194,7 @@ export class BuyerService {
     }
   }
 
-   getOrders(id: string,): Observable<any> {
+  getOrders(id: string): Observable<any> {
     return this.http.get(`${environment.backend}/transactions/buyer/${id}/wins`);
   }
 }
