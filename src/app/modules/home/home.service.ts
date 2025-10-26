@@ -161,6 +161,13 @@ export class HomeService {
 
  
 
+       updateStatusUser(data: any) {
+        return firstValueFrom(this.http.put(`${environment.backend}/users/updateStatus/${data.id}`, data ));
+       } 
+
+        deleteUser(id: string) {
+        return firstValueFrom(this.http.delete(`${environment.backend}/users/${id}`));
+       } 
 
 
 

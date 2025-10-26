@@ -10,13 +10,6 @@ export const changeFormFields = (catalogs: any) => {
             columns: [
                 {
                     fields: [
-
-                        {
-                            key: 'currentPassword',
-                            label: 'contraseña actual ',
-                            type: 'password',
-                            validators: { required: true },
-                        },
                         {
                             key: 'newPassword',
                             label: 'Nueva contraseña',

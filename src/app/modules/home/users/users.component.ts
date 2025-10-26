@@ -5,6 +5,8 @@ import { ActionButton, SortDirection, TableColumn, TableComponent } from '../../
 import { Router } from '@angular/router';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { UserModalComponent } from './user-modal/user-modal.component';
+import { ToasterService } from '../../../project/services/toaster.service';
+import { ConfirmModalComponent } from '../../../project/components/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-users',
@@ -45,7 +47,7 @@ export class UsersComponent implements OnInit {
     }
   ];
 
-  constructor(private homeService: HomeService, private router: Router, private dialogService: DialogService,) {
+  constructor(private homeService: HomeService, private router: Router, private dialogService: DialogService, private toaster: ToasterService) {
   }
 
   ngOnInit(): void {
@@ -90,25 +92,110 @@ export class UsersComponent implements OnInit {
     });
     this.ref.onClose.subscribe((data: any) => {
       console.log(data);
-      
+
       if (data) {
         console.log(data);
-        
-       this.router.navigate(['/home/user', data?.user?.id]);
+
+        this.router.navigate(['/home/user', data?.user?.id]);
       }
-      
+
 
     });
   }
 
 
-   roleName(name: string): string {
-   switch (name) {
-    case '0a973799-b889-489a-84ac-3d4e5c8af31a': return 'Administrador';
-    case 'd36ad33e-64ab-43df-8b17-49d0f2f328cd': return 'Comprador';
-    case '58005159-2d57-4db9-aa4a-34bf3f5b20ff': return 'Productor';
-    default: return 'Invitado';
-   }
-}
+  roleName(name: string): string {
+    switch (name) {
+      case '0a973799-b889-489a-84ac-3d4e5c8af31a': return 'Administrador';
+      case 'd36ad33e-64ab-43df-8b17-49d0f2f328cd': return 'Comprador';
+      case '58005159-2d57-4db9-aa4a-34bf3f5b20ff': return 'Productor';
+      default: return 'Invitado';
+    }
+  }
+
+
+  // En el componente padre
+  async onToggleStatus(event: { item: any, newStatus: boolean }) {
+
+     this.ref = this.dialogService.open(ConfirmModalComponent, {
+      /*  header: 'Update Lote de Café', */
+      data: {
+        title: event.newStatus ? 'Activar Usuario' : 'Desactivar Usuario',
+        message: event.newStatus ? '¿Estás seguro de que deseas activar al usuario?' : '¿Estás seguro de que deseas desactivar al usuario?',
+        confirmText: event.newStatus ? 'Activar' : 'Desactivar',
+        cancelText: 'Cancelar',
+        confirmSeverity: event.newStatus ? 'success' : 'warning',
+        showIcon: true,
+        icon: event.newStatus ? 'check_circle' : 'block',
+        iconColor: 'text-red-500',
+        iconSeverity: 'success'
+      },
+      showHeader: false,
+      baseZIndex: 10000,
+      closable: false,
+      dismissableMask: true
+    });
+
+    this.ref.onClose.subscribe(async (action: any) => {
+      if (action) {
+         console.log('Cambiar estado:', event.item, 'Nuevo estado:', event.newStatus);
+          event.item.isVerified=!event.item.isVerified;
+      const data = await this.homeService.updateStatusUser(event.item)
+      this.toaster.showToast({
+      severity: 'success',
+      summary: 'Guardado',
+      detail: 'Los datos se actualizaron correctamente',
+      });
+      this.ngOnInit();
+      }
+       this.ngOnInit();
+    });
+
+
+  }
+
+  onDeleteUser(user: any) {
+
+    this.ref = this.dialogService.open(ConfirmModalComponent, {
+      /*  header: 'Update Lote de Café', */
+      data: {
+        title: 'Eliminar Usuario',
+        message: '¿Estás seguro de que deseas eliminar al usuario definitivamente? Esta acción no se puede deshacer.',
+        confirmText: 'Eliminar',
+        cancelText: 'Cancelar',
+        confirmSeverity: 'danger',
+        showIcon: true,
+        icon: 'delete',
+        iconColor: 'text-red-500',
+        iconSeverity: 'success'
+      },
+      showHeader: false,
+      baseZIndex: 10000,
+      closable: false,
+      dismissableMask: true
+    });
+
+    this.ref.onClose.subscribe(async (action: any) => {
+      if (action) {
+        const data = this.homeService.deleteUser(user.id).then(res => {
+          this.toaster.showToast({
+            severity: 'success',
+            summary: 'Eliminado',
+            detail: 'El usuario se eliminó correctamente',
+          });
+          this.ngOnInit();
+        }).catch(err => {
+          this.toaster.showToast({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'No se pudo eliminar el usuario tiene datos asociados',
+          });
+        });
+        // Llamar al servicio para eliminar
+      }
+      
+    });
+
+  }
 
 }
