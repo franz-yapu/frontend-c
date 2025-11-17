@@ -9,7 +9,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { DateFnsConfigurationService } from 'ngx-date-fns';
 import localeEs from '@angular/common/locales/es';
 import { registerLocaleData } from '@angular/common';
-import { es } from 'date-fns/locale';
+import es from '@angular/common/locales/es';
 registerLocaleData(localeEs, 'es');
 
 const datefnConfig = new DateFnsConfigurationService();

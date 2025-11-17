@@ -13,6 +13,7 @@ import { AuttionDetalleComponent } from './auctions/auttion-detalle/auttion-deta
 import { AutionLotComponent } from './auctions/aution-lot/aution-lot.component';
 import { TransactionsComponent } from './transactions/transactions.component';
 import { TransactionsCoffeeComponent } from './transactions/transactions-coffee/transactions-coffee.component';
+import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 
 
 
@@ -25,7 +26,7 @@ export const routes: Routes = [
     children: [
    {
         path: '',
-        redirectTo: 'auctions',
+        redirectTo: 'dashboard',
         pathMatch: 'full' // importante
       },
       {
@@ -69,6 +70,10 @@ export const routes: Routes = [
         path: 'transactions/:id',
         component: TransactionsCoffeeComponent,
       },
+      {
+     path: 'dashboard',
+     component: AdminDashboardComponent
+    },
 
     ]
   },

@@ -88,9 +88,21 @@
             class="table-row-hover">
             @for (col of columns; track col.key) {
               <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900">
-                  {{getDisplayValue(item, col.key)}}
-                </div>
+                @if (col.key === 'estado') {
+                  <!-- Estado personalizado -->
+                  <div class="flex items-center">
+                    <span 
+                      [class]="getEstadoClasses(item)"
+                      class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium">
+                      {{ getEstadoDisplay(item) }}
+                    </span>
+                  </div>
+                } @else {
+                  <!-- Columna normal -->
+                  <div class="text-sm text-gray-900">
+                    {{getDisplayValue(item, col.key)}}
+                  </div>
+                }
               </td>
             }
           </tr>

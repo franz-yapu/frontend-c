@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-data-table',
   templateUrl: './table.component.html',
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule, FormsModule],
   styleUrls: ['./table.component.scss']
 })
 export class TableComponent<T extends Record<string, any>> implements OnInit {
@@ -16,12 +16,12 @@ export class TableComponent<T extends Record<string, any>> implements OnInit {
   @Input() currentPage = 1;
   @Input() loading = false;
   
-
   @Input() showReload = true;
   @Input() actionButtons: ActionButton[] = [];
   
   @Output() reload = new EventEmitter<void>();
   @Output() action = new EventEmitter<{action: string, item?: any}>();
+  @Output() statusChange = new EventEmitter<{item: T, newStatus: boolean}>();
 
   @Output() sortChange = new EventEmitter<{field: string, direction: SortDirection}>();
   @Output() pageChange = new EventEmitter<number>();
@@ -48,18 +48,18 @@ export class TableComponent<T extends Record<string, any>> implements OnInit {
     this.pages = Array.from({ length: totalPages }, (_, i) => i + 1);
   }
 
- onSort(field: string) {
-  // Cambiar dirección
-  this.sortDirection = this.sortField === field && this.sortDirection === 'asc' ? 'desc' : 'asc';
-  this.sortField = field;
+  onSort(field: string) {
+    // Cambiar dirección
+    this.sortDirection = this.sortField === field && this.sortDirection === 'asc' ? 'desc' : 'asc';
+    this.sortField = field;
 
-  // Ordenar
-  this.filteredData = [...this.filteredData].sort((a, b) => {
-    const valA = a[field]?.toString().toLowerCase() || '';
-    const valB = b[field]?.toString().toLowerCase() || '';
-    return valA.localeCompare(valB) * (this.sortDirection === 'asc' ? 1 : -1);
-  });
-}
+    // Ordenar
+    this.filteredData = [...this.filteredData].sort((a, b) => {
+      const valA = a[field]?.toString().toLowerCase() || '';
+      const valB = b[field]?.toString().toLowerCase() || '';
+      return valA.localeCompare(valB) * (this.sortDirection === 'asc' ? 1 : -1);
+    });
+  }
 
   onSearch() {
     if (!this.searchTerm) {
@@ -100,10 +100,9 @@ export class TableComponent<T extends Record<string, any>> implements OnInit {
     return item[key];
   }
 
-    onReload() {
-     /*  this.sortField = ''; */
-      this.searchTerm= '';
-      this.sortDirection = 'none';
+  onReload() {
+    this.searchTerm = '';
+    this.sortDirection = 'none';
     this.reload.emit();
   }
 
@@ -111,27 +110,50 @@ export class TableComponent<T extends Record<string, any>> implements OnInit {
     this.action.emit({action, item});
   }
 
-  getButtonClasses(btn: ActionButton): string {
-  const baseClasses = 'inline-flex items-center px-4 py-2 border rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2';
-  const colorClasses = {
-    primary: 'border-transparent bg-amber-600 text-white hover:bg-amber-700 focus:ring-amber-500',
-    secondary: 'border-transparent bg-green-600 text-white hover:bg-green-700 focus:ring-green-500',
-    danger: 'border-transparent bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
-    success: 'border-transparent bg-green-600 text-white hover:bg-green-700 focus:ring-green-500'
-  };
-  return `${baseClasses} ${colorClasses[btn.color || 'primary']}`;
-}
+  // Método para obtener las clases CSS del estado
+  getEstadoClasses(item: any): string {
+    const isVerified = item.isVerified || item.verified || item.estado;
+    return isVerified 
+      ? 'bg-green-100 text-green-800' 
+      : 'bg-red-100 text-red-800';
+  }
 
-getSmallButtonClasses(btn: ActionButton): string {
-  const baseClasses = 'inline-flex items-center p-2 border rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2';
-  const colorClasses = {
-    primary: 'border-transparent bg-amber-600 text-white hover:bg-amber-700 focus:ring-amber-500',
-    secondary: 'border-transparent bg-green-600 text-white hover:bg-green-700 focus:ring-green-500',
-    danger: 'border-transparent bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
-    success: 'border-transparent bg-green-600 text-white hover:bg-green-700 focus:ring-green-500'
-  };
-  return `${baseClasses} ${colorClasses[btn.color || 'primary']}`;
-}
+  // Método para mostrar el texto del estado
+  getEstadoDisplay(item: any): string {
+    const isVerified:any = item.isVerified || item.verified || item.estado;
+    return isVerified ? 'Activo' : 'Desactivado';
+  }
+
+  // Método para cambiar el estado (opcional)
+  toggleEstado(item: any) {
+    const currentStatus = item.isVerified || item.verified || item.estado;
+    const newStatus = !currentStatus;
+    
+    // Emitir el cambio de estado
+    this.statusChange.emit({ item, newStatus });
+  }
+
+  getButtonClasses(btn: ActionButton): string {
+    const baseClasses = 'inline-flex items-center px-4 py-2 border rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2';
+    const colorClasses = {
+      primary: 'border-transparent bg-amber-600 text-white hover:bg-amber-700 focus:ring-amber-500',
+      secondary: 'border-transparent bg-green-600 text-white hover:bg-green-700 focus:ring-green-500',
+      danger: 'border-transparent bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
+      success: 'border-transparent bg-green-600 text-white hover:bg-green-700 focus:ring-green-500'
+    };
+    return `${baseClasses} ${colorClasses[btn.color || 'primary']}`;
+  }
+
+  getSmallButtonClasses(btn: ActionButton): string {
+    const baseClasses = 'inline-flex items-center p-2 border rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2';
+    const colorClasses = {
+      primary: 'border-transparent bg-amber-600 text-white hover:bg-amber-700 focus:ring-amber-500',
+      secondary: 'border-transparent bg-green-600 text-white hover:bg-green-700 focus:ring-green-500',
+      danger: 'border-transparent bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
+      success: 'border-transparent bg-green-600 text-white hover:bg-green-700 focus:ring-green-500'
+    };
+    return `${baseClasses} ${colorClasses[btn.color || 'primary']}`;
+  }
 }
 
 export interface TableColumn {

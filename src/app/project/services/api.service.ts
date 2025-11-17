@@ -85,6 +85,7 @@ export class ApiService {
     const where =  {roleId:{equals:'58005159-2d57-4db9-aa4a-34bf3f5b20ff'}};
     const params = new HttpParams()
       .set('where', JSON.stringify(where))
+      .set('perPage', JSON.stringify(1000))
     return firstValueFrom(this.http.get(`${environment.backend}/dynamic/user/all/paginate`, { params }));
   }
 

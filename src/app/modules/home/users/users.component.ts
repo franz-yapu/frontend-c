@@ -42,7 +42,8 @@ export class UsersComponent implements OnInit {
       label: 'Role',
       sortable: true,
       format: (value) => this.roleName(value)
-    }
+    },
+    { key: 'estado', label: 'Estado', sortable: true },
   ];
 
   constructor(private homeService: HomeService, private router: Router, private dialogService: DialogService,) {

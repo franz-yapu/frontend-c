@@ -165,4 +165,8 @@ redirectByRole(role: string) {
   }
 
 }
+
+regulation() {
+    this.router.navigate(['/Coffee/regulation']);
+}
 }

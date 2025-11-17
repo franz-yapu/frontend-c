@@ -7,21 +7,21 @@
       <h3 class="text-xl font-semibold mb-4 text-amber-900 border-b border-amber-200 pb-2">{{ field.text }}</h3>
       }
 
-         @if (field.type === 'title') {
-          <h3 [class]="{
+      @if (field.type === 'title') {
+      <h3 [class]="{
             'text-xl font-semibold mb-4 text-amber-900 border-b border-amber-200 pb-2': !field.style,
             'text-2xl font-bold mb-6 text-amber-900 border-b-2 border-amber-300 pb-3': field.style === 'main'
           }">
-            {{ field.text }}
-          </h3>
-        }
-        
-        <!-- Subtítulo para secciones -->
-        @if (field.type === 'subtitle') {
-         <h4 class="text-md font-semibold mb-1 text-amber-900 pl-2 border-b-2 border-amber-700">
-            {{ field.text }}
-          </h4>
-        }
+        {{ field.text }}
+      </h3>
+      }
+
+      <!-- Subtítulo para secciones -->
+      @if (field.type === 'subtitle') {
+      <h4 class="text-md font-semibold mb-1 text-amber-900 pl-2 border-b-2 border-amber-700">
+        {{ field.text }}
+      </h4>
+      }
 
       @if (field.type === 'column' && field.columns) {
       <div [ngClass]="{
@@ -41,11 +41,11 @@
             </label>
 
             @if (f.type === 'subtitle') {
-          <h4 class="text-md font-semibold mb-2 text-amber-700 pl-2 border-l-4 border-green-600">
-         
-            {{ f.text }}
-          </h4>
-        }
+            <h4 class="text-md font-semibold mb-2 text-amber-700 pl-2 border-l-4 border-green-600">
+
+              {{ f.text }}
+            </h4>
+            }
 
             <!-- Input (text, number) -->
             @if (f.type && ['text'].includes(f.type)) {
@@ -68,6 +68,66 @@
               </div>
             </div>
             }
+
+            <!-- Date -->
+            @if (f.type === 'date') {
+            <div class="relative">
+              <input type="date" [formControlName]="f.key"
+                class="w-full px-4 py-2 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 bg-white/70 appearance-none"
+                [min]="f.minDate | date:'yyyy-MM-dd'" [max]="f.maxDate | date:'yyyy-MM-dd'" />
+              <!-- Icono de calendario -->
+              <div class="absolute right-3 top-2.5 pointer-events-none text-amber-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </div>
+            </div>
+            }
+
+            <!-- Select with Create -->
+            @if (f.type === 'select-with-create') {
+<div class="relative">
+  <select [formControlName]="f.key" 
+    class="w-full px-4 py-2 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 bg-white/70 appearance-none [&::-ms-expand]:hidden [&::-webkit-inner-spin-button]:hidden [&::-webkit-calendar-picker-indicator]:hidden">
+    <option value="" disabled selected>Seleccione una opción</option>
+    @for (opt of f.options || []; track opt.value) {
+    <option [value]="opt.value">{{ opt.label }}</option>
+    }
+  </select>
+  <div class="absolute right-3 top-2.5 pointer-events-none text-amber-600">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+    </svg>
+  </div>
+</div>
+
+<!-- @if (showCustomInput[f.key]) {
+<input 
+  type="text" 
+  [placeholder]="'Escriba nueva ' + f.label.toLowerCase()"
+  (input)="onCustomInput($event, f.key)"
+  class="w-full mt-2 px-4 py-2 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 bg-white/70" 
+  [value]="getCustomInputValue(f.key)"
+/>
+} -->
+}
+
+            <!-- Time -->
+            @if (f.type === 'time') {
+            <div class="relative">
+              <input type="time" [formControlName]="f.key"
+                class="w-full px-4 py-2 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition duration-200 bg-white/70 appearance-none [&::-webkit-calendar-picker-indicator]:opacity-0" />
+              <!-- Icono de reloj personalizado -->
+              <div class="absolute right-3 top-2.5 pointer-events-none text-amber-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+            </div>}
 
             <!-- Email -->
             @if (f.type === 'email') {

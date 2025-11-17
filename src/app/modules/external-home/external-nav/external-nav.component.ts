@@ -19,7 +19,7 @@ export class ExternalNavComponent {
     { name: 'Inicio', route: '/Coffee/index', isActive: false },
     { name: 'Ganadores', route: '/Coffee/winners', isActive: false },
     { name: 'Subasta Activa', route: '/Coffee/auction', isActive: false },
-    /* { name: 'Documents', route: '/Coffee/documents', isActive: false }, */
+    { name: 'Reglamento', route: '/Coffee/regulation', isActive: false },
     { name: 'Acerca de nosotros', route: '/Coffee/about', isActive: false },
    
   ];

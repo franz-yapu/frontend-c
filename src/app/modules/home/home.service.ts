@@ -32,6 +32,12 @@ export class HomeService {
         return firstValueFrom(this.http.get(`${environment.backend}/user`));
       }
 
+      getUserLog(id:string, params:any) {
+        return firstValueFrom(this.http.get(`${environment.backend}/user-logs/user/${id}`,{params}));
+      }
+
+      
+
       getDmsByImgD(id: string) {
         return firstValueFrom(this.http.get(`${environment.backend}/dms/${id}`));
       }
@@ -159,6 +165,14 @@ export class HomeService {
         return firstValueFrom(this.http.get(`${environment.backend}/dynamic/auction/all/paginate`,{params}));
       }
 
+
+       updateStatusUser(data: any) {
+        return firstValueFrom(this.http.put(`${environment.backend}/users/updateStatus/${data.id}`, data ));
+       } 
+
+        deleteUser(id: string) {
+        return firstValueFrom(this.http.delete(`${environment.backend}/users/${id}`));
+       } 
  
 
 

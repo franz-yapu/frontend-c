@@ -1,0 +1,248 @@
+<!-- src/app/components/admin-dashboard/admin-dashboard.component.html -->
+<div class="min-h-screen bg-amber-50 p-6">
+  <!-- Header -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-amber-900 mb-2">Dashboard Administrativo</h1>
+    <p class="text-amber-700">Resumen completo de la plataforma de subastas de café</p>
+  </div>
+
+  <!-- Filtros -->
+  <div class="bg-white rounded-2xl shadow-lg p-4 mb-8 border border-amber-200">
+    <h2 class="text-xl font-semibold text-amber-900 mb-4">Filtros</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <!-- Fecha Inicio -->
+      <div>
+        <label class="block text-sm font-medium text-amber-700 mb-1">Fecha Inicio</label>
+        <input type="date" [(ngModel)]="filters.startDate"
+               class="w-full px-3 py-2 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600">
+      </div>
+
+      <!-- Fecha Fin -->
+      <div>
+        <label class="block text-sm font-medium text-amber-700 mb-1">Fecha Fin</label>
+        <input type="date" [(ngModel)]="filters.endDate"
+               class="w-full px-3 py-2 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600">
+      </div>
+
+      <!-- Región -->
+    <!--   <div>
+        <label class="block text-sm font-medium text-amber-700 mb-1">Región</label>
+        <select [(ngModel)]="filters.region"
+                class="w-full px-3 py-2 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600">
+          <option value="">Todas las regiones</option>
+          <option *ngFor="let region of regions" [value]="region">{{ region }}</option>
+        </select>
+      </div> -->
+
+      <!-- Año -->
+     <!--  <div>
+        <label class="block text-sm font-medium text-amber-700 mb-1">Año</label>
+        <select [(ngModel)]="filters.year"
+                class="w-full px-3 py-2 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600">
+          <option value="">Todos los años</option>
+          <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+        </select>
+      </div> -->
+    </div>
+
+    <!-- Botones de acción -->
+    <div class="flex justify-end space-x-3 mt-4">
+      <button (click)="clearFilters()"
+              class="px-4 py-2 bg-amber-100 text-amber-800 rounded-lg hover:bg-amber-200 transition-colors">
+        Limpiar Filtros
+      </button>
+      <button (click)="applyFilters()"
+              class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+        Aplicar Filtros
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="flex justify-center items-center py-12">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+  </div>
+
+  <!-- Dashboard Content -->
+  <div *ngIf="!loading && dashboardData" class="space-y-8">
+    
+    <!-- Resumen Rápido -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Total Subastas -->
+      <div class="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-blue-500">
+        <div class="flex items-center">
+          <div class="p-3 bg-blue-100 rounded-lg mr-4">
+            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <div>
+            <p class="text-sm text-gray-600">Total Subastas</p>
+            <p class="text-2xl font-bold text-gray-900">{{ dashboardData.auctionSummary.totalAuctions }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lotes Activos -->
+      <div class="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-green-500">
+        <div class="flex items-center">
+          <div class="p-3 bg-green-100 rounded-lg mr-4">
+            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+            </svg>
+          </div>
+          <div>
+            <p class="text-sm text-gray-600">Lotes </p>
+            <p class="text-2xl font-bold text-gray-900">{{ dashboardData.lotPerformance.totalLots }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ingresos Totales -->
+     <!--  <div class="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-purple-500">
+        <div class="flex items-center">
+          <div class="p-3 bg-purple-100 rounded-lg mr-4">
+            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+            </svg>
+          </div>
+          <div>
+            <p class="text-sm text-gray-600">Ingresos Totales</p>
+            <p class="text-2xl font-bold text-gray-900">{{ dashboardData.transactionAnalytics.totalRevenue | currency:'USD':'symbol' }}</p>
+          </div>
+        </div>
+      </div> -->
+
+      <!-- Usuarios Totales -->
+      <div class="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-orange-500">
+        <div class="flex items-center">
+          <div class="p-3 bg-orange-100 rounded-lg mr-4">
+            <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
+            </svg>
+          </div>
+          <div>
+            <p class="text-sm text-gray-600">Usuarios Totales</p>
+            <p class="text-2xl font-bold text-gray-900">{{ dashboardData.userActivity.totalUsers }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gráficos -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      
+      <!-- Subastas por Estado -->
+      <div class="bg-white rounded-2xl shadow-lg p-6">
+        <h3 class="text-lg font-semibold text-amber-900 mb-4">Subastas por Estado</h3>
+        <div class="h-80">
+          <canvas baseChart
+                  [data]="getAuctionStatusChartData()"
+                  [options]="chartOptions"
+                  [type]="'doughnut'">
+          </canvas>
+        </div>
+      </div>
+
+      <!-- Lotes por Puntaje -->
+      <div class="bg-white rounded-2xl shadow-lg p-6">
+        <h3 class="text-lg font-semibold text-amber-900 mb-4">Lotes por Puntaje de Catación</h3>
+        <div class="h-80">
+          <canvas baseChart
+                  [data]="getLotScoreChartData()"
+                  [options]="barChartOptions"
+                  [type]="'bar'">
+          </canvas>
+        </div>
+      </div>
+
+      <!-- Ingresos por Mes -->
+      <div class="bg-white rounded-2xl shadow-lg p-6">
+        <h3 class="text-lg font-semibold text-amber-900 mb-4">Ingresos por Mes</h3>
+        <div class="h-80">
+          <canvas baseChart
+                  [data]="getRevenueChartData()"
+                  [options]="lineChartOptions"
+                  [type]="'line'">
+          </canvas>
+        </div>
+      </div>
+
+      <!-- Usuarios por Rol -->
+      <div class="bg-white rounded-2xl shadow-lg p-6">
+        <h3 class="text-lg font-semibold text-amber-900 mb-4">Usuarios por Rol</h3>
+        <div class="h-80">
+          <canvas baseChart
+                  [data]="getUserRoleChartData()"
+                  [options]="chartOptions"
+                  [type]="'pie'">
+          </canvas>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Tablas adicionales -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      
+      <!-- Subastas Recientes -->
+      <div class="bg-white rounded-2xl shadow-lg p-6">
+        <h3 class="text-lg font-semibold text-amber-900 mb-4">Subastas Recientes</h3>
+        <div class="overflow-x-auto">
+          <table class="min-w-full">
+            <thead>
+              <tr class="border-b border-amber-200">
+                <th class="text-left py-2 text-sm text-amber-700">Título</th>
+                <th class="text-left py-2 text-sm text-amber-700">Estado</th>
+                <th class="text-left py-2 text-sm text-amber-700">Lotes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let auction of dashboardData.auctionSummary.recentAuctions" 
+                  class="border-b border-amber-100 hover:bg-amber-50">
+                <td class="py-3 text-sm">{{ auction.title }}</td>
+                <td class="py-3">
+                  <span [class]="getStatusBadgeClass(auction.status)" class="px-2 py-1 rounded-full text-xs">
+                    {{ auction.status }}
+                  </span>
+                </td>
+                <td class="py-3 text-sm">{{ auction._count?.auctionDetails || 0 }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Lotes Top -->
+      <div class="bg-white rounded-2xl shadow-lg p-6">
+        <h3 class="text-lg font-semibold text-amber-900 mb-4">Top Lotes por Puntaje</h3>
+        <div class="overflow-x-auto">
+          <table class="min-w-full">
+            <thead>
+              <tr class="border-b border-amber-200">
+                <th class="text-left py-2 text-sm text-amber-700">Nombre</th>
+                <th class="text-left py-2 text-sm text-amber-700">Variedad</th>
+                <th class="text-left py-2 text-sm text-amber-700">Puntaje</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let lot of dashboardData.lotPerformance.topLots" 
+                  class="border-b border-amber-100 hover:bg-amber-50">
+                <td class="py-3 text-sm">{{ lot.name }}</td>
+                <td class="py-3 text-sm">{{ lot.variety }}</td>
+                <td class="py-3 text-sm font-semibold">{{ lot.cupScore }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="!loading && !dashboardData" class="text-center py-12">
+    <div class="text-amber-600">No se pudieron cargar los datos del dashboard</div>
+  </div>
+</div>

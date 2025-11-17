@@ -10,12 +10,12 @@ export const lotFormFields = (catalogs: any) => {
       columns: [
         {
           fields: [
-             {
+            {
               key: 'name',
               label: 'Nombre del Lote',
               type: 'text',
               validators: { required: true, maxLength: 50, minLength: 0 }
-             },
+            },
             {
               key: 'position',
               label: 'Posición (Ranking)',
@@ -26,7 +26,7 @@ export const lotFormFields = (catalogs: any) => {
                 max: 100
               }
             },
-             {
+            {
               key: 'cupScore',
               label: 'Puntaje de Catación',
               type: 'number',
@@ -40,27 +40,29 @@ export const lotFormFields = (catalogs: any) => {
             {
               key: 'variety',
               label: 'Variedad',
-              type: 'text',
-              validators: { required: true }
+              type: 'select-with-create',
+              validators: { required: true },
+              options: catalogs['varieties'] || []
             },
-            
           ]
         },
         {
           fields: [
-           {
+            {
               key: 'process',
               label: 'Proceso',
-              type: 'text',
-              validators: { required: true }
+              type: 'select-with-create',
+              validators: { required: true },
+              options: catalogs['processes'] || []
             },
             {
               key: 'dryingSystem',
               label: 'Sistema de Secado',
-              type: 'text',
-              validators: { required: true,maxLength: 50 }
+              type: 'select-with-create',
+              validators: { required: true, maxLength: 50 },
+              options: catalogs['dryingSystems'] || []
             },
-           {
+            {
               key: 'quantity',
               label: 'Cantidad (kg)',
               type: 'number',
@@ -81,11 +83,7 @@ export const lotFormFields = (catalogs: any) => {
               }
             },
           ]
-        
-        
-          
         },
-      
       ]
     },
     {
@@ -98,8 +96,7 @@ export const lotFormFields = (catalogs: any) => {
       columns: [
         {
           fields: [
-
-             {
+            {
               key: 'harvestYear',
               label: 'Año de Cosecha',
               type: 'number',
@@ -112,37 +109,41 @@ export const lotFormFields = (catalogs: any) => {
             {
               key: 'country',
               label: 'País',
-              type: 'text',
-              validators: { required: true }
+              type: 'select-with-create',
+              validators: { required: true },
+              options: catalogs['countries'] || []
             },
             {
               key: 'region',
               label: 'Departamento/Región',
-              type: 'text',
-              validators: { required: true,maxLength: 100 }
+              type: 'select-with-create',
+              validators: { required: true, maxLength: 100 },
+              options: catalogs['regions'] || []
             },
-           
           ]
         },
         {
           fields: [
-             {
+            {
               key: 'province',
               label: 'Provincia',
-              type: 'text',
-              validators: { required: true,maxLength: 100 }
+              type: 'select-with-create',
+              validators: { required: true, maxLength: 100 },
+              options: catalogs['provinces'] || []
             },
             {
               key: 'municipality',
               label: 'Municipio',
-              type: 'text',
-              validators: { required: true,maxLength: 100 }
+              type: 'select-with-create',
+              validators: { required: true, maxLength: 100 },
+              options: catalogs['municipalities'] || []
             },
             {
               key: 'community',
               label: 'Comunidad',
-              type: 'text',
-              validators: { required: true, maxLength: 100 }
+              type: 'select-with-create',
+              validators: { required: true, maxLength: 100 },
+              options: catalogs['communities'] || []
             },
           ]
         },

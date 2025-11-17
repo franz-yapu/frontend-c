@@ -5,6 +5,7 @@ import { BuyerDataComponent } from './buyer-data/buyer-data.component';
 import { BuyerAuctionComponent } from './buyer-auction/buyer-auction.component';
 import { BuyerComponent } from './buyer.component';
 import { BuyerOrdersComponent } from './buyer-orders/buyer-orders.component';
+import { BuyerDashboardComponent } from './buyer-dashboard/buyer-dashboard.component';
 
 
 
@@ -20,7 +21,7 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'auction',
+        redirectTo: 'dashboard',
         pathMatch: 'full' // importante
       },
       {
@@ -35,6 +36,10 @@ export const routes: Routes = [
         path: 'auction-winner',
         component: BuyerOrdersComponent
       },
+      {
+      path: 'dashboard',
+      component: BuyerDashboardComponent
+     },
 
 
 

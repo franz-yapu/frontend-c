@@ -30,9 +30,7 @@ export interface FieldOption {
   value: any;
   label: string;
 }
-
-export type FieldType = 'text' | 'email' | 'number' | 'select' | 'radio' | 'datetime' | 'file' | 'title' | 'column' | 'password'| 'subtitle';
-
+export type FieldType = 'text' | 'email' | 'number' | 'select' | 'select-with-create' | 'radio' | 'datetime' | 'date' | 'time' | 'file' | 'title' | 'column' | 'password' | 'subtitle';
 export interface FormField {
   key: string;
   label?: string;
@@ -230,6 +228,13 @@ export class DynamicFormComponent implements OnInit {
   }
   
   return v;
+}
+
+onCustomInput(event: any, fieldKey: string) {
+  const value = event.target.value;
+  if (value) {
+    this.form.get(fieldKey)?.setValue(value);
+  }
 }
 
   getControl(key: string): AbstractControl | null {

@@ -6,6 +6,7 @@ import { ExternalDocumentsComponent } from './external-documents/external-docume
 import { ExternalHomeComponent } from './external-home.component';
 import { ExternalIndexComponent } from './external-index/external-index.component';
 import { AboutComponent } from './about/about.component';
+import { RegulationComponent } from './regulation/regulation.component';
 
 
 
@@ -43,6 +44,10 @@ export const routes: Routes = [
         path: 'about',
         component: AboutComponent,
       },
+      {
+        path: 'regulation',
+        component: RegulationComponent
+      }
     ]
   },
   
