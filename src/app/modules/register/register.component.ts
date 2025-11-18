@@ -103,7 +103,6 @@ export class RegisterComponent implements OnInit {
   switch (name) {
     case 'ADMIN': return 'Administrador';
     case 'BUYER': return 'Comprador';
-    case 'SELLER': return 'Productor';
     default: return 'Invitado';
   }
 }
