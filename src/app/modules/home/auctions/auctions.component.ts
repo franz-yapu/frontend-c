@@ -122,27 +122,16 @@ export class AuctionsComponent implements OnInit {
   }
 
   // ✅ NUEVO: Preparar subasta para edición (separar fecha y hora)
-   private prepareAuctionForEdit(auction: any): any {
-  console.log('🔍 DEBUG PREPARE FOR EDIT:');
-  console.log('📅 StartDate original (UTC):', auction.startDate);
-  console.log('📅 EndDate original (UTC):', auction.endDate);
-  
-  // Las fechas vienen en UTC, crear Date objects en UTC
+ private prepareAuctionForEdit(auction: any): any {
   const startDate = new Date(auction.startDate);
   const endDate = new Date(auction.endDate);
-  
-  console.log('📅 StartDate como Date:', startDate);
-  console.log('📅 EndDate como Date:', endDate);
-  console.log('📅 StartDate UTC getDate():', startDate.getUTCDate());
-  console.log('📅 EndDate UTC getDate():', endDate.getUTCDate());
-  
+
   return {
     ...auction,
-    // Usar los métodos UTC para mantener la fecha correcta
-    startDate: this.formatDateToYMDUTC(startDate),
-    startTime: this.formatTimeUTC(startDate),
-    endDate: this.formatDateToYMDUTC(endDate),
-    endTime: this.formatTimeUTC(endDate)
+    startDate: this.formatDateToYMD(startDate),
+    startTime: this.formatTime(startDate),
+    endDate: this.formatDateToYMD(endDate),
+    endTime: this.formatTime(endDate)
   };
 }
 
@@ -162,67 +151,51 @@ private formatTimeUTC(date: Date): string {
 }
 
   // ✅ NUEVO: Formatear fecha a YYYY-MM-DD
-  private formatDateToYMD(date: Date): string {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
+private formatDateToYMD(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
 
   // ✅ NUEVO: Formatear hora a HH:MM
-  private formatTime(date: Date): string {
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    return `${hours}:${minutes}`;
-  }
+private formatTime(date: Date): string {
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  return `${hours}:${minutes}`;
+}
 
   // ✅ NUEVO: Procesar datos antes de enviar al backend
 
   // ... todo el código anterior igual hasta los métodos de fecha
 
   // ✅ SOLUCIÓN DEFINITIVA: Procesar datos sin complicaciones
-  processAuctionData(formData: any): any {
-  console.log('🔄 === PROCESSING AUCTION DATA ===');
-  console.log('📅 FormData recibido:', formData);
-  
+processAuctionData(formData: any): any {
   const processedData = { ...formData };
-  
-  // Combinar fecha y hora en un solo campo
+
   if (processedData.startDate && processedData.startTime) {
-    processedData.startDate = this.combineDateAndTimeUTC(processedData.startDate, processedData.startTime);
+    processedData.startDate = this.combineDateAndTime(processedData.startDate, processedData.startTime);
     delete processedData.startTime;
   }
-  
+
   if (processedData.endDate && processedData.endTime) {
-    processedData.endDate = this.combineDateAndTimeUTC(processedData.endDate, processedData.endTime);
+    processedData.endDate = this.combineDateAndTime(processedData.endDate, processedData.endTime);
     delete processedData.endTime;
   }
-  
-  // Convertir a UTC explícitamente
-  processedData.startDate = this.convertToUTCDate(processedData.startDate);
-  processedData.endDate = this.convertToUTCDate(processedData.endDate);
-  
-  console.log('📅 StartDate enviado:', processedData.startDate);
-  console.log('📅 EndDate enviado:', processedData.endDate);
-  console.log('🔄 === FIN PROCESSING ===');
-  
+
+  // Convertir a string ISO local (sin cambiar zona)
+  processedData.startDate = processedData.startDate.toISOString();
+  processedData.endDate = processedData.endDate.toISOString();
+
   return processedData;
 }
-
-private combineDateAndTimeUTC(dateString: string, timeString: string): Date {
+private combineDateAndTime(dateString: string, timeString: string): Date {
   const [hours, minutes] = timeString.split(':').map(Number);
   const date = new Date(dateString);
-  
-  // Crear fecha en UTC
-  return new Date(Date.UTC(
-    date.getUTCFullYear(),
-    date.getUTCMonth(),
-    date.getUTCDate(),
-    hours,
-    minutes,
-    0, 0
-  ));
+  date.setHours(hours, minutes, 0, 0);
+  return date;
 }
+
 
 // ✅ Convertir a UTC (mantener igual)
 private convertToUTCDate(dateInput: any): string {

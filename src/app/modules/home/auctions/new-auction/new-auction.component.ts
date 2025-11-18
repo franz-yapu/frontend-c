@@ -60,22 +60,14 @@ export class NewAuctionComponent implements OnInit {
       const formData = { ...this.formData.data };
       
       // Combinar startDate + startTime en startDate
-      if (formData.startDate && formData.startTime) {
-        formData.startDate = this.combineDateAndTimeCORREGIDO(formData.startDate, formData.startTime);
-        console.log('📅 StartDate combinado CORREGIDO:', formData.startDate);
-        delete formData.startTime;
-      }
-      
-      // Combinar endDate + endTime en endDate
-      if (formData.endDate && formData.endTime) {
-        formData.endDate = this.combineDateAndTimeCORREGIDO(formData.endDate, formData.endTime);
-        console.log('📅 EndDate combinado CORREGIDO:', formData.endDate);
-        delete formData.endTime;
-      }
-      
-      // Convertir a UTC
-      formData.startDate = this.createUTCDate(formData.startDate);
-      formData.endDate = this.createUTCDate(formData.endDate);
+if (formData.startDate && formData.startTime) {
+  formData.startDate = this.combineDateAndTimePlus4Hours(formData.startDate, formData.startTime);
+  delete formData.startTime;
+}
+if (formData.endDate && formData.endTime) {
+  formData.endDate = this.combineDateAndTimePlus4Hours(formData.endDate, formData.endTime);
+  delete formData.endTime;
+}
       formData.minIncrement = formData.minIncrement;
       formData.adminId = this.user?.id;
 
@@ -123,27 +115,46 @@ export class NewAuctionComponent implements OnInit {
   }
 
   // ✅ MÉTODO CORREGIDO - Combinar fecha y hora sin cambiar el día
-  private combineDateAndTimeCORREGIDO(dateString: string, timeString: string): Date {
-    console.log('🔧 COMBINANDO FECHA Y HORA:');
-    console.log('📅 DateString recibido:', dateString);
-    console.log('⏰ TimeString recibido:', timeString);
-    
-    const [hours, minutes] = timeString.split(':').map(Number);
-    
-    // ✅ SOLUCIÓN: Crear la fecha correctamente sin timezone issues
-    const dateParts = dateString.split('-');
-    const year = parseInt(dateParts[0]);
-    const month = parseInt(dateParts[1]) - 1; // Los meses en Date son 0-based
-    const day = parseInt(dateParts[2]);
-    
-    // Crear fecha local explícitamente
-    const combinedDate = new Date(year, month, day, hours, minutes, 0, 0);
-    
-    console.log('📅 Fecha combinada resultante:', combinedDate);
-    console.log('📅 Día resultante:', combinedDate.getDate());
-    
-    return combinedDate;
-  }
+ private combineDateAndTimeLocal(dateString: string, timeString: string): string {
+  const [hours, minutes] = timeString.split(':').map(Number);
+  const dateParts = dateString.split('-');
+  const year = parseInt(dateParts[0]);
+  const month = parseInt(dateParts[1]) - 1;
+  const day = parseInt(dateParts[2]);
+
+  // Crear fecha en hora local
+  const combinedDate = new Date(year, month, day, hours, minutes, 0, 0);
+
+  // Enviar como ISO local (sin sumar 4h)
+  // NOTA: toISOString() siempre convierte a UTC → NO USAR
+  // Podemos usar toJSON() o formatear manualmente
+  return this.formatDateTimeLocal(combinedDate);
+}
+
+private combineDateAndTimePlus4Hours(dateString: string, timeString: string): string {
+  const [hours, minutes] = timeString.split(':').map(Number);
+  const [year, month, day] = dateString.split('-').map(Number);
+
+  // Crear fecha local
+  const date = new Date(year, month - 1, day, hours, minutes, 0, 0);
+
+  // Sumar 4 horas
+  date.setHours(date.getHours() );
+
+  // Devolver ISO completo con Z para Prisma
+  return date.toISOString(); // ⚡ Incluye milisegundos y Z al final
+}
+
+
+private formatDateTimeLocal(date: Date): string {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  const h = String(date.getHours()).padStart(2, '0');
+  const min = String(date.getMinutes()).padStart(2, '0');
+  const s = String(date.getSeconds()).padStart(2, '0');
+  return `${y}-${m}-${d}T${h}:${min}:${s}`;
+}
 
   // ✅ Crear fecha UTC manteniendo el mismo día
   private createUTCDate(dateInput: any): string {
