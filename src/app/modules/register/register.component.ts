@@ -27,6 +27,7 @@ export class RegisterComponent implements OnInit {
   };
   initiaData: any
   catalogs: any = {};
+  public disabled = false;
   public view = false
   constructor(
 
@@ -68,7 +69,9 @@ export class RegisterComponent implements OnInit {
   }
 
   async save() {
-    if (this.formData?.valid) {
+   
+    if (this.formData?.valid && !this.disabled) {
+       this.disabled= true
       delete this.formData.data.phone;
       delete this.formData.data.repeatPassword;
       this.formData.data.roleName = 'BUYER';
@@ -77,6 +80,7 @@ export class RegisterComponent implements OnInit {
 
       }
       this.apiService.register(this.formData.data).then((res: any) => {
+        this.disabled= false;
         this.toaster.showToast({
           severity: 'success',
           summary: 'Registro exitoso',

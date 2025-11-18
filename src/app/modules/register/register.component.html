@@ -32,7 +32,7 @@
             <div class="mx-5 px-2 flex flex-col space-y-4">
                 <button 
                     (click)="save()" 
-                    [disabled]="!formData?.valid" 
+                    [disabled]="!formData?.valid && !disabled" 
                     class="w-full py-3 px-5 rounded-lg transition duration-200 font-medium
                         disabled:bg-gray-400 disabled:cursor-not-allowed
                         bg-green-700 hover:bg-green-800 text-white shadow-md hover:shadow-lg">

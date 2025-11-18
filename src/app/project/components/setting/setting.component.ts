@@ -44,10 +44,10 @@ Math: any;
   ) {}
 
   ngOnInit() {
-    setTimeout(() => {
+  /*   setTimeout(() => {
       this.loadUserLogs();
     }, 500);
-    
+     */
   }
 
   getTabClass(tab: string): string {
@@ -59,7 +59,7 @@ Math: any;
   }
 
   // Métodos para cargar logs
-loadUserLogs(page: number = 1) {
+/* loadUserLogs(page: number = 1) {
   console.log(this.user?.id);
   
   if (!this.user?.id) return;
@@ -83,15 +83,15 @@ loadUserLogs(page: number = 1) {
     this.loadingLogs = false;
     this.userLogs = [];
   });
-}
+} */
 
-  nextPage() {
+/*   nextPage() {
     if (this.pagination && this.pagination.page < this.pagination.pages) {
       this.loadUserLogs(this.pagination.page + 1);
     }
-  }
+  } */
 
-  getStartIndex(): number {
+/*   getStartIndex(): number {
   if (!this.pagination) return 0;
   return (this.pagination.page - 1) * this.pagination.limit + 1;
 }
@@ -99,12 +99,12 @@ loadUserLogs(page: number = 1) {
 getEndIndex(): number {
   if (!this.pagination) return 0;
   return Math.min(this.pagination.page * this.pagination.limit, this.pagination.total);
-}
-  previousPage() {
+} */
+ /*  previousPage() {
     if (this.pagination && this.pagination.page > 1) {
       this.loadUserLogs(this.pagination.page - 1);
     }
-  }
+  } */
 
   getActionBadgeClass(action: string): string {
   const classes: any = {
@@ -182,7 +182,7 @@ getActionDescription(log: any): string {
       if (data) {
         this.reloadData();
         // Log automático de actualización
-        this.logUserAction('UPDATE_PROFILE', 'PROFILE');
+        /* this.logUserAction('UPDATE_PROFILE', 'PROFILE'); */
       }
     });
   }
@@ -195,9 +195,9 @@ getActionDescription(log: any): string {
       closable: true
     });
     this.ref.onClose.subscribe((data: any) => {
-      if (data) {
+      /* if (data) {
         this.logUserAction('UPDATE_PASSWORD', 'PROFILE');
-      }
+      } */
     });
   }
 

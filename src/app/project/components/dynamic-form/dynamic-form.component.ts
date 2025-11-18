@@ -82,21 +82,21 @@ export class DynamicFormComponent implements OnInit {
 
   constructor(private fb: FormBuilder) { }
 
-  ngOnInit(): void {
-    this.form = this.fb.group({});
-    this.buildForm(this.fields);
+ ngOnInit(): void {
+  this.form = this.fb.group({});
+  this.buildForm(this.fields);
 
-    if (this.initialData) {
-      this.form.patchValue(this.initialData);
-      this.handleInitialFileValues();
-    }
-
-    if (this.askfor) {
-      this.askfor(this.form);
-    }
-
-    this.subscribeToFormChanges();
+  if (this.initialData) {
+    this.form.patchValue(this.initialData);
+    this.handleInitialValues(); // ✅ Cambiado de handleInitialFileValues a handleInitialValues
   }
+
+  if (this.askfor) {
+    this.askfor(this.form);
+  }
+
+  this.subscribeToFormChanges();
+}
 
   private handleInitialFileValues(): void {
     this.fields.forEach(field => {
@@ -500,6 +500,51 @@ getStepValue(validators: FieldValidator | undefined): string {
   if (!validators?.allowDecimals) return '1';
   if (!validators.decimalPlaces) return 'any';
   return '0.' + '1'.padStart(validators.decimalPlaces, '0');
+}
+
+private handleInitialValues(): void {
+  this.fields.forEach(field => {
+    if (field.columns) {
+      field.columns.forEach(column => {
+        column.fields.forEach(f => {
+          this.processFieldInitialValue(f);
+        });
+      });
+    }
+    this.processFieldInitialValue(field);
+  });
+}
+
+private processFieldInitialValue(field: FormField): void {
+  if (field.type === 'file' && this.initialData[field.key]) {
+    this.previewFiles[field.key] = this.initialData[field.key];
+    this.form.get(field.key)?.setValue(this.initialData[field.key]);
+  }
+  
+  // ✅ NUEVO: Manejo especial para campos de fecha
+  if ((field.type === 'date' || field.type === 'datetime') && this.initialData[field.key]) {
+    const dateValue = this.initialData[field.key];
+    
+    if (dateValue) {
+      // Convertir a Date object si es string
+      const date = typeof dateValue === 'string' ? new Date(dateValue) : dateValue;
+      
+      // Ajustar la fecha para compensar el desfase de zona horaria
+      const adjustedDate = new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
+      
+      // Formatear como YYYY-MM-DD para el input date
+      const formattedDate = this.formatDateForInput(adjustedDate);
+      
+      this.form.get(field.key)?.setValue(formattedDate);
+    }
+  }
+}
+
+private formatDateForInput(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 }
 
   onSubmit(): void {

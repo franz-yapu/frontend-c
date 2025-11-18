@@ -29,6 +29,7 @@ interface AuctionDetail {
   coffeeLot: CoffeeLot;
   auctionId: string;
   coffeeLotId: string;
+  position: number; // ✅ NUEVA PROPIEDAD
 }
 
 interface Auction {
@@ -358,43 +359,48 @@ handleAuctionExtension(extensionData: any) {
   }
 
   // Ordenar lotes
-  sortLots() {
-    this.filteredLots.sort((a, b) => {
-      let valueA, valueB;
-      
-      switch (this.sortBy) {
-        case 'name':
-          valueA = a.coffeeLot.name;
-          valueB = b.coffeeLot.name;
-          break;
-        case 'score':
-          valueA = a.coffeeLot.cupScore;
-          valueB = b.coffeeLot.cupScore;
-          break;
-        case 'price':
-          valueA = a.currentPrice;
-          valueB = b.currentPrice;
-          break;
-        case 'quantity':
-          valueA = a.coffeeLot.quantityLbs;
-          valueB = b.coffeeLot.quantityLbs;
-          break;
-        default:
-          valueA = a.coffeeLot.name;
-          valueB = b.coffeeLot.name;
-      }
-      
-      if (typeof valueA === 'string' && typeof valueB === 'string') {
-        return this.sortDirection === 'asc' 
-          ? valueA.localeCompare(valueB) 
-          : valueB.localeCompare(valueA);
-      } else {
-        return this.sortDirection === 'asc' 
-          ? Number(valueA) - Number(valueB)
-          : Number(valueB) - Number(valueA);
-      }
-    });
-  }
+  // Ordenar lotes
+sortLots() {
+  this.filteredLots.sort((a, b) => {
+    let valueA, valueB;
+    
+    switch (this.sortBy) {
+      case 'position': // ✅ NUEVA OPCIÓN DE ORDENAMIENTO
+        valueA = a.position;
+        valueB = b.position;
+        break;
+      case 'name':
+        valueA = a.coffeeLot.name;
+        valueB = b.coffeeLot.name;
+        break;
+      case 'score':
+        valueA = a.coffeeLot.cupScore;
+        valueB = b.coffeeLot.cupScore;
+        break;
+      case 'price':
+        valueA = a.currentPrice;
+        valueB = b.currentPrice;
+        break;
+      case 'quantity':
+        valueA = a.coffeeLot.quantityLbs;
+        valueB = b.coffeeLot.quantityLbs;
+        break;
+      default:
+        valueA = a.position; // ✅ POR DEFECTO ORDENAR POR POSICIÓN
+        valueB = b.position;
+    }
+    
+    if (typeof valueA === 'string' && typeof valueB === 'string') {
+      return this.sortDirection === 'asc' 
+        ? valueA.localeCompare(valueB) 
+        : valueB.localeCompare(valueA);
+    } else {
+      return this.sortDirection === 'asc' 
+        ? Number(valueA) - Number(valueB)
+        : Number(valueB) - Number(valueA);
+    }
+  });
+}
 
   // Cambiar criterio de ordenamiento
   changeSort(criteria: string) {

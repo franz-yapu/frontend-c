@@ -32,39 +32,9 @@ export class NewAuctionComponent implements OnInit {
     private generalService: GeneralService
   ) { }
 
- async ngOnInit() {
-  this.user = this.generalService.getUser();
-  console.log(this.user);
-  console.log(this.initiaData);
-  
-  if(this.initiaData){
-    // Separar fecha y hora de los datos existentes para la edición
-    const startDate = new Date(this.initiaData.startDate);
-    const endDate = new Date(this.initiaData.endDate);
-    
-    this.initiaData = {
-      ...this.initiaData,
-      startDate: this.formatDateToYMD(startDate),
-      startTime: this.formatTime(startDate),
-      endDate: this.formatDateToYMD(endDate),
-      endTime: this.formatTime(endDate)
-    };
-    
-    console.log(this.initiaData);
-  }
-}
-
-  private formatDateToYMD(date: Date): string {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
-
-  private formatTime(date: Date): string {
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    return `${hours}:${minutes}`;
+  async ngOnInit() {
+    this.user = this.generalService.getUser();
+    console.log('📝 Datos iniciales:', this.initiaData);
   }
 
   PatientsFormFields(catalogs: any): any[] {
@@ -81,78 +51,125 @@ export class NewAuctionComponent implements OnInit {
     this.formData = event;
   }
 
- async save() {
-  if (this.formData?.valid) {
-    console.log('Datos del formulario:', this.formData);
-    
-    // Combinar fecha y hora en un solo campo
-    const formData = { ...this.formData.data };
-    
-    // Combinar startDate + startTime en startDate
-    if (formData.startDate && formData.startTime) {
-      formData.startDate = this.combineDateAndTime(formData.startDate, formData.startTime);
-      // Eliminar el campo startTime ya que no debe enviarse
-      delete formData.startTime;
-    }
-    
-    // Combinar endDate + endTime en endDate
-    if (formData.endDate && formData.endTime) {
-      formData.endDate = this.combineDateAndTime(formData.endDate, formData.endTime);
-      // Eliminar el campo endTime ya que no debe enviarse
-      delete formData.endTime;
-    }
-    
-    // Convertir a UTC
-    formData.startDate = this.convertToUTCDate(formData.startDate);
-    formData.endDate = this.convertToUTCDate(formData.endDate);
-    formData.minIncrement = formData.minIncrement;
-    formData.adminId = this.user?.id;
+  async save() {
+    if (this.formData?.valid) {
+      console.log('💾 === INICIANDO GUARDADO ===');
+      console.log('📅 Datos del formulario:', this.formData);
+      
+      // Combinar fecha y hora en un solo campo
+      const formData = { ...this.formData.data };
+      
+      // Combinar startDate + startTime en startDate
+      if (formData.startDate && formData.startTime) {
+        formData.startDate = this.combineDateAndTimeCORREGIDO(formData.startDate, formData.startTime);
+        console.log('📅 StartDate combinado CORREGIDO:', formData.startDate);
+        delete formData.startTime;
+      }
+      
+      // Combinar endDate + endTime en endDate
+      if (formData.endDate && formData.endTime) {
+        formData.endDate = this.combineDateAndTimeCORREGIDO(formData.endDate, formData.endTime);
+        console.log('📅 EndDate combinado CORREGIDO:', formData.endDate);
+        delete formData.endTime;
+      }
+      
+      // Convertir a UTC
+      formData.startDate = this.createUTCDate(formData.startDate);
+      formData.endDate = this.createUTCDate(formData.endDate);
+      formData.minIncrement = formData.minIncrement;
+      formData.adminId = this.user?.id;
 
-    console.log('Datos a guardar:', formData);
-    
-    if (this.initiaData?.id) {
-      this.service.updateAuctions(this.initiaData.id, formData).then(res => {
-        this.ref.close(res);
-      });
-    } else {
-      this.service.createAuctions(formData).then(res => {
+      console.log('📅 Datos a enviar al backend:', formData);
+      console.log('📅 StartDate (UTC):', formData.startDate);
+      console.log('📅 EndDate (UTC):', formData.endDate);
+      console.log('💾 === FIN GUARDADO ===');
+      
+      try {
+        if (this.initiaData?.id) {
+          await this.service.updateAuctions(this.initiaData.id, formData).then(res => {
+            this.toaster.showToast({
+              severity: 'success',
+              summary: 'Actualizado',
+              detail: 'Los datos se actualizaron correctamente',
+            });
+            this.ref.close(res);
+          });
+        } else {
+          await this.service.createAuctions(formData).then(res => {
+            this.toaster.showToast({
+              severity: 'success',
+              summary: 'Guardado',
+              detail: 'Los datos se guardaron correctamente',
+            });
+            this.ref.close(res);
+          });
+        }
+      } catch (error) {
+        console.error('❌ Error al guardar:', error);
         this.toaster.showToast({
-          severity: 'success',
-          summary: 'Guardado',
-          detail: this.initiaData ? 'Los datos se actualizaron correctamente' : 'Los datos se guardaron correctamente',
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Ocurrió un error al guardar los datos',
         });
-        this.ref.close(res);
+      }
+    } else {
+      console.log("❌ Formulario no válido");
+      this.toaster.showToast({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Por favor complete todos los campos requeridos correctamente',
       });
     }
-  } else {
-    console.log("Formulario no válido");
   }
-}
 
-private combineDateAndTime(dateString: string, timeString: string): Date {
-  const [hours, minutes] = timeString.split(':').map(Number);
-  const date = new Date(dateString);
-  date.setHours(hours, minutes, 0, 0);
-  return date;
-}
+  // ✅ MÉTODO CORREGIDO - Combinar fecha y hora sin cambiar el día
+  private combineDateAndTimeCORREGIDO(dateString: string, timeString: string): Date {
+    console.log('🔧 COMBINANDO FECHA Y HORA:');
+    console.log('📅 DateString recibido:', dateString);
+    console.log('⏰ TimeString recibido:', timeString);
+    
+    const [hours, minutes] = timeString.split(':').map(Number);
+    
+    // ✅ SOLUCIÓN: Crear la fecha correctamente sin timezone issues
+    const dateParts = dateString.split('-');
+    const year = parseInt(dateParts[0]);
+    const month = parseInt(dateParts[1]) - 1; // Los meses en Date son 0-based
+    const day = parseInt(dateParts[2]);
+    
+    // Crear fecha local explícitamente
+    const combinedDate = new Date(year, month, day, hours, minutes, 0, 0);
+    
+    console.log('📅 Fecha combinada resultante:', combinedDate);
+    console.log('📅 Día resultante:', combinedDate.getDate());
+    
+    return combinedDate;
+  }
 
-convertToUTCDate(dateInput: any): Date {
-  const date = new Date(dateInput);
-  
-  // Sumar 4 horas para compensar la diferencia
-  date.setHours(date.getHours() + 4);
-  
-  return new Date(Date.UTC(
-    date.getFullYear(),
-    date.getMonth(),
-    date.getDate(),
-    date.getHours(),
-    date.getMinutes(),
-    0, 0
-  ));
-}
-
-  
+  // ✅ Crear fecha UTC manteniendo el mismo día
+  private createUTCDate(dateInput: any): string {
+    const date = new Date(dateInput);
+    
+    console.log('🔄 CREANDO FECHA UTC:');
+    console.log('📅 Fecha local original:', date.toString());
+    console.log('📅 Día local:', date.getDate());
+    
+    // Crear fecha UTC manteniendo EXACTAMENTE el mismo día y hora
+    const utcDate = new Date(Date.UTC(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),  // Mismo día
+      date.getHours(), // Misma hora
+      date.getMinutes(),
+      0, 0
+    ));
+    
+    const result = utcDate.toISOString();
+    
+    console.log('📅 Fecha UTC creada:', result);
+    console.log('📅 Día en resultado:', new Date(result).getUTCDate());
+    
+    return result;
+  }
 
   close() {
     this.ref.close();
