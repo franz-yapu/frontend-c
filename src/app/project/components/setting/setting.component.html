@@ -165,8 +165,8 @@
     </div>
 
     <!-- Activity Tab -->
-    <div *ngIf="activeTab === 'activity'">
-      <!-- ... (tu contenido actual de activity tab permanece igual) ... -->
+   <!--  <div *ngIf="activeTab === 'activity'">
+   
       <div class="mb-6">
         <h3 class="text-lg font-semibold text-amber-900">
           Historial de Actividad
@@ -174,15 +174,15 @@
         <p class="text-sm text-gray-600 mt-1">Registro completo de todas las actividades realizadas</p>
       </div>
 
-      <!-- Loading State -->
+  
       <div *ngIf="loadingLogs" class="text-center py-8">
         <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-amber-900"></div>
         <p class="mt-2 text-gray-600">Cargando actividad...</p>
       </div>
 
-      <!-- Activity Table -->
+   
       <div *ngIf="!loadingLogs" class="bg-white rounded-lg border border-gray-200 overflow-hidden">
-        <!-- Table -->
+   
         <div class="overflow-x-auto">
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
@@ -235,7 +235,7 @@
           </table>
         </div>
 
-        <!-- Empty State -->
+      
         <div *ngIf="userLogs.length === 0" class="text-center py-12">
           <div class="mx-auto h-16 w-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
             <svg class="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -247,7 +247,7 @@
         </div>
       </div>
 
-      <!-- Pagination -->
+ 
       <div *ngIf="pagination && pagination.pages > 1" class="flex justify-between items-center mt-6 px-2">
         <div class="text-sm text-gray-600">
           Mostrando {{ getStartIndex() }} - {{ getEndIndex() }} de {{ pagination.total }} registros
@@ -278,6 +278,6 @@
           </button>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </div>

@@ -1,5 +1,5 @@
 // setting.component.ts
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { EditSettingComponent } from './edit-setting/edit-setting.component';
@@ -14,7 +14,7 @@ import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-setting',
-  imports: [CommonModule, DatePipe, FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './setting.component.html',
   styleUrl: './setting.component.scss',
   providers: [DialogService],
