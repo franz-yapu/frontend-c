@@ -5,6 +5,7 @@ import { interval, Subscription } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GeneralService } from '../../../core/gerneral.service';
+import { TranslateDirective } from '../../../project/directive/translate.directive';
 
 interface CoffeeLot {
   id: string;
@@ -59,7 +60,7 @@ interface Bid {
 
 @Component({
   selector: 'app-buyer-auction',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule,TranslateDirective],
   templateUrl: './buyer-auction.component.html',
   styleUrl: './buyer-auction.component.scss'
 })

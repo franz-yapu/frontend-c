@@ -11,10 +11,12 @@ import { ToasterService } from '../../services/toaster.service';
 import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
 import { Router } from '@angular/router';
 import { ApiService } from '../../services/api.service';
+import { TranslateDirective } from '../../directive/translate.directive';
+
 
 @Component({
   selector: 'app-setting',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule,TranslateDirective],
   templateUrl: './setting.component.html',
   styleUrl: './setting.component.scss',
   providers: [DialogService],
@@ -48,6 +50,8 @@ Math: any;
       this.loadUserLogs();
     }, 500);
      */
+    console.log(this.user);
+    
   }
 
   getTabClass(tab: string): string {

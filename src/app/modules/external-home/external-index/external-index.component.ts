@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
+import { TranslateDirective } from '../../../project/directive/translate.directive';
 
 @Component({
   selector: 'app-external-index',
-  imports: [RouterModule],
+  imports: [RouterModule,TranslateDirective],
   templateUrl: './external-index.component.html',
   styleUrl: './external-index.component.scss'
 })

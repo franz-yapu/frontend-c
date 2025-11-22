@@ -5,11 +5,12 @@ import { FormsModule } from '@angular/forms';
 import { Subscription, catchError, of } from 'rxjs';
 import { BuyerService } from '../../../modules/buyer/buyer.service';
 import { LotDetailComponent } from './lot-detail/lot-detail.component';
+import { TranslateDirective } from '../../directive/translate.directive';
 
 @Component({
   selector: 'app-auction-view',
   standalone: true,
-  imports: [CommonModule, FormsModule,LotDetailComponent],
+  imports: [CommonModule, FormsModule,LotDetailComponent,TranslateDirective],
   templateUrl: './auction-view.component.html',
   styleUrls: ['./auction-view.component.scss']
 })

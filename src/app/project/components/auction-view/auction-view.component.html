@@ -1,35 +1,6 @@
 <div class="min-h-screen bg-amber-50 py-4 px-4">
   <div class="max-w-[1800px] mx-auto">
     
-    <!-- NOTIFICACIÓN DE EXTENSIÓN O CIERRE -->
-  <!--   @if (showExtensionNotification) {
-      <div class="fixed top-4 right-4 z-50 animate-fade-in">
-        <div class="bg-gradient-to-r from-green-500 to-green-600 text-white p-4 rounded-xl shadow-2xl border border-green-400/30 backdrop-blur-sm max-w-sm">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center">
-              <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center mr-3">
-                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-              </div>
-              <div>
-                <p class="font-bold text-sm">{{ extensionMessage.includes('extendida') ? '¡Subasta Extendida!' : '¡Subasta Finalizada!' }}</p>
-                <p class="text-white/90 text-xs mt-1">{{ extensionMessage }}</p>
-              </div>
-            </div>
-            <button 
-              (click)="closeExtensionNotification()"
-              class="text-white/80 hover:text-white transition-colors p-1"
-            >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-              </svg>
-            </button>
-          </div>
-        </div>
-      </div>
-    }
- -->
     <!-- Header Principal -->
     <div class="bg-gradient-to-r from-amber-900 to-amber-950 rounded-2xl shadow-2xl overflow-hidden mb-6 border border-amber-700/30">
       <div class="p-6 text-white relative overflow-hidden">
@@ -42,8 +13,8 @@
         <div class="relative z-10">
           <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
             <div class="flex-1">
-              <h1 class="text-2xl md:text-3xl font-bold mb-2 tracking-tight">Subasta de Café Especial</h1>
-              <p class="text-amber-100 text-base mb-3 max-w-2xl">Sigue en tiempo real el desarrollo de nuestra subasta de cafés premium</p>
+              <h1 class="text-2xl md:text-3xl font-bold mb-2 tracking-tight" appTranslate="AUCTION.HERO.TITLE">Subasta de Café Especial</h1>
+              <p class="text-amber-100 text-base mb-3 max-w-2xl" appTranslate="AUCTION.HERO.SUBTITLE">Sigue en tiempo real el desarrollo de nuestra subasta de cafés premium</p>
 
               <!-- Información de la subasta -->
               @if (auctionData.length > 0) {
@@ -55,7 +26,7 @@
                     </svg>
                   </div>
                   <div>
-                    <p class="text-amber-200 text-xs">Inicio</p>
+                    <p class="text-amber-200 text-xs" appTranslate="AUCTION.HERO.START_DATE">Inicio</p>
                     <p class="font-medium text-sm">{{ auctionData[0].startDate | date:'dd MMM yyyy hh:mm' }}</p>
                   </div>
                 </div>
@@ -67,7 +38,7 @@
                     </svg>
                   </div>
                   <div>
-                    <p class="text-amber-200 text-xs">Fin</p>
+                    <p class="text-amber-200 text-xs" appTranslate="AUCTION.HERO.END_DATE">Fin</p>
                     <p class="font-medium text-sm">{{ auctionData[0].endDate | date:'dd MMM yyyy hh:mm' }}</p>
                   </div>
                 </div>
@@ -85,30 +56,38 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                   </svg>
                 </div>
-                <p class="text-base font-medium text-amber-50">Subasta Finalizada</p>
-                <p class="text-xs text-amber-200 mt-1">Resultados disponibles</p>
+                <p class="text-base font-medium text-amber-50" appTranslate="AUCTION.TIMER.ENDED">Subasta Finalizada</p>
+                <p class="text-xs text-amber-200 mt-1" appTranslate="AUCTION.TIMER.RESULTS_AVAILABLE">Resultados disponibles</p>
               </div>
               } @else {
               <div class="flex flex-col items-center">
-                <span class="text-xs text-amber-200 mb-2 uppercase tracking-wider">
-                  {{ calculateTimeRemaining(auctionData[0]).hasStarted ? 'Finaliza en:' : 'Comienza en:' }}
-                </span>
+                 @if(calculateTimeRemaining(auctionData[0]).hasStarted){
+                <span class="text-sm text-white mb-4 uppercase tracking-wider font-medium" appTranslate="AUCTION.TIMER.ENDS_IN" >
+                    Finaliza en
+                  </span>
+                  }
+                   @if(!calculateTimeRemaining(auctionData[0]).hasStarted){
+                <span class="text-sm text-white mb-4 uppercase tracking-wider font-medium" appTranslate="AUCTION.TIMER.STARTS_IN">
+                    Comienza en
+                  </span>
+                  }
+              
                 <div class="grid grid-cols-4 gap-1">
                   <div class="bg-amber-800/80 text-white px-2 py-2 rounded-lg text-center min-w-[60px] backdrop-blur-sm">
                     <span class="block text-xl font-bold">{{ calculateTimeRemaining(auctionData[0]).days }}</span>
-                    <span class="block text-xs mt-1 opacity-80">Días</span>
+                    <span class="block text-xs mt-1 opacity-80" appTranslate="AUCTION.TIMER.DAYS">Días</span>
                   </div>
                   <div class="bg-amber-800/80 text-white px-2 py-2 rounded-lg text-center min-w-[60px] backdrop-blur-sm">
                     <span class="block text-xl font-bold">{{ calculateTimeRemaining(auctionData[0]).hours | number:'2.0' }}</span>
-                    <span class="block text-xs mt-1 opacity-80">Horas</span>
+                    <span class="block text-xs mt-1 opacity-80" appTranslate="AUCTION.TIMER.HOURS">Horas</span>
                   </div>
                   <div class="bg-amber-800/80 text-white px-2 py-2 rounded-lg text-center min-w-[60px] backdrop-blur-sm">
                     <span class="block text-xl font-bold">{{ calculateTimeRemaining(auctionData[0]).minutes | number:'2.0' }}</span>
-                    <span class="block text-xs mt-1 opacity-80">Min</span>
+                    <span class="block text-xs mt-1 opacity-80" appTranslate="AUCTION.TIMER.MINUTES">Min</span>
                   </div>
                   <div class="bg-amber-800/80 text-white px-2 py-2 rounded-lg text-center min-w-[60px] backdrop-blur-sm">
                     <span class="block text-xl font-bold">{{ calculateTimeRemaining(auctionData[0]).seconds | number:'2.0' }}</span>
-                    <span class="block text-xs mt-1 opacity-80">Seg</span>
+                    <span class="block text-xs mt-1 opacity-80" appTranslate="AUCTION.TIMER.SECONDS">Seg</span>
                   </div>
                 </div>
               </div>
@@ -124,15 +103,15 @@
     <div class="mb-8">
       <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
         <div>
-          <h2 class="text-xl md:text-2xl font-bold text-amber-900 mb-1">Lotes en Subasta</h2>
-          <p class="text-amber-700 text-sm">Descubre los cafés especiales disponibles</p>
+          <h2 class="text-xl md:text-2xl font-bold text-amber-900 mb-1" appTranslate="AUCTION.LOTS_TITLE">Lotes en Subasta</h2>
+          <p class="text-amber-700 text-sm" appTranslate="AUCTION.LOTS_SUBTITLE">Descubre los cafés especiales disponibles</p>
         </div>
         <div class="mt-3 md:mt-0">
           <span class="inline-flex items-center px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-medium">
             <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"></path>
             </svg>
-            {{ filteredLots.length }} Lotes
+            {{ filteredLots.length }} <span appTranslate="AUCTION.LOTS_COUNT">Lotes</span>
           </span>
         </div>
       </div>
@@ -148,7 +127,7 @@
                 #{{ detail.coffeeLot.position }}
               </span>
               <span class="px-2 py-1 bg-white/90 text-amber-900 rounded-full text-xs font-semibold shadow-sm">
-                {{ detail.coffeeLot.cupScore }} pts
+                {{ detail.coffeeLot.cupScore }} <span appTranslate="AUCTION.LOT.POINTS">pts</span>
               </span>
             </div>
             <div class="absolute bottom-2 left-3">
@@ -186,7 +165,7 @@
                     <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
                   </svg>
                 </div>
-                <span class="text-xs">{{ detail.coffeeLot.altitude }}m</span>
+                <span class="text-xs">{{ detail.coffeeLot.altitude }}<span appTranslate="AUCTION.LOT.METERS">m</span></span>
               </div>
 
               <div class="flex items-center">
@@ -195,7 +174,7 @@
                     <path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd"></path>
                   </svg>
                 </div>
-                <span class="text-xs">{{ detail.coffeeLot.quantityLbs }}lbs</span>
+                <span class="text-xs">{{ detail.coffeeLot.quantityLbs }}<span appTranslate="AUCTION.LOT.LBS">lbs</span></span>
               </div>
             </div>
 
@@ -212,11 +191,11 @@
               <!-- Precio base compacto -->
               <div class="bg-amber-50 rounded-lg p-2 border border-amber-200">
                 <div class="flex justify-between items-center mb-1">
-                  <span class="text-xs text-amber-700">Base/libra:</span>
+                  <span class="text-xs text-amber-700" appTranslate="AUCTION.LOT.BASE_PRICE">Base/libra:</span>
                   <span class="text-sm font-semibold text-amber-900">{{ detail.startingPrice | currency:'USD':'symbol' }}</span>
                 </div>
                 <div class="flex justify-between items-center text-xs">
-                  <span class="text-amber-600">Total:</span>
+                  <span class="text-amber-600" appTranslate="AUCTION.LOT.TOTAL">Total:</span>
                   <span class="font-medium text-amber-800">
                     {{ (detail.startingPrice * detail.coffeeLot.quantityLbs) | currency:'USD':'symbol' }}
                   </span>
@@ -226,11 +205,11 @@
               <!-- Precio actual compacto -->
               <div class="bg-green-50 rounded-lg p-2 border border-green-200">
                 <div class="flex justify-between items-center mb-1">
-                  <span class="text-xs text-green-700">Oferta/libra:</span>
+                  <span class="text-xs text-green-700" appTranslate="AUCTION.LOT.CURRENT_BID">Oferta/libra:</span>
                   <span class="text-sm font-bold text-green-900">{{ detail.currentPrice | currency:'USD':'symbol' }}</span>
                 </div>
                 <div class="flex justify-between items-center text-xs">
-                  <span class="text-green-600">Total:</span>
+                  <span class="text-green-600" appTranslate="AUCTION.LOT.TOTAL">Total:</span>
                   <span class="font-bold text-green-800">
                     {{ (detail.currentPrice * detail.coffeeLot.quantityLbs) | currency:'USD':'symbol' }}
                   </span>
@@ -241,7 +220,7 @@
             <!-- Últimas pujas - MÁXIMO 3 -->
             <div class="mt-3">
               <div class="flex items-center justify-between mb-2">
-                <h5 class="text-xs font-semibold text-amber-800">Últimas ofertas</h5>
+                <h5 class="text-xs font-semibold text-amber-800" appTranslate="AUCTION.LOT.RECENT_BIDS">Últimas ofertas</h5>
               </div>
 
               @if ((lastBids.get(detail.coffeeLot.id) || []).length > 0) {
@@ -280,11 +259,12 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
         </svg>
       </div>
-      <h3 class="text-lg font-semibold text-amber-800 mb-1">No hay lotes disponibles</h3>
-      <p class="text-amber-600 text-sm max-w-md mx-auto">Actualmente no hay lotes de café disponibles en subasta.</p>
+      <h3 class="text-lg font-semibold text-amber-800 mb-1" appTranslate="AUCTION.EMPTY.TITLE">No hay lotes disponibles</h3>
+      <p class="text-amber-600 text-sm max-w-md mx-auto" appTranslate="AUCTION.EMPTY.SUBTITLE">Actualmente no hay lotes de café disponibles en subasta.</p>
     </div>
     }
   </div>
+  
 </div>
 
 @if (selectedLot) {

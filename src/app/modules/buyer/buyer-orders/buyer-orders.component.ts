@@ -2,11 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { BuyerService } from '../buyer.service';
 import { GeneralService } from '../../../core/gerneral.service';
+import { TranslateDirective } from '../../../project/directive/translate.directive';
+
 
 @Component({
   selector: 'app-buyer-orders',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateDirective],
   templateUrl: './buyer-orders.component.html',
   styleUrls: ['./buyer-orders.component.scss']
 })

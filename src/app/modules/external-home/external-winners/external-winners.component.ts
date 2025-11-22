@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { HomeService } from '../../home/home.service';
+import { TranslateDirective } from '../../../project/directive/translate.directive';
 
 @Component({
   selector: 'app-external-winners',
-  imports: [CommonModule],
+  imports: [CommonModule,TranslateDirective],
   templateUrl: './external-winners.component.html',
   styleUrl: './external-winners.component.scss'
 })

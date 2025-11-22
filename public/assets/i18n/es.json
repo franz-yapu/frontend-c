@@ -1,0 +1,339 @@
+{
+  "NAV": {
+    "HOME": "Inicio",
+    "WINNERS": "Ganadores",
+    "AUCTION": "Subasta Activa",
+    "REGULATION": "Reglamento",
+    "ABOUT": "Acerca de nosotros",
+    "LANGUAGE": "Idioma",
+    "DASHBOARD": "Dashboard",
+    "ORDERS": "Órdenes",
+    "MY_DATA": "Mis datos",
+    "LOGOUT": "Cerrar sesión"
+  },
+  "APP": {
+    "TITLE": "Altura",
+    "TITLE_ACCENT": " Café"
+  },
+  "HOME": {
+    "HERO": {
+      "TITLE": "Subasta Premium de Cafés Especiales",
+      "SUBTITLE": "Descubre los mejores lotes de café de origen boliviano directamente de productores especializados",
+      "AUCTION_BUTTON": "Ver Subastas Activas",
+      "LOGIN_BUTTON": "Ingresar",
+      "REGISTER_BUTTON": "Crear Cuenta"
+    },
+    "FEATURES": {
+      "TITLE": "¿Por qué participar en nuestras subastas?",
+      "SUBTITLE": "Conectamos directamente a productores de café especial con compradores exigentes",
+      "QUALITY_TITLE": "Calidad Certificada",
+      "QUALITY_DESC": "Todos nuestros lotes tienen puntuación Q Grader y análisis de calidad garantizada",
+      "FAIR_TRADE_TITLE": "Comercio Justo",
+      "FAIR_TRADE_DESC": "Los productores reciben hasta un 40% más que en canales tradicionales",
+      "TRANSPARENCY_TITLE": "Transparencia Total",
+      "TRANSPARENCY_DESC": "Seguimiento completo desde el productor hasta tu taza de café"
+    },
+    "ORIGINS": {
+      "TITLE": "Orígenes Premium de Bolivia",
+      "SUBTITLE": "Descubre la diversidad de sabores de nuestras regiones cafetaleras",
+      "CARANAVI_DESC": "Altitud: 1,200 - 1,800 msnm. Sabores: Cítricos, Chocolate",
+      "YUNGAS_DESC": "Altitud: 800 - 1,600 msnm. Sabores: Frutales, Especiados",
+      "SANTA_CRUZ_DESC": "Altitud: 400 - 1,200 msnm. Sabores: Dulces, Afrutados",
+      "LA_PAZ_DESC": "Altitud: 1,500 - 2,000 msnm. Sabores: Complejos, Acaramelados"
+    },
+    "CTA": {
+      "TITLE": "¿Listo para participar en nuestras subastas?",
+      "SUBTITLE": "Únete a nuestra comunidad de amantes del café y descubre lotes exclusivos directamente de los productores",
+      "REGISTER_BUTTON": "Crear Cuenta",
+      "LOGIN_BUTTON": "Ingresar"
+    }
+  },
+  "FOOTER": {
+    "COMPANY_TITLE": "Café Subastas",
+    "COMPANY_DESC": "Conectando productores con amantes del café desde 2023",
+    "QUICK_LINKS_TITLE": "Enlaces Rápidos",
+    "ACTIVE_AUCTIONS": "Subastas Activas",
+    "HOW_IT_WORKS": "Cómo Funciona",
+    "SUPPORT_TITLE": "Soporte",
+    "TERMS": "Términos",
+    "CONTACT_TITLE": "Contacto",
+    "LOCATION": "La Paz, Bolivia",
+    "COPYRIGHT": "© 2025 Café Altura. Todos los derechos reservados."
+  },
+  "WINNERS": {
+    "HERO": {
+      "TITLE": "Resultados de Subasta",
+      "SUBTITLE": "Descubre los ganadores de nuestra exclusiva subasta de cafés especiales. Cada lote representa la excelencia y dedicación de nuestros productores."
+    },
+    "AUCTION_INFO": {
+      "WINNERS": "🏆 Ganadores",
+      "START_DATE": "Inicio:",
+      "END_DATE": "Fin:"
+    },
+    "LOTS_TITLE": "Lotes Adjudicados",
+    "LOT": {
+      "POINTS": "Puntos",
+      "PRICING_TITLE": "Detalles de Precio",
+      "STARTING_PRICE": "Precio inicial/libra",
+      "FINAL_PRICE": "Precio final/libra",
+      "TOTAL_QUANTITY": "Cantidad total",
+      "LBS": "lbs",
+      "TOTAL_VALUE": "Valor total",
+      "BUYER_TITLE": "Comprador",
+      "SELLER_TITLE": "Productor"
+    },
+    "STATS": {
+      "TITLE": "Resumen Ejecutivo",
+      "LOTS_SOLD": "Lotes Vendidos",
+      "TOTAL_REVENUE": "Ingreso Total",
+      "AVG_PRICE": "Precio Promedio",
+      "TOTAL_LBS": "Lbs Totales"
+    },
+    "CTA": {
+      "TITLE": "¿Listo para la próxima subasta?",
+      "SUBTITLE": "Únete a nuestra comunidad exclusiva de compradores y productores de café especial. No te pierdas las próximas oportunidades.",
+      "REGISTER_BUTTON": "Registrarse Ahora",
+      "CALENDAR_BUTTON": "Ver Calendario"
+    },
+    "EMPTY": {
+      "TITLE": "Subasta en Preparación",
+      "SUBTITLE": "Estamos organizando nuestra próxima subasta de cafés especiales. Regresa pronto para descubrir lotes exclusivos.",
+      "NOTIFY_BUTTON": "Notificarme"
+    }
+  },
+  "AUCTION": {
+    "HERO": {
+      "TITLE": "Subasta de Café Especial",
+      "SUBTITLE": "Sigue en tiempo real el desarrollo de nuestra subasta de cafés premium",
+      "START_DATE": "Inicio",
+      "END_DATE": "Fin"
+    },
+    "TIMER": {
+      "ENDS_IN": "Finaliza en:",
+      "STARTS_IN": "Comienza en:",
+      "ENDED": "Subasta Finalizada",
+      "RESULTS_AVAILABLE": "Resultados disponibles",
+      "DAYS": "Días",
+      "HOURS": "Horas",
+      "MINUTES": "Min",
+      "SECONDS": "Seg"
+    },
+    "LOTS_TITLE": "Lotes en Subasta",
+    "LOTS_SUBTITLE": "Descubre los cafés especiales disponibles",
+    "LOTS_COUNT": "Lotes",
+    "LOT": {
+      "POINTS": "pts",
+      "METERS": "m",
+      "LBS": "lbs",
+      "BASE_PRICE": "Base/libra:",
+      "CURRENT_BID": "Oferta/libra:",
+      "TOTAL": "Total:",
+      "RECENT_BIDS": "Últimas ofertas"
+    },
+    "EMPTY": {
+      "TITLE": "No hay lotes disponibles",
+      "SUBTITLE": "Actualmente no hay lotes de café disponibles en subasta."
+    }
+  },
+  "ABOUT": {
+    "HERO": {
+      "TITLE": "Quiénes Somos",
+      "SUBTITLE_PART1": "Café Altura orada, un emprendimiento de",
+      "SUBTITLE_HIGHLIGHT": " 3 mujeres productoras",
+      "SUBTITLE_PART2": ", dedicado a la producción y transformación del café."
+    },
+    "HISTORY": {
+      "TITLE": "Nuestra Historia",
+      "PARAGRAPH1": "Mujeres apasionadas por el café vieron una oportunidad en sus bondades para mejorar sus condiciones de vida y la de sus familias.",
+      "PARAGRAPH2": "Con profunda pasión por el café, hemos creado una alianza donde cada grano es cultivado con amor y dedicación."
+    },
+    "MISSION": {
+      "TITLE": "Nuestra Misión",
+      "PARAGRAPH_PART1": "Producir café de la más alta calidad para el mercado boliviano,",
+      "PARAGRAPH_HIGHLIGHT": " promoviendo prácticas agrícolas sostenibles",
+      "PARAGRAPH_PART2": "."
+    },
+    "VALUES": {
+      "TITLE": "Nuestros Valores",
+      "QUALITY_TITLE": "Calidad",
+      "QUALITY_DESC": "Nos esforzamos por ofrecer el mejor café, cuidando cada etapa del proceso de producción.",
+      "SUSTAINABILITY_TITLE": "Sostenibilidad",
+      "SUSTAINABILITY_DESC": "Utilizamos prácticas agrícolas que respetan el medio ambiente y aseguran la fertilidad de nuestra tierra.",
+      "COMMITMENT_TITLE": "Compromiso",
+      "COMMITMENT_DESC": "Creemos en el desarrollo de nuestras comunidades, aportando al bienestar de las familias productoras."
+    },
+    "COFFEE": {
+      "TITLE": "Nuestro Café",
+      "QUALITY_LABEL": "Calidad y Sabor:",
+      "QUALITY_DESC": " Nuestro café se distingue por su sabor profundo y auténtico, resultado del cuidado en cada etapa.",
+      "SUSTAINABILITY_LABEL": "Producción Sostenible:",
+      "SUSTAINABILITY_DESC": " Métodos de cultivo responsables que protegen la biodiversidad y los suelos.",
+      "MARKET_LABEL": "Para el Mercado Boliviano:",
+      "MARKET_DESC": " Un café excepcional, cultivado en nuestra tierra y elaborado por manos bolivianas."
+    }
+  },
+  "REGULATION": {
+    "HERO": {
+      "TITLE": "Reglamento de la Subasta",
+      "START_DATE": "Fecha de Inicio",
+      "END_DATE": "Fecha de Cierre"
+    },
+    "CONTACT": {
+      "TITLE": "¿Tienes preguntas?",
+      "SUBTITLE": "Contáctanos para resolver cualquier duda sobre el reglamento",
+      "BUTTON": "Contactar"
+    },
+    "SECTIONS": {
+      "OBJECT": {
+        "TITLE": "Objeto y Ámbito de Aplicación",
+        "PARAGRAPH1": "El presente reglamento tiene por objeto establecer las normas, condiciones y procedimientos aplicables a la subasta electrónica de los lotes de café con puntaje en taza superior a 85, seleccionados como ganadores en el Torneo Regional para Familias Cafetaleras.",
+        "PARAGRAPH2": "Este reglamento regula los derechos, obligaciones y sanciones para todos los participantes, y establece las disposiciones que rigen la organización, desarrollo y formalización de las adjudicaciones de lotes, con el fin de asegurar la transparencia, equidad y legalidad del proceso de subasta."
+      },
+      "PARTICIPATION": {
+        "TITLE": "Participación",
+        "ELIGIBILITY_TITLE": "1. Elegibilidad de Participantes y/o compradores",
+        "ELIGIBILITY_DESC": "La subasta está abierta a personas naturales y jurídicas que completen su registro y aprueben una evaluación de confiabilidad realizada por el organizador, la cual verifica antecedentes de cumplimiento y capacidad de pago. Para participar plenamente en la subasta debe registrarse al menos 15 minutos antes del cierre de la subasta. La organización se reserva el derecho de rechazar participantes que no cumplan con los estándares de confiabilidad establecidos.",
+        "RESPONSIBILITY_TITLE": "2. Responsabilidad de los Participantes",
+        "RESPONSIBILITY_DESC": "La participación en la subasta implica la aceptación expresa de las disposiciones contenidas en el presente reglamento, así como el compromiso de cumplir con todas las normas e instrucciones del organizador."
+      },
+      "DURATION": {
+        "TITLE": "Duración de la Subasta",
+        "START_LABEL": "Inicio:",
+        "START_DESC": " La subasta comenzará según la fecha y hora establecida para cada evento.",
+        "END_LABEL": "Cierre:",
+        "END_DESC": " La subasta finalizará según la fecha y hora programada para cada evento.",
+        "FOOTNOTE": "El calendario establecido será de carácter inamovible, salvo circunstancias extraordinarias, en cuyo caso se notificará a los participantes con antelación."
+      },
+      "BIDDING": {
+        "TITLE": "Procedimiento de Pujas",
+        "MECHANISM_TITLE": "1. Mecanismo de Pujas",
+        "MECHANISM_POINT1": "Las pujas serán realizadas exclusivamente mediante la plataforma de subasta.",
+        "MECHANISM_POINT2": "Cada lote contará con un precio de salida. Las pujas deben efectuarse en incrementos mínimos, que serán especificados para cada lote.",
+        "NOTE_LABEL": "Nota:",
+        "NOTE_DESC": " Todos los montos están expresados en dólares americanos (USD). Para conversión a bolivianos, utilizar el tipo de cambio oficial de 1 USD = 6.97 Bs.",
+        "AWARD_CONDITIONS_TITLE": "2. Condiciones de Adjudicación",
+        "AWARD_CONDITION1": "El lote será adjudicado al participante que haya registrado la puja más alta al cierre de la subasta.",
+        "AWARD_CONDITION2": "En caso de empate entre dos o más pujas, la adjudicación corresponderá a la primera puja ganadora ingresada."
+      },
+      "CONFIRMATION": {
+        "TITLE": "Confirmación de Adjudicación y Formalización de Compra",
+        "NOTIFICATION_TITLE": "1. Notificación de Adjudicación",
+        "NOTIFICATION_DESC": "Los ganadores serán notificados mediante correo electrónico una vez finalizada la subasta, indicando los detalles del lote adjudicado y las instrucciones de pago.",
+        "PAYMENT_DEADLINE_TITLE": "2. Plazo de Pago y Formalización",
+        "PAYMENT_DEADLINE_DESC": "Los ganadores disponen de un plazo de 24 horas, contadas a partir de la notificación, para formalizar la adquisición mediante firma de documento de adjudicación y un adelanto del 30% del valor total.",
+        "NON_COMPLIANCE_TITLE": "3. Sanción por Incumplimiento",
+        "NON_COMPLIANCE_DESC": "En caso de que un adjudicatario no efectúe el pago en el plazo establecido:",
+        "NON_COMPLIANCE_POINT1": "El lote será ofrecido al siguiente postor de mayor puja.",
+        "NON_COMPLIANCE_POINT2": "Se aplicará una sanción de exclusión definitiva del adjudicatario en futuras subastas."
+      },
+      "PAYMENT_SHIPPING": {
+        "TITLE": "Condiciones de Pago y Envío",
+        "PAYMENT_METHODS_TITLE": "1. Métodos de Pago",
+        "PAYMENT_METHODS_DESC": "El pago deberá realizarse exclusivamente a través de los medios autorizados por el organizador, notificados previa adjudicación.",
+        "SHIPPING_CONDITIONS_TITLE": "2. Condiciones de Envío",
+        "SHIPPING_CONDITIONS_DESC": "Los costos de envío serán asumidos por el comprador, quien recibirá el tiempo estimado de entrega una vez confirmado el pago."
+      },
+      "CANCELLATION": {
+        "TITLE": "Políticas de Cancelación y Devolución",
+        "CANCELLATION_TITLE": "1. Cancelación de Adjudicación",
+        "CANCELLATION_DESC": "Si el pago no se efectúa en el plazo estipulado, el adjudicatario perderá el derecho al lote, el cual será ofrecido al siguiente postor.",
+        "REFUNDS_TITLE": "2. Devoluciones",
+        "REFUNDS_DESC": "No se aceptarán devoluciones de los lotes adjudicados, salvo en casos donde el organizador incumpla las condiciones establecidas en el presente reglamento."
+      },
+      "GENERAL": {
+        "TITLE": "Disposiciones Generales",
+        "MODIFICATION_TITLE": "1. Modificación del Reglamento",
+        "MODIFICATION_DESC": "El organizador se reserva el derecho de modificar este reglamento, comprometiéndose a informar cualquier cambio a los participantes inscritos.",
+        "ACCEPTANCE_TITLE": "2. Aceptación de los Términos y Condiciones",
+        "ACCEPTANCE_DESC": "La participación en la subasta constituye la aceptación total de las disposiciones contenidas en este reglamento.",
+        "CONTACT_INFO_TITLE": "3. Información de Contacto",
+        "CONTACT_INFO_DESC": "Para consultas adicionales, los participantes pueden comunicarse a través del correo electrónico habilitado en la plataforma de subasta."
+      }
+    }
+  },
+    "AUCTION-BUYER": {
+    "PREMIUM_AUCTIONS": "Subastas de Café Premium",
+    "EXCLUSIVE_LOTS": "Lotes exclusivos de productores especializados",
+    "AUCTION_ENDED": "Subasta Finalizada",
+    "RESULTS_AVAILABLE": "Resultados disponibles",
+    "ENDS_IN": "Finaliza en",
+    "STARTS_IN": "Comienza en",
+    "START_DATE": "Inicio",
+    "END_DATE": "Fin",
+    "LOTS_IN_AUCTION": "Lotes en Subasta",
+    "BASE_PRICE": "Precio Base",
+    "PER_POUND": "Por libra",
+    "TOTAL_QUANTITY": "Cantidad total",
+    "TOTAL_VALUE": "Valor total",
+    "CURRENT_BID": "Oferta Actual",
+    "CURRENT_VALUE": "Valor actual",
+    "RESERVE_PRICE": "Precio de reserva",
+    "LAST_BIDS": "Últimas pujas",
+    "PLACE_BID": "Realizar Puja",
+    "AUCTION_NOT_STARTED": "Subasta no iniciada",
+    "NO_LOTS_FOUND": "No se encontraron lotes",
+    "ADJUST_SEARCH_TERMS": "Intenta ajustar los términos de búsqueda o filtros",
+    "CURRENT_PRICE": "Precio actual",
+    "MIN_INCREMENT": "Incremento mínimo",
+    "MIN_REQUIRED_AMOUNT": "Monto mínimo requerido",
+    "YOUR_BID": "Tu oferta",
+    "CONFIRM_BID": "Confirmar Puja"
+  },
+  "COMMON": {
+    "DAYS": "Días",
+    "HOURS": "Horas",
+    "MINUTES": "Min",
+    "SECONDS": "Seg",
+    "POINTS": "pts",
+    "PRODUCER": "Productor",
+    "METERS": "m",
+    "LBS": "lbs",
+    "AVAILABLE": "disponibles",
+    "CANCEL": "Cancelar",
+    "PROCESSING": "Procesando..."
+  },
+   "TRANSACTIONS": {
+    "TITLE": "Historial de Transacciones",
+    "SUBTITLE": "Seguimiento completo de todas tus transacciones de café",
+    "AUCTION": "Subasta",
+    "SCORE": "Puntaje",
+    "BUYER": "Comprador",
+    "STARTING_PRICE": "Precio Inicial",
+    "FINAL_PRICE": "Precio Final",
+    "PRICE_PER_LB": "Precio x Lb",
+    "PAYMENT": "Pago",
+    "BID_HISTORY": "Historial de Pujas",
+    "NO_TRANSACTIONS": "No hay transacciones disponibles",
+    "NO_TRANSACTIONS_DESC": "No se encontraron transacciones en tu historial"
+  },
+  "SETTINGS": {
+    "PROFILE_INFO": "Información del Perfil",
+    "ACTIVITY_HISTORY": "Historial de Actividad",
+    "BASIC_INFO": "Información Básica",
+    "CONTACT_INFO": "Información de Contacto",
+    "EMAIL": "Email",
+    "STATUS": "Estado",
+    "ACTIVE": "Activo",
+    "INACTIVE": "Desactivado",
+    "COMPANY": "Empresa",
+    "PHONE": "Teléfono",
+    "ADDRESS": "Dirección",
+    "DEACTIVATE_USER": "Desactivar Usuario",
+    "ACTIVATE_USER": "Activar Usuario",
+    "DELETE_USER": "Eliminar Usuario",
+    "EDIT_PROFILE": "Editar Perfil",
+    "CHANGE_PASSWORD": "Cambiar Contraseña",
+    "ACTIVITY_RECORD": "Registro completo de todas las actividades realizadas",
+    "LOADING_ACTIVITY": "Cargando actividad...",
+    "ACTION": "Acción",
+    "DESCRIPTION": "Descripción",
+    "DATE": "Fecha",
+    "NO_ACTIVITY": "No hay actividad registrada",
+    "ACTIVITY_APPEAR_HERE": "Las acciones que realices aparecerán aquí",
+    "SHOWING": "Mostrando",
+    "OF": "de",
+    "RECORDS": "registros",
+    "PREVIOUS": "Anterior",
+    "NEXT": "Siguiente"
+  }
+}

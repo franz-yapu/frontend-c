@@ -9,8 +9,8 @@
           </svg>
         </div>
         <div>
-          <h1 class="text-4xl font-bold text-amber-900">Historial de Transacciones</h1>
-          <p class="text-amber-700 text-lg mt-2">Seguimiento completo de todas tus transacciones de café</p>
+          <h1 class="text-4xl font-bold text-amber-900" appTranslate="TRANSACTIONS.TITLE">Historial de Transacciones</h1>
+          <p class="text-amber-700 text-lg mt-2" appTranslate="TRANSACTIONS.SUBTITLE">Seguimiento completo de todas tus transacciones de café</p>
         </div>
       </div>
     </div>
@@ -27,7 +27,9 @@
               <div class="flex justify-between items-start relative z-10">
                 <div class="flex-1 min-w-0 pr-4">
                   <h2 class="text-xl font-bold text-white leading-tight truncate">{{ tx.lot.name }}</h2>
-                  <p class="text-emerald-100 text-sm font-medium mt-2 truncate">Subasta: {{ tx.auction.title }}</p>
+                  <p class="text-emerald-100 text-sm font-medium mt-2 truncate">
+                    <span appTranslate="TRANSACTIONS.AUCTION">Subasta</span>: {{ tx.auction.title }}
+                  </p>
                 </div>
                 <div class="flex-shrink-0">
                   <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-white/20 backdrop-blur-sm text-white border border-white/30">
@@ -68,7 +70,7 @@
                         <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
                       </svg>
                     </div>
-                    <span>{{ tx.lot.altitude }} m</span>
+                    <span>{{ tx.lot.altitude }} <span appTranslate="COMMON.METERS">m</span></span>
                   </div>
                   
                   <div class="flex items-center text-amber-700">
@@ -92,18 +94,18 @@
               <!-- Puntaje Destacado -->
               <div class="flex justify-center">
                 <div class="bg-gradient-to-br from-emerald-500 to-emerald-600 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
-                  Puntaje: {{ tx.lot.cupScore }} pts
+                  <span appTranslate="TRANSACTIONS.SCORE">Puntaje</span>: {{ tx.lot.cupScore }} <span appTranslate="COMMON.POINTS">pts</span>
                 </div>
               </div>
 
               <!-- Vendedor y Comprador -->
               <div class="grid grid-cols-2 gap-4">
                 <div class="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl p-4 border border-emerald-200">
-                  <p class="text-xs font-bold text-emerald-700 uppercase tracking-wider mb-2">Vendedor</p>
+                  <p class="text-xs font-bold text-emerald-700 uppercase tracking-wider mb-2" appTranslate="COMMON.PRODUCER">Productor</p>
                   <p class="text-sm font-semibold text-emerald-900 truncate">{{ tx.seller.name }}</p>
                 </div>
                 <div class="bg-gradient-to-br from-amber-50 to-amber-100 rounded-xl p-4 border border-amber-200">
-                  <p class="text-xs font-bold text-amber-700 uppercase tracking-wider mb-2">Comprador</p>
+                  <p class="text-xs font-bold text-amber-700 uppercase tracking-wider mb-2" appTranslate="TRANSACTIONS.BUYER">Comprador</p>
                   <p class="text-sm font-semibold text-amber-900 truncate">{{ tx.buyer.name }}</p>
                 </div>
               </div>
@@ -112,15 +114,15 @@
               <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-4 border border-gray-200">
                 <div class="space-y-3">
                   <div class="flex justify-between items-center">
-                    <span class="text-sm text-gray-600 font-medium">Precio Inicial:</span>
+                    <span class="text-sm text-gray-600 font-medium" appTranslate="TRANSACTIONS.STARTING_PRICE">Precio Inicial</span>
                     <span class="font-semibold text-gray-800">${{ tx.pricing.startingPrice | number:'1.2-2' }}</span>
                   </div>
                   <div class="flex justify-between items-center">
-                    <span class="text-sm text-gray-600 font-medium">Precio Final:</span>
+                    <span class="text-sm text-gray-600 font-medium" appTranslate="TRANSACTIONS.FINAL_PRICE">Precio Final</span>
                     <span class="font-bold text-emerald-700 text-lg">${{ tx.pricing.finalPrice | number:'1.2-2' }}</span>
                   </div>
                   <div class="flex justify-between items-center">
-                    <span class="text-sm text-gray-600 font-medium">Precio x Lb:</span>
+                    <span class="text-sm text-gray-600 font-medium" appTranslate="TRANSACTIONS.PRICE_PER_LB">Precio x Lb</span>
                     <span class="font-semibold text-gray-800">${{ tx.pricing.pricePerLb | number:'1.2-2' }}</span>
                   </div>
                 </div>
@@ -131,7 +133,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
-                <span class="font-medium">Pago: {{ tx.paymentDate | date:'medium' }}</span>
+                <span class="font-medium" appTranslate="TRANSACTIONS.PAYMENT">Pago</span>: {{ tx.paymentDate | date:'medium' }}
               </div>
 
               <!-- Acordeón de pujas mejorado -->
@@ -144,7 +146,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                     </svg>
-                    Historial de Pujas ({{ tx.auction.bids.length }})
+                    <span appTranslate="TRANSACTIONS.BID_HISTORY">Historial de Pujas</span> ({{ tx.auction.bids.length }})
                   </span>
                   <span [class]="tx.showBids ? 'rotate-180' : ''" class="transition-transform duration-300 text-gray-600">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -179,8 +181,8 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
         </div>
-        <h3 class="text-2xl font-bold text-amber-900 mb-4">No hay transacciones disponibles</h3>
-        <p class="text-amber-600 max-w-md mx-auto text-lg">No se encontraron transacciones en tu historial.</p>
+        <h3 class="text-2xl font-bold text-amber-900 mb-4" appTranslate="TRANSACTIONS.NO_TRANSACTIONS">No hay transacciones disponibles</h3>
+        <p class="text-amber-600 max-w-md mx-auto text-lg" appTranslate="TRANSACTIONS.NO_TRANSACTIONS_DESC">No se encontraron transacciones en tu historial.</p>
       </div>
     }
   </div>

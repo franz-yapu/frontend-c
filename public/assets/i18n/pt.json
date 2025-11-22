@@ -1,0 +1,14 @@
+{
+  "NAV": {
+    "HOME": "Início",
+    "WINNERS": "Vencedores",
+    "AUCTION": "Leilão Ativo",
+    "REGULATION": "Regulamento",
+    "ABOUT": "Sobre Nós",
+    "LANGUAGE": "Idioma"
+  },
+  "APP": {
+    "TITLE": "Altitude",
+    "TITLE_ACCENT": "Café"
+  }
+}

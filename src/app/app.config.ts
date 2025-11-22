@@ -4,7 +4,7 @@ import { MultiTranslateHttpLoader } from 'ngx-translate-multi-http-loader';
 import { routes } from './app.routes';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { AuthInterceptor } from './core/auth.interceptor';
-import { HttpBackend, provideHttpClient, withInterceptors } from '@angular/common/http';
+import { HttpBackend, provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { DateFnsConfigurationService } from 'ngx-date-fns';
 import localeEs from '@angular/common/locales/es';
@@ -33,6 +33,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideAnimations(),
+     provideHttpClient(withFetch()), // Añadir esto
     provideHttpClient(withInterceptors([AuthInterceptor])),
     importProvidersFrom(TranslateModule.forRoot({
       loader: {

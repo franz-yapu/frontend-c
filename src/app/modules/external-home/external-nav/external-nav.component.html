@@ -11,13 +11,14 @@
             class="h-12 w-auto rounded-full shadow-md bg-white p-1"
           />
           <span class="hidden md:block font-bold text-xl tracking-wide text-white">
-            Altura <span class="text-amber-200">Café</span>
+            <span appTranslate="APP.TITLE">Altura</span> 
+            <span class="text-amber-200" appTranslate="APP.TITLE_ACCENT">Café</span>
           </span>
         </a>
       </div>
 
       <!-- Desktop Menu -->
-      <div class="hidden md:flex space-x-6">
+      <div class="hidden md:flex space-x-6 items-center">
         <a 
           *ngFor="let item of navItems" 
           [routerLink]="item.route" 
@@ -26,13 +27,73 @@
           [ngClass]="item.isActive 
             ? 'bg-green-800 text-white shadow-md' 
             : 'text-gray-200 hover:text-amber-300 hover:bg-green-600'"
+          [appTranslate]="item.translateKey"
         >
           {{ item.name }}
         </a>
+
+        <!-- Language Dropdown Desktop -->
+        <div class="relative">
+          <button 
+            type="button"
+            (click)="toggleLanguageDropdown()"
+            class="flex items-center space-x-2 px-3 py-2 text-sm font-medium rounded-lg transition-all duration-300 text-gray-200 hover:text-amber-300 hover:bg-green-800/40"
+          >
+            <span class="text-lg">{{ currentLanguageInfo().flag }}</span>
+            <span class="hidden lg:block">{{ currentLanguageInfo().name }}</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+
+          <!-- Dropdown Menu Desktop -->
+          <div 
+            *ngIf="isLanguageDropdownOpen"
+            class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 z-50 border border-gray-200"
+          >
+            <button
+              *ngFor="let lang of availableLanguages()" 
+              (click)="changeLanguage(lang.code)"
+              class="flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-amber-50 cursor-pointer transition-colors duration-200 w-full text-left"
+              [class.bg-amber-100]="currentLanguage() === lang.code" 
+            >
+              <span class="text-lg">{{ lang.flag }}</span>
+              <span>{{ lang.name }}</span>
+            </button>
+          </div>
+        </div>
       </div>
 
-      <!-- Botón Móvil -->
-      <div class="md:hidden flex items-center">
+      <!-- Mobile Menu Button + Language Selector -->
+      <div class="md:hidden flex items-center space-x-2">
+        <!-- Language Selector Mobile -->
+        <div class="relative">
+          <button 
+            type="button"
+            (click)="toggleLanguageDropdown()"
+            class="flex items-center space-x-1 p-2 text-gray-200 hover:bg-green-800/40 hover:text-amber-300 rounded-lg transition-all duration-300"
+          >
+            <span class="text-lg">{{ currentLanguageInfo().flag }}</span>  <!-- CAMBIADO: currentLanguageInfo().flag -->
+          </button>
+
+          <!-- Dropdown Menu Mobile -->
+          <div 
+            *ngIf="isLanguageDropdownOpen"
+            class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg py-1 z-50 border border-gray-200"
+          >
+            <button
+              *ngFor="let lang of availableLanguages()"  
+              (click)="changeLanguage(lang.code)"
+              class="flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-amber-50 cursor-pointer transition-colors duration-200 w-full text-left"
+              [class.bg-amber-100]="currentLanguage() === lang.code"  
+            >
+              <span class="text-lg">{{ lang.flag }}</span>
+              <span>{{ lang.name }}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Mobile Menu Button -->
         <button 
           type="button" 
           (click)="toggleMobileMenu()"
@@ -78,9 +139,25 @@
         [ngClass]="item.isActive 
           ? 'bg-green-600 text-white shadow-md' 
           : 'text-gray-200 hover:text-amber-300 hover:bg-green-800/50'"
+        [appTranslate]="item.translateKey"
       >
         {{ item.name }}
       </a>
+      
+      <!-- Language Selector in Mobile Menu -->
+     <!--  <div class="border-t border-amber-700 pt-2 mt-2">
+        <div class="text-xs font-medium text-amber-200 px-3 py-1" appTranslate="NAV.LANGUAGE">Idioma</div>
+        <button
+          *ngFor="let lang of availableLanguages()" 
+          (click)="changeLanguage(lang.code); toggleMobileMenu()"
+          class="flex items-center space-x-3 px-3 py-2 text-base text-gray-200 hover:text-amber-300 hover:bg-green-800/50 cursor-pointer transition-colors duration-200 w-full text-left rounded-lg"
+          [class.bg-green-600]="currentLanguage() === lang.code"  
+          [class.text-white]="currentLanguage() === lang.code"  
+        >
+          <span class="text-lg">{{ lang.flag }}</span>
+          <span>{{ lang.name }}</span>
+        </button>
+      </div> -->
     </div>
   </div>
 </nav>

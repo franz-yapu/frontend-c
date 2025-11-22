@@ -1,0 +1,339 @@
+{
+  "NAV": {
+    "HOME": "Home",
+    "WINNERS": "Winners",
+    "AUCTION": "Active Auction",
+    "REGULATION": "Regulation",
+    "ABOUT": "About Us",
+    "LANGUAGE": "Language",
+    "DASHBOARD": "Dashboard",
+    "ORDERS": "Orders",
+    "MY_DATA": "My Data",
+    "LOGOUT": "Logout"
+  },
+  "APP": {
+    "TITLE": "Altitude",
+    "TITLE_ACCENT": " Coffee"
+  },
+    "HOME": {
+    "HERO": {
+      "TITLE": "Premium Specialty Coffee Auction",
+      "SUBTITLE": "Discover the best Bolivian origin coffee lots directly from specialized producers",
+      "AUCTION_BUTTON": "View Active Auctions",
+      "LOGIN_BUTTON": "Login",
+      "REGISTER_BUTTON": "Create Account"
+    },
+    "FEATURES": {
+      "TITLE": "Why participate in our auctions?",
+      "SUBTITLE": "We directly connect specialty coffee producers with demanding buyers",
+      "QUALITY_TITLE": "Certified Quality",
+      "QUALITY_DESC": "All our lots have Q Grader scoring and guaranteed quality analysis",
+      "FAIR_TRADE_TITLE": "Fair Trade",
+      "FAIR_TRADE_DESC": "Producers receive up to 40% more than in traditional channels",
+      "TRANSPARENCY_TITLE": "Total Transparency",
+      "TRANSPARENCY_DESC": "Complete tracking from the producer to your coffee cup"
+    },
+    "ORIGINS": {
+      "TITLE": "Premium Bolivian Origins",
+      "SUBTITLE": "Discover the flavor diversity of our coffee regions",
+      "CARANAVI_DESC": "Altitude: 1,200 - 1,800 masl. Flavors: Citrus, Chocolate",
+      "YUNGAS_DESC": "Altitude: 800 - 1,600 masl. Flavors: Fruity, Spicy",
+      "SANTA_CRUZ_DESC": "Altitude: 400 - 1,200 masl. Flavors: Sweet, Fruity",
+      "LA_PAZ_DESC": "Altitude: 1,500 - 2,000 masl. Flavors: Complex, Caramelized"
+    },
+    "CTA": {
+      "TITLE": "Ready to participate in our auctions?",
+      "SUBTITLE": "Join our community of coffee lovers and discover exclusive lots directly from producers",
+      "REGISTER_BUTTON": "Create Account",
+      "LOGIN_BUTTON": "Login"
+    }
+  },
+  "FOOTER": {
+    "COMPANY_TITLE": "Coffee Auctions",
+    "COMPANY_DESC": "Connecting producers with coffee lovers since 2023",
+    "QUICK_LINKS_TITLE": "Quick Links",
+    "ACTIVE_AUCTIONS": "Active Auctions",
+    "HOW_IT_WORKS": "How It Works",
+    "SUPPORT_TITLE": "Support",
+    "TERMS": "Terms",
+    "CONTACT_TITLE": "Contact",
+    "LOCATION": "La Paz, Bolivia",
+    "COPYRIGHT": "© 2025 Altura Coffee. All rights reserved."
+  },
+    "WINNERS": {
+    "HERO": {
+      "TITLE": "Auction Results",
+      "SUBTITLE": "Discover the winners of our exclusive specialty coffee auction. Each lot represents the excellence and dedication of our producers."
+    },
+    "AUCTION_INFO": {
+      "WINNERS": "🏆 Winners",
+      "START_DATE": "Start:",
+      "END_DATE": "End:"
+    },
+    "LOTS_TITLE": "Awarded Lots",
+    "LOT": {
+      "POINTS": "Points",
+      "PRICING_TITLE": "Pricing Details",
+      "STARTING_PRICE": "Starting price/lb",
+      "FINAL_PRICE": "Final price/lb",
+      "TOTAL_QUANTITY": "Total quantity",
+      "LBS": "lbs",
+      "TOTAL_VALUE": "Total value",
+      "BUYER_TITLE": "Buyer",
+      "SELLER_TITLE": "Producer"
+    },
+    "STATS": {
+      "TITLE": "Executive Summary",
+      "LOTS_SOLD": "Lots Sold",
+      "TOTAL_REVENUE": "Total Revenue",
+      "AVG_PRICE": "Average Price",
+      "TOTAL_LBS": "Total Lbs"
+    },
+    "CTA": {
+      "TITLE": "Ready for the next auction?",
+      "SUBTITLE": "Join our exclusive community of specialty coffee buyers and producers. Don't miss upcoming opportunities.",
+      "REGISTER_BUTTON": "Register Now",
+      "CALENDAR_BUTTON": "View Calendar"
+    },
+    "EMPTY": {
+      "TITLE": "Auction in Preparation",
+      "SUBTITLE": "We are organizing our next specialty coffee auction. Come back soon to discover exclusive lots.",
+      "NOTIFY_BUTTON": "Notify Me"
+    }
+  },
+     "AUCTION": {
+    "HERO": {
+      "TITLE": "Specialty Coffee Auction",
+      "SUBTITLE": "Follow the development of our premium coffee auction in real time",
+      "START_DATE": "Start",
+      "END_DATE": "End"
+    },
+    "TIMER": {
+      "ENDS_IN": "Ends in:",
+      "STARTS_IN": "Starts in:",
+      "ENDED": "Auction Ended",
+      "RESULTS_AVAILABLE": "Results available",
+      "DAYS": "Days",
+      "HOURS": "Hours",
+      "MINUTES": "Min",
+      "SECONDS": "Sec"
+    },
+    "LOTS_TITLE": "Auction Lots",
+    "LOTS_SUBTITLE": "Discover the available specialty coffees",
+    "LOTS_COUNT": "Lots",
+    "LOT": {
+      "POINTS": "pts",
+      "METERS": "m",
+      "LBS": "lbs",
+      "BASE_PRICE": "Base/lb:",
+      "CURRENT_BID": "Bid/lb:",
+      "TOTAL": "Total:",
+      "RECENT_BIDS": "Recent Bids"
+    },
+    "EMPTY": {
+      "TITLE": "No lots available",
+      "SUBTITLE": "There are currently no coffee lots available in auction."
+    }
+  },
+"ABOUT": {
+    "HERO": {
+      "TITLE": "About Us",
+      "SUBTITLE_PART1": "Café Altura orada, an enterprise of",
+      "SUBTITLE_HIGHLIGHT": " 3 women producers",
+      "SUBTITLE_PART2": ", dedicated to coffee production and processing."
+    },
+    "HISTORY": {
+      "TITLE": "Our History",
+      "PARAGRAPH1": "Women passionate about coffee saw an opportunity in its benefits to improve their living conditions and those of their families.",
+      "PARAGRAPH2": "With deep passion for coffee, we have created an alliance where every bean is cultivated with love and dedication."
+    },
+    "MISSION": {
+      "TITLE": "Our Mission",
+      "PARAGRAPH_PART1": "Produce the highest quality coffee for the Bolivian market,",
+      "PARAGRAPH_HIGHLIGHT": " promoting sustainable agricultural practices",
+      "PARAGRAPH_PART2": "."
+    },
+    "VALUES": {
+      "TITLE": "Our Values",
+      "QUALITY_TITLE": "Quality",
+      "QUALITY_DESC": "We strive to offer the best coffee, taking care of every stage of the production process.",
+      "SUSTAINABILITY_TITLE": "Sustainability",
+      "SUSTAINABILITY_DESC": "We use agricultural practices that respect the environment and ensure the fertility of our land.",
+      "COMMITMENT_TITLE": "Commitment",
+      "COMMITMENT_DESC": "We believe in the development of our communities, contributing to the well-being of producer families."
+    },
+    "COFFEE": {
+      "TITLE": "Our Coffee",
+      "QUALITY_LABEL": "Quality and Flavor:",
+      "QUALITY_DESC": " Our coffee stands out for its deep and authentic flavor, the result of care in every stage.",
+      "SUSTAINABILITY_LABEL": "Sustainable Production:",
+      "SUSTAINABILITY_DESC": " Responsible cultivation methods that protect biodiversity and soils.",
+      "MARKET_LABEL": "For the Bolivian Market:",
+      "MARKET_DESC": " An exceptional coffee, grown in our land and crafted by Bolivian hands."
+    }
+  },
+  "REGULATION": {
+    "HERO": {
+      "TITLE": "Auction Regulations",
+      "START_DATE": "Start Date",
+      "END_DATE": "End Date"
+    },
+    "CONTACT": {
+      "TITLE": "Have questions?",
+      "SUBTITLE": "Contact us to resolve any doubts about the regulations",
+      "BUTTON": "Contact"
+    },
+    "SECTIONS": {
+      "OBJECT": {
+        "TITLE": "Purpose and Scope of Application",
+        "PARAGRAPH1": "These regulations aim to establish the rules, conditions, and procedures applicable to the electronic auction of coffee lots with cup scores above 85, selected as winners in the Regional Tournament for Coffee Families.",
+        "PARAGRAPH2": "These regulations govern the rights, obligations, and sanctions for all participants, and establish the provisions that regulate the organization, development, and formalization of lot awards, in order to ensure the transparency, fairness, and legality of the auction process."
+      },
+      "PARTICIPATION": {
+        "TITLE": "Participation",
+        "ELIGIBILITY_TITLE": "1. Participant and/or Buyer Eligibility",
+        "ELIGIBILITY_DESC": "The auction is open to individuals and legal entities who complete their registration and pass a reliability assessment conducted by the organizer, which verifies compliance history and payment capacity. To fully participate in the auction, you must register at least 15 minutes before the auction closes. The organization reserves the right to reject participants who do not meet the established reliability standards.",
+        "RESPONSIBILITY_TITLE": "2. Participant Responsibility",
+        "RESPONSIBILITY_DESC": "Participation in the auction implies express acceptance of the provisions contained in these regulations, as well as the commitment to comply with all rules and instructions from the organizer."
+      },
+      "DURATION": {
+        "TITLE": "Auction Duration",
+        "START_LABEL": "Start:",
+        "START_DESC": " The auction will begin according to the date and time established for each event.",
+        "END_LABEL": "End:",
+        "END_DESC": " The auction will end according to the scheduled date and time for each event.",
+        "FOOTNOTE": "The established schedule will be non-negotiable, except in extraordinary circumstances, in which case participants will be notified in advance."
+      },
+      "BIDDING": {
+        "TITLE": "Bidding Procedure",
+        "MECHANISM_TITLE": "1. Bidding Mechanism",
+        "MECHANISM_POINT1": "Bids will be made exclusively through the auction platform.",
+        "MECHANISM_POINT2": "Each lot will have a starting price. Bids must be made in minimum increments, which will be specified for each lot.",
+        "NOTE_LABEL": "Note:",
+        "NOTE_DESC": " All amounts are expressed in US dollars (USD). For conversion to Bolivianos, use the official exchange rate of 1 USD = 6.97 Bs.",
+        "AWARD_CONDITIONS_TITLE": "2. Award Conditions",
+        "AWARD_CONDITION1": "The lot will be awarded to the participant who has registered the highest bid at the close of the auction.",
+        "AWARD_CONDITION2": "In case of a tie between two or more bids, the award will correspond to the first winning bid entered."
+      },
+      "CONFIRMATION": {
+        "TITLE": "Award Confirmation and Purchase Formalization",
+        "NOTIFICATION_TITLE": "1. Award Notification",
+        "NOTIFICATION_DESC": "Winners will be notified by email once the auction has ended, indicating the details of the awarded lot and payment instructions.",
+        "PAYMENT_DEADLINE_TITLE": "2. Payment Deadline and Formalization",
+        "PAYMENT_DEADLINE_DESC": "Winners have a period of 24 hours, counted from notification, to formalize the acquisition by signing the award document and making a 30% advance payment of the total value.",
+        "NON_COMPLIANCE_TITLE": "3. Non-Compliance Sanction",
+        "NON_COMPLIANCE_DESC": "In case an awardee does not make the payment within the established period:",
+        "NON_COMPLIANCE_POINT1": "The lot will be offered to the next highest bidder.",
+        "NON_COMPLIANCE_POINT2": "A sanction of definitive exclusion of the awardee from future auctions will be applied."
+      },
+      "PAYMENT_SHIPPING": {
+        "TITLE": "Payment and Shipping Conditions",
+        "PAYMENT_METHODS_TITLE": "1. Payment Methods",
+        "PAYMENT_METHODS_DESC": "Payment must be made exclusively through the means authorized by the organizer, notified prior to award.",
+        "SHIPPING_CONDITIONS_TITLE": "2. Shipping Conditions",
+        "SHIPPING_CONDITIONS_DESC": "Shipping costs will be assumed by the buyer, who will receive the estimated delivery time once payment is confirmed."
+      },
+      "CANCELLATION": {
+        "TITLE": "Cancellation and Refund Policies",
+        "CANCELLATION_TITLE": "1. Award Cancellation",
+        "CANCELLATION_DESC": "If payment is not made within the stipulated period, the awardee will lose the right to the lot, which will be offered to the next bidder.",
+        "REFUNDS_TITLE": "2. Refunds",
+        "REFUNDS_DESC": "Refunds of awarded lots will not be accepted, except in cases where the organizer fails to comply with the conditions established in these regulations."
+      },
+      "GENERAL": {
+        "TITLE": "General Provisions",
+        "MODIFICATION_TITLE": "1. Regulation Modification",
+        "MODIFICATION_DESC": "The organizer reserves the right to modify these regulations, committing to inform registered participants of any changes.",
+        "ACCEPTANCE_TITLE": "2. Acceptance of Terms and Conditions",
+        "ACCEPTANCE_DESC": "Participation in the auction constitutes full acceptance of the provisions contained in these regulations.",
+        "CONTACT_INFO_TITLE": "3. Contact Information",
+        "CONTACT_INFO_DESC": "For additional inquiries, participants can communicate through the email enabled on the auction platform."
+      }
+    }
+  },
+   "AUCTION-BUYER": {
+    "PREMIUM_AUCTIONS": "Premium Coffee Auctions",
+    "EXCLUSIVE_LOTS": "Exclusive lots from specialized producers",
+    "AUCTION_ENDED": "Auction Ended",
+    "RESULTS_AVAILABLE": "Results available",
+    "ENDS_IN": "Ends in",
+    "STARTS_IN": "Starts in",
+    "START_DATE": "Start",
+    "END_DATE": "End",
+    "LOTS_IN_AUCTION": "Lots in Auction",
+    "BASE_PRICE": "Base Price",
+    "PER_POUND": "Per pound",
+    "TOTAL_QUANTITY": "Total quantity",
+    "TOTAL_VALUE": "Total value",
+    "CURRENT_BID": "Current Bid",
+    "CURRENT_VALUE": "Current value",
+    "RESERVE_PRICE": "Reserve price",
+    "LAST_BIDS": "Last Bids",
+    "PLACE_BID": "Place Bid",
+    "AUCTION_NOT_STARTED": "Auction not started",
+    "NO_LOTS_FOUND": "No lots found",
+    "ADJUST_SEARCH_TERMS": "Try adjusting search terms or filters",
+    "CURRENT_PRICE": "Current price",
+    "MIN_INCREMENT": "Minimum increment",
+    "MIN_REQUIRED_AMOUNT": "Minimum required amount",
+    "YOUR_BID": "Your bid",
+    "CONFIRM_BID": "Confirm Bid"
+  },
+  "COMMON": {
+    "DAYS": "Days",
+    "HOURS": "Hours",
+    "MINUTES": "Min",
+    "SECONDS": "Sec",
+    "POINTS": "pts",
+    "PRODUCER": "Producer",
+    "METERS": "m",
+    "LBS": "lbs",
+    "AVAILABLE": "available",
+    "CANCEL": "Cancel",
+    "PROCESSING": "Processing..."
+  },
+  "TRANSACTIONS": {
+    "TITLE": "Transaction History",
+    "SUBTITLE": "Complete tracking of all your coffee transactions",
+    "AUCTION": "Auction",
+    "SCORE": "Score",
+    "BUYER": "Buyer",
+    "STARTING_PRICE": "Starting Price",
+    "FINAL_PRICE": "Final Price",
+    "PRICE_PER_LB": "Price per Lb",
+    "PAYMENT": "Payment",
+    "BID_HISTORY": "Bid History",
+    "NO_TRANSACTIONS": "No transactions available",
+    "NO_TRANSACTIONS_DESC": "No transactions found in your history"
+  },
+   "SETTINGS": {
+    "PROFILE_INFO": "Profile Information",
+    "ACTIVITY_HISTORY": "Activity History",
+    "BASIC_INFO": "Basic Information",
+    "CONTACT_INFO": "Contact Information",
+    "EMAIL": "Email",
+    "STATUS": "Status",
+    "ACTIVE": "Active",
+    "INACTIVE": "Inactive",
+    "COMPANY": "Company",
+    "PHONE": "Phone",
+    "ADDRESS": "Address",
+    "DEACTIVATE_USER": "Deactivate User",
+    "ACTIVATE_USER": "Activate User",
+    "DELETE_USER": "Delete User",
+    "EDIT_PROFILE": "Edit Profile",
+    "CHANGE_PASSWORD": "Change Password",
+    "ACTIVITY_RECORD": "Complete record of all activities performed",
+    "LOADING_ACTIVITY": "Loading activity...",
+    "ACTION": "Action",
+    "DESCRIPTION": "Description",
+    "DATE": "Date",
+    "NO_ACTIVITY": "No activity recorded",
+    "ACTIVITY_APPEAR_HERE": "Actions you take will appear here",
+    "SHOWING": "Showing",
+    "OF": "of",
+    "RECORDS": "records",
+    "PREVIOUS": "Previous",
+    "NEXT": "Next"
+  }
+}
