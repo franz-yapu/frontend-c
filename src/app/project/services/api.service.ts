@@ -78,6 +78,7 @@ export class ApiService {
     return firstValueFrom(this.http.get(`${environment.backend}/dms/${id}`));
   }
   getRoles() {
+    
     return firstValueFrom(this.http.get(`${environment.backend}/dynamic/role`));
   }
  //users seller

@@ -20,6 +20,9 @@ interface CoffeeLot {
   harvestYear: number;
   producerName: string | null;
   isSpecialty: boolean;
+  position:string;
+  municipality:string;
+  seller:string;
 }
 
 interface AuctionDetail {
@@ -367,8 +370,8 @@ sortLots() {
     
     switch (this.sortBy) {
       case 'position': // ✅ NUEVA OPCIÓN DE ORDENAMIENTO
-        valueA = a.position;
-        valueB = b.position;
+        valueA = a.coffeeLot.position;
+        valueB = b.coffeeLot.position;
         break;
       case 'name':
         valueA = a.coffeeLot.name;
@@ -387,8 +390,8 @@ sortLots() {
         valueB = b.coffeeLot.quantityLbs;
         break;
       default:
-        valueA = a.position; // ✅ POR DEFECTO ORDENAR POR POSICIÓN
-        valueB = b.position;
+        valueA = a.coffeeLot.position; // ✅ POR DEFECTO ORDENAR POR POSICIÓN
+        valueB = b.coffeeLot.position;
     }
     
     if (typeof valueA === 'string' && typeof valueB === 'string') {

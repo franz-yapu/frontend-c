@@ -4,13 +4,13 @@
     <div class="p-6 space-y-8">
       @for (field of fields; track $index + (field.key || 'title')) {
       @if (field.type === 'title') {
-      <h3 class="text-xl font-semibold mb-4 text-amber-900 border-b border-amber-200 pb-2">{{ field.text }}</h3>
+      <h3 class="text-xl font-semibold mb-4 text-primary border-b border-amber-200 pb-2">{{ field.text }}</h3>
       }
 
       @if (field.type === 'title') {
       <h3 [class]="{
-            'text-xl font-semibold mb-4 text-amber-900 border-b border-amber-200 pb-2': !field.style,
-            'text-2xl font-bold mb-6 text-amber-900 border-b-2 border-amber-300 pb-3': field.style === 'main'
+            'text-xl font-semibold mb-4 text-primary border-b border-amber-200 pb-2': !field.style,
+            'text-2xl font-bold mb-6 text-primary border-b-2 border-primary pb-3': field.style === 'main'
           }">
         {{ field.text }}
       </h3>
@@ -18,7 +18,7 @@
 
       <!-- Subtítulo para secciones -->
       @if (field.type === 'subtitle') {
-      <h4 class="text-md font-semibold mb-1 text-amber-900 pl-2 border-b-2 border-amber-700">
+      <h4 class="text-md font-semibold mb-1 text-primary pl-2 border-b-2 border-amber-700">
         {{ field.text }}
       </h4>
       }
@@ -33,7 +33,7 @@
           @for (f of column.fields; track f.key || $index) {
           @if (isFieldVisible(f)) {
           <div class="flex flex-col">
-            <label class="text-amber-950 font-medium mb-1">
+            <label class="text-black font-medium mb-1">
               {{ f.label }}
               @if (f.validators?.required) {
               <span class="text-red-700">*</span>
@@ -50,13 +50,13 @@
             <!-- Input (text, number) -->
             @if (f.type && ['text'].includes(f.type)) {
             <input [type]="f.type" [formControlName]="f.key" [readonly]="f.readonly || false"
-              class="w-full px-4 py-2 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition duration-200 bg-white/70" />
+              class="w-full px-4 py-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition duration-200 bg-white/70" />
             }
 
             @if (f.type === 'number') {
             <input type="number" [formControlName]="f.key" [readonly]="f.readonly || false"
               [step]="getStepValue(f.validators)"
-              class="w-full px-4 py-2 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition duration-200 bg-white/70" />
+              class="w-full px-4 py-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition duration-200 bg-white/70" />
 
             <!-- Mensajes de error específicos para números -->
             <div class="text-red-700 text-xs mt-1" *ngIf="getControl(f.key)?.touched && getControl(f.key)?.invalid">
@@ -73,7 +73,7 @@
             @if (f.type === 'date') {
             <div class="relative">
               <input type="date" [formControlName]="f.key"
-                class="w-full px-4 py-2 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 bg-white/70 appearance-none"
+                class="w-full px-4 py-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-white/70 appearance-none"
                 [min]="f.minDate | date:'yyyy-MM-dd'" [max]="f.maxDate | date:'yyyy-MM-dd'" />
               <!-- Icono de calendario -->
               <div class="absolute right-3 top-2.5 pointer-events-none text-amber-600">
@@ -90,7 +90,7 @@
             @if (f.type === 'select-with-create') {
 <div class="relative">
   <select [formControlName]="f.key" 
-    class="w-full px-4 py-2 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 bg-white/70 appearance-none [&::-ms-expand]:hidden [&::-webkit-inner-spin-button]:hidden [&::-webkit-calendar-picker-indicator]:hidden">
+    class="w-full px-4 py-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-white/70 appearance-none [&::-ms-expand]:hidden [&::-webkit-inner-spin-button]:hidden [&::-webkit-calendar-picker-indicator]:hidden">
     <option value="" disabled selected>Seleccione una opción</option>
     @for (opt of f.options || []; track opt.value) {
     <option [value]="opt.value">{{ opt.label }}</option>
@@ -108,7 +108,7 @@
   type="text" 
   [placeholder]="'Escriba nueva ' + f.label.toLowerCase()"
   (input)="onCustomInput($event, f.key)"
-  class="w-full mt-2 px-4 py-2 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 bg-white/70" 
+  class="w-full mt-2 px-4 py-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-white/70" 
   [value]="getCustomInputValue(f.key)"
 />
 } -->
@@ -118,7 +118,7 @@
             @if (f.type === 'time') {
             <div class="relative">
               <input type="time" [formControlName]="f.key"
-                class="w-full px-4 py-2 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition duration-200 bg-white/70 appearance-none [&::-webkit-calendar-picker-indicator]:opacity-0" />
+                class="w-full px-4 py-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition duration-200 bg-white/70 appearance-none [&::-webkit-calendar-picker-indicator]:opacity-0" />
               <!-- Icono de reloj personalizado -->
               <div class="absolute right-3 top-2.5 pointer-events-none text-amber-600">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -133,7 +133,7 @@
             @if (f.type === 'email') {
             <div class="relative">
               <input type="email" [formControlName]="f.key" placeholder="ejemplo@dominio.com"
-                class="w-full px-4 py-2 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition duration-200 bg-white/70" />
+                class="w-full px-4 py-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition duration-200 bg-white/70" />
               @if (getControl(f.key)?.touched && getControl(f.key)?.errors?.['email']) {
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 absolute right-3 top-2.5" fill="none"
                 viewBox="0 0 24 24" stroke="currentColor">
@@ -148,7 +148,7 @@
             @if (f.type === 'password') {
             <div class="relative">
               <input [type]="showPassword[f.key] ? 'text' : 'password'" [formControlName]="f.key"
-                class="w-full px-4 py-2 pr-10 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition duration-200 bg-white/70" />
+                class="w-full px-4 py-2 pr-10 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition duration-200 bg-white/70" />
               <button type="button" (click)="togglePasswordVisibility(f.key)"
                 class="absolute right-3 top-2.5 text-amber-600 hover:text-amber-800">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -170,7 +170,7 @@
             <!-- Select -->
             @if (f.type === 'select') {
             <select [formControlName]="f.key"
-              class="w-full px-4 py-2 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 bg-white/70">
+              class="w-full px-4 py-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-white/70">
               <option value="" disabled selected>Seleccione una opción</option>
               @for (opt of f.options || []; track opt.value) {
               <option [value]="opt.value">{{ opt.label }}</option>
@@ -184,7 +184,7 @@
               @for (opt of f.options || []; track opt.value) {
               <label class="inline-flex items-center">
                 <input type="radio" [value]="opt.value" [formControlName]="f.key"
-                  class="form-radio text-green-600 focus:ring-green-600" />
+                  class="form-radio text-green-600 focus:ring-primary" />
                 <span class="ml-2 text-amber-800">{{ opt.label }}</span>
               </label>
               }
@@ -197,7 +197,7 @@
               <!-- Input de fecha personalizado -->
               <div class="relative">
                 <input type="date" [formControlName]="f.key"
-                  class="w-full px-4 py-2 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 bg-white/70 appearance-none"
+                  class="w-full px-4 py-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-white/70 appearance-none"
                   [min]="f.minDate | date:'yyyy-MM-dd'" [max]="f.maxDate | date:'yyyy-MM-dd'" />
                 <!-- Icono de calendario -->
                 <div class="absolute right-3 top-2.5 pointer-events-none text-amber-600">
@@ -219,7 +219,7 @@
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                     </svg>
                   </button>
-                  <span class="font-medium text-amber-900">{{ currentMonth[f.key] | date:'MMMM yyyy' }}</span>
+                  <span class="font-medium text-primary">{{ currentMonth[f.key] | date:'MMMM yyyy' }}</span>
                   <button (click)="nextMonth(f.key)" class="p-1 rounded-full hover:bg-amber-100">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-amber-600" fill="none"
                       viewBox="0 0 24 24" stroke="currentColor">
@@ -228,7 +228,7 @@
                   </button>
                 </div>
 
-                <div class="grid grid-cols-7 gap-1 text-center text-sm text-amber-900 font-medium mb-1">
+                <div class="grid grid-cols-7 gap-1 text-center text-sm text-primary font-medium mb-1">
                   <div>L</div>
                   <div>M</div>
                   <div>X</div>
@@ -255,7 +255,7 @@
             <div class="w-full">
               <!-- Dropzone / Card input -->
               <div
-                class="relative border-2 border-dashed border-amber-300 rounded-lg p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:border-green-600 transition duration-300 bg-amber-50/50"
+                class="relative border-2 border-dashed border-primary rounded-lg p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:border-green-600 transition duration-300 bg-amber-50/50"
                 (click)="triggerFileInput(f.key)">
                 <svg class="w-10 h-10 text-amber-500 mb-2" fill="none" stroke="currentColor" stroke-width="2"
                   viewBox="0 0 24 24">
@@ -296,7 +296,7 @@
               </label>
               <div class="relative">
                 <input [type]="showRepeatPassword ? 'text' : 'password'" formControlName="repeatPassword"
-                  class="w-full px-4 py-2 pr-10 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 bg-white/70" />
+                  class="w-full px-4 py-2 pr-10 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-white/70" />
                 <button type="button" (click)="showRepeatPassword = !showRepeatPassword"
                   class="absolute right-3 top-2.5 text-amber-600 hover:text-amber-800">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"

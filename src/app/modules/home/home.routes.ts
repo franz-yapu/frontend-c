@@ -26,7 +26,7 @@ export const routes: Routes = [
     children: [
    {
         path: '',
-        redirectTo: 'dashboard',
+        redirectTo: 'auctions',
         pathMatch: 'full' // importante
       },
       {
@@ -58,10 +58,10 @@ export const routes: Routes = [
         path: 'auction/:id/coffee-lot/:coffeeLotId',
         component: AutionLotComponent,
       },
-      {
+     /*  {
         path: 'sellers/:id/coffee-lot/:coffeeLotId',
         component: SellerLotComponent,
-      },
+      }, */
       {
         path: 'transactions',
         component: TransactionsComponent,

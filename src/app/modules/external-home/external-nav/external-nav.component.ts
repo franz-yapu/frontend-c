@@ -28,11 +28,13 @@ export class ExternalNavComponent implements OnInit, OnDestroy {
   });
 
   navItems: NavItem[] = [
-    { name: 'Inicio', route: '/Coffee/index', isActive: false, translateKey: 'NAV.HOME' },
-    { name: 'Ganadores', route: '/Coffee/winners', isActive: false, translateKey: 'NAV.WINNERS' },
-    { name: 'Subasta Activa', route: '/Coffee/auction', isActive: false, translateKey: 'NAV.AUCTION' },
-    { name: 'Reglamento', route: '/Coffee/regulation', isActive: false, translateKey: 'NAV.REGULATION' },
-    { name: 'Acerca de nosotros', route: '/Coffee/about', isActive: false, translateKey: 'NAV.ABOUT' },
+    { name: 'Inicio', route: '/index', isActive: false, translateKey: 'NAV.HOME' },
+    { name: 'Subasta Activa', route: '/auction', isActive: false, translateKey: 'NAV.AUCTION' },
+     { name: 'Ingresar', route: '/login', isActive: false, translateKey: 'HOME.CTA.LOGIN_BUTTON' },
+    { name: 'Crear cuenta', route: '/register', isActive: false, translateKey: 'HOME.CTA.REGISTER_BUTTON' },
+   /*  { name: 'Ganadores', route: '/winners', isActive: false, translateKey: 'NAV.WINNERS' }, */
+    { name: 'Reglamento', route: '/regulation', isActive: false, translateKey: 'NAV.REGULATION' },
+   /*  { name: 'Acerca de nosotros', route: '/Coffee/about', isActive: false, translateKey: 'NAV.ABOUT' }, */
   ];
 
   // Usar los Signals directamente del servicio

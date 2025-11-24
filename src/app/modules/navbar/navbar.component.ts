@@ -34,16 +34,11 @@ export class NavbarComponent implements OnInit {
       path: 'style',
       icon: 'category'
     }, */
-     {
+   /*   {
       title: 'Dashboard', 
       path: 'dashboard',
       icon: 'analytics'
-    },
-    {
-      title: 'Proveedores', 
-      path: 'sellers',
-      icon: 'two_pager_store'
-    },
+    }, */
     {
       title: 'Subastas', 
       path: 'auctions',

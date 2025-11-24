@@ -35,7 +35,7 @@ export class BuyerComponent implements OnInit, OnDestroy {
   public user: any;
 
   navItems: NavItem[] = [
-    { name: 'Dashboard', route: '/buyer/dashboard', isActive: true, translateKey: 'NAV.DASHBOARD' },
+    /* { name: 'Dashboard', route: '/buyer/dashboard', isActive: true, translateKey: 'NAV.DASHBOARD' }, */
     { name: 'Subasta Activa', route: '/buyer/auction', isActive: false, translateKey: 'NAV.AUCTION' },
     { name: 'Ordenes', route: '/buyer/auction-winner', isActive: false, translateKey: 'NAV.ORDERS' },
     { name: 'Mis datos', route: '/buyer/user-data', isActive: false, translateKey: 'NAV.MY_DATA' },

@@ -72,8 +72,8 @@ export class RegulationComponent implements OnInit, OnDestroy {
 
   private getObjectContent(): string {
     return `
-      <p class="text-amber-700 mb-4">${this.translationService.translate('REGULATION.SECTIONS.OBJECT.PARAGRAPH1')}</p>
-      <p class="text-amber-700">${this.translationService.translate('REGULATION.SECTIONS.OBJECT.PARAGRAPH2')}</p>
+      <p class="text-black/70 mb-4">${this.translationService.translate('REGULATION.SECTIONS.OBJECT.PARAGRAPH1')}</p>
+      <p class="text-black/70">${this.translationService.translate('REGULATION.SECTIONS.OBJECT.PARAGRAPH2')}</p>
     `;
   }
 
@@ -81,12 +81,12 @@ export class RegulationComponent implements OnInit, OnDestroy {
     return `
       <div class="space-y-4">
         <div>
-          <h4 class="font-semibold text-amber-900 mb-2">${this.translationService.translate('REGULATION.SECTIONS.PARTICIPATION.ELIGIBILITY_TITLE')}</h4>
-          <p class="text-amber-700">${this.translationService.translate('REGULATION.SECTIONS.PARTICIPATION.ELIGIBILITY_DESC')}</p>
+          <h4 class="font-semibold text-primary mb-2">${this.translationService.translate('REGULATION.SECTIONS.PARTICIPATION.ELIGIBILITY_TITLE')}</h4>
+          <p class="text-black/70">${this.translationService.translate('REGULATION.SECTIONS.PARTICIPATION.ELIGIBILITY_DESC')}</p>
         </div>
         <div>
-          <h4 class="font-semibold text-amber-900 mb-2">${this.translationService.translate('REGULATION.SECTIONS.PARTICIPATION.RESPONSIBILITY_TITLE')}</h4>
-          <p class="text-amber-700">${this.translationService.translate('REGULATION.SECTIONS.PARTICIPATION.RESPONSIBILITY_DESC')}</p>
+          <h4 class="font-semibold text-primary mb-2">${this.translationService.translate('REGULATION.SECTIONS.PARTICIPATION.RESPONSIBILITY_TITLE')}</h4>
+          <p class="text-black/70">${this.translationService.translate('REGULATION.SECTIONS.PARTICIPATION.RESPONSIBILITY_DESC')}</p>
         </div>
       </div>
     `;
@@ -97,19 +97,19 @@ export class RegulationComponent implements OnInit, OnDestroy {
       <div class="space-y-3">
         <div class="flex items-start">
           <span class="text-amber-600 font-semibold mr-2">•</span>
-          <p class="text-amber-700">
+          <p class="text-black/70">
             <span class="font-semibold">${this.translationService.translate('REGULATION.SECTIONS.DURATION.START_LABEL')}</span>
             ${this.translationService.translate('REGULATION.SECTIONS.DURATION.START_DESC')}
           </p>
         </div>
         <div class="flex items-start">
           <span class="text-amber-600 font-semibold mr-2">•</span>
-          <p class="text-amber-700">
+          <p class="text-black/70">
             <span class="font-semibold">${this.translationService.translate('REGULATION.SECTIONS.DURATION.END_LABEL')}</span>
             ${this.translationService.translate('REGULATION.SECTIONS.DURATION.END_DESC')}
           </p>
         </div>
-        <p class="text-amber-700 mt-4">${this.translationService.translate('REGULATION.SECTIONS.DURATION.FOOTNOTE')}</p>
+        <p class="text-black/70 mt-4">${this.translationService.translate('REGULATION.SECTIONS.DURATION.FOOTNOTE')}</p>
       </div>
     `;
   }
@@ -118,19 +118,19 @@ export class RegulationComponent implements OnInit, OnDestroy {
     return `
       <div class="space-y-4">
         <div>
-          <h4 class="font-semibold text-amber-900 mb-2">${this.translationService.translate('REGULATION.SECTIONS.BIDDING.MECHANISM_TITLE')}</h4>
+          <h4 class="font-semibold text-primary mb-2">${this.translationService.translate('REGULATION.SECTIONS.BIDDING.MECHANISM_TITLE')}</h4>
           <div class="space-y-2 ml-4">
             <div class="flex items-start">
               <span class="text-amber-600 mr-2">◦</span>
-              <p class="text-amber-700">${this.translationService.translate('REGULATION.SECTIONS.BIDDING.MECHANISM_POINT1')}</p>
+              <p class="text-black/70">${this.translationService.translate('REGULATION.SECTIONS.BIDDING.MECHANISM_POINT1')}</p>
             </div>
             <div class="flex items-start">
               <span class="text-amber-600 mr-2">◦</span>
-              <p class="text-amber-700">${this.translationService.translate('REGULATION.SECTIONS.BIDDING.MECHANISM_POINT2')}</p>
+              <p class="text-black/70">${this.translationService.translate('REGULATION.SECTIONS.BIDDING.MECHANISM_POINT2')}</p>
             </div>
             <div class="flex items-start">
               <span class="text-amber-600 mr-2">◦</span>
-              <p class="text-amber-700">
+              <p class="text-black/70">
                 <strong>${this.translationService.translate('REGULATION.SECTIONS.BIDDING.NOTE_LABEL')}</strong>
                 ${this.translationService.translate('REGULATION.SECTIONS.BIDDING.NOTE_DESC')}
               </p>
@@ -138,15 +138,15 @@ export class RegulationComponent implements OnInit, OnDestroy {
           </div>
         </div>
         <div>
-          <h4 class="font-semibold text-amber-900 mb-2">${this.translationService.translate('REGULATION.SECTIONS.BIDDING.AWARD_CONDITIONS_TITLE')}</h4>
+          <h4 class="font-semibold text-primary mb-2">${this.translationService.translate('REGULATION.SECTIONS.BIDDING.AWARD_CONDITIONS_TITLE')}</h4>
           <div class="space-y-2 ml-4">
             <div class="flex items-start">
               <span class="text-amber-600 mr-2">◦</span>
-              <p class="text-amber-700">${this.translationService.translate('REGULATION.SECTIONS.BIDDING.AWARD_CONDITION1')}</p>
+              <p class="text-black/70">${this.translationService.translate('REGULATION.SECTIONS.BIDDING.AWARD_CONDITION1')}</p>
             </div>
             <div class="flex items-start">
               <span class="text-amber-600 mr-2">◦</span>
-              <p class="text-amber-700">${this.translationService.translate('REGULATION.SECTIONS.BIDDING.AWARD_CONDITION2')}</p>
+              <p class="text-black/70">${this.translationService.translate('REGULATION.SECTIONS.BIDDING.AWARD_CONDITION2')}</p>
             </div>
           </div>
         </div>
@@ -158,24 +158,24 @@ export class RegulationComponent implements OnInit, OnDestroy {
     return `
       <div class="space-y-4">
         <div>
-          <h4 class="font-semibold text-amber-900 mb-2">${this.translationService.translate('REGULATION.SECTIONS.CONFIRMATION.NOTIFICATION_TITLE')}</h4>
-          <p class="text-amber-700">${this.translationService.translate('REGULATION.SECTIONS.CONFIRMATION.NOTIFICATION_DESC')}</p>
+          <h4 class="font-semibold text-primary mb-2">${this.translationService.translate('REGULATION.SECTIONS.CONFIRMATION.NOTIFICATION_TITLE')}</h4>
+          <p class="text-black/70">${this.translationService.translate('REGULATION.SECTIONS.CONFIRMATION.NOTIFICATION_DESC')}</p>
         </div>
         <div>
-          <h4 class="font-semibold text-amber-900 mb-2">${this.translationService.translate('REGULATION.SECTIONS.CONFIRMATION.PAYMENT_DEADLINE_TITLE')}</h4>
-          <p class="text-amber-700">${this.translationService.translate('REGULATION.SECTIONS.CONFIRMATION.PAYMENT_DEADLINE_DESC')}</p>
+          <h4 class="font-semibold text-primary mb-2">${this.translationService.translate('REGULATION.SECTIONS.CONFIRMATION.PAYMENT_DEADLINE_TITLE')}</h4>
+          <p class="text-black/70">${this.translationService.translate('REGULATION.SECTIONS.CONFIRMATION.PAYMENT_DEADLINE_DESC')}</p>
         </div>
         <div>
-          <h4 class="font-semibold text-amber-900 mb-2">${this.translationService.translate('REGULATION.SECTIONS.CONFIRMATION.NON_COMPLIANCE_TITLE')}</h4>
-          <p class="text-amber-700 mb-2">${this.translationService.translate('REGULATION.SECTIONS.CONFIRMATION.NON_COMPLIANCE_DESC')}</p>
+          <h4 class="font-semibold text-primary mb-2">${this.translationService.translate('REGULATION.SECTIONS.CONFIRMATION.NON_COMPLIANCE_TITLE')}</h4>
+          <p class="text-black/70 mb-2">${this.translationService.translate('REGULATION.SECTIONS.CONFIRMATION.NON_COMPLIANCE_DESC')}</p>
           <div class="space-y-1 ml-4">
             <div class="flex items-start">
               <span class="text-amber-600 mr-2">◦</span>
-              <p class="text-amber-700">${this.translationService.translate('REGULATION.SECTIONS.CONFIRMATION.NON_COMPLIANCE_POINT1')}</p>
+              <p class="text-black/70">${this.translationService.translate('REGULATION.SECTIONS.CONFIRMATION.NON_COMPLIANCE_POINT1')}</p>
             </div>
             <div class="flex items-start">
               <span class="text-amber-600 mr-2">◦</span>
-              <p class="text-amber-700">${this.translationService.translate('REGULATION.SECTIONS.CONFIRMATION.NON_COMPLIANCE_POINT2')}</p>
+              <p class="text-black/70">${this.translationService.translate('REGULATION.SECTIONS.CONFIRMATION.NON_COMPLIANCE_POINT2')}</p>
             </div>
           </div>
         </div>
@@ -187,12 +187,12 @@ export class RegulationComponent implements OnInit, OnDestroy {
     return `
       <div class="space-y-4">
         <div>
-          <h4 class="font-semibold text-amber-900 mb-2">${this.translationService.translate('REGULATION.SECTIONS.PAYMENT_SHIPPING.PAYMENT_METHODS_TITLE')}</h4>
-          <p class="text-amber-700">${this.translationService.translate('REGULATION.SECTIONS.PAYMENT_SHIPPING.PAYMENT_METHODS_DESC')}</p>
+          <h4 class="font-semibold text-primary mb-2">${this.translationService.translate('REGULATION.SECTIONS.PAYMENT_SHIPPING.PAYMENT_METHODS_TITLE')}</h4>
+          <p class="text-black/70">${this.translationService.translate('REGULATION.SECTIONS.PAYMENT_SHIPPING.PAYMENT_METHODS_DESC')}</p>
         </div>
         <div>
-          <h4 class="font-semibold text-amber-900 mb-2">${this.translationService.translate('REGULATION.SECTIONS.PAYMENT_SHIPPING.SHIPPING_CONDITIONS_TITLE')}</h4>
-          <p class="text-amber-700">${this.translationService.translate('REGULATION.SECTIONS.PAYMENT_SHIPPING.SHIPPING_CONDITIONS_DESC')}</p>
+          <h4 class="font-semibold text-primary mb-2">${this.translationService.translate('REGULATION.SECTIONS.PAYMENT_SHIPPING.SHIPPING_CONDITIONS_TITLE')}</h4>
+          <p class="text-black/70">${this.translationService.translate('REGULATION.SECTIONS.PAYMENT_SHIPPING.SHIPPING_CONDITIONS_DESC')}</p>
         </div>
       </div>
     `;
@@ -202,12 +202,12 @@ export class RegulationComponent implements OnInit, OnDestroy {
     return `
       <div class="space-y-4">
         <div>
-          <h4 class="font-semibold text-amber-900 mb-2">${this.translationService.translate('REGULATION.SECTIONS.CANCELLATION.CANCELLATION_TITLE')}</h4>
-          <p class="text-amber-700">${this.translationService.translate('REGULATION.SECTIONS.CANCELLATION.CANCELLATION_DESC')}</p>
+          <h4 class="font-semibold text-primary mb-2">${this.translationService.translate('REGULATION.SECTIONS.CANCELLATION.CANCELLATION_TITLE')}</h4>
+          <p class="text-black/70">${this.translationService.translate('REGULATION.SECTIONS.CANCELLATION.CANCELLATION_DESC')}</p>
         </div>
         <div>
-          <h4 class="font-semibold text-amber-900 mb-2">${this.translationService.translate('REGULATION.SECTIONS.CANCELLATION.REFUNDS_TITLE')}</h4>
-          <p class="text-amber-700">${this.translationService.translate('REGULATION.SECTIONS.CANCELLATION.REFUNDS_DESC')}</p>
+          <h4 class="font-semibold text-primary mb-2">${this.translationService.translate('REGULATION.SECTIONS.CANCELLATION.REFUNDS_TITLE')}</h4>
+          <p class="text-black/70">${this.translationService.translate('REGULATION.SECTIONS.CANCELLATION.REFUNDS_DESC')}</p>
         </div>
       </div>
     `;
@@ -217,16 +217,16 @@ export class RegulationComponent implements OnInit, OnDestroy {
     return `
       <div class="space-y-4">
         <div>
-          <h4 class="font-semibold text-amber-900 mb-2">${this.translationService.translate('REGULATION.SECTIONS.GENERAL.MODIFICATION_TITLE')}</h4>
-          <p class="text-amber-700">${this.translationService.translate('REGULATION.SECTIONS.GENERAL.MODIFICATION_DESC')}</p>
+          <h4 class="font-semibold text-primary mb-2">${this.translationService.translate('REGULATION.SECTIONS.GENERAL.MODIFICATION_TITLE')}</h4>
+          <p class="text-black/70">${this.translationService.translate('REGULATION.SECTIONS.GENERAL.MODIFICATION_DESC')}</p>
         </div>
         <div>
-          <h4 class="font-semibold text-amber-900 mb-2">${this.translationService.translate('REGULATION.SECTIONS.GENERAL.ACCEPTANCE_TITLE')}</h4>
-          <p class="text-amber-700">${this.translationService.translate('REGULATION.SECTIONS.GENERAL.ACCEPTANCE_DESC')}</p>
+          <h4 class="font-semibold text-primary mb-2">${this.translationService.translate('REGULATION.SECTIONS.GENERAL.ACCEPTANCE_TITLE')}</h4>
+          <p class="text-black/70">${this.translationService.translate('REGULATION.SECTIONS.GENERAL.ACCEPTANCE_DESC')}</p>
         </div>
         <div>
-          <h4 class="font-semibold text-amber-900 mb-2">${this.translationService.translate('REGULATION.SECTIONS.GENERAL.CONTACT_INFO_TITLE')}</h4>
-          <p class="text-amber-700">${this.translationService.translate('REGULATION.SECTIONS.GENERAL.CONTACT_INFO_DESC')}</p>
+          <h4 class="font-semibold text-primary mb-2">${this.translationService.translate('REGULATION.SECTIONS.GENERAL.CONTACT_INFO_TITLE')}</h4>
+          <p class="text-black/70">${this.translationService.translate('REGULATION.SECTIONS.GENERAL.CONTACT_INFO_DESC')}</p>
         </div>
       </div>
     `;

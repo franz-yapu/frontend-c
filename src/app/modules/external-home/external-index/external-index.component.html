@@ -1,224 +1,153 @@
-<div class="min-h-screen bg-gradient-to-b from-amber-50 to-white">
-  <!-- Hero Section -->
-  <section class="relative bg-gradient-to-r from-amber-900 to-amber-800 text-white overflow-hidden">
-    <!-- Overlay oscuro -->
-    <div class="absolute inset-0 bg-black/40"></div>
+<div class="min-h-screen bg-white text-black font-sans">
 
-    <div class="relative max-w-7xl mx-auto px-4 py-20 sm:px-6 lg:px-8 flex flex-col items-center text-center">
+  <!-- HERO -->
+  <section class="relative bg-[#95c11f] text-white">
+    <div class="max-w-6xl mx-auto px-4 py-24 text-center">
 
       <!-- Logo -->
-      <div class="mb-10">
-        <div class="p-8 bg-white rounded-full shadow-xl inline-flex items-center justify-center">
-          <img src="assets/img/logo.png" alt="Alborada Café" class="h-48 md:h-64 w-auto drop-shadow-md" />
+      <div class="mb-12 flex justify-center">
+        <div class="p-6 bg-white rounded-full shadow-lg">
+          <img src="assets/img/logo.png" alt="Café Altura" class="h-40 md:h-52 w-auto" />
         </div>
       </div>
 
       <!-- Título -->
-      <h1 class="text-4xl md:text-6xl font-bold mb-6 animate-fade-in-up" appTranslate="HOME.HERO.TITLE">
+      <h1 class="text-4xl md:text-6xl text-black font-extrabold tracking-tight mb-6" appTranslate="HOME.HERO.TITLE">
         Subasta Premium de Cafés Especiales
       </h1>
 
       <!-- Subtítulo -->
-      <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-amber-100 animate-fade-in-up delay-200" appTranslate="HOME.HERO.SUBTITLE">
-        Descubre los mejores lotes de café de origen boliviano directamente de productores especializados
+      <p class="text-lg md:text-xl max-w-2xl mx-auto text-black/90 leading-relaxed mb-12" appTranslate="HOME.HERO.SUBTITLE">
+        Cafés exclusivos de productores bolivianos, seleccionados por expertos
       </p>
 
       <!-- Botones -->
-      <div class="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up delay-300">
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+
         <button (click)="goToAuction()"
-          class="bg-amber-600 hover:bg-amber-700 text-white px-8 py-3 rounded-lg font-semibold transition-all transform hover:scale-105 shadow-lg"
+          class="px-8 py-3 rounded-xl bg-white text-black font-semibold border border-black/10 hover:bg-black hover:text-white transition-all shadow-sm"
           appTranslate="HOME.HERO.AUCTION_BUTTON">
-          Ver Subastas Activas
+          Ver Subastas
         </button>
+
         <button (click)="goToLogin()"
-          class="border-2 border-white text-white hover:bg-white hover:text-amber-900 px-8 py-3 rounded-lg font-semibold transition-all shadow-lg"
+          class="px-8 py-3 rounded-xl bg-white text-black font-semibold border border-black/10 hover:bg-black hover:text-white transition-all shadow-sm"
           appTranslate="HOME.HERO.LOGIN_BUTTON">
           Ingresar
         </button>
+
         <button (click)="goToRegister()"
-          class="border-2 border-white text-white hover:bg-white hover:text-amber-900 px-8 py-3 rounded-lg font-semibold transition-all"
+          class="px-8 py-3 rounded-xl bg-white text-black font-semibold border border-black/10 hover:bg-black hover:text-white transition-all shadow-sm"
           appTranslate="HOME.HERO.REGISTER_BUTTON">
           Crear Cuenta
         </button>
+
       </div>
+
     </div>
   </section>
 
-  <!-- Features Section -->
-  <section class="py-16 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold text-amber-900 mb-4" appTranslate="HOME.FEATURES.TITLE">
-          ¿Por qué participar en nuestras subastas?
+  <!-- FEATURES -->
+  <section class="py-24 bg-white">
+    <div class="max-w-6xl mx-auto px-4">
+
+      <div class="text-center mb-20">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4" appTranslate="HOME.FEATURES.TITLE">
+          ¿Por qué elegirnos?
         </h2>
-        <p class="text-lg text-amber-700 max-w-2xl mx-auto" appTranslate="HOME.FEATURES.SUBTITLE">
-          Conectamos directamente a productores de café especial con compradores exigentes
-        </p>
+      <!--   <p class="text-lg text-black/70 max-w-xl mx-auto leading-relaxed" appTranslate="HOME.FEATURES.SUBTITLE">
+          Tecnología moderna, transparencia y excelencia en cada taza.
+        </p> -->
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="text-center p-6 rounded-lg hover:shadow-lg transition-shadow">
-          <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg class="w-8 h-8 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+
+        <!-- Item -->
+        <div class="p-8 border rounded-2xl shadow-sm hover:shadow-md transition-all bg-white">
+          <div class="w-14 h-14 mb-4 mx-auto rounded-xl bg-[#95c11f]/15 flex items-center justify-center">
+            <svg class="w-7 h-7 text-[#95c11f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
-              </path>
+                d="M9 12l2 2 4-4"></path>
             </svg>
           </div>
-          <h3 class="text-xl font-semibold text-amber-900 mb-2" appTranslate="HOME.FEATURES.QUALITY_TITLE">Calidad Certificada</h3>
-          <p class="text-amber-700" appTranslate="HOME.FEATURES.QUALITY_DESC">
-            Todos nuestros lotes tienen puntuación Q Grader y análisis de calidad garantizada
+          <h3 class="text-xl font-semibold mb-2" appTranslate="HOME.FEATURES.QUALITY_TITLE">Calidad Certificada</h3>
+          <p class="text-black/70 leading-relaxed" appTranslate="HOME.FEATURES.QUALITY_DESC">
+            Todos los lotes son evaluados por Q Graders profesionales.
           </p>
         </div>
 
-        <div class="text-center p-6 rounded-lg hover:shadow-lg transition-shadow">
-          <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg class="w-8 h-8 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <!-- Item -->
+        <div class="p-8 border rounded-2xl shadow-sm hover:shadow-md transition-all bg-white">
+          <div class="w-14 h-14 mb-4 mx-auto rounded-xl bg-[#95c11f]/15 flex items-center justify-center">
+            <svg class="w-7 h-7 text-[#95c11f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
-              </path>
+                d="M17 20h5v-2a3 3 0 00-5-2"></path>
             </svg>
           </div>
-          <h3 class="text-xl font-semibold text-amber-900 mb-2" appTranslate="HOME.FEATURES.FAIR_TRADE_TITLE">Comercio Justo</h3>
-          <p class="text-amber-700" appTranslate="HOME.FEATURES.FAIR_TRADE_DESC">
-            Los productores reciben hasta un 40% más que en canales tradicionales
+          <h3 class="text-xl font-semibold mb-2" appTranslate="HOME.FEATURES.FAIR_TRADE_TITLE">Comercio Justo</h3>
+          <p class="text-black/70 leading-relaxed" appTranslate="HOME.FEATURES.FAIR_TRADE_DESC">
+            Más ingresos para los productores locales.
           </p>
         </div>
 
-        <div class="text-center p-6 rounded-lg hover:shadow-lg transition-shadow">
-          <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg class="w-8 h-8 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z">
-              </path>
+        <!-- Item -->
+        <div class="p-8 border rounded-2xl shadow-sm hover:shadow-md transition-all bg-white">
+          <div class="w-14 h-14 mb-4 mx-auto rounded-xl bg-[#95c11f]/15 flex items-center justify-center">
+            <svg class="w-7 h-7 text-[#95c11f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M13 10V3L4 14h7v7l9-11h-7z"></path>
             </svg>
           </div>
-          <h3 class="text-xl font-semibold text-amber-900 mb-2" appTranslate="HOME.FEATURES.TRANSPARENCY_TITLE">Transparencia Total</h3>
-          <p class="text-amber-700" appTranslate="HOME.FEATURES.TRANSPARENCY_DESC">
-            Seguimiento completo desde el productor hasta tu taza de café
+          <h3 class="text-xl font-semibold mb-2" appTranslate="HOME.FEATURES.TRANSPARENCY_TITLE">Transparencia Real</h3>
+          <p class="text-black/70 leading-relaxed" appTranslate="HOME.FEATURES.TRANSPARENCY_DESC">
+            Seguimiento desde la finca hasta tu taza.
           </p>
         </div>
+
       </div>
     </div>
   </section>
 
-  <!-- Coffee Origins Section -->
-  <section class="py-16 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold text-amber-900 mb-4" appTranslate="HOME.ORIGINS.TITLE">
-          Orígenes Premium de Bolivia
-        </h2>
-        <p class="text-lg text-amber-700 max-w-2xl mx-auto" appTranslate="HOME.ORIGINS.SUBTITLE">
-          Descubre la diversidad de sabores de nuestras regiones cafetaleras
-        </p>
-      </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="group relative overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-all">
-          <div class="h-48 bg-gradient-to-br from-amber-600 to-amber-800"></div>
-          <div class="p-6">
-            <h3 class="text-xl font-semibold text-amber-900 mb-2">Caranavi</h3>
-            <p class="text-amber-700" appTranslate="HOME.ORIGINS.CARANAVI_DESC">
-              Altitud: 1,200 - 1,800 msnm. Sabores: Cítricos, Chocolate
-            </p>
-          </div>
-        </div>
 
-        <div class="group relative overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-all">
-          <div class="h-48 bg-gradient-to-br from-green-600 to-green-800"></div>
-          <div class="p-6">
-            <h3 class="text-xl font-semibold text-amber-900 mb-2">Yungas</h3>
-            <p class="text-amber-700" appTranslate="HOME.ORIGINS.YUNGAS_DESC">
-              Altitud: 800 - 1,600 msnm. Sabores: Frutales, Especiados
-            </p>
-          </div>
-        </div>
+  <!-- FOOTER -->
+  <footer class="bg-black text-white py-16">
+    <div class="max-w-6xl mx-auto px-4">
 
-        <div class="group relative overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-all">
-          <div class="h-48 bg-gradient-to-br from-blue-600 to-blue-800"></div>
-          <div class="p-6">
-            <h3 class="text-xl font-semibold text-amber-900 mb-2">Santa Cruz</h3>
-            <p class="text-amber-700" appTranslate="HOME.ORIGINS.SANTA_CRUZ_DESC">
-              Altitud: 400 - 1,200 msnm. Sabores: Dulces, Afrutados
-            </p>
-          </div>
-        </div>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
 
-        <div class="group relative overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-all">
-          <div class="h-48 bg-gradient-to-br from-purple-600 to-purple-800"></div>
-          <div class="p-6">
-            <h3 class="text-xl font-semibold text-amber-900 mb-2">La Paz</h3>
-            <p class="text-amber-700" appTranslate="HOME.ORIGINS.LA_PAZ_DESC">
-              Altitud: 1,500 - 2,000 msnm. Sabores: Complejos, Acaramelados
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA Section -->
-  <section class="py-16 bg-gradient-to-r from-amber-600 to-amber-800 text-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <h2 class="text-3xl md:text-4xl font-bold mb-6" appTranslate="HOME.CTA.TITLE">
-        ¿Listo para participar en nuestras subastas?
-      </h2>
-      <p class="text-xl mb-8 max-w-2xl mx-auto text-amber-100" appTranslate="HOME.CTA.SUBTITLE">
-        Únete a nuestra comunidad de amantes del café y descubre lotes exclusivos directamente de los productores
-      </p>
-      <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <button (click)="goToRegister()"
-          class="bg-white text-amber-800 hover:bg-amber-50 px-8 py-4 rounded-lg font-semibold text-lg transition-all"
-          appTranslate="HOME.CTA.REGISTER_BUTTON">
-          Crear Cuenta
-        </button>
-        <button (click)="goToLogin()"
-          class="border-2 border-white text-white hover:bg-white hover:text-amber-900 px-8 py-3 rounded-lg font-semibold transition-all"
-          appTranslate="HOME.CTA.LOGIN_BUTTON">
-          Ingresar
-        </button>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="bg-amber-900 text-amber-200 py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
         <div>
-          <h3 class="text-lg font-semibold text-white mb-4" appTranslate="FOOTER.COMPANY_TITLE">Café Subastas</h3>
-          <p class="text-amber-300" appTranslate="FOOTER.COMPANY_DESC">
-            Conectando productores con amantes del café desde 2023
-          </p>
+          <h3 class="text-xl font-semibold mb-3" appTranslate="FOOTER.COMPANY_TITLE">Café Altura</h3>
+          <p class="text-white/60" appTranslate="FOOTER.COMPANY_DESC">Subastas premium desde 2023.</p>
         </div>
 
         <div>
-          <h3 class="text-lg font-semibold text-white mb-4" appTranslate="FOOTER.QUICK_LINKS_TITLE">Enlaces Rápidos</h3>
-          <ul class="space-y-2">
-            <li><a (click)="goToAuction()" class="text-amber-300 hover:text-white transition-colors cursor-pointer" appTranslate="FOOTER.ACTIVE_AUCTIONS">Subastas Activas</a></li>
-            <li><a href="#" class="text-amber-300 hover:text-white transition-colors" appTranslate="FOOTER.HOW_IT_WORKS">Cómo Funciona</a></li>
+          <h3 class="text-lg font-semibold mb-3" appTranslate="FOOTER.QUICK_LINKS_TITLE">Enlaces</h3>
+          <ul class="space-y-2 text-white/70">
+            <li><a (click)="goToAuction()" class="hover:text-white cursor-pointer" appTranslate="FOOTER.ACTIVE_AUCTIONS">Subastas</a></li>
+            <li><a class="hover:text-white cursor-pointer" appTranslate="FOOTER.HOW_IT_WORKS">Cómo funciona</a></li>
           </ul>
         </div>
 
         <div>
-          <h3 class="text-lg font-semibold text-white mb-4" appTranslate="FOOTER.SUPPORT_TITLE">Soporte</h3>
-          <ul class="space-y-2">
-            <li><a href="#" class="text-amber-300 hover:text-white transition-colors" appTranslate="FOOTER.TERMS">Términos</a></li>
+          <h3 class="text-lg font-semibold mb-3" appTranslate="FOOTER.SUPPORT_TITLE">Soporte</h3>
+          <ul class="space-y-2 text-white/70">
+            <li><a class="hover:text-white cursor-pointer" appTranslate="FOOTER.TERMS">Términos</a></li>
           </ul>
         </div>
 
         <div>
-          <h3 class="text-lg font-semibold text-white mb-4" appTranslate="FOOTER.CONTACT_TITLE">Contacto</h3>
-          <p class="text-amber-300">+591 61139545</p>
-          <p class="text-amber-300" appTranslate="FOOTER.LOCATION">La Paz, Bolivia</p>
+          <h3 class="text-lg font-semibold mb-3" appTranslate="FOOTER.CONTACT_TITLE">Contacto</h3>
+          <p class="text-white/70" appTranslate="FOOTER.CONTACT_PHONE">+591 61139545</p>
+          <p class="text-white/70" appTranslate="FOOTER.LOCATION">La Paz, Bolivia</p>
         </div>
       </div>
 
-      <div class="border-t border-amber-800 mt-8 pt-8 text-center">
-        <p class="text-amber-400" appTranslate="FOOTER.COPYRIGHT">
-          © 2025 Café Altura. Todos los derechos reservados.
-        </p>
+      <div class="text-center text-white/50 mt-12 pt-6 border-t border-white/10">
+        <p appTranslate="FOOTER.COPYRIGHT">© 2025 Café Altura — Todos los derechos reservados.</p>
       </div>
+
     </div>
   </footer>
+
 </div>

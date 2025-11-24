@@ -3,9 +3,9 @@ import { authGuard } from './core/auth.guard';
 
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'Coffee', pathMatch: 'full' },
+    { path: '', redirectTo: '', pathMatch: 'full' },
     {
-        path: 'Coffee',
+        path: '',
         loadChildren: () => import('./modules/external-home/external.routes').then(m => m.routes),
         title: 'Home'
     },

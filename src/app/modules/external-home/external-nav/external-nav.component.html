@@ -1,4 +1,4 @@
-<nav class="bg-amber-800 shadow-lg">
+<nav class="bg-secondary text-light border-b border-secondary/40 border-t-2 border-primary">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="flex h-16 justify-between items-center">
 
@@ -6,27 +6,28 @@
       <div class="flex items-center space-x-3">
         <a routerLink="/" class="flex items-center space-x-3">
           <img 
-            src="assets/img/logo.png" 
-            alt="Alborada Café" 
-            class="h-12 w-auto rounded-full shadow-md bg-white p-1"
+            src="assets/img/logo.png"
+            alt="Alborada Café"
+            class="h-10 w-auto rounded-full bg-light p-1"
           />
-          <span class="hidden md:block font-bold text-xl tracking-wide text-white">
-            <span appTranslate="APP.TITLE">Altura</span> 
-            <span class="text-amber-200" appTranslate="APP.TITLE_ACCENT">Café</span>
+          <span class="hidden md:block font-semibold text-lg tracking-wide">
+            <span appTranslate="APP.TITLE">Altura</span>
+            <span class="text-primary" appTranslate="APP.TITLE_ACCENT">Café</span>
           </span>
         </a>
       </div>
 
       <!-- Desktop Menu -->
       <div class="hidden md:flex space-x-6 items-center">
+
         <a 
-          *ngFor="let item of navItems" 
-          [routerLink]="item.route" 
+          *ngFor="let item of navItems"
+          [routerLink]="item.route"
           (click)="setActiveItem(item)"
-          class="px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300"
+          class="px-3 py-2 text-sm font-medium transition-all duration-200"
           [ngClass]="item.isActive 
-            ? 'bg-green-800 text-white shadow-md' 
-            : 'text-gray-200 hover:text-amber-300 hover:bg-green-600'"
+            ? 'text-primary border-b-2 border-primary' 
+            : 'text-light/80 hover:text-primary hover:bg-primary/10'"
           [appTranslate]="item.translateKey"
         >
           {{ item.name }}
@@ -37,127 +38,84 @@
           <button 
             type="button"
             (click)="toggleLanguageDropdown()"
-            class="flex items-center space-x-2 px-3 py-2 text-sm font-medium rounded-lg transition-all duration-300 text-gray-200 hover:text-amber-300 hover:bg-green-800/40"
+            class="flex items-center space-x-2 px-3 py-2 text-sm font-medium transition-all 
+                   hover:text-primary hover:bg-primary/10 rounded-md"
           >
             <span class="text-lg">{{ currentLanguageInfo().flag }}</span>
             <span class="hidden lg:block">{{ currentLanguageInfo().name }}</span>
+
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>
           </button>
 
           <!-- Dropdown Menu Desktop -->
           <div 
             *ngIf="isLanguageDropdownOpen"
-            class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 z-50 border border-gray-200"
+            class="absolute right-0 mt-2 w-44 bg-secondary border border-primary/40 rounded-md shadow-lg py-1 z-50"
           >
             <button
-              *ngFor="let lang of availableLanguages()" 
+              *ngFor="let lang of availableLanguages()"
               (click)="changeLanguage(lang.code)"
-              class="flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-amber-50 cursor-pointer transition-colors duration-200 w-full text-left"
-              [class.bg-amber-100]="currentLanguage() === lang.code" 
+              class="flex items-center space-x-3 px-4 py-2 text-sm text-light/90 hover:text-primary hover:bg-primary/10 transition-colors w-full text-left"
+              [class.text-primary]="currentLanguage() === lang.code"
             >
               <span class="text-lg">{{ lang.flag }}</span>
               <span>{{ lang.name }}</span>
             </button>
           </div>
         </div>
+
       </div>
 
-      <!-- Mobile Menu Button + Language Selector -->
+      <!-- Mobile Menu Button -->
       <div class="md:hidden flex items-center space-x-2">
-        <!-- Language Selector Mobile -->
-        <div class="relative">
-          <button 
-            type="button"
-            (click)="toggleLanguageDropdown()"
-            class="flex items-center space-x-1 p-2 text-gray-200 hover:bg-green-800/40 hover:text-amber-300 rounded-lg transition-all duration-300"
-          >
-            <span class="text-lg">{{ currentLanguageInfo().flag }}</span>  <!-- CAMBIADO: currentLanguageInfo().flag -->
-          </button>
 
-          <!-- Dropdown Menu Mobile -->
-          <div 
-            *ngIf="isLanguageDropdownOpen"
-            class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg py-1 z-50 border border-gray-200"
-          >
-            <button
-              *ngFor="let lang of availableLanguages()"  
-              (click)="changeLanguage(lang.code)"
-              class="flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-amber-50 cursor-pointer transition-colors duration-200 w-full text-left"
-              [class.bg-amber-100]="currentLanguage() === lang.code"  
-            >
-              <span class="text-lg">{{ lang.flag }}</span>
-              <span>{{ lang.name }}</span>
-            </button>
-          </div>
-        </div>
+        <!-- Language Button -->
+        <button
+          type="button"
+          (click)="toggleLanguageDropdown()"
+          class="p-2 text-light/80 hover:text-primary hover:bg-primary/10 transition-all rounded-md"
+        >
+          <span class="text-xl">{{ currentLanguageInfo().flag }}</span>
+        </button>
 
-        <!-- Mobile Menu Button -->
+        <!-- Menu Button -->
         <button 
           type="button" 
           (click)="toggleMobileMenu()"
-          class="inline-flex items-center justify-center rounded-md p-2 text-gray-200 hover:bg-green-800/40 hover:text-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-400"
-          aria-controls="mobile-menu"
-          [attr.aria-expanded]="isMobileMenuOpen"
+          class="p-2 text-light/80 hover:text-primary hover:bg-primary/10 transition-colors rounded-md"
         >
-          <svg 
-            *ngIf="!isMobileMenuOpen"
-            class="h-6 w-6" 
-            xmlns="http://www.w3.org/2000/svg" 
-            fill="none" 
-            viewBox="0 0 24 24" 
-            stroke="currentColor" 
-            stroke-width="2"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-16 6h16"/>
+          <svg *ngIf="!isMobileMenuOpen" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-16 6h16" />
           </svg>
-          <svg 
-            *ngIf="isMobileMenuOpen"
-            class="h-6 w-6" 
-            xmlns="http://www.w3.org/2000/svg" 
-            fill="none" 
-            viewBox="0 0 24 24" 
-            stroke="currentColor" 
-            stroke-width="2"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+
+          <svg *ngIf="isMobileMenuOpen" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
+
       </div>
     </div>
   </div>
 
   <!-- Mobile Menu -->
-  <div *ngIf="isMobileMenuOpen" class="md:hidden" id="mobile-menu">
-    <div class="space-y-1 px-3 pt-3 pb-4 bg-amber-900/95 shadow-md">
+  <div *ngIf="isMobileMenuOpen" class="md:hidden border-t border-secondary/50 bg-secondary/95">
+    <div class="space-y-1 px-3 pt-3 pb-4">
+
       <a 
-        *ngFor="let item of navItems" 
-        [routerLink]="item.route" 
+        *ngFor="let item of navItems"
+        [routerLink]="item.route"
         (click)="setActiveItem(item); toggleMobileMenu()"
-        class="block rounded-lg px-3 py-2 text-base font-medium transition-colors duration-200"
+        class="block px-3 py-2 text-base font-medium transition-colors"
         [ngClass]="item.isActive 
-          ? 'bg-green-600 text-white shadow-md' 
-          : 'text-gray-200 hover:text-amber-300 hover:bg-green-800/50'"
+          ? 'text-primary' 
+          : 'text-light/80 hover:text-primary hover:bg-primary/10'"
         [appTranslate]="item.translateKey"
       >
         {{ item.name }}
       </a>
-      
-      <!-- Language Selector in Mobile Menu -->
-     <!--  <div class="border-t border-amber-700 pt-2 mt-2">
-        <div class="text-xs font-medium text-amber-200 px-3 py-1" appTranslate="NAV.LANGUAGE">Idioma</div>
-        <button
-          *ngFor="let lang of availableLanguages()" 
-          (click)="changeLanguage(lang.code); toggleMobileMenu()"
-          class="flex items-center space-x-3 px-3 py-2 text-base text-gray-200 hover:text-amber-300 hover:bg-green-800/50 cursor-pointer transition-colors duration-200 w-full text-left rounded-lg"
-          [class.bg-green-600]="currentLanguage() === lang.code"  
-          [class.text-white]="currentLanguage() === lang.code"  
-        >
-          <span class="text-lg">{{ lang.flag }}</span>
-          <span>{{ lang.name }}</span>
-        </button>
-      </div> -->
+
     </div>
   </div>
 </nav>

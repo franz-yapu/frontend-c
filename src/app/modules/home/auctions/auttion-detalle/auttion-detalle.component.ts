@@ -33,6 +33,8 @@ interface CoffeeLot {
   country: string | null;
   auctionId: string | null;
   position: number | null;
+  seller:string;
+  quantityLbs: number;
 }
 
 interface StatusFilter {
@@ -173,7 +175,8 @@ export class AuttionDetalleComponent implements OnInit {
     this.ref.onClose.subscribe((newLot: CoffeeLot) => {
       if (newLot) {
         this.coffeeLots.unshift(newLot);
-        this.filterCoffeeLots();
+        this.ngOnInit()
+
       }
     });
   }

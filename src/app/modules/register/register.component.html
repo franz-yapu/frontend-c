@@ -12,7 +12,7 @@
     <div class="w-full md:w-1/2 flex items-center justify-center  md:p-8 bg-white">
         <div class="max-w-md w-full  rounded-lg">
             <!-- Botón para volver atrás -->
-            <button (click)="home()" class="flex items-center text-amber-700 hover:text-amber-900 ">
+            <button (click)="home()" class="flex items-center text-primary ">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
@@ -20,7 +20,7 @@
             </button>
 
             <div class="text-center ">
-                <h2 class="text-3xl font-bold text-amber-900">Registro</h2>
+                <h2 class="text-3xl font-bold text-black">Registro</h2>
                
             </div>
 
@@ -33,9 +33,9 @@
                 <button 
                     (click)="save()" 
                     [disabled]="!formData?.valid && !disabled" 
-                    class="w-full py-3 px-5 rounded-lg transition duration-200 font-medium
-                        disabled:bg-gray-400 disabled:cursor-not-allowed
-                        bg-green-700 hover:bg-green-800 text-white shadow-md hover:shadow-lg">
+                    class="w-full py-3 px-5  transition duration-200 font-medium
+                        disabled:bg-primary/50 disabled:cursor-not-allowed
+                        bg-primary hover:bg-primary text-white shadow-md hover:shadow-lg">
                     Registrarse
                 </button>
 
