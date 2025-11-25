@@ -1,11 +1,13 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ApiService } from '../../project/services/api.service';
-import { ToasterService } from '../../project/services/toaster.service';
+
 
 import { CommonModule } from '@angular/common';
-import { GeneralService } from '../../core/gerneral.service';
+import { ApiService } from '../../../project/services/api.service';
+import { ToasterService } from '../../../project/services/toaster.service';
+import { GeneralService } from '../../../core/gerneral.service';
+
 
 @Component({
   selector: 'app-login',
@@ -167,6 +169,6 @@ redirectByRole(role: string) {
 }
 
 regulation() {
-    this.router.navigate(['/Coffee/regulation']);
+    this.router.navigate(['/regulation']);
 }
 }

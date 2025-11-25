@@ -29,6 +29,8 @@ export class BuyerOrdersComponent implements OnInit {
     this.buyerService.getOrders(this.userId).subscribe(res => {
       // Asegurar IDs únicos y limpiar datos
       this.data = this.ensureUniqueIds(res);
+      console.log(res);
+      
       console.log('Transacciones procesadas:', this.data);
     });
   }

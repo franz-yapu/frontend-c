@@ -1,16 +1,16 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { GeneralService } from '../../core/gerneral.service';
-import { ApiService } from '../../project/services/api.service';
+
 import { Router } from '@angular/router';
-import { ToasterService } from '../../project/services/toaster.service';
-import { DynamicFormComponent } from '../../project/components/dynamic-form/dynamic-form.component';
+
 import { CommonModule } from '@angular/common';
-import { productFormFields } from '../product/modal-product/schema';
-import { environment } from '../../../environments/environment';
-import { ProductService } from '../product/product.service';
+
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { registerFormFields } from './schema-register';
+import { DynamicFormComponent } from '../../../project/components/dynamic-form/dynamic-form.component';
+import { ProductService } from '../../product/product.service';
+import { ToasterService } from '../../../project/services/toaster.service';
+import { ApiService } from '../../../project/services/api.service';
 
 @Component({
   selector: 'app-register',

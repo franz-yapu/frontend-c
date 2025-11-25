@@ -1,0 +1,18 @@
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-100% - 2rem)); /* Ajuste para el espacio entre elementos */
+  }
+}
+
+.animate-scroll {
+  animation: scroll 50s linear infinite;
+  width: max-content; /* Importante para el cálculo correcto */
+}
+
+.animate-scroll:hover {
+  animation-play-state: paused;
+}
+

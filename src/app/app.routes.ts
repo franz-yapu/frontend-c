@@ -9,15 +9,7 @@ export const routes: Routes = [
         loadChildren: () => import('./modules/external-home/external.routes').then(m => m.routes),
         title: 'Home'
     },
-    {
-        path: 'login',
-        loadChildren: () => import('./modules/login/login.routes').then(m => m.routes),
-        title: 'Login'
-    },
-    {
-        path: 'register',
-        loadChildren: () => import('./modules/register/register.routes').then(m => m.routes),
-    },
+   
     {
         path: 'home',
         loadChildren: () => import('./modules/home/home.routes').then(m => m.routes),

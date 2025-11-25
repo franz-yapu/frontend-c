@@ -4,21 +4,23 @@ module.exports = {
   darkMode: ["class"],
   theme: {
     extend: {
+
       colors: {
         primary: {
-          DEFAULT: "#95c11f", // Verde principal
+          DEFAULT: "#95c11f",
           50: "#f7fce9",
           100: "#eef9d3",
           200: "#dcf3a8",
           300: "#caed7d",
           400: "#b7e752",
-          500: "#95C11F",   // color solicitado
+          500: "#95C11F",
           600: "#7da41a",
           700: "#648516",
           800: "#4b6611",
           900: "#32470c",
           950: "#1f2b07",
         },
+
         secondary: {
           DEFAULT: "#000000",
           50: "#FFF3E5",
@@ -33,15 +35,8 @@ module.exports = {
           900: "#804500",
           950: "#472700",
         },
+
         light: "#ffffff",
-
-        gray: { /* ... tus grises ... */ },
-        green: { /* ... tus verdes ... */ },
-        sky: { /* ... */ },
-        yellow: { /* ... */ },
-        red: { /* ... */ },
-        indigo: { /* ... */ },
-
         bgligth: "#F3EDE5",
         bgdark: "#2A2826",
         bgbluegray: "#E2E8F0",
@@ -50,34 +45,23 @@ module.exports = {
       },
 
       keyframes: {
-        "fade-in": {
+        fade: {
           "0%": { opacity: 0 },
-          "100%": { opacity: 1 },
+          "10%": { opacity: 1 },
+          "30%": { opacity: 1 },
+          "40%": { opacity: 0 },
+          "100%": { opacity: 0 },
         },
-        flip: {
-          "0%": { transform: "rotateY(0deg)" },
-          "100%": { transform: "rotateY(360deg)" },
-        },
-        "flip-back": {
-          "0%": { transform: "rotateY(180deg)" },
-          "100%": { transform: "rotateY(0deg)" },
-        },
-        "slide-in-right": {
-          "0%": { transform: "translateX(100%)", opacity: 0 },
-          "100%": { transform: "translateX(0)", opacity: 1 },
-        },
-        "slide-out-left": {
-          "0%": { transform: "translateX(0)", opacity: 1 },
-          "100%": { transform: "translateX(-100%)", opacity: 0 },
-        },
+
+        scroll: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" }
+        }
       },
 
       animation: {
-        "fade-in": "fade-in 0.5s ease-in-out",
-        flip: "flip 0.6s ease-in-out forwards",
-        "flip-back": "flip-back 0.6s ease-in-out forwards",
-        "slide-in-right": "slide-in-right 0.6s ease-in-out forwards",
-        "slide-out-left": "slide-out-left 0.6s ease-in-out forwards",
+        fade: "fade 15s infinite ease-in-out",
+        scroll: "scroll 30s linear infinite",
       }
     },
   },

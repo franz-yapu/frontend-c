@@ -13,7 +13,7 @@
   },
   "APP": {
     "TITLE": "Altura",
-    "TITLE_ACCENT": " Café"
+    "TITLE_ACCENT": " TECAB"
   },
   "HOME": {
     "HERO": {
@@ -22,6 +22,10 @@
       "AUCTION_BUTTON": "Ver Subastas Activas",
       "LOGIN_BUTTON": "Ingresar",
       "REGISTER_BUTTON": "Crear Cuenta"
+    },
+    "SPONSORS":{
+      "TITLE": "Nuestros Sponsors",
+      "SUBTITLE": "Empresas y organizaciones que apoyan nuestra misión"
     },
     "FEATURES": {
       "TITLE": "¿Por qué participar en nuestras subastas?",
@@ -58,7 +62,7 @@
     "TERMS": "Términos",
     "CONTACT_TITLE": "Contacto",
     "LOCATION": "La Paz, Bolivia",
-    "COPYRIGHT": "© 2025 Café Altura. Todos los derechos reservados."
+    "COPYRIGHT": "© 2025 Tecab. Todos los derechos reservados."
   },
   "WINNERS": {
     "HERO": {

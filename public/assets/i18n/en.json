@@ -13,7 +13,7 @@
   },
   "APP": {
     "TITLE": "Altitude",
-    "TITLE_ACCENT": " Coffee"
+    "TITLE_ACCENT": " TECAB"
   },
     "HOME": {
     "HERO": {
@@ -22,6 +22,10 @@
       "AUCTION_BUTTON": "View Active Auctions",
       "LOGIN_BUTTON": "Login",
       "REGISTER_BUTTON": "Create Account"
+    },
+    "SPONSORS":{
+      "TITLE": "Our Sponsors",
+      "SUBTITLE": "Companies and organizations that support our mission"
     },
     "FEATURES": {
       "TITLE": "Why participate in our auctions?",
@@ -58,7 +62,7 @@
     "TERMS": "Terms",
     "CONTACT_TITLE": "Contact",
     "LOCATION": "La Paz, Bolivia",
-    "COPYRIGHT": "© 2025 Altura Coffee. All rights reserved."
+    "COPYRIGHT": "© 2025 TECAB. All rights reserved."
   },
     "WINNERS": {
     "HERO": {

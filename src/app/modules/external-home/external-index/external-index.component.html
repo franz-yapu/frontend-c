@@ -1,110 +1,131 @@
 <div class="min-h-screen bg-white text-black font-sans">
 
   <!-- HERO -->
-  <section class="relative bg-[#95c11f] text-white">
-    <div class="max-w-6xl mx-auto px-4 py-24 text-center">
+<section class="relative bg-[#95c11f] text-white overflow-hidden"
+           (mouseenter)="onSliderHover(true)"
+           (mouseleave)="onSliderHover(false)">
+    
+    <!-- Slider de fondo -->
+    <div class="absolute inset-0 z-0">
+      <div class="relative w-full h-full">
+        @for (slide of slides; track $index; let i = $index) {
+          <div 
+            class="absolute inset-0 bg-cover bg-center transition-all duration-1000 ease-in-out"
+            [style.background-image]="'url(' + slide.url + ')'"
+            [class.opacity-0]="i !== currentSlide"
+            [class.opacity-100]="i === currentSlide"
+            [class.z-0]="i !== currentSlide"
+            [class.z-10]="i === currentSlide">
+          </div>
+        }
+        <!-- Overlay para mejor legibilidad -->
+        <div class="absolute inset-0 bg-black/40 z-20"></div>
+      </div>
+    </div>
 
+    <!-- Contenido -->
+    <div class="max-w-6xl mx-auto px-4 py-24 text-center relative z-30">
       <!-- Logo -->
       <div class="mb-12 flex justify-center">
-        <div class="p-6 bg-white rounded-full shadow-lg">
-          <img src="assets/img/logo.png" alt="Café Altura" class="h-40 md:h-52 w-auto" />
+        <div class="bg-white rounded-full shadow-lg">
+          <img src="assets/img/tecab/tecab.svg" alt="Café Altura" class="h-80 md:h-62 w-auto" />
         </div>
       </div>
 
       <!-- Título -->
-      <h1 class="text-4xl md:text-6xl text-black font-extrabold tracking-tight mb-6" appTranslate="HOME.HERO.TITLE">
+      <h1 class="text-4xl md:text-6xl text-white font-extrabold tracking-tight mb-6">
         Subasta Premium de Cafés Especiales
       </h1>
 
       <!-- Subtítulo -->
-      <p class="text-lg md:text-xl max-w-2xl mx-auto text-black/90 leading-relaxed mb-12" appTranslate="HOME.HERO.SUBTITLE">
+      <p class="text-lg md:text-xl max-w-2xl mx-auto text-white/90 leading-relaxed mb-12">
         Cafés exclusivos de productores bolivianos, seleccionados por expertos
       </p>
 
       <!-- Botones -->
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
-
         <button (click)="goToAuction()"
-          class="px-8 py-3 rounded-xl bg-white text-black font-semibold border border-black/10 hover:bg-black hover:text-white transition-all shadow-sm"
-          appTranslate="HOME.HERO.AUCTION_BUTTON">
+          class="px-8 py-3 rounded-xl bg-white text-black font-semibold border border-black/10 hover:bg-black hover:text-white transition-all shadow-sm">
           Ver Subastas
         </button>
 
         <button (click)="goToLogin()"
-          class="px-8 py-3 rounded-xl bg-white text-black font-semibold border border-black/10 hover:bg-black hover:text-white transition-all shadow-sm"
-          appTranslate="HOME.HERO.LOGIN_BUTTON">
+          class="px-8 py-3 rounded-xl bg-white text-black font-semibold border border-black/10 hover:bg-black hover:text-white transition-all shadow-sm">
           Ingresar
         </button>
 
         <button (click)="goToRegister()"
-          class="px-8 py-3 rounded-xl bg-white text-black font-semibold border border-black/10 hover:bg-black hover:text-white transition-all shadow-sm"
-          appTranslate="HOME.HERO.REGISTER_BUTTON">
+          class="px-8 py-3 rounded-xl bg-white text-black font-semibold border border-black/10 hover:bg-black hover:text-white transition-all shadow-sm">
           Crear Cuenta
         </button>
-
       </div>
-
     </div>
+
+    <!-- Controles del slider -->
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30 flex space-x-3">
+      @for (slide of slides; track $index; let i = $index) {
+        <button 
+          (click)="goToSlide(i)"
+          class="w-3 h-3 rounded-full transition-all duration-300"
+          [class]="i === currentSlide ? 'bg-white scale-125' : 'bg-white/50 hover:bg-white/80'">
+        </button>
+      }
+    </div>
+
+    <!-- Flechas de navegación -->
+    <button 
+      (click)="prevSlide()"
+      class="absolute left-4 top-1/2 transform -translate-y-1/2 z-30 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-all duration-300">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+      </svg>
+    </button>
+
+    <button 
+      (click)="nextSlide()"
+      class="absolute right-4 top-1/2 transform -translate-y-1/2 z-30 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-all duration-300">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+      </svg>
+    </button>
   </section>
 
   <!-- FEATURES -->
-  <section class="py-24 bg-white">
+   <!-- SPONSORS -->
+  <section class="py-24 bg-white overflow-hidden">
     <div class="max-w-6xl mx-auto px-4">
 
-      <div class="text-center mb-20">
-        <h2 class="text-3xl md:text-4xl font-bold mb-4" appTranslate="HOME.FEATURES.TITLE">
-          ¿Por qué elegirnos?
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4" appTranslate="HOME.SPONSORS.TITLE">
+          Nuestros Sponsors
         </h2>
-      <!--   <p class="text-lg text-black/70 max-w-xl mx-auto leading-relaxed" appTranslate="HOME.FEATURES.SUBTITLE">
-          Tecnología moderna, transparencia y excelencia en cada taza.
-        </p> -->
+        <p class="text-lg text-black/70 max-w-xl mx-auto leading-relaxed" appTranslate="HOME.SPONSORS.SUBTITLE">
+          Empresas y organizaciones que apoyan nuestra misión
+        </p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-
-        <!-- Item -->
-        <div class="p-8 border rounded-2xl shadow-sm hover:shadow-md transition-all bg-white">
-          <div class="w-14 h-14 mb-4 mx-auto rounded-xl bg-[#95c11f]/15 flex items-center justify-center">
-            <svg class="w-7 h-7 text-[#95c11f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M9 12l2 2 4-4"></path>
-            </svg>
-          </div>
-          <h3 class="text-xl font-semibold mb-2" appTranslate="HOME.FEATURES.QUALITY_TITLE">Calidad Certificada</h3>
-          <p class="text-black/70 leading-relaxed" appTranslate="HOME.FEATURES.QUALITY_DESC">
-            Todos los lotes son evaluados por Q Graders profesionales.
-          </p>
-        </div>
-
-        <!-- Item -->
-        <div class="p-8 border rounded-2xl shadow-sm hover:shadow-md transition-all bg-white">
-          <div class="w-14 h-14 mb-4 mx-auto rounded-xl bg-[#95c11f]/15 flex items-center justify-center">
-            <svg class="w-7 h-7 text-[#95c11f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M17 20h5v-2a3 3 0 00-5-2"></path>
-            </svg>
-          </div>
-          <h3 class="text-xl font-semibold mb-2" appTranslate="HOME.FEATURES.FAIR_TRADE_TITLE">Comercio Justo</h3>
-          <p class="text-black/70 leading-relaxed" appTranslate="HOME.FEATURES.FAIR_TRADE_DESC">
-            Más ingresos para los productores locales.
-          </p>
-        </div>
-
-        <!-- Item -->
-        <div class="p-8 border rounded-2xl shadow-sm hover:shadow-md transition-all bg-white">
-          <div class="w-14 h-14 mb-4 mx-auto rounded-xl bg-[#95c11f]/15 flex items-center justify-center">
-            <svg class="w-7 h-7 text-[#95c11f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-            </svg>
-          </div>
-          <h3 class="text-xl font-semibold mb-2" appTranslate="HOME.FEATURES.TRANSPARENCY_TITLE">Transparencia Real</h3>
-          <p class="text-black/70 leading-relaxed" appTranslate="HOME.FEATURES.TRANSPARENCY_DESC">
-            Seguimiento desde la finca hasta tu taza.
-          </p>
-        </div>
-
+      <!-- Carrusel de Sponsors -->
+      <div class="relative">
+  <!-- Contenedor del carrusel -->
+  <div class="overflow-hidden">
+    <div class="flex space-x-8 animate-scroll">
+       @for (sponsor of sponsors; track sponsor.name; let i = $index) {
+         <div class="flex-none w-48 h-32 bg-white  items-center justify-center p-4 border border-gray-100">
+          <img 
+                [src]="sponsor.logo" 
+                [alt]="sponsor.name" 
+                class="max-h-16 lg:max-h-20 max-w-full  "
+                [title]="sponsor.name">
       </div>
+       }
+    </div>
+  </div>
+  
+  <!-- Overlay para efecto de desvanecimiento -->
+  <div class="absolute top-0 left-0 w-24 h-full bg-gradient-to-r from-white to-transparent z-10"></div>
+  <div class="absolute top-0 right-0 w-24 h-full bg-gradient-to-l from-white to-transparent z-10"></div>
+</div>
+
     </div>
   </section>
 
@@ -138,7 +159,7 @@
 
         <div>
           <h3 class="text-lg font-semibold mb-3" appTranslate="FOOTER.CONTACT_TITLE">Contacto</h3>
-          <p class="text-white/70" appTranslate="FOOTER.CONTACT_PHONE">+591 61139545</p>
+         <!--  <p class="text-white/70" appTranslate="FOOTER.CONTACT_PHONE">+591 61139545</p> -->
           <p class="text-white/70" appTranslate="FOOTER.LOCATION">La Paz, Bolivia</p>
         </div>
       </div>

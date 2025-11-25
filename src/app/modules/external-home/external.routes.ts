@@ -7,6 +7,8 @@ import { ExternalHomeComponent } from './external-home.component';
 import { ExternalIndexComponent } from './external-index/external-index.component';
 import { AboutComponent } from './about/about.component';
 import { RegulationComponent } from './regulation/regulation.component';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 
 
 
@@ -35,6 +37,14 @@ export const routes: Routes = [
         path: 'auction',
         component: ExternalAuctionComponent,
          data: { preload: true }
+      },
+       {
+        path: 'login',
+        component: LoginComponent,
+      },
+       {
+        path: 'register',
+        component: RegisterComponent,
       },
       {
         path: 'documents',

@@ -6,13 +6,13 @@
       <div class="flex items-center space-x-3">
         <a routerLink="/" class="flex items-center space-x-3">
           <img 
-            src="assets/img/logo.png"
+            src="assets/img/tecab/tecab.svg"
             alt="Alborada Café"
-            class="h-10 w-auto rounded-full bg-light p-1"
+            class="h-10 w-auto rounded-full bg-light "
           />
           <span class="hidden md:block font-semibold text-lg tracking-wide">
-            <span appTranslate="APP.TITLE">Altura</span>
-            <span class="text-primary" appTranslate="APP.TITLE_ACCENT">Café</span>
+            
+            <span class="text-primary" appTranslate="APP.TITLE_ACCENT">TECAB</span>
           </span>
         </a>
       </div>
@@ -117,5 +117,17 @@
       </a>
 
     </div>
+    <div class="px-3 py-2">
+          <div class="text-xs font-medium text-primary px-1 py-1" appTranslate="NAV.LANGUAGE">Idioma</div>
+          <button
+            *ngFor="let lang of availableLanguages()" 
+            (click)="changeLanguage(lang.code); toggleMobileMenu()"
+            class="flex items-center space-x-3 px-3 py-2 text-base text-light/80 hover:text-primary hover:bg-primary/10 cursor-pointer transition-colors w-full text-left rounded-md"
+            [class.text-primary]="currentLanguage() === lang.code"  
+          >
+            <span class="text-lg">{{ lang.flag }}</span>
+            <span>{{ lang.name }}</span>
+          </button>
+        </div>
   </div>
 </nav>
