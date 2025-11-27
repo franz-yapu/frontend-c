@@ -233,7 +233,7 @@
             </div>
           </div>
           <div class="mt-1 text-sm font-bold text-black text-right">
-            Total: {{ (detail.currentPrice * detail.coffeeLot.quantityLbs) | currency:'USD':'symbol' }}
+           <Span appTranslate="AUCTION.LOT.TOTAL"> TOTAL</Span> {{ (detail.currentPrice * detail.coffeeLot.quantityLbs) | currency:'USD':'symbol' }}
           </div>
         </div>
       </div>
@@ -288,7 +288,14 @@
     </div>
     }
   </div>
-  
+  <div class="absolute top-12 right-0 z-2 w-1/4 max-w-xs">
+      <img src="assets/img/der.svg" alt="Granos de café" class="w-full h-auto" />
+    </div>
+
+    <!-- Imagen decorativa superior izquierda -->
+    <div class="absolute bottom-0 -left-8 z-1 w-1/4 max-w-xs">
+      <img src="assets/img/izq.svg" alt="Hoja de café" class="w-full h-auto" />
+    </div>
 </div>
 
 @if (selectedLot) {

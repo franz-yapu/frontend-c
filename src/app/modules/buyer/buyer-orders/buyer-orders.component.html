@@ -123,6 +123,12 @@
                     <span class="text-sm text-gray-600 font-medium" appTranslate="TRANSACTIONS.PRICE_PER_LB">Precio x Lb</span>
                     <span class="font-semibold text-gray-800">${{ tx.pricing.pricePerLb | number:'1.2-2' }}</span>
                   </div>
+
+                   <div class="flex justify-between items-center">
+                    <span class="text-sm text-gray-600 font-medium" appTranslate="AUCTION.LOT.TOTAL">TOTAL</span>
+                    <span class="font-semibold text-gray-800">{{ (tx.pricing.finalPrice  * tx.lot.quantityLbs) | currency:'USD':'symbol' }}</span>
+                  </div>
+                 
                 </div>
               </div>
 

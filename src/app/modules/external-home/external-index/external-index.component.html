@@ -1,12 +1,12 @@
 <div class="min-h-screen bg-white text-black font-sans">
 
   <!-- HERO -->
-<section class="relative bg-[#95c11f] text-white overflow-hidden"
+<section class="relative bg-white text-white overflow-hidden"
            (mouseenter)="onSliderHover(true)"
            (mouseleave)="onSliderHover(false)">
     
     <!-- Slider de fondo -->
-    <div class="absolute inset-0 z-0">
+   <!--  <div class="absolute inset-0 z-0">
       <div class="relative w-full h-full">
         @for (slide of slides; track $index; let i = $index) {
           <div 
@@ -18,10 +18,10 @@
             [class.z-10]="i === currentSlide">
           </div>
         }
-        <!-- Overlay para mejor legibilidad -->
+     
         <div class="absolute inset-0 bg-black/40 z-20"></div>
       </div>
-    </div>
+    </div> -->
 
     <!-- Contenido -->
     <div class="max-w-6xl mx-auto px-4 py-24 text-center relative z-30">
@@ -33,36 +33,36 @@
       </div>
 
       <!-- Título -->
-      <h1 class="text-4xl md:text-6xl text-white font-extrabold tracking-tight mb-6">
+      <h1 class="text-2xl md:text-4xl text-black font-extrabold tracking-tight mb-6" appTranslate="HOME.HERO.TITLE">
         Subasta Premium de Cafés Especiales
       </h1>
 
       <!-- Subtítulo -->
-      <p class="text-lg md:text-xl max-w-2xl mx-auto text-white/90 leading-relaxed mb-12">
+      <p class="text-lg text-black md:text-xl max-w-2xl mx-auto  leading-relaxed mb-12" appTranslate="HOME.HERO.SUBTITLE">
         Cafés exclusivos de productores bolivianos, seleccionados por expertos
       </p>
 
       <!-- Botones -->
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
         <button (click)="goToAuction()"
-          class="px-8 py-3 rounded-xl bg-white text-black font-semibold border border-black/10 hover:bg-black hover:text-white transition-all shadow-sm">
+           appTranslate="HOME.HERO.AUCTION_BUTTON" class="  px-8 py-3 rounded-xl bg-primary text-white font-semibold border border-black/10 hover:bg-white hover:text-black hover:border-primary transition-all shadow-sm">
           Ver Subastas
         </button>
 
         <button (click)="goToLogin()"
-          class="px-8 py-3 rounded-xl bg-white text-black font-semibold border border-black/10 hover:bg-black hover:text-white transition-all shadow-sm">
+          appTranslate="HOME.HERO.LOGIN_BUTTON" class="px-8 py-3 rounded-xl bg-primary text-white font-semibold border border-black/10 hover:bg-white hover:text-black hover:border-primary transition-all shadow-sm">
           Ingresar
         </button>
 
         <button (click)="goToRegister()"
-          class="px-8 py-3 rounded-xl bg-white text-black font-semibold border border-black/10 hover:bg-black hover:text-white transition-all shadow-sm">
+          appTranslate="HOME.HERO.REGISTER_BUTTON" class="px-8 py-3 rounded-xl bg-primary text-white font-semibold border border-black/10 hover:bg-white hover:text-black hover:border-primary transition-all shadow-sm">
           Crear Cuenta
         </button>
       </div>
     </div>
 
     <!-- Controles del slider -->
-    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30 flex space-x-3">
+    <!-- <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30 flex space-x-3">
       @for (slide of slides; track $index; let i = $index) {
         <button 
           (click)="goToSlide(i)"
@@ -70,10 +70,10 @@
           [class]="i === currentSlide ? 'bg-white scale-125' : 'bg-white/50 hover:bg-white/80'">
         </button>
       }
-    </div>
+    </div> -->
 
     <!-- Flechas de navegación -->
-    <button 
+   <!--  <button 
       (click)="prevSlide()"
       class="absolute left-4 top-1/2 transform -translate-y-1/2 z-30 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-all duration-300">
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -87,7 +87,25 @@
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
       </svg>
-    </button>
+    </button> -->
+
+
+        <!-- Imagen decorativa inferior derecha -->
+     <!-- Imagen decorativa inferior derecha -->
+   <!-- Imagen decorativa superior derecha -->
+    <div class="absolute top-0 right-0 z-20 w-1/4 max-w-xs">
+      <img src="assets/img/der.svg" alt="Granos de café" class="w-full h-auto" />
+    </div>
+
+    <!-- Imagen decorativa superior izquierda -->
+    <div class="absolute top-0 -left-8 z-10 w-1/4 max-w-xs">
+      <img src="assets/img/izq.svg" alt="Hoja de café" class="w-full h-auto" />
+    </div>
+
+    <!-- Imagen decorativa inferior central - AL 100% -->
+    <div class="absolute bottom-0 left-0 w-full z-20">
+      <img src="assets/img/2.png" alt="Taza de café" class="w-full h-auto " />
+    </div>
   </section>
 
   <!-- FEATURES -->

@@ -1,7 +1,7 @@
-<div class="min-h-screen bg-gradient-to-br from-white via-gray-50 to-gray-100/60 py-8 px-4">
+<div class="min-h-screen  py-8 px-4">
   <div class="max-w-8xl mx-auto">
     <!-- Header Principal -->
-    <div class="relative bg-primary   shadow p-3 mb-6 border border-primary/20 overflow-hidden">
+    <div class="relative bg-primary   shadow p-3 mb-6  overflow-hidden">
       <!-- Elementos decorativos de fondo -->
 
       <div class="relative z-10">
@@ -20,9 +20,9 @@
                 <div class="absolute -inset-2 bg-white/10 rounded-2xl blur-sm -z-10"></div>
               </div>
               <div>
-                <h1 class="text-4xl md:text-5xl font-bold text-white mb-3 tracking-tight"
+                <h1 class="text-4xl md:text-5xl font-bold text-black mb-3 tracking-tight"
                   appTranslate="AUCTION-BUYER.PREMIUM_AUCTIONS">Subastas de Café Premium</h1>
-                <p class="text-white/90 text-xl font-light" appTranslate="AUCTION-BUYER.EXCLUSIVE_LOTS">Lotes exclusivos
+                <p class="text-black text-xl font-light" appTranslate="AUCTION-BUYER.EXCLUSIVE_LOTS">Lotes exclusivos
                   de productores especializados</p>
               </div>
             </div>
@@ -30,7 +30,7 @@
 
           <!-- Contador regresivo -->
           @if (auctionData.length > 0) {
-          <div class="bg-white/10 backdrop-blur-xl p-7 border border-white/20 shadow-2xl min-w-[320px]">
+          <div class="bg-primary rounded-lg p-7 border border-white/20 shadow-2xl min-w-[320px]">
             @if (calculateTimeRemaining(auctionData[0]).hasEnded || auctionEnded) {
             <div class="text-center">
               <div
@@ -61,28 +61,28 @@
 
               <div class="grid grid-cols-4 gap-3">
                 <div
-                  class="bg-gradient-to-br from-white/20 to-white/10 text-white px-4 py-5  text-center min-w-[75px] backdrop-blur-sm border border-white/20 shadow-lg">
+                  class="bg-white from-white/20 to-white/10 text-white px-4 py-5  text-center min-w-[75px] backdrop-blur-sm border border-white/20 shadow-lg">
                   <span class="block text-black text-3xl font-bold tracking-tight">{{
                     calculateTimeRemaining(auctionData[0]).days }}</span>
                   <span class="block text-black text-xs mt-2 opacity-90 font-medium"
                     appTranslate="COMMON.DAYS">Días</span>
                 </div>
                 <div
-                  class="bg-gradient-to-br from-white/20 to-white/10 text-white px-4 py-5  text-center min-w-[75px] backdrop-blur-sm border border-white/20 shadow-lg">
+                  class="bg-white text-white px-4 py-5  text-center min-w-[75px] backdrop-blur-sm border border-white/20 shadow-lg">
                   <span class="block text-black text-3xl font-bold tracking-tight">{{
                     calculateTimeRemaining(auctionData[0]).hours | number:'2.0' }}</span>
                   <span class="block text-black text-xs mt-2 opacity-90 font-medium"
                     appTranslate="COMMON.HOURS">Horas</span>
                 </div>
                 <div
-                  class="bg-gradient-to-br from-white/20 to-white/10 text-white px-4 py-5  text-center min-w-[75px] backdrop-blur-sm border border-white/20 shadow-lg">
+                  class="bg-white text-white px-4 py-5  text-center min-w-[75px] backdrop-blur-sm border border-white/20 shadow-lg">
                   <span class="block text-black text-3xl font-bold tracking-tight">{{
                     calculateTimeRemaining(auctionData[0]).minutes | number:'2.0' }}</span>
                   <span class="block text-black text-xs mt-2 opacity-90 font-medium"
                     appTranslate="COMMON.MINUTES">Min</span>
                 </div>
                 <div
-                  class="bg-gradient-to-br from-white/20 to-white/10 text-white px-4 py-5  text-center min-w-[75px] backdrop-blur-sm border border-white/20 shadow-lg">
+                  class="bg-white text-white px-4 py-5  text-center min-w-[75px] backdrop-blur-sm border border-white/20 shadow-lg">
                   <span class="block text-black text-3xl font-bold tracking-tight">{{
                     calculateTimeRemaining(auctionData[0]).seconds | number:'2.0' }}</span>
                   <span class="block text-black text-xs mt-2 opacity-90 font-medium"
@@ -94,7 +94,11 @@
           </div>
           }
         </div>
+        
       </div>
+      <div class="absolute bottom-0 left-0 w-full z-1">
+      <img src="assets/img/2.png" alt="Taza de café" class="w-full h-auto " />
+    </div>
     </div>
 
     <!-- Información de la subasta -->
@@ -151,10 +155,11 @@
         <div
           class="group bg-white  shadow-xl hover:shadow-2xl transition-all duration-500 border border-gray-200 hover:border-primary/30 overflow-hidden hover:-translate-y-1">
           <!-- Header con nombre y puntuación -->
-          <div class="relative p-5 bg-primary border-b border-primary/30 overflow-hidden">
+          <div class="relative p-5 border-b border-primary/30 overflow-hidden bg-cover bg-center bg-no-repeat"
+     style="background-image: url('assets/img/foto prod.png');">
 
             <div class="flex justify-center items-start mb-4">
-              <p class="text-6xl text-black mr-2"> #{{ detail.coffeeLot.position }}</p>
+              <p class="text-7xl text-primary mr-2"> #{{ detail.coffeeLot.position }}</p>
               
               <div>
                 <h4 class="text-xl font-bold text-white  leading-tight pr-4">{{ detail.coffeeLot.name }}</h4>
@@ -163,7 +168,7 @@
               </div>
 
               <span
-                class="px-3.5 py-1.5 rounded-full text-xl font-bold bg-white/20 text-white border border-white/30 shadow-lg">
+                class="px-3.5 py-1.5 rounded-full text-xl font-bold bg-white/20 text-primary border border-white/30 shadow-lg">
                 {{ detail.coffeeLot.cupScore }} 
               </span>
             </div>

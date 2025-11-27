@@ -17,14 +17,14 @@
   },
   "HOME": {
     "HERO": {
-      "TITLE": "Subasta Premium de Cafés Especiales",
-      "SUBTITLE": "Descubre los mejores lotes de café de origen boliviano directamente de productores especializados",
+      "TITLE": "TECAB Bolivia 2025 reunirá a los ganadores de las competencias de los últimos años",
+      "SUBTITLE": "creando un encuentro de calidad sin precedentes",
       "AUCTION_BUTTON": "Ver Subastas Activas",
       "LOGIN_BUTTON": "Ingresar",
       "REGISTER_BUTTON": "Crear Cuenta"
     },
     "SPONSORS":{
-      "TITLE": "Nuestros Sponsors",
+      "TITLE": "Nuestros aliados",
       "SUBTITLE": "Empresas y organizaciones que apoyan nuestra misión"
     },
     "FEATURES": {
@@ -107,8 +107,8 @@
   },
   "AUCTION": {
     "HERO": {
-      "TITLE": "Subasta de Café Especial",
-      "SUBTITLE": "Sigue en tiempo real el desarrollo de nuestra subasta de cafés premium",
+      "TITLE": "Subasta del TECAB Bolivia 2025",
+      "SUBTITLE": "Los mejores productores de Bolivia 2025",
       "START_DATE": "Inicio",
       "END_DATE": "Fin"
     },
@@ -253,11 +253,20 @@
         "CONTACT_INFO_TITLE": "3. Información de Contacto",
         "CONTACT_INFO_DESC": "Para consultas adicionales, los participantes pueden comunicarse a través del correo electrónico habilitado en la plataforma de subasta."
       }
+    },
+     "PDF": {
+      "TITLE": "Documento del Reglamento",
+      "LOADING": "Cargando documento...",
+      "ERROR": "Error al cargar el documento",
+      "RETRY": "Reintentar",
+      "DOWNLOAD": "Descargar PDF"
     }
+
+
   },
     "AUCTION-BUYER": {
-    "PREMIUM_AUCTIONS": "Subastas de Café Premium",
-    "EXCLUSIVE_LOTS": "Lotes exclusivos de productores especializados",
+    "PREMIUM_AUCTIONS": "Subasta del TECAB Bolivia 2025",
+    "EXCLUSIVE_LOTS": "Los mejores productores de Bolivia 2025",
     "AUCTION_ENDED": "Subasta Finalizada",
     "RESULTS_AVAILABLE": "Resultados disponibles",
     "ENDS_IN": "Finaliza en",
@@ -339,5 +348,35 @@
     "RECORDS": "registros",
     "PREVIOUS": "Anterior",
     "NEXT": "Siguiente"
+  },
+   "LOGIN": {
+    "SUCCESS_MESSAGE": "¡Cuenta verificada exitosamente!",
+    "TITLE": "Iniciar Sesión",
+    "SUBTITLE": "Accede a tu cuenta para continuar",
+
+    "EMAIL_LABEL": "Correo Electrónico",
+    "EMAIL_PLACEHOLDER": "tucorreo@ejemplo.com",
+    "EMAIL_REQUIRED": "El correo electrónico es requerido",
+    "EMAIL_INVALID": "Por favor ingresa un correo electrónico válido",
+
+    "PASSWORD_LABEL": "Contraseña",
+    "PASSWORD_REQUIRED": "La contraseña es requerida",
+
+    "LOGIN_BUTTON": "Iniciar Sesión",
+
+    "NO_ACCOUNT": "¿No tienes una cuenta?",
+    "REGISTER_LINK": " Regístrate",
+
+    "TERMS_TEXT": "Al iniciar sesión aceptas nuestros",
+    "TERMS_LINK": " Términos y Condiciones"
+  },
+    "REGISTER": {
+    "WELCOME": "¡Bienvenidos!",
+    "COFFEE_BEANS": "Granos de café",
+    "COFFEE_LEAF": "Hoja de café",
+    "TITLE": "Registro",
+    "REGISTER_BUTTON": "Registrarse",
+    "GO_BACK": "Volver atrás"
   }
+
 }

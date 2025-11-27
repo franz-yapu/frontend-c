@@ -11,10 +11,11 @@ import { DynamicFormComponent } from '../../../project/components/dynamic-form/d
 import { ProductService } from '../../product/product.service';
 import { ToasterService } from '../../../project/services/toaster.service';
 import { ApiService } from '../../../project/services/api.service';
+import { TranslateDirective } from '../../../project/directive/translate.directive';
 
 @Component({
   selector: 'app-register',
-  imports: [CommonModule, DynamicFormComponent],
+  imports: [CommonModule, DynamicFormComponent,TranslateDirective],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })

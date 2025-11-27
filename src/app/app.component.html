@@ -1,6 +1,7 @@
-
-<app-toast></app-toast>
-<app-loading-overlay></app-loading-overlay>
-<main class="min-h-screen bg-gray-50">
-  <router-outlet></router-outlet>
-</main>
+<div class="global-watermarks">
+  <app-toast></app-toast>
+  <app-loading-overlay></app-loading-overlay>
+  <main class="min-h-screen bg-gray-50 relative z-10">
+    <router-outlet></router-outlet>
+  </main>
+</div>

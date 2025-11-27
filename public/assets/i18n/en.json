@@ -17,14 +17,14 @@
   },
     "HOME": {
     "HERO": {
-      "TITLE": "Premium Specialty Coffee Auction",
-      "SUBTITLE": "Discover the best Bolivian origin coffee lots directly from specialized producers",
+      "TITLE": "TECAB Bolivia 2025 will bring together the winners of the competitions from recent years",
+      "SUBTITLE": "creating an unprecedented high-quality event",
       "AUCTION_BUTTON": "View Active Auctions",
       "LOGIN_BUTTON": "Login",
       "REGISTER_BUTTON": "Create Account"
     },
     "SPONSORS":{
-      "TITLE": "Our Sponsors",
+      "TITLE": "Our allies",
       "SUBTITLE": "Companies and organizations that support our mission"
     },
     "FEATURES": {
@@ -107,8 +107,8 @@
   },
      "AUCTION": {
     "HERO": {
-      "TITLE": "Specialty Coffee Auction",
-      "SUBTITLE": "Follow the development of our premium coffee auction in real time",
+      "TITLE": "TECAB Bolivia 2025 Auction",
+      "SUBTITLE": "The best producers of Bolivia 2025s",
       "START_DATE": "Start",
       "END_DATE": "End"
     },
@@ -253,11 +253,18 @@
         "CONTACT_INFO_TITLE": "3. Contact Information",
         "CONTACT_INFO_DESC": "For additional inquiries, participants can communicate through the email enabled on the auction platform."
       }
+    },
+      "PDF": {
+      "TITLE": "Regulation Document",
+      "LOADING": "Loading document...",
+      "ERROR": "Error loading document",
+      "RETRY": "Retry",
+      "DOWNLOAD": "Download PDF"
     }
   },
    "AUCTION-BUYER": {
-    "PREMIUM_AUCTIONS": "Premium Coffee Auctions",
-    "EXCLUSIVE_LOTS": "Exclusive lots from specialized producers",
+    "PREMIUM_AUCTIONS": "TECAB Bolivia 2025 Auction",
+    "EXCLUSIVE_LOTS": "The best producers of Bolivia 2025",
     "AUCTION_ENDED": "Auction Ended",
     "RESULTS_AVAILABLE": "Results available",
     "ENDS_IN": "Ends in",
@@ -339,5 +346,34 @@
     "RECORDS": "records",
     "PREVIOUS": "Previous",
     "NEXT": "Next"
+  },
+  "LOGIN": {
+    "SUCCESS_MESSAGE": "Account successfully verified!",
+    "TITLE": "Log In",
+    "SUBTITLE": "Access your account to continue",
+
+    "EMAIL_LABEL": "Email Address",
+    "EMAIL_PLACEHOLDER": "yourmail@example.com",
+    "EMAIL_REQUIRED": "Email is required",
+    "EMAIL_INVALID": "Please enter a valid email address",
+
+    "PASSWORD_LABEL": "Password",
+    "PASSWORD_REQUIRED": "Password is required",
+
+    "LOGIN_BUTTON": "Log In",
+
+    "NO_ACCOUNT": "Don’t have an account?",
+    "REGISTER_LINK": " Sign Up",
+
+    "TERMS_TEXT": "By logging in you accept our",
+    "TERMS_LINK": " Terms and Conditions"
+  },
+    "REGISTER": {
+    "WELCOME": "Welcome!",
+    "COFFEE_BEANS": "Coffee beans",
+    "COFFEE_LEAF": "Coffee leaf",
+    "TITLE": "Registration",
+    "REGISTER_BUTTON": "Register",
+    "GO_BACK": "Go back"
   }
 }

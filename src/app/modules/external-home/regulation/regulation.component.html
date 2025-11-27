@@ -1,20 +1,17 @@
 <div class="min-h-screen bg-white py-8 px-4">
-  <div class="max-w-4xl mx-auto">
+  <div class="max-w-6xl mx-auto">
     
     <!-- Header del Reglamento -->
-    <div class="bg-primary  overflow-hidden mb-4 border border-primary">
+    <div class="bg-primary overflow-hidden mb-4 border border-primary">
       <div class="p-8 text-white relative overflow-hidden">
-        <!-- Elementos decorativos de fondo -->
-        
-     
         <div class="relative z-10 text-center">
           <h1 class="text-3xl md:text-4xl font-bold mb-4 tracking-tight" appTranslate="REGULATION.HERO.TITLE">Reglamento de la Subasta</h1>
-          <p class="text-black text-2xl font-bold mb-6">{{ auctionTitle }}</p>
+          <!-- <p class="text-black text-2xl font-bold mb-6">{{ auctionTitle }}</p> -->
           
           <!-- Información de fechas de la subasta -->
-          @if (auctionData) {
+          <!-- @if (auctionData) {
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 max-w-3xl mx-auto">
-              <div class="flex items-center justify-center  rounded-xl p-4 border border-black/30 shadow">
+              <div class="flex items-center justify-center rounded-xl p-4 border border-black/30 shadow">
                 <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center mr-3">
                   <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
@@ -22,12 +19,12 @@
                 </div>
                 <div class="text-left">
                   <p class="text-black text-sm" appTranslate="REGULATION.HERO.START_DATE">Fecha de Inicio</p>
-                  <p class="font-medium text-white ">{{ formatSpanishDate(auctionData.startDate) }}</p>
-                  <p class="text-black   text-xs">{{ formatSpanishTime(auctionData.startDate) }}</p>
+                  <p class="font-medium text-white">{{ formatSpanishDate(auctionData.startDate) }}</p>
+                  <p class="text-black text-xs">{{ formatSpanishTime(auctionData.startDate) }}</p>
                 </div>
               </div>
 
-              <div class="flex items-center justify-center  rounded-xl p-4 border border-black/30 shadow">
+              <div class="flex items-center justify-center rounded-xl p-4 border border-black/30 shadow">
                 <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center mr-3">
                   <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -40,45 +37,69 @@
                 </div>
               </div>
             </div>
-          }
+          } -->
         </div>
       </div>
     </div>
 
-    <!-- Navegación Corregida -->
-    <div class="bg-white p-4">
-      <div class="flex flex-wrap gap-2 justify-center">
-        @for (section of regulationSections; track section.id) {
-          <button 
-            (click)="scrollToSection(section.id)"
-            class="px-3 py-1 bg-white text-primary rounded-full text-xs font-medium border border-primary hover:bg-primary  hover:text-white transition-colors"
-            [appTranslate]="section.titleKey"
-            >
-            {{ section.titleKey }}
-          </button>
+    <!-- Contenedor del PDF -->
+    <div class="bg-white shadow-lg border border-primary overflow-hidden">
+      <div class="p-4 border-b border-primary bg-primary/5">
+        <h2 class="text-xl font-bold text-primary text-center" appTranslate="REGULATION.PDF.TITLE">
+          Documento del Reglamento
+        </h2>
+      </div>
+      
+      <!-- Visor de PDF -->
+      <div class="w-full h-screen">
+        @if (pdfUrl && !pdfError) {
+          <iframe 
+            [src]="pdfUrl" 
+            class="w-full h-full border-0"
+            title="Reglamento de la Subasta"
+            (load)="onPdfLoad()"
+            (error)="onPdfError()">
+          </iframe>
+        } @else if (pdfError) {
+          <div class="flex items-center justify-center h-64">
+            <div class="text-center text-red-600">
+              <svg class="w-12 h-12 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+              </svg>
+              <p appTranslate="REGULATION.PDF.ERROR">Error al cargar el documento</p>
+              <button 
+                (click)="loadPdf()"
+                class="mt-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/80 transition-colors"
+                appTranslate="REGULATION.PDF.RETRY"
+              >
+                Reintentar
+              </button>
+            </div>
+          </div>
+        } @else {
+          <div class="flex items-center justify-center h-64">
+            <div class="text-center">
+              <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+              <p class="text-gray-600" appTranslate="REGULATION.PDF.LOADING">Cargando documento...</p>
+            </div>
+          </div>
         }
       </div>
-    </div>
-
-    <!-- Contenido del Reglamento -->
-    <div class="bg-white shadow-lg border border-primary overflow-hidden">
-      <!-- Contenido del reglamento -->
-    <!-- Contenido del Reglamento -->
-<div class="bg-white  shadow-lg border border-primary overflow-hidden">
-  <!-- Contenido del reglamento -->
-  <div class="p-8">
-    @for (section of regulationSections; track section.id) {
-      <div [id]="section.id" class="mb-10 scroll-mt-20">
-        <h2 class="text-2xl font-bold text-black mb-4 pb-2 border-b border-primary">
-          {{ section.roman }}. <span [appTranslate]="section.titleKey">{{ section.titleKey }}</span>
-        </h2>
-        <div class="prose prose-primary max-w-none">
-          <div [innerHTML]="getSectionContent(section.id)"></div>
-        </div>
+      
+      <!-- Botones de descarga -->
+      <div class="p-4 border-t border-primary/20 bg-white flex justify-center space-x-4">
+        <a 
+          [href]="currentPdfPath" 
+          target="_blank"
+          class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/80 transition-colors flex items-center space-x-2"
+          appTranslate="REGULATION.PDF.DOWNLOAD"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          </svg>
+          <span>Descargar PDF</span>
+        </a>
       </div>
-    }
-  </div>
-</div>
     </div>
 
     <!-- Información de contacto -->
@@ -98,5 +119,14 @@
       </div>
     </div>
 
+  </div>
+  
+  <!-- Elementos decorativos -->
+  <div class="absolute bottom-0 right-0 z-20 w-1/4 max-w-xs">
+    <img src="assets/img/der.svg" alt="Granos de café" class="w-full h-auto" />
+  </div>
+
+  <div class="absolute top-10 -left-8 z-10 w-1/4 max-w-xs">
+    <img src="assets/img/izq.svg" alt="Hoja de café" class="w-full h-auto" />
   </div>
 </div>

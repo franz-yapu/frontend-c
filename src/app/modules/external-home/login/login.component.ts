@@ -7,12 +7,13 @@ import { CommonModule } from '@angular/common';
 import { ApiService } from '../../../project/services/api.service';
 import { ToasterService } from '../../../project/services/toaster.service';
 import { GeneralService } from '../../../core/gerneral.service';
+import { TranslateDirective } from '../../../project/directive/translate.directive';
 
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule,TranslateDirective],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })

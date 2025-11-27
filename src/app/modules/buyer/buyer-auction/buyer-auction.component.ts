@@ -20,9 +20,9 @@ interface CoffeeLot {
   harvestYear: number;
   producerName: string | null;
   isSpecialty: boolean;
-  position:string;
-  municipality:string;
-  seller:string;
+  position: string;
+  municipality: string;
+  seller: string;
 }
 
 interface AuctionDetail {
@@ -33,7 +33,7 @@ interface AuctionDetail {
   coffeeLot: CoffeeLot;
   auctionId: string;
   coffeeLotId: string;
-  position: number; // ✅ NUEVA PROPIEDAD
+  position: number;
 }
 
 interface Auction {
@@ -63,21 +63,22 @@ interface Bid {
 
 @Component({
   selector: 'app-buyer-auction',
-  imports: [CommonModule, FormsModule,TranslateDirective],
+  imports: [CommonModule, FormsModule, TranslateDirective],
   templateUrl: './buyer-auction.component.html',
   styleUrl: './buyer-auction.component.scss'
 })
 export class BuyerAuctionComponent implements OnInit, OnDestroy {
-  userId: string = ''; 
+  userId: string = '';
   auctionData: Auction[] = [];
   currentTime: Date = new Date();
   filteredLots: AuctionDetail[] = [];
   searchTerm: string = '';
-  sortBy: string = 'name';
+  sortBy: string = 'position'; // ✅ Cambiado a 'position' por defecto
   sortDirection: 'asc' | 'desc' = 'asc';
   private timerSubscription!: Subscription;
   private bidSubscription!: Subscription;
   private auctionExtendedSubscription!: Subscription;
+  private auctionClosedSubscription!: Subscription;
   private highestBids: Map<string, number> = new Map();
   userBidAmounts: Map<string, number> = new Map();
   lastBids: Map<string, any[]> = new Map();
@@ -89,9 +90,7 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
   showExtensionNotification: boolean = false;
   extensionMessage: string = '';
   private notificationTimeout: any;
-
-  private auctionClosedSubscription!: Subscription; // NUEVO
-  auctionEnded: boolean = false; // NUEVO: para controlar el estado
+  auctionEnded: boolean = false;
 
   constructor(
     private buyerService: BuyerService,
@@ -103,9 +102,8 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       const dataUser: any = this.generalService.getUser();
       this.userId = dataUser.id;
-      // PRIMERO configurar WebSocket, LUEGO cargar datos
-    this.setupWebSocket();
-    await this.loadAuctionData();
+      this.setupWebSocket();
+      await this.loadAuctionData();
     }
   }
 
@@ -113,21 +111,23 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
     try {
       const data = await this.buyerService.getAuctionsLotsActive().toPromise();
       this.auctionData = data;
-      
+
       if (this.auctionData.length > 0 && this.auctionData[0].auctionDetails) {
-        this.filteredLots = [...this.auctionData[0].auctionDetails];
-        console.log(this.filteredLots);
-        
-        // Unirse a la sala de la subasta
+        // ✅ Ordenar por posición desde el inicio
+        this.filteredLots = [...this.auctionData[0].auctionDetails].sort((a, b) => {
+          return (Number(a.coffeeLot.position) || 0) - (Number(b.coffeeLot.position) || 0);
+        });
+
+        console.log('📦 Lotes cargados y ordenados por posición:', this.filteredLots.map(lot => ({
+          position: lot.coffeeLot.position,
+          name: lot.coffeeLot.name
+        })));
+
         this.buyerService.joinAuctionRoom(this.auctionData[0].id);
-        
-        // Cargar pujas más altas para cada lote
         await this.loadHighestBids();
-        // Cargar historial de pujas
         await this.loadBidHistory();
       }
-      
-      // Iniciar el contador regresivo
+
       this.timerSubscription = interval(1000).subscribe(() => {
         this.currentTime = new Date();
       });
@@ -142,25 +142,13 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
         const highestBid = await this.buyerService
           .getHighestBidForCoffeeLot(lot.auctionId, lot.coffeeLot.id)
           .toPromise();
-        
+
         if (highestBid) {
           this.highestBids.set(lot.coffeeLot.id, highestBid.amount);
           lot.currentPrice = highestBid.amount;
         }
       } catch (error) {
         console.error('Error loading highest bid for lot:', error);
-        try {
-          const generalBid = await this.buyerService
-            .getHighestBidForCoffeeLot(lot.auctionId, lot.coffeeLot.id)
-            .toPromise();
-          
-          if (generalBid && generalBid.coffeeLotId === lot.coffeeLot.id) {
-            this.highestBids.set(lot.coffeeLot.id, generalBid.amount);
-            lot.currentPrice = generalBid.amount;
-          }
-        } catch (fallbackError) {
-          console.error('Error loading general highest bid:', fallbackError);
-        }
       }
     }
   }
@@ -170,59 +158,34 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
       return;
     }
     console.log('🔌 Configurando WebSocket listeners...');
-    // Suscripción a nuevas pujas
+
     this.bidSubscription = this.buyerService.getNewBids().subscribe((newBid: Bid) => {
-      console.log('New bid received via WebSocket:', newBid);
+      console.log('Nueva puja recibida:', newBid);
       this.handleNewBid(newBid);
     });
 
-    // Suscripción a extensiones de subasta
     this.auctionExtendedSubscription = this.buyerService.getAuctionExtended().subscribe((extensionData: any) => {
-      console.log('Auction extended received:', extensionData);
+      console.log('Subasta extendida:', extensionData);
       this.handleAuctionExtension(extensionData);
     });
 
-     // NUEVO: Suscripción a cierre de subasta
     this.auctionClosedSubscription = this.buyerService.getAuctionClosed().subscribe((closeData: any) => {
-      console.log('Auction closed received:', closeData);
+      console.log('Subasta cerrada:', closeData);
       this.handleAuctionClosed(closeData);
     });
 
-     // Verificar estado de conexión
-  this.buyerService.getConnectionStatus().subscribe((connected: boolean) => {
-    console.log('📡 WebSocket connection status:', connected);
-  });
+    this.buyerService.getConnectionStatus().subscribe((connected: boolean) => {
+      console.log('📡 Estado conexión WebSocket:', connected);
+    });
   }
 
-  handleAuctionClosed(closeData: any) {
-  if (this.auctionData.length > 0 && this.auctionData[0].id === closeData.auctionId) {
-    this.auctionEnded = true;
-    
-    // Actualizar el estado de la subasta
-    this.auctionData[0].status = 'CLOSED';
-    
-    // Mostrar notificación de cierre
-    this.showExtensionNotification = true;
-    this.extensionMessage = '¡Subasta finalizada definitivamente!';
-    
-    if (this.notificationTimeout) {
-      clearTimeout(this.notificationTimeout);
-    }
-    this.notificationTimeout = setTimeout(() => {
-      this.showExtensionNotification = false;
-    }, 5000);
-
-    // Forzar actualización inmediata
-    this.currentTime = new Date();
-    
-    console.log('🔚 Subasta cerrada definitivamente');
-  }
-}
-
+  // ✅ MÉTODO CORREGIDO - MANTIENE EL ORDEN POR POSICIÓN
   handleNewBid(bid: Bid) {
-    // Actualizar el precio actual del lote correspondiente
-    this.filteredLots = this.filteredLots.map(lot => {
+    console.log('🔄 Procesando nueva puja para lote:', bid.coffeeLotId);
+
+    const updatedLots = this.filteredLots.map(lot => {
       if (lot.coffeeLot.id === bid.coffeeLotId) {
+        console.log(`💰 Actualizando lote ${lot.coffeeLot.position}: ${lot.currentPrice} → ${bid.amount}`);
         return {
           ...lot,
           currentPrice: bid.amount
@@ -231,38 +194,55 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
       return lot;
     });
 
-    // Actualizar el mapa de pujas más altas
+    // ✅ MANTENER ORDEN POR POSICIÓN después de actualizar precios
+    this.filteredLots = updatedLots.sort((a, b) => {
+      const posA = Number(a.coffeeLot.position) || 0;
+      const posB = Number(b.coffeeLot.position) || 0;
+      return posA - posB;
+    });
+
     this.highestBids.set(bid.coffeeLotId, bid.amount);
-
-    // Actualizar el historial de pujas
     this.updateBidHistory(bid);
+
+    console.log('✅ Orden mantenido después de puja');
   }
 
-  // En buyer-auction.component.ts - modifica el método handleAuctionExtension
-handleAuctionExtension(extensionData: any) {
-  // Actualizar la fecha de fin de la subasta en los datos locales
-  if (this.auctionData.length > 0 && this.auctionData[0].id === extensionData.auctionId) {
-    this.auctionData[0].endDate = extensionData.newEndDate;
-    console.log(`¡Subasta extendida! Nueva hora de cierre: ${new Date(extensionData.newEndDate).toLocaleTimeString()}`);
-    
-    // Mostrar notificación
-    this.showExtensionNotification = true;
-    this.extensionMessage = `¡Subasta extendida! Nueva hora de cierre: ${new Date(extensionData.newEndDate).toLocaleTimeString()}`;
-    
-    // Ocultar notificación después de 5 segundos
-    if (this.notificationTimeout) {
-      clearTimeout(this.notificationTimeout);
+  handleAuctionExtension(extensionData: any) {
+    if (this.auctionData.length > 0 && this.auctionData[0].id === extensionData.auctionId) {
+      this.auctionData[0].endDate = extensionData.newEndDate;
+      
+      this.showExtensionNotification = true;
+      this.extensionMessage = `¡Subasta extendida! Nueva hora: ${new Date(extensionData.newEndDate).toLocaleTimeString()}`;
+      
+      if (this.notificationTimeout) {
+        clearTimeout(this.notificationTimeout);
+      }
+      this.notificationTimeout = setTimeout(() => {
+        this.showExtensionNotification = false;
+      }, 5000);
+
+      this.currentTime = new Date();
     }
-    this.notificationTimeout = setTimeout(() => {
-      this.showExtensionNotification = false;
-    }, 5000);
-
-    // Forzar actualización del timer inmediatamente
-    this.currentTime = new Date();
-    
-    console.log('🔄 Subasta extendida - Nuevo endDate:', extensionData.newEndDate);
   }
-}
+
+  handleAuctionClosed(closeData: any) {
+    if (this.auctionData.length > 0 && this.auctionData[0].id === closeData.auctionId) {
+      this.auctionEnded = true;
+      this.auctionData[0].status = 'CLOSED';
+      
+      this.showExtensionNotification = true;
+      this.extensionMessage = '¡Subasta finalizada!';
+      
+      if (this.notificationTimeout) {
+        clearTimeout(this.notificationTimeout);
+      }
+      this.notificationTimeout = setTimeout(() => {
+        this.showExtensionNotification = false;
+      }, 5000);
+
+      this.currentTime = new Date();
+    }
+  }
 
   async loadBidHistory() {
     for (const lot of this.filteredLots) {
@@ -270,10 +250,9 @@ handleAuctionExtension(extensionData: any) {
         const bids = await this.buyerService
           .getLastBids(lot.auctionId, lot.coffeeLot.id, 5)
           .toPromise();
-        
         this.lastBids.set(lot.coffeeLot.id, bids || []);
       } catch (error) {
-        console.error('Error loading bid history for lot', lot.coffeeLot.id, error);
+        console.error('Error loading bid history:', error);
         this.lastBids.set(lot.coffeeLot.id, []);
       }
     }
@@ -320,17 +299,15 @@ handleAuctionExtension(extensionData: any) {
       };
 
       const response = await this.buyerService.placeBid(bidData).toPromise();
-
       this.userBidAmounts.set(this.selectedLot.coffeeLot.id, this.bidAmount);
 
       if (response.data && response.lastBids) {
         this.lastBids.set(this.selectedLot.coffeeLot.id, response.lastBids);
       }
 
-      // Verificar si la subasta fue extendida
       if (response.auctionExtended) {
         this.showExtensionNotification = true;
-        this.extensionMessage = '¡Subasta extendida por 3 minutos!';
+        this.extensionMessage = '¡Subasta extendida 3 minutos!';
         
         if (this.notificationTimeout) {
           clearTimeout(this.notificationTimeout);
@@ -342,13 +319,12 @@ handleAuctionExtension(extensionData: any) {
 
       this.closeBidModal();
     } catch (error: any) {
-      this.bidError = error.message || 'Error al realizar la puja';
+      this.bidError = error.message || 'Error al pujar';
     } finally {
       this.isLoading = false;
     }
   }
 
-  // Filtrar lotes según término de búsqueda
   filterLots() {
     if (!this.auctionData.length || !this.auctionData[0].auctionDetails) return;
     
@@ -362,51 +338,49 @@ handleAuctionExtension(extensionData: any) {
     this.sortLots();
   }
 
-  // Ordenar lotes
-  // Ordenar lotes
-sortLots() {
-  this.filteredLots.sort((a, b) => {
-    let valueA, valueB;
-    
-    switch (this.sortBy) {
-      case 'position': // ✅ NUEVA OPCIÓN DE ORDENAMIENTO
-        valueA = a.coffeeLot.position;
-        valueB = b.coffeeLot.position;
-        break;
-      case 'name':
-        valueA = a.coffeeLot.name;
-        valueB = b.coffeeLot.name;
-        break;
-      case 'score':
-        valueA = a.coffeeLot.cupScore;
-        valueB = b.coffeeLot.cupScore;
-        break;
-      case 'price':
-        valueA = a.currentPrice;
-        valueB = b.currentPrice;
-        break;
-      case 'quantity':
-        valueA = a.coffeeLot.quantityLbs;
-        valueB = b.coffeeLot.quantityLbs;
-        break;
-      default:
-        valueA = a.coffeeLot.position; // ✅ POR DEFECTO ORDENAR POR POSICIÓN
-        valueB = b.coffeeLot.position;
-    }
-    
-    if (typeof valueA === 'string' && typeof valueB === 'string') {
-      return this.sortDirection === 'asc' 
-        ? valueA.localeCompare(valueB) 
-        : valueB.localeCompare(valueA);
-    } else {
-      return this.sortDirection === 'asc' 
-        ? Number(valueA) - Number(valueB)
-        : Number(valueB) - Number(valueA);
-    }
-  });
-}
+  // ✅ MÉTODO MEJORADO - MANEJA MEJOR LAS POSICIONES
+  sortLots() {
+    this.filteredLots.sort((a, b) => {
+      let valueA: any, valueB: any;
+      
+      switch (this.sortBy) {
+        case 'position':
+          valueA = Number(a.coffeeLot.position) || 0;
+          valueB = Number(b.coffeeLot.position) || 0;
+          break;
+        case 'name':
+          valueA = a.coffeeLot.name.toLowerCase();
+          valueB = b.coffeeLot.name.toLowerCase();
+          break;
+        case 'score':
+          valueA = a.coffeeLot.cupScore;
+          valueB = b.coffeeLot.cupScore;
+          break;
+        case 'price':
+          valueA = a.currentPrice;
+          valueB = b.currentPrice;
+          break;
+        case 'quantity':
+          valueA = a.coffeeLot.quantityLbs;
+          valueB = b.coffeeLot.quantityLbs;
+          break;
+        default:
+          valueA = Number(a.coffeeLot.position) || 0;
+          valueB = Number(b.coffeeLot.position) || 0;
+      }
+      
+      if (typeof valueA === 'string' && typeof valueB === 'string') {
+        return this.sortDirection === 'asc' 
+          ? valueA.localeCompare(valueB) 
+          : valueB.localeCompare(valueA);
+      } else {
+        return this.sortDirection === 'asc' 
+          ? Number(valueA) - Number(valueB)
+          : Number(valueB) - Number(valueA);
+      }
+    });
+  }
 
-  // Cambiar criterio de ordenamiento
   changeSort(criteria: string) {
     if (this.sortBy === criteria) {
       this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
@@ -417,9 +391,8 @@ sortLots() {
     this.sortLots();
   }
 
-  // Calcular el tiempo restante para el inicio o fin de la subasta
   calculateTimeRemaining(auction: Auction): { days: number, hours: number, minutes: number, seconds: number, hasStarted: boolean, hasEnded: boolean } {
-     if (this.auctionEnded) {
+    if (this.auctionEnded) {
       return { days: 0, hours: 0, minutes: 0, seconds: 0, hasStarted: true, hasEnded: true };
     }
     const startDate = new Date(auction.startDate);
@@ -440,7 +413,6 @@ sortLots() {
     return { days, hours, minutes, seconds, hasStarted, hasEnded };
   }
 
-  // Formatear el tiempo restante para mostrar
   formatTimeRemaining(time: { days: number, hours: number, minutes: number, seconds: number }): string {
     if (time.days > 0) {
       return `${time.days}d ${time.hours}h ${time.minutes}m ${time.seconds}s`;
@@ -449,7 +421,6 @@ sortLots() {
     }
   }
 
-  // Cerrar notificación de extensión manualmente
   closeExtensionNotification() {
     this.showExtensionNotification = false;
     if (this.notificationTimeout) {
@@ -461,27 +432,18 @@ sortLots() {
     if (this.timerSubscription) {
       this.timerSubscription.unsubscribe();
     }
-
     if (this.bidSubscription) {
       this.bidSubscription.unsubscribe();
-      this.bidSubscription = undefined!;
     }
-
     if (this.auctionExtendedSubscription) {
       this.auctionExtendedSubscription.unsubscribe();
-      this.auctionExtendedSubscription = undefined!;
     }
-
-       // NUEVO: Desuscribirse del cierre de subasta
     if (this.auctionClosedSubscription) {
       this.auctionClosedSubscription.unsubscribe();
-      this.auctionClosedSubscription = undefined!;
     }
-
     if (this.notificationTimeout) {
       clearTimeout(this.notificationTimeout);
     }
-
     if (this.auctionData.length > 0) {
       this.buyerService.leaveAuctionRoom(this.auctionData[0].id);
     }

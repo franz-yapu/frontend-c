@@ -1,0 +1,58 @@
+
+/* Asegurar que el contenido principal esté debajo */
+main {
+  position: relative;
+  z-index: 1;
+}
+
+/* Asegurar que los componentes overlay estén por encima */
+app-toast,
+app-loading-overlay {
+  position: relative;
+  z-index: 10000;
+}
+
+/* app.component.scss (versión con pseudo-elementos) */
+.global-watermarks {
+  position: relative;
+  min-height: 100vh;
+  
+  &::before,
+  &::after {
+    content: '';
+    position: fixed;
+    pointer-events: none;
+    opacity: 0.15;
+    width: 120px;
+    height: 120px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 9999;
+  }
+  
+  &::before {
+    top: 20px;
+    left: 20px;
+    background-image: url('/public/assets/img/der.svg');
+    transform: rotate(-15deg);
+  }
+  
+  &::after {
+    bottom: 20px;
+    right: 20px;
+   background-image: url('/public/assets/img/izq.svg');
+    transform: rotate(15deg);
+  }
+}
+
+main {
+  position: relative;
+  z-index: 1;
+}
+
+app-toast,
+app-loading-overlay {
+  position: relative;
+  z-index: 10000;
+}

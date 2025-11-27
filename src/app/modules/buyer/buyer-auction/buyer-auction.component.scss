@@ -1,0 +1,36 @@
+/* buyer-orders.component.scss */
+.watermark-container {
+  position: relative;
+  min-height: 100vh;
+}
+
+.watermark {
+   position: fixed;
+  pointer-events: none;
+  opacity: 0.15;
+  width: 120px;
+  height: 120px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  z-index: 9999; /* Alto z-index para que esté por encima */
+  
+  &.top-left {
+    top: 20px;
+    left: 20px;
+    background-image: url('/assets/img/der.svg');
+    transform: rotate(-15deg);
+  }
+  
+  &.bottom-right {
+    bottom: 20px;
+    right: 20px;
+    background-image: url('/assets/img/izq.svg');
+    transform: rotate(15deg);
+  }
+}
+
+.content-wrapper {
+  position: relative;
+  z-index: 1;
+}
