@@ -14,14 +14,14 @@ export const lotFormFields = (catalogs: any) => {
               key: 'name',
               label: 'Nombre del Lote',
               type: 'text',
-              validators: { required: true, maxLength: 50, minLength: 0 }
+              validators: { required: false, maxLength: 50, minLength: 0 }
             },
             {
               key: 'position',
               label: 'Posición (Ranking)',
               type: 'number',
               validators: {
-                required: true,
+                required: false,
                 min: 0,
                 max: 100
               }
@@ -31,7 +31,7 @@ export const lotFormFields = (catalogs: any) => {
               label: 'Puntaje de Catación',
               type: 'number',
               validators: {
-                required: true,
+                required: false,
                 min: 0,
                 max: 100,
                 decimalPlaces: 2
@@ -40,9 +40,9 @@ export const lotFormFields = (catalogs: any) => {
             {
               key: 'variety',
               label: 'Variedad',
-              type: 'select-with-create',
-              validators: { required: true },
-              options: catalogs['varieties'] || []
+              type: 'text',
+              validators: { required: false },
+              
             },
           ]
         },
@@ -51,23 +51,23 @@ export const lotFormFields = (catalogs: any) => {
             {
               key: 'process',
               label: 'Proceso',
-              type: 'select-with-create',
-              validators: { required: true },
-              options: catalogs['processes'] || []
+              type: 'text',
+              validators: { required: false },
+              
             },
             {
               key: 'dryingSystem',
               label: 'Sistema de Secado',
-              type: 'select-with-create',
-              validators: { required: true, maxLength: 50 },
-              options: catalogs['dryingSystems'] || []
+              type: 'text',
+              validators: { required: false, maxLength: 50 },
+             
             },
             {
               key: 'quantity',
               label: 'Cantidad (kg)',
               type: 'number',
               validators: {
-                required: true,
+                required: false,
                 min: 0,
                 decimalPlaces: 2
               }
@@ -77,7 +77,7 @@ export const lotFormFields = (catalogs: any) => {
               label: 'Cantidad (lbs)',
               type: 'number',
               validators: {
-                required: true,
+                required: false,
                 min: 0,
                 decimalPlaces: 2
               }
@@ -101,7 +101,7 @@ export const lotFormFields = (catalogs: any) => {
               label: 'Año de Cosecha',
               type: 'number',
               validators: {
-                required: true,
+                required: false,
                 min: 2000,
                 max: new Date().getFullYear()
               }
@@ -110,14 +110,14 @@ export const lotFormFields = (catalogs: any) => {
               key: 'country',
               label: 'País',
               type: 'select-with-create',
-              validators: { required: true },
+              validators: { required: false },
               options: catalogs['countries'] || []
             },
             {
               key: 'region',
               label: 'Departamento/Región',
               type: 'select-with-create',
-              validators: { required: true, maxLength: 100 },
+              validators: { required: false, maxLength: 100 },
               options: catalogs['regions'] || []
             },
           ]
@@ -127,23 +127,23 @@ export const lotFormFields = (catalogs: any) => {
             {
               key: 'province',
               label: 'Provincia',
-              type: 'select-with-create',
-              validators: { required: true, maxLength: 100 },
-              options: catalogs['provinces'] || []
+              type: 'text',
+              validators: { required: false, maxLength: 100 },
+              
             },
             {
               key: 'municipality',
               label: 'Municipio',
-              type: 'select-with-create',
-              validators: { required: true, maxLength: 100 },
-              options: catalogs['municipalities'] || []
+              type: 'text',
+              validators: { required: false, maxLength: 100 },
+             
             },
             {
               key: 'community',
               label: 'Comunidad',
-              type: 'select-with-create',
-              validators: { required: true, maxLength: 100 },
-              options: catalogs['communities'] || []
+              type: 'text',
+              validators: { required: false, maxLength: 100 },
+             
             },
           ]
         },
@@ -168,7 +168,7 @@ export const lotFormFields = (catalogs: any) => {
               label: 'Altitud (msnm)',
               type: 'number',
               validators: {
-                required: true,
+                required: false,
                 min: 0,
                 max: 4000
               }
@@ -177,13 +177,13 @@ export const lotFormFields = (catalogs: any) => {
               key: 'productionSystem',
               label: 'Sistema de Producción',
               type: 'text',
-               validators: {required: true, maxLength: 50 }
+               validators: {required: false, maxLength: 50 }
             },
             {
               key: 'shadeType',
               label: 'Tipo de Sombra',
               type: 'text',
-              validators: {required: true, maxLength: 50 }
+              validators: {required: false, maxLength: 50 }
             },
           ]
         },
@@ -193,7 +193,7 @@ export const lotFormFields = (catalogs: any) => {
               key: 'images',
               label: 'Imágenes del Lote',
               type: 'file',
-              multiple: true,
+              multiple: false,
               validators: {
                 fileType: ['image/png', 'image/jpeg'],
                 fileSize: 2 * 1024 * 1024 // 2 MB
@@ -228,19 +228,19 @@ export const lotFormFields = (catalogs: any) => {
               key: 'fragranceAroma',
               label: 'Fragancia/Aroma',
               type: 'text',
-              validators: { required: true,maxLength: 200 }
+              validators: { required: false,maxLength: 200 }
             },
             {
               key: 'acidity',
               label: 'Acidez',
               type: 'text',
-              validators: { required: true,maxLength: 200 }
+              validators: { required: false,maxLength: 200 }
             },
             {
               key: 'flavor',
               label: 'Sabor',
               type: 'text',
-              validators: { required :true ,maxLength: 200 }
+              validators: { required :false ,maxLength: 200 }
             },
           
           ]
@@ -265,7 +265,7 @@ export const lotFormFields = (catalogs: any) => {
               label:'Productor',
               type: 'text',
                validators: { 
-                required: true,
+                required: false,
                 min: 0,
                 max: 1000,
                },
@@ -276,7 +276,7 @@ export const lotFormFields = (catalogs: any) => {
               label:'Precio inicial una libra en ($)',
               type: 'number',
               validators: { 
-                required: true,
+                required: false,
                 min: 0,
                 max: 1000,
                 decimalPlaces: 2
