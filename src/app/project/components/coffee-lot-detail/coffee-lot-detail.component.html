@@ -298,7 +298,7 @@
     <!-- Acciones -->
     <div class="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4">
       <!-- Botón de edición (solo visible si se cumple la condición de fecha) -->
-      @if (canEdit() && Edit) {
+     <!--  @if (canEdit() && Edit) { -->
         <button (click)="editLot()"
           class="px-6 py-3 border border-amber-300 text-amber-700 font-medium rounded-lg hover:bg-amber-50 transition-colors flex items-center justify-center">
           <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -307,7 +307,7 @@
           </svg>
           Editar información
         </button>
-      }
+    <!--   } -->
     </div>
   </div>
   }
