@@ -12,7 +12,7 @@ import { TranslateDirective } from '../../../project/directive/translate.directi
 export class ExternalIndexComponent implements OnInit, OnDestroy {
     @ViewChild('sponsorsContainer') sponsorsContainer!: ElementRef;
   private router = inject(Router);
-  
+  showModal = true;
   slides = [
     {
       url: 'https://images.unsplash.com/photo-1447933601403-0c6688de566e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
@@ -94,4 +94,8 @@ export class ExternalIndexComponent implements OnInit, OnDestroy {
   goToLogin(): void {
     this.router.navigate(['/login']);
   }
+
+  closeModal() {
+  this.showModal = false;
+}
 }

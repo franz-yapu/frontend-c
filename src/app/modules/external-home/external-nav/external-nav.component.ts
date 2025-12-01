@@ -32,7 +32,7 @@ export class ExternalNavComponent implements OnInit, OnDestroy {
     { name: 'Subasta Activa', route: '/auction', isActive: false, translateKey: 'NAV.AUCTION' },
      { name: 'Ingresar', route: '/login', isActive: false, translateKey: 'HOME.CTA.LOGIN_BUTTON' },
     { name: 'Crear cuenta', route: '/register', isActive: false, translateKey: 'HOME.CTA.REGISTER_BUTTON' },
-   /*  { name: 'Ganadores', route: '/winners', isActive: false, translateKey: 'NAV.WINNERS' }, */
+    { name: 'Ganadores', route: '/winners', isActive: false, translateKey: 'NAV.WINNERS' },
     { name: 'Reglamento', route: '/regulation', isActive: false, translateKey: 'NAV.REGULATION' },
    /*  { name: 'Acerca de nosotros', route: '/Coffee/about', isActive: false, translateKey: 'NAV.ABOUT' }, */
   ];
