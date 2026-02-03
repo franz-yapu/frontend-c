@@ -261,11 +261,11 @@ export const lotFormFields = (catalogs: any) => {
           fields: [
 
              {
-              key: 'sellerId',
+              key: 'seller',
               label:'Productor',
-              type: 'select',
+              type: 'text',
               validators: { required: true },
-              options: catalogs['sellerId'],
+             
             },
             {
               key: 'startingPrice',
