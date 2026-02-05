@@ -1,29 +1,39 @@
-<div class="min-h-screen  py-8 px-4">
+<div class="min-h-screen py-8 px-4">
   <div class="max-w-8xl mx-auto">
-    <!-- Header Principal -->
-    <div class="relative bg-primary   shadow p-3 mb-6  overflow-hidden">
-      <!-- Elementos decorativos de fondo -->
+    
+    <!-- Notificación de sistema -->
+    @if (showExtensionNotification) {
+    <div class="mb-6 animate-fade-in">
+      <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-4 rounded-xl shadow-lg border border-blue-400 flex justify-between items-center">
+        <div class="flex items-center">
+          <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+          </svg>
+          <span class="font-medium">{{ extensionMessage }}</span>
+        </div>
+        <button (click)="closeExtensionNotification()" class="text-white hover:text-blue-100">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+    }
 
+    <!-- Header Principal -->
+    <div class="relative bg-primary shadow p-3 mb-6 overflow-hidden">
       <div class="relative z-10">
         <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8">
           <div class="flex-1">
             <div class="flex items-center gap-5 mb-5">
-              <div class="relative">
-                <div
-                  class="w-16 h-16 bg-gradient-to-br from-white/20 to-white/10 rounded-2xl flex items-center justify-center shadow-2xl border border-white/20">
-                  <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
-                      clip-rule="evenodd" />
-                  </svg>
-                </div>
-                <div class="absolute -inset-2 bg-white/10 rounded-2xl blur-sm -z-10"></div>
-              </div>
+
               <div>
-                <h1 class="text-4xl md:text-5xl font-bold text-black mb-3 tracking-tight"
-                  appTranslate="AUCTION-BUYER.PREMIUM_AUCTIONS">Subastas de Café Premium</h1>
-                <p class="text-black text-xl font-light" appTranslate="AUCTION-BUYER.EXCLUSIVE_LOTS">Lotes exclusivos
-                  de productores especializados</p>
+                <h1 class="text-4xl md:text-5xl font-bold text-black mb-3 tracking-tight" appTranslate="AUCTION-BUYER.PREMIUM_AUCTIONS">
+                  Subastas de Café Premium
+                </h1>
+                <p class="text-black text-xl font-light" appTranslate="AUCTION-BUYER.EXCLUSIVE_LOTS">
+                  Lotes exclusivos de productores especializados
+                </p>
               </div>
             </div>
           </div>
@@ -33,60 +43,47 @@
           <div class="bg-primary rounded-lg p-7 border border-white/20 shadow-2xl min-w-[320px]">
             @if (calculateTimeRemaining(auctionData[0]).hasEnded || auctionEnded) {
             <div class="text-center">
-              <div
-                class="w-14 h-14 bg-gradient-to-br from-white/20 to-white/10 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg border border-white/20">
+              <div class="w-14 h-14 bg-gradient-to-br from-white/20 to-white/10 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg border border-white/20">
                 <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
               </div>
-              <p class="text-xl font-semibold text-white mb-2" appTranslate="AUCTION-BUYER.AUCTION_ENDED">Subasta
-                Finalizada</p>
-              <p class="text-white text-sm" appTranslate="AUCTION-BUYER.RESULTS_AVAILABLE">Resultados disponibles</p>
+              <p class="text-xl font-semibold text-white mb-2" appTranslate="AUCTION-BUYER.AUCTION_ENDED">
+                Subasta Finalizada
+              </p>
+              <p class="text-white text-sm" appTranslate="AUCTION-BUYER.RESULTS_AVAILABLE">
+                Resultados disponibles
+              </p>
             </div>
             } @else {
             <div class="flex flex-col items-center">
               @if(calculateTimeRemaining(auctionData[0]).hasStarted){
-              <span class="text-sm text-white mb-4 uppercase tracking-wider font-medium"
-                appTranslate="AUCTION-BUYER.ENDS_IN">
+              <span class="text-sm text-white mb-4 uppercase tracking-wider font-medium" appTranslate="AUCTION-BUYER.ENDS_IN">
                 Finaliza en
               </span>
               }
               @if(!calculateTimeRemaining(auctionData[0]).hasStarted){
-              <span class="text-sm text-white mb-4 uppercase tracking-wider font-medium"
-                appTranslate="AUCTION-BUYER.STARTS_IN">
+              <span class="text-sm text-white mb-4 uppercase tracking-wider font-medium" appTranslate="AUCTION-BUYER.STARTS_IN">
                 Comienza en
               </span>
               }
 
               <div class="grid grid-cols-4 gap-3">
-                <div
-                  class="bg-white from-white/20 to-white/10 text-white px-4 py-5  text-center min-w-[75px] backdrop-blur-sm border border-white/20 shadow-lg">
-                  <span class="block text-black text-3xl font-bold tracking-tight">{{
-                    calculateTimeRemaining(auctionData[0]).days }}</span>
-                  <span class="block text-black text-xs mt-2 opacity-90 font-medium"
-                    appTranslate="COMMON.DAYS">Días</span>
+                <div class="bg-white text-primary px-4 py-5 text-center min-w-[75px] backdrop-blur-sm border border-white/20 shadow-lg">
+                  <span class="block text-3xl font-bold tracking-tight">{{ calculateTimeRemaining(auctionData[0]).days }}</span>
+                  <span class="block text-xs mt-2 opacity-90 font-medium" appTranslate="COMMON.DAYS">Días</span>
                 </div>
-                <div
-                  class="bg-white text-white px-4 py-5  text-center min-w-[75px] backdrop-blur-sm border border-white/20 shadow-lg">
-                  <span class="block text-black text-3xl font-bold tracking-tight">{{
-                    calculateTimeRemaining(auctionData[0]).hours | number:'2.0' }}</span>
-                  <span class="block text-black text-xs mt-2 opacity-90 font-medium"
-                    appTranslate="COMMON.HOURS">Horas</span>
+                <div class="bg-white text-primary px-4 py-5 text-center min-w-[75px] backdrop-blur-sm border border-white/20 shadow-lg">
+                  <span class="block text-3xl font-bold tracking-tight">{{ calculateTimeRemaining(auctionData[0]).hours | number:'2.0' }}</span>
+                  <span class="block text-xs mt-2 opacity-90 font-medium" appTranslate="COMMON.HOURS">Horas</span>
                 </div>
-                <div
-                  class="bg-white text-white px-4 py-5  text-center min-w-[75px] backdrop-blur-sm border border-white/20 shadow-lg">
-                  <span class="block text-black text-3xl font-bold tracking-tight">{{
-                    calculateTimeRemaining(auctionData[0]).minutes | number:'2.0' }}</span>
-                  <span class="block text-black text-xs mt-2 opacity-90 font-medium"
-                    appTranslate="COMMON.MINUTES">Min</span>
+                <div class="bg-white text-primary px-4 py-5 text-center min-w-[75px] backdrop-blur-sm border border-white/20 shadow-lg">
+                  <span class="block text-3xl font-bold tracking-tight">{{ calculateTimeRemaining(auctionData[0]).minutes | number:'2.0' }}</span>
+                  <span class="block text-xs mt-2 opacity-90 font-medium" appTranslate="COMMON.MINUTES">Min</span>
                 </div>
-                <div
-                  class="bg-white text-white px-4 py-5  text-center min-w-[75px] backdrop-blur-sm border border-white/20 shadow-lg">
-                  <span class="block text-black text-3xl font-bold tracking-tight">{{
-                    calculateTimeRemaining(auctionData[0]).seconds | number:'2.0' }}</span>
-                  <span class="block text-black text-xs mt-2 opacity-90 font-medium"
-                    appTranslate="COMMON.SECONDS">Seg</span>
+                <div class="bg-white text-primary px-4 py-5 text-center min-w-[75px] backdrop-blur-sm border border-white/20 shadow-lg">
+                  <span class="block text-3xl font-bold tracking-tight">{{ calculateTimeRemaining(auctionData[0]).seconds | number:'2.0' }}</span>
+                  <span class="block text-xs mt-2 opacity-90 font-medium" appTranslate="COMMON.SECONDS">Seg</span>
                 </div>
               </div>
             </div>
@@ -94,25 +91,22 @@
           </div>
           }
         </div>
-        
       </div>
       <div class="absolute bottom-0 left-0 w-full z-1">
-      <img src="assets/img/2.png" alt="Taza de café" class="w-full h-auto " />
-    </div>
+        <img src="assets/img/2.png" alt="Taza de café" class="w-full h-auto"/>
+      </div>
     </div>
 
     <!-- Información de la subasta -->
     @if (auctionData.length > 0) {
     <div class="mb-10">
-      <div class="bg-white  shadow-xl p-5 border border-gray-200 backdrop-blur-sm">
+      <div class="bg-white shadow-xl p-5 border border-gray-200 backdrop-blur-sm">
         <h2 class="text-3xl font-bold text-gray-900 mb-6 tracking-tight">{{ auctionData[0].title }}</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-7">
           <div class="flex items-center text-gray-800">
-            <div
-              class="w-12 h-12 bg-gradient-to-br from-primary/10 to-primary/5 rounded-xl flex items-center justify-center mr-4 shadow-sm border border-primary/20">
+            <div class="w-12 h-12 bg-gradient-to-br from-primary/10 to-primary/5 rounded-xl flex items-center justify-center mr-4 shadow-sm border border-primary/20">
               <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
               </svg>
             </div>
             <div>
@@ -122,11 +116,9 @@
           </div>
 
           <div class="flex items-center text-gray-800">
-            <div
-              class="w-12 h-12 bg-gradient-to-br from-primary/10 to-primary/5 rounded-xl flex items-center justify-center mr-4 shadow-sm border border-primary/20">
+            <div class="w-12 h-12 bg-gradient-to-br from-primary/10 to-primary/5 rounded-xl flex items-center justify-center mr-4 shadow-sm border border-primary/20">
               <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>
             </div>
             <div>
@@ -139,156 +131,153 @@
     </div>
     }
 
+    <!-- Barra de búsqueda y filtros -->
+    <div class="mb-8">
+      <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
+        <div class="flex-1 w-full">
+          <div class="relative">
+            <input 
+              type="text" 
+              [(ngModel)]="searchTerm" 
+              (ngModelChange)="filterLots()"
+              placeholder="Buscar lotes por nombre, variedad o región..." 
+              class="w-full p-4 pl-12 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary/50 focus:border-primary shadow-sm"
+            />
+            <svg class="w-5 h-5 text-gray-400 absolute left-4 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+          </div>
+        </div>
+        
+        <div class="flex items-center gap-3">
+          <span class="text-sm font-medium text-gray-600">Ordenar por:</span>
+          <div class="flex bg-gray-100 p-1 rounded-lg">
+            <button 
+              (click)="changeSort('position')" 
+              class="px-4 py-2 rounded-md text-sm font-medium transition-colors"
+              [class.bg-white]="sortBy === 'position'"
+              [class.shadow]="sortBy === 'position'"
+            >
+              Posición
+            </button>
+            <button 
+              (click)="changeSort('price')" 
+              class="px-4 py-2 rounded-md text-sm font-medium transition-colors"
+              [class.bg-white]="sortBy === 'price'"
+              [class.shadow]="sortBy === 'price'"
+            >
+              Precio
+            </button>
+            <button 
+              (click)="changeSort('score')" 
+              class="px-4 py-2 rounded-md text-sm font-medium transition-colors"
+              [class.bg-white]="sortBy === 'score'"
+              [class.shadow]="sortBy === 'score'"
+            >
+              Puntuación
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Lista de lotes de café -->
     <div class="mb-10">
       <div class="flex items-center gap-4 mb-8">
         <div class="w-3 h-3 bg-primary rounded-full shadow-lg"></div>
-        <h4 class="text-3xl font-bold text-gray-900 tracking-tight" appTranslate="AUCTION-BUYER.LOTS_IN_AUCTION">Lotes
-          en Subasta</h4>
+        <h4 class="text-3xl font-bold text-gray-900 tracking-tight" appTranslate="AUCTION-BUYER.LOTS_IN_AUCTION">
+          Lotes en Subasta
+        </h4>
         <span class="px-5 py-2 bg-primary text-white rounded-full text-sm font-bold border border-primary/30 shadow-lg">
           {{ filteredLots.length }} <span appTranslate="COMMON.AVAILABLE">disponibles</span>
         </span>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7">
+      @if (isLoading && filteredLots.length === 0) {
+      <div class="text-center py-20">
+        <div class="animate-spin w-12 h-12 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
+        <p class="text-gray-600">Cargando lotes...</p>
+      </div>
+      }
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-7">
         @for (detail of filteredLots; track detail.id) {
-        <div
-          class="group bg-white  shadow-xl hover:shadow-2xl transition-all duration-500 border border-gray-200 hover:border-primary/30 overflow-hidden hover:-translate-y-1">
+        <div class="group bg-white shadow-xl hover:shadow-2xl transition-all duration-500 border border-gray-200 hover:border-primary/30 overflow-hidden hover:-translate-y-1">
+          
           <!-- Header con nombre y puntuación -->
           <div class="relative p-5 border-b border-primary/30 overflow-hidden bg-cover bg-center bg-no-repeat"
-     style="background-image: url('assets/img/foto prod.png');">
-
+               style="background-image: url('assets/img/foto prod.png');">
             <div class="flex justify-center items-start mb-4">
-              <p class="text-7xl text-primary mr-2"> #{{ detail.coffeeLot.position }}</p>
-              
+              <p class="text-7xl text-primary mr-2">#{{ detail.coffeeLot.position }}</p>
               <div>
-                <!-- <h4 class="text-xl font-bold text-white  leading-tight pr-4">{{ detail.coffeeLot.name }}</h4> -->
-                <h4 class="text-xl font-bold text-white leading-tight pr-4">{{ detail.coffeeLot.variety }}</h4>
-                <h4 class="text-xl font-bold text-white leading-tight pr-4">{{ detail.coffeeLot.seller }}</h4>
+                <h4 class="text-md font-bold text-white leading-tight pr-2">{{ detail.coffeeLot.variety }}</h4>
+                <h4 class="text-md font-bold text-white leading-tight pr-2">{{ detail.coffeeLot.seller }}</h4>
               </div>
-
-              <span
-                class="px-3.5 py-1.5 rounded-full text-xl font-bold bg-white/20 text-primary border border-white/30 shadow-lg">
-                {{ detail.coffeeLot.cupScore }} pts.
+              <span class="px-3.5 py-1.5 rounded-full text-xl font-bold bg-white/20 text-primary border border-white/30 shadow-lg">
+                {{ detail.coffeeLot.cupScore }}
               </span>
             </div>
-<!--             <p class="text-white/90 text-sm font-medium">
-              • {{ detail.coffeeLot.harvestYear }}
-            </p> -->
           </div>
 
           <!-- Información del lote -->
           <div class="p-5">
             <div class="grid grid-cols-3 gap-4 mb-3 text-sm">
-            
-
               <div class="flex items-center">
-                <div
-                  class="w-7 h-7  rounded-lg flex items-center justify-center mr-3 shadow-sm border border-primary/20">
+                <div class="w-7 h-7 rounded-lg flex items-center justify-center mr-3 shadow-sm border border-primary/20">
                   <svg class="w-3.5 h-3.5 text-primary" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
-                    <path fill-rule="evenodd"
-                      d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
-                      clip-rule="evenodd"></path>
+                    <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path>
                   </svg>
                 </div>
                 <span class="truncate font-medium text-gray-700">{{ detail.coffeeLot.process }}</span>
               </div>
 
               <div class="flex items-center">
-                <div
-                  class="w-7 h-7  rounded-lg flex items-center justify-center mr-3 shadow-sm border border-primary/20">
+                <div class="w-7 h-7 rounded-lg flex items-center justify-center mr-3 shadow-sm border border-primary/20">
                   <svg class="w-3.5 h-3.5 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd"
-                      d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                      clip-rule="evenodd"></path>
+                    <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
                   </svg>
                 </div>
-                <span class="font-medium text-gray-700">{{ detail.coffeeLot.altitude }} <span
-                    appTranslate="COMMON.METERS">m</span></span>
+                <span class="font-medium text-gray-700">{{ detail.coffeeLot.altitude }} <span appTranslate="COMMON.METERS">m</span></span>
               </div>
 
               <div class="flex items-center">
-                <div
-                  class="w-7 h-7 bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg flex items-center justify-center mr-3 shadow-sm border border-primary/20">
+                <div class="w-7 h-7 bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg flex items-center justify-center mr-3 shadow-sm border border-primary/20">
                   <svg class="w-3.5 h-3.5 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd"
-                      d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z"
-                      clip-rule="evenodd"></path>
+                    <path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd"></path>
                   </svg>
                 </div>
-                <span class="font-medium text-gray-700">{{ detail.coffeeLot.quantityLbs }} <span
-                    appTranslate="COMMON.LBS">lbs</span></span>
+                <span class="font-medium text-gray-700">{{ detail.coffeeLot.quantityLbs }} <span appTranslate="COMMON.LBS">lbs</span></span>
               </div>
             </div>
 
-            <div
-              class="flex items-center text-sm text-primary mb-2  p-4 rounded-xl border border-primary/20 shadow-sm">
+            <div class="flex items-center text-sm text-primary mb-2 p-4 rounded-xl border border-primary/20 shadow-sm">
               <svg class="w-5 h-5 text-primary mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd"
-                  d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                  clip-rule="evenodd"></path>
+                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
               </svg>
               <span class="truncate font-medium">{{ detail.coffeeLot.municipality }}, {{ detail.coffeeLot.region }}, {{ detail.coffeeLot.country }}</span>
             </div>
 
-            <!-- Información de precios mejorada -->
+            <!-- Información de precios -->
             <div class="space-y-5 mb-6">
-              <!-- Precio base -->
-              <!-- <div
-                class="bg-gradient-to-br from-gray-50 to-gray-100/60 rounded-xl p-5 border border-gray-200 shadow-sm">
-                <h5 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-4"
-                  appTranslate="AUCTION-BUYER.BASE_PRICE">Precio Base</h5>
+              <div class="bg-gradient-to-br from-primary/5 to-primary/10 rounded-xl p-5 border border-primary/20 shadow-sm">
+                <h5 class="text-xs font-bold text-primary uppercase tracking-wider mb-4" appTranslate="AUCTION-BUYER.CURRENT_BID">
+                  Oferta Actual
+                </h5>
                 <div class="space-y-3">
                   <div class="flex justify-between items-center">
-                    <span class="text-sm font-medium text-gray-600" appTranslate="AUCTION-BUYER.PER_POUND">Por
-                      libra</span>
-                    <span class="font-semibold text-gray-900">{{ detail.startingPrice | currency:'USD':'symbol'
-                      }}</span>
+                    <span class="text-sm font-medium text-gray-600" appTranslate="AUCTION-BUYER.PER_POUND">Por libra</span>
+                    <span class="text-lg font-bold text-primary">{{ detail.currentPrice | currency:'USD':'symbol' }}</span>
                   </div>
                   <div class="flex justify-between items-center">
-                    <span class="text-sm font-medium text-gray-600" appTranslate="AUCTION-BUYER.TOTAL_QUANTITY">Cantidad
-                      total</span>
-                    <span class="font-medium text-gray-900">{{ detail.coffeeLot.quantityLbs }} <span
-                        appTranslate="COMMON.LBS">lbs</span></span>
-                  </div>
-                  <div class="pt-3 border-t border-gray-200/60 mt-3">
-                    <div class="flex justify-between items-center">
-                      <span class="text-sm font-bold text-gray-800" appTranslate="AUCTION-BUYER.TOTAL_VALUE">Valor
-                        total:</span>
-                      <span class="text-lg font-bold text-gray-900">
-                        {{ (detail.startingPrice * detail.coffeeLot.quantityLbs) | currency:'USD':'symbol' }}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div> -->
-
-              <!-- Precios de subasta -->
-              <div
-                class="bg-gradient-to-br from-primary/5 to-primary/10 rounded-xl p-5 border border-primary/20 shadow-sm">
-                <h5 class="text-xs font-bold text-primary uppercase tracking-wider mb-4"
-                  appTranslate="AUCTION-BUYER.CURRENT_BID">Oferta Actual</h5>
-                <div class="space-y-3">
-                  <div class="flex justify-between items-center">
-                    <span class="text-sm font-medium text-gray-600" appTranslate="AUCTION-BUYER.PER_POUND">Por
-                      libra</span>
-                    <span class="text-lg font-bold text-primary">{{ detail.currentPrice | currency:'USD':'symbol'
-                      }}</span>
-                  </div>
-                  <div class="flex justify-between items-center">
-                    <span class="text-sm font-medium text-gray-600" appTranslate="AUCTION-BUYER.CURRENT_VALUE">Valor
-                      actual</span>
-                    <span class="font-semibold text-primary">{{ (detail.currentPrice * detail.coffeeLot.quantityLbs) |
-                      currency:'USD':'symbol' }}</span>
+                    <span class="text-sm font-medium text-gray-600" appTranslate="AUCTION-BUYER.CURRENT_VALUE">Valor actual</span>
+                    <span class="font-semibold text-primary">{{ (detail.currentPrice * detail.coffeeLot.quantityLbs) | currency:'USD':'symbol' }}</span>
                   </div>
                   @if (detail.reservePrice) {
                   <div class="pt-3 border-t border-primary/20 mt-3">
                     <div class="flex justify-between items-center text-xs">
-                      <span class="text-primary font-bold" appTranslate="AUCTION-BUYER.RESERVE_PRICE">Precio de
-                        reserva</span>
-                      <span class="font-semibold text-primary">{{ detail.reservePrice | currency:'USD':'symbol'
-                        }}</span>
+                      <span class="text-primary font-bold" appTranslate="AUCTION-BUYER.RESERVE_PRICE">Precio de reserva</span>
+                      <span class="font-semibold text-primary">{{ detail.reservePrice | currency:'USD':'symbol' }}</span>
                     </div>
                   </div>
                   }
@@ -300,10 +289,10 @@
             @if ((lastBids.get(detail.coffeeLot.id) || []).length > 0) {
             <div class="mt-6">
               <div class="flex items-center justify-between mb-4">
-                <h5 class="text-sm font-bold text-gray-800 uppercase tracking-wider"
-                  appTranslate="AUCTION-BUYER.LAST_BIDS">Últimas pujas</h5>
-                <span
-                  class="text-xs text-primary bg-primary/10 px-2.5 py-1 rounded-full font-semibold border border-primary/20">
+                <h5 class="text-sm font-bold text-gray-800 uppercase tracking-wider" appTranslate="AUCTION-BUYER.LAST_BIDS">
+                  Últimas pujas
+                </h5>
+                <span class="text-xs text-primary bg-primary/10 px-2.5 py-1 rounded-full font-semibold border border-primary/20">
                   {{ (lastBids.get(detail.coffeeLot.id) || []).length }}
                 </span>
               </div>
@@ -332,37 +321,29 @@
 
             <!-- Botones de estado -->
             <div class="mt-7">
-              @if (auctionData.length > 0 && calculateTimeRemaining(auctionData[0]).hasStarted &&
-              !calculateTimeRemaining(auctionData[0]).hasEnded) {
+              @if (auctionData.length > 0 && calculateTimeRemaining(auctionData[0]).hasStarted && !calculateTimeRemaining(auctionData[0]).hasEnded) {
               <button (click)="openBidModal(detail)"
                 class="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 flex items-center justify-center shadow-lg hover:shadow-xl border border-primary/30 hover:scale-[1.02]">
                 <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
                 </svg>
                 <span appTranslate="AUCTION-BUYER.PLACE_BID">Realizar Puja</span>
               </button>
               }
 
               @if (auctionData.length > 0 && !calculateTimeRemaining(auctionData[0]).hasStarted) {
-              <div
-                class="text-center text-gray-700 bg-gradient-to-r from-gray-50 to-gray-100 py-4 px-4 rounded-xl border border-gray-200 shadow-sm">
-                <svg class="w-5 h-5 inline-block mr-2 text-gray-600" fill="none" stroke="currentColor"
-                  viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              <div class="text-center text-gray-700 bg-gradient-to-r from-gray-50 to-gray-100 py-4 px-4 rounded-xl border border-gray-200 shadow-sm">
+                <svg class="w-5 h-5 inline-block mr-2 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
                 <span class="font-semibold" appTranslate="AUCTION-BUYER.AUCTION_NOT_STARTED">Subasta no iniciada</span>
               </div>
               }
 
               @if (auctionData.length > 0 && calculateTimeRemaining(auctionData[0]).hasEnded) {
-              <div
-                class="text-center text-gray-700 bg-gradient-to-r from-gray-50 to-gray-100 py-4 px-4 rounded-xl border border-gray-200 shadow-sm">
-                <svg class="w-5 h-5 inline-block mr-2 text-gray-600" fill="none" stroke="currentColor"
-                  viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              <div class="text-center text-gray-700 bg-gradient-to-r from-gray-50 to-gray-100 py-4 px-4 rounded-xl border border-gray-200 shadow-sm">
+                <svg class="w-5 h-5 inline-block mr-2 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
                 <span class="font-semibold" appTranslate="AUCTION-BUYER.AUCTION_ENDED">Subasta finalizada</span>
               </div>
@@ -375,94 +356,164 @@
     </div>
 
     <!-- Mensaje cuando no hay resultados -->
-    @if (filteredLots.length === 0) {
+    @if (filteredLots.length === 0 && !isLoading) {
     <div class="text-center py-20 bg-white rounded-2xl shadow-xl border border-gray-200">
-      <div
-        class="w-24 h-24 bg-gradient-to-br from-primary/10 to-primary/5 rounded-2xl flex items-center justify-center mx-auto mb-7 shadow-sm border border-primary/20">
+      <div class="w-24 h-24 bg-gradient-to-br from-primary/10 to-primary/5 rounded-2xl flex items-center justify-center mx-auto mb-7 shadow-sm border border-primary/20">
         <svg class="w-12 h-12 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
         </svg>
       </div>
-      <h3 class="text-2xl font-bold text-gray-900 mb-4 tracking-tight" appTranslate="AUCTION-BUYER.NO_LOTS_FOUND">No se
-        encontraron lotes</h3>
+      <h3 class="text-2xl font-bold text-gray-900 mb-4 tracking-tight" appTranslate="AUCTION-BUYER.NO_LOTS_FOUND">
+        No se encontraron lotes
+      </h3>
       <p class="text-gray-600 max-w-md mx-auto text-lg font-medium" appTranslate="AUCTION-BUYER.ADJUST_SEARCH_TERMS">
-        Intenta ajustar los términos de búsqueda o filtros</p>
+        Intenta ajustar los términos de búsqueda o filtros
+      </p>
     </div>
     }
   </div>
 </div>
 
 <!-- Modal de puja -->
-@if (showBidModal) {
+@if (showBidModal && selectedLot) {
 <div class="fixed inset-0 bg-black/50 backdrop-blur-md flex items-center justify-center z-50 p-4">
   <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-9 border border-gray-200 backdrop-blur-lg">
-    <div class="flex justify-between items-center mb-7">
-      <h3 class="text-2xl font-bold text-gray-900 tracking-tight" appTranslate="AUCTION-BUYER.PLACE_BID">Realizar Puja
-      </h3>
-      <button (click)="closeBidModal()"
-        class="text-gray-500 hover:text-gray-700 transition-colors p-2 hover:bg-gray-100 rounded-xl">
+    
+    <!-- Header del modal -->
+    <div class="flex justify-between items-center ">
+      <div>
+        <h3 class="text-2xl font-bold text-gray-900 tracking-tight" appTranslate="AUCTION-BUYER.PLACE_BID">
+          Realizar Puja
+        </h3>
+      </div>
+      <button (click)="closeBidModal()" class="text-gray-500 hover:text-gray-700 transition-colors p-2 hover:bg-gray-100 rounded-xl">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
         </svg>
       </button>
     </div>
 
-    @if (selectedLot) {
+    <!-- Información del lote -->
     <div class="mb-7">
       <h4 class="text-lg font-bold text-primary mb-2">{{ selectedLot.coffeeLot.name }}</h4>
-      <p class="text-sm text-gray-600 font-medium">{{ selectedLot.coffeeLot.variety }} • {{ selectedLot.coffeeLot.region
-        }}</p>
-
-      <div
-        class="mt-5 p-5 bg-gradient-to-br from-primary/5 to-primary/10 rounded-xl border border-primary/20 shadow-sm">
+      <p class="text-sm text-gray-600 font-medium">{{ selectedLot.coffeeLot.variety }} • {{ selectedLot.coffeeLot.region }}</p>
+      
+      <div class="mt-5 p-5 bg-gradient-to-br from-primary/5 to-primary/10 rounded-xl border border-primary/20 shadow-sm">
         <div class="space-y-3">
           <div class="flex justify-between items-center">
-            <span class="text-sm text-gray-700 font-medium" appTranslate="AUCTION-BUYER.CURRENT_PRICE">Precio
-              actual:</span>
-            <span class="font-semibold text-primary">{{ selectedLot.currentPrice | currency:'USD':'symbol':'1.2-2'
-              }}</span>
+            <span class="text-sm text-gray-700 font-medium" appTranslate="AUCTION-BUYER.CURRENT_PRICE">Precio actual:</span>
+            <span class="font-semibold text-primary">{{ selectedLot.currentPrice | currency:'USD':'symbol':'1.2-2' }}</span>
           </div>
           <div class="flex justify-between items-center">
-            <span class="text-sm text-gray-700 font-medium" appTranslate="AUCTION-BUYER.MIN_INCREMENT">Incremento
-              mínimo:</span>
-            <span class="font-semibold text-primary">{{ auctionData[0].minIncrement | currency:'USD':'symbol':'1.2-2'
-              }}</span>
+            <span class="text-sm text-gray-700 font-medium" appTranslate="AUCTION-BUYER.MIN_INCREMENT">Incremento mínimo:</span>
+            <span class="font-semibold text-primary">{{ auctionData[0].minIncrement | currency:'USD':'symbol':'1.2-2' }}</span>
           </div>
           <div class="flex justify-between items-center pt-3 border-t border-primary/20">
-            <span class="text-sm font-bold text-primary" appTranslate="AUCTION-BUYER.MIN_REQUIRED_AMOUNT">Monto mínimo
-              requerido:</span>
-            <span class="font-bold text-primary">{{ calculateMinBidAmount(selectedLot) | currency:'USD':'symbol':'1.2-2'
-              }}</span>
+            <span class="text-sm font-bold text-primary" appTranslate="AUCTION-BUYER.MIN_REQUIRED_AMOUNT">Monto mínimo requerido:</span>
+            <span class="font-bold text-primary">{{ calculateMinBidAmount(selectedLot) | currency:'USD':'symbol':'1.2-2' }}</span>
           </div>
         </div>
       </div>
     </div>
-    }
 
+    <!-- Selección del monto -->
     <div class="mb-7">
       <label class="block text-sm font-bold text-gray-800 mb-3" appTranslate="AUCTION-BUYER.YOUR_BID">Tu oferta</label>
-      <div class="relative">
-        <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-primary font-bold">$</span>
-        <input type="number" [(ngModel)]="bidAmount" [min]="calculateMinBidAmount(selectedLot!)" step="0.01"
-          class="w-full p-4 pl-8 border border-gray-300 bg-white text-gray-900 rounded-xl focus:ring-2 focus:ring-primary/50 focus:border-primary font-medium shadow-sm"
-          placeholder="0.00" />
+      
+      <!-- Incrementos rápidos -->
+      <div class="mb-5">
+        <div class="grid grid-cols-4 gap-3">
+          @for (increment of quickIncrements; track increment) {
+            <button (click)="selectQuickIncrement(increment)"
+              class="py-2 px-3 border rounded-xl transition-all font-medium shadow-sm hover:shadow-md"
+              [class.bg-primary]="selectedIncrement === increment"
+              [class.border-primary]="selectedIncrement === increment"
+              [class.text-white]="selectedIncrement === increment"
+              [class.border-gray-300]="selectedIncrement !== increment"
+              [class.text-gray-700]="selectedIncrement !== increment"
+              [class.hover:bg-primary]="selectedIncrement !== increment"
+              [class.hover:border-primary]="selectedIncrement !== increment"
+              [class.hover:text-white]="selectedIncrement !== increment">
+              +{{ increment | currency:'USD':'symbol':'1.2-2' }}
+            </button>
+          }
+          <!-- Botón "Otro" -->
+          <button (click)="showManualInput()"
+            class="py-2 px-3 border rounded-xl transition-all font-medium shadow-sm hover:shadow-md"
+            [class.bg-primary]="showManualBidInput"
+            [class.border-primary]="showManualBidInput"
+            [class.text-white]="showManualBidInput"
+            [class.border-gray-300]="!showManualBidInput"
+            [class.text-gray-700]="!showManualBidInput"
+            [class.hover:bg-primary]="!showManualBidInput"
+            [class.hover:border-primary]="!showManualBidInput"
+            [class.hover:text-white]="!showManualBidInput">
+            Otro
+          </button>
+        </div>
       </div>
+
+      <!-- Input manual -->
+      @if (showManualBidInput) {
+      <div class="mt-5 mb-5">
+        <div class="relative">
+          <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-primary font-bold">$</span>
+          <input type="number" 
+                 [(ngModel)]="bidAmount" 
+                 (input)="onManualBidChange()"
+                 class="w-full p-4 pl-8 border border-gray-300 bg-white text-gray-900 rounded-xl focus:ring-2 focus:ring-primary/50 focus:border-primary font-medium shadow-sm"
+                 placeholder="0.00" />
+          <div class="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500 font-medium">
+            /lb
+          </div>
+        </div>
+        
+        <!-- Mostrar monto mínimo requerido -->
+      </div>
+      }
+
+      <!-- Información del total -->
+      @if (bidAmount > 0) {
+      <div class="mt-4 p-3 bg-gray-50 rounded-lg border border-gray-300">
+        <div class="flex justify-between items-center">
+          <span class="text-gray-600 font-medium" appTranslate="AUCTION-BUYER.TOTAL_AMOUNT">Monto total:</span>
+          <span class="font-bold text-primary text-xl">
+            {{ totalLotValue | currency:'USD':'symbol':'1.2-2' }}
+          </span>
+        </div>
+        <div class="text-md  mt-1 font-medium">
+          {{ selectedLot.coffeeLot.quantityLbs }} lbs × {{ bidAmount | currency:'USD':'symbol':'1.2-2' }}
+        </div>
+      </div>
+      }
+
+      <!-- Mensaje de selección -->
+      @if (!selectedIncrement && !showManualBidInput) {
+      <div class="mt-4 p-3 bg-yellow-50 border border-yellow-200 text-yellow-700 rounded-xl text-sm font-medium">
+        <svg class="w-4 h-4 inline-block mr-2" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+        </svg>
+        Selecciona un incremento rápido o ingresa un monto personalizado
+      </div>
+      }
     </div>
 
+    <!-- Mostrar error -->
     @if (bidError) {
-    <div class="mb-7 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl font-medium">
+    <div class="mb-7 p-3 bg-red-50 border border-red-200 text-red-700 rounded-xl font-medium text-sm">
       {{ bidError }}
     </div>
     }
 
+    <!-- Botones -->
     <div class="flex space-x-4">
       <button (click)="closeBidModal()"
         class="flex-1 py-4 px-6 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors font-semibold shadow-sm hover:shadow-md"
         appTranslate="COMMON.CANCEL">
         Cancelar
       </button>
-      <button (click)="placeBid()" [disabled]="isLoading || bidAmount < calculateMinBidAmount(selectedLot!)"
+      <button (click)="placeBid()" 
+        [disabled]="!canConfirmBid()"
         class="flex-1 py-4 px-6 bg-gradient-to-r from-primary to-primary/80 text-white rounded-xl hover:from-primary/90 hover:to-primary disabled:opacity-50 disabled:cursor-not-allowed transition-all font-bold shadow-lg hover:shadow-xl">
         @if (!isLoading) {
         <span appTranslate="AUCTION-BUYER.CONFIRM_BID">Confirmar Puja</span>

@@ -12,14 +12,14 @@
 
             </div>
         </div>
-        <div class="absolute bottom-0 right-0 z-2 w-1/4 max-w-lg">
+       <!--  <div class="absolute bottom-0 right-0 z-2 w-1/4 max-w-lg">
             <img src="assets/img/der.svg" alt="Granos de café" class="w-full h-auto" />
-        </div>
+        </div> -->
 
         <!-- Imagen decorativa superior izquierda -->
-        <div class="absolute top-10 left-8 z-1 w-1/4 max-w-lg">
+      <!--   <div class="absolute top-10 left-8 z-1 w-1/4 max-w-lg">
             <img src="assets/img/izq.svg" alt="Hoja de café" class="w-full h-auto" />
-        </div>
+        </div> -->
     </div>
 
     <!-- Sección del formulario -->
@@ -34,7 +34,7 @@
             </button> -->
 
             <div class="text-center ">
-              <h2 class="text-3xl font-bold text-black" appTranslate="REGISTER.TITLE">Registro</h2>
+                <h2 class="text-3xl font-bold text-black" appTranslate="REGISTER.TITLE">Registro</h2>
 
 
             </div>
@@ -45,9 +45,11 @@
 
             <!-- Contenedor de botones -->
             <div class="mx-5 px-2 flex flex-col space-y-4">
-                <button (click)="save()" class="w-full py-3 px-5 bg-primary text-white rounded-lg" appTranslate="REGISTER.REGISTER_BUTTON">
-  Registrarse
-</button>
+                <button (click)="save()" [disabled]="!formData?.valid || disabled"
+                    class="w-full py-3 px-5 bg-primary text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                    appTranslate="REGISTER.REGISTER_BUTTON">
+                    Registrarse
+                </button>
 
             </div>
         </div>

@@ -70,10 +70,11 @@ export class RegisterComponent implements OnInit {
   }
 
   async save() {
-   
-    if (this.formData?.valid && !this.disabled) {
+    console.log(this.formData);
+    
+   /*  if (this.formData?.valid && !this.disabled) {
        this.disabled= true
-      delete this.formData.data.phone;
+     
       delete this.formData.data.repeatPassword;
       this.formData.data.roleName = 'BUYER';
       if( this.formData.data.companyName === ''){
@@ -92,7 +93,7 @@ export class RegisterComponent implements OnInit {
         },800); // Espera 2 segundos antes de redirigir
       
       });
-    }
+    } */
   }
 
 
