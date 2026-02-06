@@ -7,3 +7,9 @@
     @tailwind components;
     @tailwind utilities;
 }
+
+[class*="text-3xl"],
+[class*="text-2xl"],
+[class*="text-6xl"] {
+  color: rgb(13, 32, 56) !important;
+}

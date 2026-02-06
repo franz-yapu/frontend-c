@@ -13,11 +13,11 @@
   },
   "APP": {
     "TITLE": "Altitude",
-    "TITLE_ACCENT": " TECAB"
+    "TITLE_ACCENT": " Cáritas"
   },
     "HOME": {
     "HERO": {
-      "TITLE": "TECAB Bolivia 2025 will bring together the winners of the competitions from recent years",
+      "TITLE": "Cáritas Bolivia 2026 will bring together the winners of the competitions from recent years",
       "SUBTITLE": "creating an unprecedented high-quality event",
       "AUCTION_BUTTON": "View Active Auctions",
       "LOGIN_BUTTON": "Login",
@@ -62,7 +62,7 @@
     "TERMS": "Terms",
     "CONTACT_TITLE": "Contact",
     "LOCATION": "La Paz, Bolivia",
-    "COPYRIGHT": "© 2025 TECAB. All rights reserved."
+    "COPYRIGHT": "© 2026 Cáritas. All rights reserved."
   },
     "WINNERS": {
     "HERO": {
@@ -107,8 +107,8 @@
   },
      "AUCTION": {
     "HERO": {
-      "TITLE": "TECAB Bolivia 2025 Auction",
-      "SUBTITLE": "The best producers of Bolivia 2025s",
+      "TITLE": "Cáritas Bolivia 2026 Auction",
+      "SUBTITLE": "The best producers of Bolivia 2026s",
       "START_DATE": "Start",
       "END_DATE": "End"
     },
@@ -263,8 +263,8 @@
     }
   },
    "AUCTION-BUYER": {
-    "PREMIUM_AUCTIONS": "TECAB Bolivia 2025 Auction",
-    "EXCLUSIVE_LOTS": "The best producers of Bolivia 2025",
+    "PREMIUM_AUCTIONS": "Cáritas Bolivia 2026 Auction",
+    "EXCLUSIVE_LOTS": "The best producers of Bolivia 2026",
     "AUCTION_ENDED": "Auction Ended",
     "RESULTS_AVAILABLE": "Results available",
     "ENDS_IN": "Ends in",
@@ -288,7 +288,8 @@
     "MIN_INCREMENT": "Minimum increment",
     "MIN_REQUIRED_AMOUNT": "Minimum required amount",
     "YOUR_BID": "Your bid",
-    "CONFIRM_BID": "Confirm Bid"
+    "CONFIRM_BID": "Confirm Bid",
+    "TOTAL_AMOUNT":"Total amount:"
   },
   "COMMON": {
     "DAYS": "Days",

@@ -27,8 +27,8 @@
     <div class="max-w-6xl mx-auto px-4 py-24 text-center relative z-30">
       <!-- Logo -->
       <div class="mb-12 flex justify-center">
-        <div class="bg-white rounded-full shadow-lg">
-          <img src="assets/img/tecab/tecab.svg" alt="Café Altura" class="h-80 md:h-62 w-auto" />
+        <div class="bg-white rounded-full ">
+          <img src="assets/img/caritas/logo.png" alt="Café Altura" class="h-80 md:h-62 w-auto" />
         </div>
       </div>
 
@@ -113,7 +113,7 @@
   <section class="py-24 bg-white overflow-hidden">
     <div class="max-w-6xl mx-auto px-4">
 
-      <div class="text-center mb-16">
+      <div class="text-center mb-5">
         <h2 class="text-3xl md:text-4xl font-bold mb-4" appTranslate="HOME.SPONSORS.TITLE">
           Nuestros Sponsors
         </h2>
@@ -123,25 +123,72 @@
       </div>
 
       <!-- Carrusel de Sponsors -->
-      <div class="relative">
-  <!-- Contenedor del carrusel -->
-  <div class="overflow-hidden">
-    <div class="flex space-x-8 animate-scroll">
-       @for (sponsor of sponsors; track sponsor.name; let i = $index) {
-         <div class="flex-none w-48 h-32 bg-white  items-center justify-center p-4 border border-gray-100">
-          <img 
+      <div class="relative overflow-hidden py-2">
+  <div 
+    class="sponsors-marquee"
+    (mouseenter)="onSponsorContainerHover(true)"
+    (mouseleave)="onSponsorContainerHover(false)">
+    
+    <div class="marquee-content">
+      <!-- Primera copia -->
+      @for (sponsor of sponsors; track $index; let i = $index) {
+        <div class="sponsor-item">
+          @if (sponsor.url && sponsor.url !== '#') {
+            <a 
+              [href]="sponsor.url" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="block w-48 h-32 bg-white items-center justify-center p-4 border border-gray-100 hover:shadow-lg transition-shadow duration-300 cursor-pointer rounded-lg">
+              <img 
                 [src]="sponsor.logo" 
                 [alt]="sponsor.name" 
-                class="max-h-16 lg:max-h-20 max-w-full  "
+                class="h-full w-full object-contain"
                 [title]="sponsor.name">
-      </div>
-       }
+            </a>
+          } @else {
+            <div class="w-48 h-32 bg-white items-center justify-center p-4 border border-gray-100 rounded-lg">
+              <img 
+                [src]="sponsor.logo" 
+                [alt]="sponsor.name" 
+                class="h-full w-full object-contain"
+                [title]="sponsor.name">
+            </div>
+          }
+        </div>
+      }
+      
+      <!-- Segunda copia (para el efecto infinito) -->
+      @for (sponsor of sponsors; track $index; let i = $index) {
+        <div class="sponsor-item">
+          @if (sponsor.url && sponsor.url !== '#') {
+            <a 
+              [href]="sponsor.url" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="block w-48 h-32 bg-white items-center justify-center p-4 border border-gray-100 hover:shadow-lg transition-shadow duration-300 cursor-pointer rounded-lg">
+              <img 
+                [src]="sponsor.logo" 
+                [alt]="sponsor.name" 
+                class="h-full w-full object-contain"
+                [title]="sponsor.name">
+            </a>
+          } @else {
+            <div class="w-48 h-32 bg-white items-center justify-center p-4 border border-gray-100 rounded-lg">
+              <img 
+                [src]="sponsor.logo" 
+                [alt]="sponsor.name" 
+                class="h-full w-full object-contain"
+                [title]="sponsor.name">
+            </div>
+          }
+        </div>
+      }
     </div>
   </div>
   
-  <!-- Overlay para efecto de desvanecimiento -->
-  <div class="absolute top-0 left-0 w-24 h-full bg-gradient-to-r from-white to-transparent z-10"></div>
-  <div class="absolute top-0 right-0 w-24 h-full bg-gradient-to-l from-white to-transparent z-10"></div>
+  <!-- Gradientes para un efecto de desvanecimiento en los bordes -->
+  <div class="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-white to-transparent z-10"></div>
+  <div class="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-white to-transparent z-10"></div>
 </div>
 
     </div>

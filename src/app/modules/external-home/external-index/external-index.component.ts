@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { TranslateDirective } from '../../../project/directive/translate.directive';
 
@@ -9,8 +9,10 @@ import { TranslateDirective } from '../../../project/directive/translate.directi
   templateUrl: './external-index.component.html',
   styleUrl: './external-index.component.scss'
 })
-export class ExternalIndexComponent implements OnInit, OnDestroy {
-    @ViewChild('sponsorsContainer') sponsorsContainer!: ElementRef;
+export class ExternalIndexComponent implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild('sponsorsContainer') sponsorsContainer!: ElementRef;
+  @ViewChild('sponsorsTrack') sponsorsTrack!: ElementRef;
+  
   private router = inject(Router);
   showModal = false;
   slides = [
@@ -25,28 +27,41 @@ export class ExternalIndexComponent implements OnInit, OnDestroy {
     }
   ];
 
-    sponsors = [
-    { name: 'Ayuda en Acción', logo: 'assets/img/tecab/ayuda en accion.svg', url: '#' },
-    { name: 'CANEB', logo: 'assets/img/tecab/caneb.svg', url: '#' },
-    { name: 'GAMLP', logo: 'assets/img/tecab/gamlp.svg', url: '#' },
-    { name: 'HB', logo: 'assets/img/tecab/hb.svg', url: '#' },
-    { name: 'JICA', logo: 'assets/img/tecab/jica.svg', url: '#' },
-    { name: 'MUNART', logo: 'assets/img/tecab/munart.svg', url: '#' },
-    { name: 'Naciones Unidas', logo: 'assets/img/tecab/naciones unidas.svg', url: '#' },
-    { name: 'Unión Europea', logo: 'assets/img/tecab/union europea.svg', url: '#' },
-    { name: 'Nayra Qata', logo: 'assets/img/tecab/nayra qata.svg', url: '#' },
-    { name: 'Presidencia', logo: 'assets/img/tecab/precidencia.svg', url: '#' }
+  sponsors = [
+    { name: 'Ayuda en Acción', logo: 'assets/img/caritas/CARITAS-ALEMANIA.png', url: 'https://www.caritas.org/?lang=es' },
+    { name: 'Ayuda en Acción', logo: 'assets/img/caritas/ALEMANA.png', url: 'https://fondo-cooperacion-triangular.net/' },
+    { name: 'Ayuda en Acción', logo: 'assets/img/caritas/Samu Foundation.png', url: 'https://fundacionsamu.org/' },
+    { name: 'Ayuda en Acción', logo: 'assets/img/caritas/Acnur.jpg', url: 'https://www.acnur.org/' },
+    { name: 'Ayuda en Acción', logo: 'assets/img/caritas/WFPnewlogo.png', url: 'https://es.wfp.org/' },
+    { name: 'Ayuda en Acción', logo: 'assets/img/caritas/CRS.png', url: 'https://www.crs.org/es' },
+    { name: 'Ayuda en Acción', logo: 'assets/img/caritas/OIM.png', url: 'https://www.iom.int/es' },
+    { name: 'Ayuda en Acción', logo: 'assets/img/caritas/MEDICOR.png', url: 'https://www.medicor.li/en/' },
+    { name: 'Ayuda en Acción', logo: 'assets/img/caritas/logo mariamarina.png', url: 'https://es.mmf.li/' },
   ];
+
+  // Duplicamos los sponsors para crear un efecto infinito suave
+  duplicatedSponsors = [...this.sponsors, ...this.sponsors];
 
   currentSlide = 0;
   private intervalId: any;
+  private animationId: number | null = null;
+  private isPaused = false;
+  private position = 0;
+  private speed = 1; // Velocidad de desplazamiento en píxeles por frame
 
   ngOnInit() {
     this.startAutoSlide();
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.startInfiniteScroll();
+    }, 100);
+  }
+
   ngOnDestroy() {
     this.stopAutoSlide();
+    this.stopInfiniteScroll();
   }
 
   startAutoSlide() {
@@ -59,6 +74,40 @@ export class ExternalIndexComponent implements OnInit, OnDestroy {
     if (this.intervalId) {
       clearInterval(this.intervalId);
     }
+  }
+
+  startInfiniteScroll() {
+    if (!this.sponsorsTrack) return;
+
+    const animate = () => {
+      if (!this.isPaused && this.sponsorsTrack) {
+        this.position -= this.speed;
+        
+        // Cuando hemos desplazado la mitad del track (que contiene los sponsors duplicados),
+        // reiniciamos la posición para crear un efecto infinito suave
+        const trackWidth = this.sponsorsTrack.nativeElement.scrollWidth / 2;
+        
+        if (Math.abs(this.position) >= trackWidth) {
+          this.position = 0;
+        }
+        
+        this.sponsorsTrack.nativeElement.style.transform = `translateX(${this.position}px)`;
+      }
+      
+      this.animationId = requestAnimationFrame(animate);
+    };
+
+    this.animationId = requestAnimationFrame(animate);
+  }
+
+  stopInfiniteScroll() {
+    if (this.animationId) {
+      cancelAnimationFrame(this.animationId);
+    }
+  }
+
+  onSponsorContainerHover(hovering: boolean) {
+    this.isPaused = hovering;
   }
 
   nextSlide() {
@@ -81,8 +130,6 @@ export class ExternalIndexComponent implements OnInit, OnDestroy {
     }
   }
 
-
-  
   goToAuction(): void {
     this.router.navigate(['/auction']);
   }
@@ -96,6 +143,6 @@ export class ExternalIndexComponent implements OnInit, OnDestroy {
   }
 
   closeModal() {
-  this.showModal = false;
-}
+    this.showModal = false;
+  }
 }

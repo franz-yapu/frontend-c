@@ -131,55 +131,7 @@
     </div>
     }
 
-    <!-- Barra de búsqueda y filtros -->
-    <div class="mb-8">
-      <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
-        <div class="flex-1 w-full">
-          <div class="relative">
-            <input 
-              type="text" 
-              [(ngModel)]="searchTerm" 
-              (ngModelChange)="filterLots()"
-              placeholder="Buscar lotes por nombre, variedad o región..." 
-              class="w-full p-4 pl-12 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary/50 focus:border-primary shadow-sm"
-            />
-            <svg class="w-5 h-5 text-gray-400 absolute left-4 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-            </svg>
-          </div>
-        </div>
-        
-        <div class="flex items-center gap-3">
-          <span class="text-sm font-medium text-gray-600">Ordenar por:</span>
-          <div class="flex bg-gray-100 p-1 rounded-lg">
-            <button 
-              (click)="changeSort('position')" 
-              class="px-4 py-2 rounded-md text-sm font-medium transition-colors"
-              [class.bg-white]="sortBy === 'position'"
-              [class.shadow]="sortBy === 'position'"
-            >
-              Posición
-            </button>
-            <button 
-              (click)="changeSort('price')" 
-              class="px-4 py-2 rounded-md text-sm font-medium transition-colors"
-              [class.bg-white]="sortBy === 'price'"
-              [class.shadow]="sortBy === 'price'"
-            >
-              Precio
-            </button>
-            <button 
-              (click)="changeSort('score')" 
-              class="px-4 py-2 rounded-md text-sm font-medium transition-colors"
-              [class.bg-white]="sortBy === 'score'"
-              [class.shadow]="sortBy === 'score'"
-            >
-              Puntuación
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+  
 
     <!-- Lista de lotes de café -->
     <div class="mb-10">
@@ -205,7 +157,7 @@
         <div class="group bg-white shadow-xl hover:shadow-2xl transition-all duration-500 border border-gray-200 hover:border-primary/30 overflow-hidden hover:-translate-y-1">
           
           <!-- Header con nombre y puntuación -->
-          <div class="relative p-5 border-b border-primary/30 overflow-hidden bg-cover bg-center bg-no-repeat"
+          <div class="relative p-5 border-b border-primary/30 overflow-hidden bg-cover bg-center bg-no-repeat bg-gradient-to-br from-primary/5 to-primary/10 p-5 border border-primary/20 shadow-sm "
                style="background-image: url('assets/img/foto prod.png');">
             <div class="flex justify-center items-start mb-4">
               <p class="text-7xl text-primary mr-2">#{{ detail.coffeeLot.position }}</p>
@@ -434,11 +386,11 @@
               [class.hover:bg-primary]="selectedIncrement !== increment"
               [class.hover:border-primary]="selectedIncrement !== increment"
               [class.hover:text-white]="selectedIncrement !== increment">
-              +{{ increment | currency:'USD':'symbol':'1.2-2' }}
+              +{{ increment | currency:'USD':'symbol':'1.0-2' }}
             </button>
           }
           <!-- Botón "Otro" -->
-          <button (click)="showManualInput()"
+        <!--   <button (click)="showManualInput()"
             class="py-2 px-3 border rounded-xl transition-all font-medium shadow-sm hover:shadow-md"
             [class.bg-primary]="showManualBidInput"
             [class.border-primary]="showManualBidInput"
@@ -449,12 +401,12 @@
             [class.hover:border-primary]="!showManualBidInput"
             [class.hover:text-white]="!showManualBidInput">
             Otro
-          </button>
+          </button> -->
         </div>
       </div>
 
       <!-- Input manual -->
-      @if (showManualBidInput) {
+      
       <div class="mt-5 mb-5">
         <div class="relative">
           <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-primary font-bold">$</span>
@@ -470,7 +422,7 @@
         
         <!-- Mostrar monto mínimo requerido -->
       </div>
-      }
+      
 
       <!-- Información del total -->
       @if (bidAmount > 0) {
@@ -513,7 +465,7 @@
         Cancelar
       </button>
       <button (click)="placeBid()" 
-        [disabled]="!canConfirmBid()"
+        [disabled]="!canConfirmBid() "
         class="flex-1 py-4 px-6 bg-gradient-to-r from-primary to-primary/80 text-white rounded-xl hover:from-primary/90 hover:to-primary disabled:opacity-50 disabled:cursor-not-allowed transition-all font-bold shadow-lg hover:shadow-xl">
         @if (!isLoading) {
         <span appTranslate="AUCTION-BUYER.CONFIRM_BID">Confirmar Puja</span>

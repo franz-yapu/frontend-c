@@ -5,11 +5,13 @@ import { Subscription, catchError, of } from 'rxjs';
 import { BuyerService } from '../../../modules/buyer/buyer.service';
 import { LotDetailComponent } from './lot-detail/lot-detail.component';
 import { TranslateDirective } from '../../directive/translate.directive';
+import { HomeService } from '../../../modules/home/home.service';
+import { WinnersTableComponent } from './winners-table/winners-table.component';
 
 @Component({
   selector: 'app-auction-view',
   standalone: true,
-  imports: [CommonModule, FormsModule, LotDetailComponent, TranslateDirective],
+  imports: [CommonModule, FormsModule, LotDetailComponent, TranslateDirective,WinnersTableComponent],
   templateUrl: './auction-view.component.html',
   styleUrls: ['./auction-view.component.scss']
 })
@@ -34,8 +36,18 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   private timerSubscription: Subscription | null = null;
 
+   // Nuevas propiedades para manejar ganadores
+  showWinners: boolean = false;
+  winners: any[] = [];
+  loadingWinners: boolean = false;
+  winnersError: string | null = null;
+  private winnersCheckInterval: any;
+  private winnersLoaded: boolean = false;
+  
+
+
   constructor(
-    private buyerService: BuyerService,
+    private buyerService: BuyerService,private homeService: HomeService,
     @Inject(PLATFORM_ID) private platformId: any
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
@@ -49,6 +61,7 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
     if (this.isBrowser) {
       this.setupWebSocketListeners();
       this.setupConnectionMonitoring();
+      this.startWinnersCheck();
     }
   }
 
@@ -57,6 +70,8 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
     try {
       this.loading = true;
       this.error = null;
+      this.showWinners = false;
+      this.winnersLoaded = false;
 
       const data = await this.buyerService.getAutionsLotsActive();
       this.auctionData = Array.isArray(data) ? data : [];
@@ -76,6 +91,15 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
         
         await this.loadBidHistory();
         this.sortLots();
+         // Verificar si la subasta ya terminó
+        const auction = this.auctionData[0];
+        const endDate = new Date(auction.endDate);
+        const now = new Date();
+        
+        if (now.getTime() - endDate.getTime() > 3 * 60 * 1000) {
+          // Si terminó hace más de 3 minutos, cargar ganadores
+          await this.loadWinners();
+        }
       }
       
     } catch (error) {
@@ -98,6 +122,78 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
     }, 1000);
     
     this.timerSubscription.add(() => clearInterval(intervalId));
+  }
+
+   private startWinnersCheck() {
+    // Verificar cada 30 segundos si la subasta ha terminado y cargar ganadores
+    this.winnersCheckInterval = setInterval(() => {
+      this.checkAndLoadWinners();
+    }, 30000); // 30 segundos
+    
+    // Verificar inmediatamente
+    setTimeout(() => {
+      this.checkAndLoadWinners();
+    }, 1000);
+  }
+
+    private async checkAndLoadWinners() {
+    if (this.winnersLoaded || this.loadingWinners) return;
+    
+    // Verificar si la subasta ha terminado
+    if (this.auctionData.length > 0) {
+      const auction = this.auctionData[0];
+      const endDate = new Date(auction.endDate);
+      const now = new Date();
+      
+      // Si la subasta terminó hace más de 3 minutos
+      if (now.getTime() - endDate.getTime() > 3 * 60 * 1000) {
+        await this.loadWinners();
+      }
+    }
+  }
+
+   // Método para cargar los ganadores
+  private async loadWinners() {
+    if (this.winnersLoaded || this.loadingWinners || this.auctionData.length === 0) return;
+    
+    try {
+      this.loadingWinners = true;
+      this.winnersError = null;
+      
+      const auctionId = this.auctionData[0].id;
+      
+      // Obtener transacciones de la subasta
+      const transactions = await this.homeService.getAutionTransactions(auctionId);
+      
+      if (transactions && Array.isArray(transactions)) {
+        this.winners = transactions.map(transaction => ({
+          id: transaction.id,
+          position: transaction.coffeeLot?.position,
+          variety: transaction.coffeeLot?.variety,
+          region: transaction.coffeeLot?.region,
+          country: transaction.coffeeLot?.country,
+          cupScore: transaction.coffeeLot?.cupScore,
+          quantityLbs: transaction.coffeeLot?.quantityLbs,
+          quantity: transaction.coffeeLot?.quantity,
+          winningBid: transaction.amount,
+          winnerName: transaction.buyer?.firstName + ' ' + transaction.buyer?.lastName,
+          winnerCompany: transaction.buyer?.companyName,
+          buyerName: transaction.buyer?.firstName + ' ' + transaction.buyer?.lastName,
+          companyName: transaction.buyer?.companyName
+        }));
+        
+        this.showWinners = this.winners.length > 0;
+        this.winnersLoaded = true;
+        
+        console.log('Ganadores cargados:', this.winners);
+      }
+      
+    } catch (error) {
+      console.error('Error loading winners:', error);
+      this.winnersError = 'Error al cargar los resultados de la subasta';
+    } finally {
+      this.loadingWinners = false;
+    }
   }
 
   calculateTimeRemaining(auction: any): { 

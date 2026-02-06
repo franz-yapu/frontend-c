@@ -13,7 +13,7 @@ import { LoadingOverlayComponent } from './project/components/loading-overlay/lo
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  title = 'Tecab';
+  title = 'Cáritas Bolivia 2026 Auction';
 
 
 

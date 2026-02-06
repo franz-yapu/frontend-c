@@ -13,11 +13,11 @@
   },
   "APP": {
     "TITLE": "Altura",
-    "TITLE_ACCENT": " TECAB"
+    "TITLE_ACCENT": " Cáritas"
   },
   "HOME": {
     "HERO": {
-      "TITLE": "TECAB Bolivia 2025 reunirá a los ganadores de las competencias de los últimos años",
+      "TITLE": "Cáritas Bolivia 2026 reunirá a los ganadores de las competencias de los últimos años",
       "SUBTITLE": "creando un encuentro de calidad sin precedentes",
       "AUCTION_BUTTON": "Ver Subastas Activas",
       "LOGIN_BUTTON": "Ingresar",
@@ -62,7 +62,7 @@
     "TERMS": "Términos",
     "CONTACT_TITLE": "Contacto",
     "LOCATION": "La Paz, Bolivia",
-    "COPYRIGHT": "© 2025 Tecab. Todos los derechos reservados."
+    "COPYRIGHT": "© 2026 Cáritas. Todos los derechos reservados."
   },
   "WINNERS": {
     "HERO": {
@@ -107,8 +107,8 @@
   },
   "AUCTION": {
     "HERO": {
-      "TITLE": "Subasta del TECAB Bolivia 2025",
-      "SUBTITLE": "Los mejores productores de Bolivia 2025",
+      "TITLE": "Subasta del Cáritas Bolivia 2026",
+      "SUBTITLE": "Los mejores productores de Bolivia 2026",
       "START_DATE": "Inicio",
       "END_DATE": "Fin"
     },
@@ -265,8 +265,8 @@
 
   },
     "AUCTION-BUYER": {
-    "PREMIUM_AUCTIONS": "Subasta del TECAB Bolivia 2025",
-    "EXCLUSIVE_LOTS": "Los mejores productores de Bolivia 2025",
+    "PREMIUM_AUCTIONS": "Subasta del Cáritas Bolivia 2026",
+    "EXCLUSIVE_LOTS": "Los mejores productores de Bolivia 2026",
     "AUCTION_ENDED": "Subasta Finalizada",
     "RESULTS_AVAILABLE": "Resultados disponibles",
     "ENDS_IN": "Finaliza en",
@@ -290,7 +290,8 @@
     "MIN_INCREMENT": "Incremento mínimo",
     "MIN_REQUIRED_AMOUNT": "Monto mínimo requerido",
     "YOUR_BID": "Tu oferta",
-    "CONFIRM_BID": "Confirmar Puja"
+    "CONFIRM_BID": "Confirmar Puja",
+    "TOTAL_AMOUNT":"Monto total:"
   },
   "COMMON": {
     "DAYS": "Días",

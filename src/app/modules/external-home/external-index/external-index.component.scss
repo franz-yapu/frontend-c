@@ -1,26 +1,82 @@
+/* ... existing styles ... */
+/* ... existing styles ... */
+
+.sponsors-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.sponsors-track {
+  display: flex;
+  will-change: transform;
+}
+
+.sponsor-item {
+  flex: 0 0 auto;
+  transition: transform 0.3s ease;
+}
+
+.sponsor-item:hover {
+  transform: translateY(-5px);
+}
+
+/* ... rest of styles ... */
+.animate-scroll {
+  animation: scroll 30s linear infinite;
+}
+
 @keyframes scroll {
   0% {
     transform: translateX(0);
   }
   100% {
-    transform: translateX(calc(-100% - 2rem)); /* Ajuste para el espacio entre elementos */
+    transform: translateX(-50%);
   }
 }
 
-.animate-scroll {
-  animation: scroll 50s linear infinite;
-  width: max-content; /* Importante para el cálculo correcto */
-}
-
-.animate-scroll:hover {
+/* Pause animation on hover */
+.overflow-hidden:hover .animate-scroll {
   animation-play-state: paused;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+/* Smooth scrolling for the container */
+.overflow-hidden {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 
-.animate-fadeIn {
-  animation: fadeIn .4s ease-out;
+.sponsors-marquee {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.marquee-content {
+  display: flex;
+  animation: marquee 30s linear infinite;
+  width: max-content;
+}
+
+.marquee-content:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.sponsor-item {
+  flex: 0 0 auto;
+  margin-right: 2rem;
+  transition: transform 0.3s ease;
+}
+
+.sponsor-item:hover {
+  transform: translateY(-5px);
 }

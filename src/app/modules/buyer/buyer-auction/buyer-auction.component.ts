@@ -69,7 +69,7 @@ interface Bid {
 })
 export class BuyerAuctionComponent implements OnInit, OnDestroy {
   userId: string = '';
-  quickIncrements: number[] = [3, 5, 6, 10, 15, 20];
+  quickIncrements: number[] = [1, 2, 3, 5, 8, 13, 21];
   
   auctionData: Auction[] = [];
   currentTime: Date = new Date();
