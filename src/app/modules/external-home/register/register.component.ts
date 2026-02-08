@@ -70,9 +70,9 @@ export class RegisterComponent implements OnInit {
   }
 
   async save() {
-    console.log(this.formData);
     
-   /*  if (this.formData?.valid && !this.disabled) {
+    
+    if (this.formData?.valid && !this.disabled) {
        this.disabled= true
      
       delete this.formData.data.repeatPassword;
@@ -93,7 +93,7 @@ export class RegisterComponent implements OnInit {
         },800); // Espera 2 segundos antes de redirigir
       
       });
-    } */
+    }
   }
 
 

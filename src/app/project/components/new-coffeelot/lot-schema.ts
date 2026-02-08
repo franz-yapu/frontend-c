@@ -173,7 +173,7 @@ export const lotFormFields = (catalogs: any) => {
                 max: 4000
               }
             },
-            {
+/*             {
               key: 'productionSystem',
               label: 'Sistema de Producción',
               type: 'text',
@@ -184,7 +184,7 @@ export const lotFormFields = (catalogs: any) => {
               label: 'Tipo de Sombra',
               type: 'text',
               validators: {required: false, maxLength: 50 }
-            },
+            }, */
           ]
         },
      /*    {
@@ -226,11 +226,11 @@ export const lotFormFields = (catalogs: any) => {
 
              {
               key: 'fragranceAroma',
-              label: 'Fragancia/Aroma',
+              label: 'Perfil de Cata',
               type: 'text',
-              validators: { required: false,maxLength: 200 }
+              validators: { required: false,maxLength: 1000 }
             },
-            {
+ /*            {
               key: 'acidity',
               label: 'Acidez',
               type: 'text',
@@ -241,7 +241,7 @@ export const lotFormFields = (catalogs: any) => {
               label: 'Sabor',
               type: 'text',
               validators: { required :false ,maxLength: 200 }
-            },
+            }, */
           
           ]
         },

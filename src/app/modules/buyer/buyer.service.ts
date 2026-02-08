@@ -11,9 +11,11 @@ export class BuyerService {
   private socket: Socket | null = null;
   private bidSubject = new Subject<any>();
   private auctionExtendedSubject = new Subject<any>();
-  private auctionClosedSubject = new Subject<any>(); // NUEVO
+  private auctionClosedSubject = new Subject<any>();
   private connectionStatus = new BehaviorSubject<boolean>(false);
+  private connectionQuality = new BehaviorSubject<'excellent' | 'good' | 'fair' | 'poor' | 'offline'>('good');
   private isInitialized = false;
+  private latency = 0;
 
   constructor(
     private http: HttpClient,
@@ -44,34 +46,10 @@ export class BuyerService {
     }
   }
 
-  private setupConnectionListeners() {
-    if (!this.socket) return;
-
-    this.socket.on('connect', () => {
-      this.ngZone.run(() => {
-        console.log('✅ Conectado al servidor WebSocket');
-        this.connectionStatus.next(true);
-      });
-    });
-
-    this.socket.on('disconnect', (reason) => {
-      this.ngZone.run(() => {
-        console.log('❌ Desconectado del servidor WebSocket:', reason);
-        this.connectionStatus.next(false);
-      });
-    });
-
-    this.socket.on('connect_error', (error) => {
-      this.ngZone.run(() => {
-        console.error('❌ Error de conexión WebSocket:', error);
-        this.connectionStatus.next(false);
-      });
-    });
-  }
-
   private setupSocketListeners() {
     if (!this.socket) return;
 
+    // Eventos existentes
     this.socket.on('newBid', (bid: any) => {
       this.ngZone.run(() => {
         this.bidSubject.next(bid);
@@ -85,7 +63,7 @@ export class BuyerService {
       });
     });
 
-       this.socket.on('auctionClosed', (data: any) => {
+    this.socket.on('auctionClosed', (data: any) => {
       this.ngZone.run(() => {
         console.log('🔚 Subasta cerrada:', data);
         this.auctionClosedSubject.next(data);
@@ -97,6 +75,100 @@ export class BuyerService {
         console.error('Error en puja:', error);
       });
     });
+
+    // NUEVOS EVENTOS DEL BACKEND MEJORADO
+      this.socket.on('ping', (data: any) => {
+    this.ngZone.run(() => {
+      this.handleServerPing(data);
+    });
+  });
+
+
+    this.socket.on('highLatencyWarning', (data: any) => {
+      this.ngZone.run(() => {
+        console.warn('⚠️ Advertencia de latencia alta:', data);
+        this.updateLatency(data.latency);
+      });
+    });
+
+    this.socket.on('timeSync', (data: any) => {
+      this.ngZone.run(() => {
+        console.log('🕒 Sincronización de tiempo recibida:', data);
+      });
+    });
+
+    this.socket.on('joinedRoom', (data: any) => {
+      console.log('✅ Unido a sala:', data);
+    });
+  }
+
+private handlePing(pingData: any) {
+  console.log('📡 Ping recibido del servidor:', pingData);
+  
+  // Calcular latencia inmediatamente si tenemos timestamp
+  if (pingData?.timestamp) {
+    this.latency = Date.now() - pingData.timestamp;
+    this.updateLatency(this.latency);
+    console.log(`📡 Latencia: ${this.latency}ms`);
+  }
+  
+  // Responder con pong
+  if (this.socket?.connected) {
+    // Crear objeto de respuesta completo
+    const pongResponse = {
+      timestamp: pingData?.timestamp || Date.now(),
+      clientTime: Date.now(),
+      serverTime: pingData?.serverTime,
+      latency: this.latency,
+      type: 'pong_response'
+    };
+    
+    console.log('📡 Enviando pong:', pongResponse);
+    
+    // Enviar como objeto JSON
+    this.socket.emit('pong', pongResponse);
+  }
+}
+
+
+  private updateLatency(latency: number) {
+    this.latency = latency;
+    
+    let quality: 'excellent' | 'good' | 'fair' | 'poor' | 'offline' = 'good';
+    if (latency > 1000) quality = 'poor';
+    else if (latency > 500) quality = 'fair';
+    else if (latency > 200) quality = 'good';
+    else quality = 'excellent';
+    
+    this.connectionQuality.next(quality);
+  }
+
+  private setupConnectionListeners() {
+    if (!this.socket) return;
+
+    this.socket.on('connect', () => {
+      this.ngZone.run(() => {
+        console.log('✅ Conectado al servidor WebSocket');
+        this.connectionStatus.next(true);
+        this.connectionQuality.next('good');
+      });
+    });
+
+    this.socket.on('disconnect', (reason) => {
+      this.ngZone.run(() => {
+        console.log('❌ Desconectado del servidor WebSocket:', reason);
+        this.connectionStatus.next(false);
+        this.connectionQuality.next('offline');
+      });
+    });
+
+    this.socket.on('connect_error', (error) => {
+      this.ngZone.run(() => {
+        console.error('❌ Error de conexión WebSocket:', error);
+        this.connectionStatus.next(false);
+        this.connectionQuality.next('offline');
+      });
+    });
   }
 
   // Unirse a la sala de subasta
@@ -105,7 +177,6 @@ export class BuyerService {
       this.socket.emit('joinAuctionRoom', auctionId);
     } else {
       console.warn('Socket no conectado, no se puede unir a la sala');
-      // Reintentar después de 1 segundo si no está conectado
       setTimeout(() => {
         if (this.socket && this.socket.connected) {
           this.socket.emit('joinAuctionRoom', auctionId);
@@ -153,7 +224,17 @@ export class BuyerService {
     return this.connectionStatus.asObservable();
   }
 
-  // Métodos HTTP con manejo de errores
+  // Obtener calidad de conexión
+  getConnectionQuality(): Observable<string> {
+    return this.connectionQuality.asObservable();
+  }
+
+  // Obtener latencia actual
+  getCurrentLatency(): number {
+    return this.latency;
+  }
+
+  // Métodos HTTP
   getAuctionsLotsActive(): Observable<any> {
     return this.http.get(`${environment.backend}/auctions/active`);
   }
@@ -182,9 +263,36 @@ export class BuyerService {
     return this.auctionExtendedSubject.asObservable();
   }
 
-    getAuctionClosed(): Observable<any> {
+  getAuctionClosed(): Observable<any> {
     return this.auctionClosedSubject.asObservable();
   }
+
+  private handleServerPing(pingData: any) {
+  const now = Date.now();
+  
+  // Debug
+  console.log('❤️ Ping del servidor:', pingData);
+  
+  // Calcular latencia
+  if (pingData?.timestamp) {
+    this.latency = now - pingData.timestamp;
+    this.updateLatency(this.latency);
+  }
+  
+  // Responder siempre con pong
+  if (this.socket?.connected) {
+    const response = {
+      timestamp: pingData?.timestamp || now,
+      clientTime: now,
+      serverTime: pingData?.serverTime,
+      receivedAt: now
+    };
+    
+    console.log('📤 Respondiendo pong:', response);
+    this.socket.emit('pong', response);
+  }
+}
+
   // Limpiar recursos
   disconnect() {
     if (this.socket) {

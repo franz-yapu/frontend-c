@@ -7,11 +7,15 @@ import { LotDetailComponent } from './lot-detail/lot-detail.component';
 import { TranslateDirective } from '../../directive/translate.directive';
 import { HomeService } from '../../../modules/home/home.service';
 import { WinnersTableComponent } from './winners-table/winners-table.component';
+import { TimeSyncService } from '../../services/time-sync.service';
+
+import { ExternalWinnersComponent } from "../../../modules/external-home/external-winners/external-winners.component";
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-auction-view',
   standalone: true,
-  imports: [CommonModule, FormsModule, LotDetailComponent, TranslateDirective,WinnersTableComponent],
+  imports: [CommonModule, FormsModule, LotDetailComponent, TranslateDirective, ExternalWinnersComponent, ExternalWinnersComponent],
   templateUrl: './auction-view.component.html',
   styleUrls: ['./auction-view.component.scss']
 })
@@ -32,22 +36,26 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
   showExtensionNotification: boolean = false;
   extensionMessage: string = '';
   private notificationTimeout: any;
-  
+
   private subscriptions: Subscription[] = [];
   private timerSubscription: Subscription | null = null;
 
-   // Nuevas propiedades para manejar ganadores
+  // Nuevas propiedades para manejar ganadores
   showWinners: boolean = false;
   winners: any[] = [];
   loadingWinners: boolean = false;
   winnersError: string | null = null;
   private winnersCheckInterval: any;
   private winnersLoaded: boolean = false;
-  
+// Agregar nuevas propiedades
+private connectionCheckInterval: any;
+private lastSuccessfulSync: Date | null = null;
+private connectionLost = false;
 
 
   constructor(
-    private buyerService: BuyerService,private homeService: HomeService,
+    private buyerService: BuyerService, private homeService: HomeService,
+    private timeSyncService: TimeSyncService,
     @Inject(PLATFORM_ID) private platformId: any
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
@@ -55,116 +63,316 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     await this.loadAuctionData(); // ✅ ESTE MÉTODO SÍ EXISTE AHORA
-    
+
+    // Sincronizar tiempo primero
+    await this.timeSyncService.syncWithServer();
+
     this.startTimer();
-    
+
     if (this.isBrowser) {
       this.setupWebSocketListeners();
       this.setupConnectionMonitoring();
       this.startWinnersCheck();
+      this.setupHttpConnectionMonitoring();
     }
   }
+
+  private setupHttpConnectionMonitoring() {
+  if (!this.isBrowser) return;
+  
+  // Verificar conexión HTTP cada 15 segundos
+  this.connectionCheckInterval = setInterval(() => {
+    this.checkHttpConnection();
+  }, 15000);
+  
+  // Verificar inmediatamente
+  setTimeout(() => {
+    this.checkHttpConnection();
+  }, 3000);
+}
+
+private async checkHttpConnection() {
+  try {
+    // Lista de endpoints a probar (en orden de prioridad)
+    const endpoints = [
+      `${environment.backend}/time/server`,  // Endpoint de tiempo
+      `${environment.backend}/api`,          // Endpoint base de API
+      `${environment.backend}/`,             // Root endpoint
+    ];
+    
+    let isBackendOnline = false;
+    
+    // Probar cada endpoint hasta encontrar uno que funcione
+    for (const endpoint of endpoints) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 3000);
+        
+        const response = await fetch(endpoint, {
+          method: 'HEAD',
+          cache: 'no-cache',
+          signal: controller.signal
+        }).catch(() => null).finally(() => clearTimeout(timeoutId));
+        
+        if (response?.ok) {
+          isBackendOnline = true;
+          break;
+        }
+      } catch (error) {
+        // Continuar con el siguiente endpoint
+        continue;
+      }
+    }
+    
+    if (!isBackendOnline && !this.connectionLost) {
+      console.warn('⚠️ Backend no responde');
+      this.connectionLost = true;
+      this.showConnectionWarning();
+    } else if (isBackendOnline && this.connectionLost) {
+      console.log('✅ Backend restablecido');
+      this.connectionLost = false;
+      this.hideConnectionWarning();
+      
+      // Forzar resincronización y recarga de datos
+      await this.timeSyncService.forceResync();
+      await this.reloadAuctionData();
+    }
+    
+  } catch (error) {
+    console.error('Error verificando conexión HTTP:', error);
+  }
+}
+
+private showConnectionWarning() {
+  // Mostrar notificación de conexión perdida
+  this.showExtensionNotification = true;
+  this.extensionMessage = '⚠️ Problemas de conexión. Los datos pueden estar desactualizados.';
+  
+  if (this.notificationTimeout) {
+    clearTimeout(this.notificationTimeout);
+  }
+  
+  this.notificationTimeout = setTimeout(() => {
+    this.showExtensionNotification = false;
+  }, 10000);
+}
+
+private hideConnectionWarning() {
+  this.showExtensionNotification = true;
+  this.extensionMessage = '✅ Conexión restablecida. Sincronizando datos...';
+  
+  if (this.notificationTimeout) {
+    clearTimeout(this.notificationTimeout);
+  }
+  
+  this.notificationTimeout = setTimeout(() => {
+    this.showExtensionNotification = false;
+  }, 5000);
+}
+
+private async reloadAuctionData() {
+  try {
+    console.log('🔄 Recargando datos de subasta...');
+    await this.loadAuctionData();
+    
+    // Reunirse a la sala WebSocket
+    if (this.auctionData.length > 0 && this.auctionData[0].id) {
+      this.buyerService.joinAuctionRoom(this.auctionData[0].id);
+    }
+  } catch (error) {
+    console.error('Error recargando datos:', error);
+  }
+}
 
   // ✅ MÉTODO loadAuctionData CORREGIDO Y COMPLETO
-  private async loadAuctionData() {
-    try {
-      this.loading = true;
-      this.error = null;
-      this.showWinners = false;
-      this.winnersLoaded = false;
+private async loadAuctionData() {
+  try {
+    this.loading = true;
+    this.error = null;
+    this.showWinners = false;
+    this.winnersLoaded = false;
 
-      const data = await this.buyerService.getAutionsLotsActive();
-      this.auctionData = Array.isArray(data) ? data : [];
-       
-      console.log('Datos de subasta cargados:', data);
-       
-      if (this.auctionData.length > 0 && this.auctionData[0].auctionDetails) {
-        this.filteredLots = [...this.auctionData[0].auctionDetails];
-        
-        if (this.isBrowser) {
-          setTimeout(() => {
-            if (this.auctionData[0]?.id) {
-              this.buyerService.joinAuctionRoom(this.auctionData[0].id);
-            }
-          }, 1000);
-        }
-        
-        await this.loadBidHistory();
-        this.sortLots();
-         // Verificar si la subasta ya terminó
-        const auction = this.auctionData[0];
-        const endDate = new Date(auction.endDate);
-        const now = new Date();
-        
-        if (now.getTime() - endDate.getTime() > 3 * 60 * 1000) {
-          // Si terminó hace más de 3 minutos, cargar ganadores
-          await this.loadWinners();
-        }
+    const data = await this.buyerService.getAutionsLotsActive();
+    this.auctionData = Array.isArray(data) ? data : [];
+
+    console.log('Datos de subasta cargados:', data);
+
+    if (this.auctionData.length > 0 && this.auctionData[0].auctionDetails) {
+      this.filteredLots = [...this.auctionData[0].auctionDetails];
+
+      if (this.isBrowser) {
+        setTimeout(() => {
+          if (this.auctionData[0]?.id) {
+            this.buyerService.joinAuctionRoom(this.auctionData[0].id);
+          }
+        }, 1000);
       }
-      
-    } catch (error) {
-      console.error('Error loading auction data:', error);
-      this.error = 'Error al cargar los datos de la subasta';
-    } finally {
-      this.loading = false;
-    }
-  }
 
+      await this.loadBidHistory();
+      this.sortLots();
+      
+      // ✅ CORREGIDO: Usar tiempo sincronizado
+      const auction = this.auctionData[0];
+      const endDate = new Date(auction.endDate);
+      const now = this.timeSyncService.getCurrentTime(); // Usar tiempo sincronizado
+
+      // Verificar si la subasta ya terminó (hace más de 3 minutos)
+      if (now.getTime() - endDate.getTime() > 3 * 60 * 1000) {
+        console.log('⏰ Subasta terminada hace más de 3 minutos, cargando ganadores...');
+        await this.loadWinners();
+      }
+    }
+
+  } catch (error) {
+    console.error('Error loading auction data:', error);
+    this.error = 'Error al cargar los datos de la subasta';
+  } finally {
+    this.loading = false;
+  }
+}
+
+// Agregar método para determinar qué mostrar
+shouldShowWinners(): boolean {
+  // Solo mostrar ganadores si hay una subasta activa que ya terminó
+  if (!this.hasActiveAuction()) return false;
+  
+  if (this.auctionData.length === 0) return false;
+  
+  const auction = this.auctionData[0];
+  const endDate = new Date(auction.endDate);
+  const now = this.timeSyncService.getCurrentTime();
+  
+  const timeSinceEnd = now.getTime() - endDate.getTime();
+  
+  return this.auctionEnded && 
+         timeSinceEnd > 3 * 60 * 1000 && 
+         this.winners.length > 0;
+}
+
+hasActiveAuction(): boolean {
+  // Retorna true si hay una subasta activa con lotes
+  return this.auctionData.length > 0 && 
+         this.auctionData[0]?.auctionDetails?.length > 0 &&
+         this.auctionData[0]?.status === 'ACTIVE';
+}
+
+shouldShowLots(): boolean {
+  // Mostrar lotes SIEMPRE que:
+  // 1. Tengamos datos de subasta Y
+  // 2. Tengamos detalles de subasta
+  
+  if (this.auctionData.length === 0 || !this.auctionData[0].auctionDetails) {
+    return false;
+  }
+  
+  // SIEMPRE mostrar lotes, incluso si la subasta terminó
+  // Los lotes se muestran durante los 3 minutos de procesamiento
+  return true;
+}
+
+  // Modificar startTimer para usar tiempo sincronizado:
   private startTimer() {
     if (this.timerSubscription) {
       this.timerSubscription.unsubscribe();
     }
+
+    // Usar tiempo sincronizado
+    this.timerSubscription = this.timeSyncService.getCurrentTimeObservable().subscribe(time => {
+      this.currentTime = time;
+
+      // Verificar si la subasta debería haber terminado
+      this.checkAuctionStatus();
+    });
+  }
+  // Agregar método para verificar estado de subasta:
+ private checkAuctionStatus() {
+  if (this.auctionData.length === 0 || this.auctionEnded) return;
+
+  // Verificar si el tiempo está sincronizado
+  if (!this.timeSyncService.isTimeSynchronized()) {
+    console.warn('⚠️ Tiempo no sincronizado, verificando estado de subasta...');
     
-    this.timerSubscription = new Subscription();
+    // Intentar resincronizar
+    this.timeSyncService.forceResync().then(success => {
+      if (success) {
+        console.log('✅ Tiempo resincronizado, verificando estado nuevamente');
+        this.checkAuctionStatus(); // Re-verificar con tiempo sincronizado
+      }
+    });
     
-    const intervalId = setInterval(() => {
-      this.currentTime = new Date();
-    }, 1000);
-    
-    this.timerSubscription.add(() => clearInterval(intervalId));
+    return;
   }
 
-   private startWinnersCheck() {
+  const auction = this.auctionData[0];
+  const timeRemaining = this.calculateTimeRemaining(auction);
+
+  // Verificar si la subasta debería haber terminado
+  if (timeRemaining.hasEnded && !this.auctionEnded) {
+    console.log('⚠️ Subasta debería haber terminado según tiempo sincronizado');
+    this.auctionEnded = true;
+    this.auctionData[0].status = 'CLOSED';
+    this.showExtensionNotification = true;
+    this.extensionMessage = '¡Subasta finalizada! Los resultados estarán disponibles en 3 minutos.';
+
+    if (this.notificationTimeout) {
+      clearTimeout(this.notificationTimeout);
+    }
+    
+    this.notificationTimeout = setTimeout(() => {
+      this.showExtensionNotification = false;
+    }, 10000);
+
+    // Programar carga de ganadores para 3 minutos después
+    console.log('⏰ Programando carga de ganadores para 3 minutos...');
+    setTimeout(() => {
+      console.log('🔄 Cargando ganadores automáticamente...');
+      this.loadWinners();
+    }, 3 * 60 * 1000);
+  }
+}
+
+  private startWinnersCheck() {
     // Verificar cada 30 segundos si la subasta ha terminado y cargar ganadores
     this.winnersCheckInterval = setInterval(() => {
       this.checkAndLoadWinners();
     }, 30000); // 30 segundos
-    
+
     // Verificar inmediatamente
     setTimeout(() => {
       this.checkAndLoadWinners();
     }, 1000);
   }
 
-    private async checkAndLoadWinners() {
-    if (this.winnersLoaded || this.loadingWinners) return;
+// Modificar checkAndLoadWinners para usar tiempo sincronizado:
+private async checkAndLoadWinners() {
+  if (this.winnersLoaded || this.loadingWinners) return;
+  
+  // Verificar si la subasta ha terminado
+  if (this.auctionData.length > 0) {
+    const auction = this.auctionData[0];
+    const endDate = new Date(auction.endDate);
+    const now = this.timeSyncService.getCurrentTime(); // Usar tiempo sincronizado
     
-    // Verificar si la subasta ha terminado
-    if (this.auctionData.length > 0) {
-      const auction = this.auctionData[0];
-      const endDate = new Date(auction.endDate);
-      const now = new Date();
-      
-      // Si la subasta terminó hace más de 3 minutos
-      if (now.getTime() - endDate.getTime() > 3 * 60 * 1000) {
-        await this.loadWinners();
-      }
+    // Si la subasta terminó hace más de 3 minutos
+    if (now.getTime() - endDate.getTime() > 3 * 60 * 1000) {
+      await this.loadWinners();
     }
   }
+}
 
-   // Método para cargar los ganadores
+  // Método para cargar los ganadores
   private async loadWinners() {
     if (this.winnersLoaded || this.loadingWinners || this.auctionData.length === 0) return;
-    
+
     try {
       this.loadingWinners = true;
       this.winnersError = null;
-      
+
       const auctionId = this.auctionData[0].id;
-      
+
       // Obtener transacciones de la subasta
       const transactions = await this.homeService.getAutionTransactions(auctionId);
-      
+
       if (transactions && Array.isArray(transactions)) {
         this.winners = transactions.map(transaction => ({
           id: transaction.id,
@@ -181,13 +389,12 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
           buyerName: transaction.buyer?.firstName + ' ' + transaction.buyer?.lastName,
           companyName: transaction.buyer?.companyName
         }));
-        
-        this.showWinners = this.winners.length > 0;
+
         this.winnersLoaded = true;
-        
+
         console.log('Ganadores cargados:', this.winners);
       }
-      
+
     } catch (error) {
       console.error('Error loading winners:', error);
       this.winnersError = 'Error al cargar los resultados de la subasta';
@@ -196,13 +403,14 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
     }
   }
 
-  calculateTimeRemaining(auction: any): { 
-    days: number, 
-    hours: number, 
-    minutes: number, 
-    seconds: number, 
-    hasStarted: boolean, 
-    hasEnded: boolean 
+  // Modificar calculateTimeRemaining para usar tiempo sincronizado:
+  calculateTimeRemaining(auction: any): {
+    days: number,
+    hours: number,
+    minutes: number,
+    seconds: number,
+    hasStarted: boolean,
+    hasEnded: boolean
   } {
     if (!auction) {
       return { days: 0, hours: 0, minutes: 0, seconds: 0, hasStarted: false, hasEnded: false };
@@ -214,19 +422,19 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
 
     const startDate = new Date(auction.startDate);
     const endDate = new Date(auction.endDate);
-    const now = this.currentTime;
-    
+    const now = this.currentTime; // Ya usa tiempo sincronizado
+
     const hasStarted = now >= startDate;
     const hasEnded = now >= endDate;
-    
+
     const targetDate = hasStarted ? endDate : startDate;
     const diff = Math.max(0, targetDate.getTime() - now.getTime());
-    
+
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-    
+
     return { days, hours, minutes, seconds, hasStarted, hasEnded };
   }
 
@@ -290,48 +498,70 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
     this.subscriptions.push(bidSubscription, auctionExtendedSubscription, auctionClosedSubscription);
   }
 
-  private handleAuctionExtension(extensionData: any) {
-    if (this.auctionData.length > 0 && this.auctionData[0].id === extensionData.auctionId) {
-      this.auctionData[0].endDate = extensionData.newEndDate;
+private handleAuctionExtension(extensionData: any) {
+  if (this.auctionData.length > 0 && this.auctionData[0].id === extensionData.auctionId) {
+    this.auctionData[0].endDate = extensionData.newEndDate;
+    
+    // Si la subasta estaba marcada como finalizada, reactivarla
+    if (this.auctionEnded) {
+      this.auctionEnded = false;
+      this.auctionData[0].status = 'ACTIVE';
+      this.showWinners = false;
+      this.winners = []; // Limpiar ganadores
+      this.winnersLoaded = false; // Permitir recarga
       
-      this.showExtensionNotification = true;
-      this.extensionMessage = `¡Subasta extendida! Nueva hora: ${new Date(extensionData.newEndDate).toLocaleTimeString()}`;
-      
-      if (this.notificationTimeout) {
-        clearTimeout(this.notificationTimeout);
-      }
-      
-      this.notificationTimeout = setTimeout(() => {
-        this.showExtensionNotification = false;
-      }, 5000);
-
-      this.currentTime = new Date();
-      
-      console.log('🔄 Subasta extendida en AuctionViewComponent');
+      console.log('🔄 Subasta reactivada después de extensión');
     }
-  }
-
-  private handleAuctionClosed(closeData: any) {
-    if (this.auctionData.length > 0 && this.auctionData[0].id === closeData.auctionId) {
-      this.auctionEnded = true;
-      this.auctionData[0].status = 'CLOSED';
-      
-      this.showExtensionNotification = true;
-      this.extensionMessage = '¡Subasta finalizada!';
-      
-      if (this.notificationTimeout) {
-        clearTimeout(this.notificationTimeout);
-      }
-      
-      this.notificationTimeout = setTimeout(() => {
-        this.showExtensionNotification = false;
-      }, 5000);
-
-      this.currentTime = new Date();
-      
-      console.log('🔚 Subasta finalizada en AuctionViewComponent');
+    
+    this.showExtensionNotification = true;
+    const newEndTime = new Date(extensionData.newEndDate);
+    const formattedTime = newEndTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    this.extensionMessage = `¡Subasta extendida hasta las ${formattedTime}!`;
+    
+    if (this.notificationTimeout) {
+      clearTimeout(this.notificationTimeout);
     }
+    
+    this.notificationTimeout = setTimeout(() => {
+      this.showExtensionNotification = false;
+    }, 5000);
+
+    this.currentTime = this.timeSyncService.getCurrentTime();
+    
+    console.log('🔄 Subasta extendida en AuctionViewComponent');
   }
+}
+
+private handleAuctionClosed(closeData: any) {
+  if (this.auctionData.length > 0 && this.auctionData[0].id === closeData.auctionId) {
+    this.auctionEnded = true;
+    this.auctionData[0].status = 'CLOSED';
+    
+    this.showExtensionNotification = true;
+    this.extensionMessage = '¡Subasta finalizada definitivamente!';
+    
+    if (this.notificationTimeout) {
+      clearTimeout(this.notificationTimeout);
+    }
+    
+    this.notificationTimeout = setTimeout(() => {
+      this.showExtensionNotification = false;
+    }, 5000);
+
+    this.currentTime = this.timeSyncService.getCurrentTime();
+    
+    console.log('🔚 Subasta finalizada en AuctionViewComponent');
+    
+    // ✅ MEJORADO: Esperar 3 minutos antes de cargar ganadores
+    setTimeout(() => {
+      this.loadWinners();
+    }, 3 * 60 * 1000); // Esperar 3 minutos exactos
+    
+    // Mostrar mensaje de "procesando resultados" inmediatamente
+    this.showWinners = false;
+    this.winners = []; // Limpiar ganadores anteriores
+  }
+}
 
   closeExtensionNotification() {
     this.showExtensionNotification = false;
@@ -340,16 +570,24 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
     }
   }
 
-  private setupConnectionMonitoring() {
-    if (!this.isBrowser) return;
+private setupConnectionMonitoring() {
+  if (!this.isBrowser) return;
 
-    const connectionSubscription = this.buyerService.getConnectionStatus()
-      .subscribe(connected => {
-        this.isConnected = connected;
-      });
+  const connectionSubscription = this.buyerService.getConnectionStatus()
+    .subscribe(connected => {
+      this.isConnected = connected;
+      
+      if (connected) {
+        console.log('✅ WebSocket reconectado en AuctionViewComponent');
+        // Recargar datos cuando se reconecta
+        this.loadAuctionData();
+      } else {
+        console.warn('⚠️ WebSocket desconectado en AuctionViewComponent');
+      }
+    });
 
-    this.subscriptions.push(connectionSubscription);
-  }
+  this.subscriptions.push(connectionSubscription);
+}
 
   private handleNewBid(bid: any) {
     this.filteredLots = this.filteredLots.map(lot => {
@@ -367,8 +605,8 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
       try {
         if (lot.auctionId && lot.coffeeLot?.id) {
           const bids = await this.buyerService.getLastBids(
-            lot.auctionId, 
-            lot.coffeeLot.id, 
+            lot.auctionId,
+            lot.coffeeLot.id,
             5
           ).pipe(
             catchError(error => {
@@ -393,7 +631,7 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
 
     bids.forEach(bid => {
       const bidKey = `${bid.amount}_${bid.user?.id}_${new Date(bid.createdAt).toISOString().slice(0, 16)}`;
-      
+
       if (!seen.has(bidKey)) {
         seen.add(bidKey);
         uniqueBids.push(bid);
@@ -405,11 +643,11 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
 
   private updateBidHistory(newBid: any) {
     if (!newBid.coffeeLotId) return;
-    
+
     const currentBids = this.lastBids.get(newBid.coffeeLotId) || [];
     const allBids = this.removeDuplicateBids([newBid, ...currentBids]);
     const updatedBids = allBids.slice(0, 5);
-    
+
     this.lastBids.set(newBid.coffeeLotId, updatedBids);
   }
 
@@ -417,7 +655,7 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
   sortLots() {
     this.filteredLots.sort((a, b) => {
       let valueA: any, valueB: any;
-      
+
       switch (this.sortBy) {
         case 'position':
           valueA = a.coffeeLot.position;
@@ -443,13 +681,13 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
           valueA = a.coffeeLot.position;
           valueB = b.coffeeLot.position;
       }
-      
+
       if (typeof valueA === 'string' && typeof valueB === 'string') {
-        return this.sortDirection === 'asc' 
-          ? valueA.localeCompare(valueB) 
+        return this.sortDirection === 'asc'
+          ? valueA.localeCompare(valueB)
           : valueB.localeCompare(valueA);
       } else {
-        return this.sortDirection === 'asc' 
+        return this.sortDirection === 'asc'
           ? Number(valueA) - Number(valueB)
           : Number(valueB) - Number(valueA);
       }
@@ -458,14 +696,14 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
 
   filterLots() {
     if (!this.auctionData.length || !this.auctionData[0].auctionDetails) return;
-    
-    this.filteredLots = this.auctionData[0].auctionDetails.filter((lot: any) => 
+
+    this.filteredLots = this.auctionData[0].auctionDetails.filter((lot: any) =>
       lot.coffeeLot.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
       lot.coffeeLot.variety.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
       lot.coffeeLot.region.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
       lot.coffeeLot.country.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
-    
+
     this.sortLots();
   }
 
@@ -494,7 +732,7 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
   }
 
   @HostListener('document:keydown.escape', ['$event'])
-  onKeydownHandler(event: KeyboardEvent) {
+  onKeydownHandler(event: Event) {
     if (this.selectedLot) {
       this.closeLotDetail();
     }
@@ -502,17 +740,21 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.forEach(sub => sub.unsubscribe());
-    
+
     if (this.timerSubscription) {
       this.timerSubscription.unsubscribe();
     }
-    
+
     if (this.notificationTimeout) {
       clearTimeout(this.notificationTimeout);
     }
-    
+
     if (this.isBrowser && this.auctionData.length > 0 && this.auctionData[0].id) {
       this.buyerService.leaveAuctionRoom(this.auctionData[0].id);
     }
+
+     if (this.connectionCheckInterval) {
+    clearInterval(this.connectionCheckInterval);
+  }
   }
 }

@@ -1,6 +1,6 @@
 // setting.component.ts
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { EditSettingComponent } from './edit-setting/edit-setting.component';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -12,6 +12,7 @@ import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component'
 import { Router } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { TranslateDirective } from '../../directive/translate.directive';
+import { GeneralService } from '../../../core/gerneral.service';
 
 
 @Component({
@@ -25,6 +26,7 @@ export class SettingComponent implements OnInit {
   ref!: DynamicDialogRef;
   @Input() user: any;
   @Output() reload = new EventEmitter<any>();
+  private generalService = inject(GeneralService);
 
   // Tabs
   activeTab: 'profile' | 'activity' = 'profile';
@@ -33,6 +35,7 @@ export class SettingComponent implements OnInit {
   userLogs: any[] = [];
   loadingLogs = false;
   activityFilter = 'all';
+  userAdmin:any;
   pagination: any;
 Math: any;
 
@@ -50,8 +53,7 @@ Math: any;
       this.loadUserLogs();
     }, 500);
      */
-    console.log(this.user);
-    
+    this.userAdmin = this.generalService.getUser();
   }
 
   getTabClass(tab: string): string {
