@@ -4,21 +4,29 @@ import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/ro
 import { GeneralService } from '../../core/gerneral.service';
 import { ApiService } from '../../project/services/api.service';
 import { filter } from 'rxjs';
+import { BrandingService } from '../../core/branding/branding.service';
+import { inject } from '@angular/core';
 
 interface MenuItem {
   title: string;
   path: string;
   icon: string;
+  translateKey: string;
 }
+
+import { TranslateDirective } from '../../project/directive/translate.directive';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive],
+  imports: [CommonModule, RouterLink, RouterLinkActive, TranslateDirective],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
+  private brandingService = inject(BrandingService);
+  public branding$ = this.brandingService.config$;
+  
   public user: any;
   public isMenuOpen = false;
   
@@ -42,18 +50,26 @@ export class NavbarComponent implements OnInit {
     {
       title: 'Subastas', 
       path: 'auctions',
-      icon: 'gavel'
+      icon: 'gavel',
+      translateKey: 'NAV.AUCTIONS'
     },
     {
       title: 'Ganadores',
       path: 'transactions',
-      icon: 'social_leaderboard'
-    }, 
+      icon: 'social_leaderboard',
+      translateKey: 'NAV.WINNERS'
+    },      {
+       title: 'Usuarios', 
+       path: 'users',
+       icon: 'group',
+       translateKey: 'NAV.USERS'
+     },
      {
-      title: 'Usuarios', 
-      path: 'users',
-      icon: 'group'
-    },
+       title: 'Branding', 
+       path: 'branding',
+       icon: 'palette',
+       translateKey: 'NAV.BRANDING'
+     },
    
   
   ];
@@ -79,7 +95,7 @@ export class NavbarComponent implements OnInit {
 
   }
 
-   @HostListener('window:resize', ['$event'])
+  @HostListener('window:resize')
   checkScreenSize() {
     if (window.innerWidth < 768) {
       this.isMenuOpen = false;

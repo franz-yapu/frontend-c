@@ -14,13 +14,11 @@ export class ConnectionQualityService {
   constructor() {
     // Monitorear estado de conexión del navegador
     window.addEventListener('online', () => {
-      console.log('🌐 Navegador online');
       this.isOnline.next(true);
       this.updateQualityBasedOnLatency();
     });
     
     window.addEventListener('offline', () => {
-      console.log('🌐 Navegador offline');
       this.isOnline.next(false);
       this.quality.next('offline');
     });
@@ -32,7 +30,6 @@ export class ConnectionQualityService {
   }
   
   updateLatency(latency: number): void {
-    console.log(`📡 Actualizando latencia: ${latency}ms`);
     this.latency.next(latency);
     this.updateQualityBasedOnLatency();
   }
@@ -52,14 +49,12 @@ export class ConnectionQualityService {
     else if (latency > 200) quality = 'good';
     else quality = 'excellent';
     
-    console.log(`📡 Calidad de conexión actualizada: ${quality} (${latency}ms)`);
     this.quality.next(quality);
   }
   
   private checkConnection(): void {
     // Verificar si el navegador reporta online
     if (!navigator.onLine && this.isOnline.value) {
-      console.log('⚠️ Navegador reporta offline');
       this.isOnline.next(false);
       this.quality.next('offline');
     }
@@ -68,11 +63,11 @@ export class ConnectionQualityService {
   getQualityColor(): string {
     const q = this.quality.value;
     switch(q) {
-      case 'excellent': return 'bg-green-500';
-      case 'good': return 'bg-green-400';
+      case 'excellent': return 'bg-success-500';
+      case 'good': return 'bg-success-400';
       case 'fair': return 'bg-yellow-500';
-      case 'poor': return 'bg-orange-500';
-      case 'offline': return 'bg-red-500';
+      case 'poor': return 'bg-warning-500';
+      case 'offline': return 'bg-danger-500';
       default: return 'bg-gray-500';
     }
   }

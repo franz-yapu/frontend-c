@@ -59,7 +59,7 @@ Math: any;
   getTabClass(tab: string): string {
     const baseClasses = 'flex items-center px-4 py-3 text-sm font-medium rounded-t-lg border-b-2';
     if (this.activeTab === tab) {
-      return `${baseClasses} border-amber-900 text-amber-900 bg-amber-50`;
+      return `${baseClasses} border-primary-900 text-primary-900 bg-primary-50`;
     }
     return `${baseClasses} border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300`;
   }
@@ -114,10 +114,10 @@ getEndIndex(): number {
 
   getActionBadgeClass(action: string): string {
   const classes: any = {
-    'CREATE_TRANSACTION': 'bg-green-100 text-green-800',
-    'CREATE_BID': 'bg-blue-100 text-blue-800',
+    'CREATE_TRANSACTION': 'bg-success-100 text-success-800',
+    'CREATE_BID': 'bg-info-100 text-info-800',
     'CREATE_AUCTION': 'bg-purple-100 text-purple-800',
-    'CREATE_COFFEE_LOT': 'bg-amber-100 text-amber-800',
+    'CREATE_COFFEE_LOT': 'bg-primary-100 text-primary-800',
     'USER_REGISTER': 'bg-indigo-100 text-indigo-800',
     'UPDATE_PROFILE': 'bg-emerald-100 text-emerald-800',
   };
@@ -141,7 +141,7 @@ getActionText(action: string): string {
 getPageButtonClass(page: number): string {
   const baseClasses = 'px-3 py-2 text-sm font-medium cursor-pointer rounded-md transition-colors';
   if (page === this.pagination.page) {
-    return `${baseClasses} bg-amber-900 text-white`;
+    return `${baseClasses} bg-primary-900 text-white`;
   }
   return `${baseClasses} text-gray-700 hover:bg-gray-100`;
 }
@@ -235,10 +235,10 @@ getActionDescription(log: any): string {
 
 getActionIconClass(action: string): string {
   const classes: any = {
-    'CREATE_TRANSACTION': 'bg-green-500',
-    'CREATE_BID': 'bg-blue-500',
+    'CREATE_TRANSACTION': 'bg-success-500',
+    'CREATE_BID': 'bg-info-500',
     'CREATE_AUCTION': 'bg-purple-500',
-    'CREATE_COFFEE_LOT': 'bg-amber-500',
+    'CREATE_COFFEE_LOT': 'bg-primary-500',
     'USER_REGISTER': 'bg-indigo-500',
     'UPDATE_PROFILE': 'bg-emerald-500',
   };
@@ -269,9 +269,9 @@ hasAdditionalInfo(log: any): boolean {
 
 getStatusClass(status: string): string {
   const classes: any = {
-    'COMPLETED': 'text-green-600',
+    'COMPLETED': 'text-success-600',
     'PENDING': 'text-yellow-600',
-    'CANCELLED': 'text-red-600',
+    'CANCELLED': 'text-danger-600',
   };
   return classes[status] || 'text-gray-600';
 }
@@ -325,7 +325,7 @@ getPageNumbers(): number[] {
         confirmSeverity: this.user.isVerified ? 'warning':  'success',
         showIcon: true,
         icon: this.user.isVerified ?  'block':'check_circle',
-        iconColor: 'text-red-500',
+        iconColor: 'text-danger-500',
         iconSeverity: 'success'
       },
       showHeader: false,
@@ -366,7 +366,7 @@ getPageNumbers(): number[] {
         confirmSeverity: 'danger',
         showIcon: true,
         icon: 'delete',
-        iconColor: 'text-red-500',
+        iconColor: 'text-danger-500',
         iconSeverity: 'success'
       },
       showHeader: false,

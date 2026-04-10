@@ -13,25 +13,25 @@ export const registerFormFields = (catalogs: any) => {
 
                         {
                             key: 'firstName',
-                            label: 'Nombre ',
+                            label: 'REGISTER.FIRST_NAME',
                             type: 'text',
                             validators: { required: true, maxLength: 50, minLength: 0 },
                         },
                         {
                             key: 'lastName',
-                            label: 'Apellido',
+                            label: 'REGISTER.LAST_NAME',
                             type: 'text',
                             validators: { required: true, maxLength: 100, minLength: 0 },
                         },
                         {
                             key: 'companyName',
-                            label: 'Nombre de la Empresa o Asociación',
+                            label: 'REGISTER.COMPANY_NAME',
                             type: 'text',
                             validators: { maxLength: 100, minLength: 0 },
                         },
                         {
                             key: 'phone',
-                            label: 'Telefono',
+                            label: 'REGISTER.PHONE',
                             type: 'number',
                             validators: { required: true  ,minLength:8 ,maxLength: 30 },
 
@@ -45,7 +45,7 @@ export const registerFormFields = (catalogs: any) => {
                         }, */
                         {
                             key: 'email',
-                            label: 'Correo Electrónico',
+                            label: 'REGISTER.EMAIL',
                             type: 'email',
 
                             validators: { required: true },
@@ -53,7 +53,7 @@ export const registerFormFields = (catalogs: any) => {
                         },
                         {
                             key: 'password',
-                            label: 'Contraseña',
+                            label: 'REGISTER.PASSWORD',
                             type: 'password',
 
                             validators: { required: true,   maxLength: 30 ,minLength:6},

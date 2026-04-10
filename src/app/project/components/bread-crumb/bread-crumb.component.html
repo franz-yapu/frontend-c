@@ -4,15 +4,15 @@
       <li class="inline-flex items-center">
         @if (!last) {
           <a [routerLink]="item.routerLink" 
-             class="inline-flex items-center text-sm font-medium text-amber-700 hover:text-green-800 transition-colors duration-200">
+             class="inline-flex items-center text-sm font-medium text-primary-700 hover:text-success-800 transition-colors duration-200">
             @if (item.icon) {
               <span class="material-symbols-outlined mr-2 text-base">{{item.icon}}</span>
             }
             {{item.label}}
           </a>
-          <span class="mx-2 text-amber-900">/</span>
+          <span class="mx-2 text-primary-900">/</span>
         } @else {
-          <span class="inline-flex items-center text-sm font-semibold text-red-900">
+          <span class="inline-flex items-center text-sm font-semibold text-danger-900">
             @if (item.icon) {
               <span class="material-symbols-outlined mr-2 text-base">{{item.icon}}</span>
             }

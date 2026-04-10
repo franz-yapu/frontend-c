@@ -12,6 +12,7 @@ export class BuyerService {
   private bidSubject = new Subject<any>();
   private auctionExtendedSubject = new Subject<any>();
   private auctionClosedSubject = new Subject<any>();
+  private timeSyncSubject = new Subject<any>();
   private connectionStatus = new BehaviorSubject<boolean>(false);
   private connectionQuality = new BehaviorSubject<'excellent' | 'good' | 'fair' | 'poor' | 'offline'>('good');
   private isInitialized = false;
@@ -58,14 +59,12 @@ export class BuyerService {
 
     this.socket.on('auctionExtended', (data: any) => {
       this.ngZone.run(() => {
-        console.log('🔄 Subasta extendida:', data);
         this.auctionExtendedSubject.next(data);
       });
     });
 
     this.socket.on('auctionClosed', (data: any) => {
       this.ngZone.run(() => {
-        console.log('🔚 Subasta cerrada:', data);
         this.auctionClosedSubject.next(data);
       });
     });
@@ -79,7 +78,7 @@ export class BuyerService {
     // NUEVOS EVENTOS DEL BACKEND MEJORADO
       this.socket.on('ping', (data: any) => {
     this.ngZone.run(() => {
-      this.handleServerPing(data);
+      this.handlePing(data);
     });
   });
 
@@ -93,40 +92,32 @@ export class BuyerService {
 
     this.socket.on('timeSync', (data: any) => {
       this.ngZone.run(() => {
-        console.log('🕒 Sincronización de tiempo recibida:', data);
+        this.timeSyncSubject.next(data);
       });
     });
 
     this.socket.on('joinedRoom', (data: any) => {
-      console.log('✅ Unido a sala:', data);
+      // room joined
     });
   }
 
 private handlePing(pingData: any) {
-  console.log('📡 Ping recibido del servidor:', pingData);
+  const now = Date.now();
   
-  // Calcular latencia inmediatamente si tenemos timestamp
   if (pingData?.timestamp) {
-    this.latency = Date.now() - pingData.timestamp;
+    this.latency = now - pingData.timestamp;
     this.updateLatency(this.latency);
-    console.log(`📡 Latencia: ${this.latency}ms`);
   }
   
-  // Responder con pong
   if (this.socket?.connected) {
-    // Crear objeto de respuesta completo
-    const pongResponse = {
-      timestamp: pingData?.timestamp || Date.now(),
-      clientTime: Date.now(),
+    const response = {
+      timestamp: pingData?.timestamp || now,
+      clientTime: now,
       serverTime: pingData?.serverTime,
-      latency: this.latency,
-      type: 'pong_response'
+      latency: this.latency
     };
     
-    console.log('📡 Enviando pong:', pongResponse);
-    
-    // Enviar como objeto JSON
-    this.socket.emit('pong', pongResponse);
+    this.socket.emit('pong', response);
   }
 }
 
@@ -148,7 +139,6 @@ private handlePing(pingData: any) {
 
     this.socket.on('connect', () => {
       this.ngZone.run(() => {
-        console.log('✅ Conectado al servidor WebSocket');
         this.connectionStatus.next(true);
         this.connectionQuality.next('good');
       });
@@ -156,7 +146,6 @@ private handlePing(pingData: any) {
 
     this.socket.on('disconnect', (reason) => {
       this.ngZone.run(() => {
-        console.log('❌ Desconectado del servidor WebSocket:', reason);
         this.connectionStatus.next(false);
         this.connectionQuality.next('offline');
       });
@@ -164,7 +153,6 @@ private handlePing(pingData: any) {
 
     this.socket.on('connect_error', (error) => {
       this.ngZone.run(() => {
-        console.error('❌ Error de conexión WebSocket:', error);
         this.connectionStatus.next(false);
         this.connectionQuality.next('offline');
       });
@@ -267,31 +255,10 @@ private handlePing(pingData: any) {
     return this.auctionClosedSubject.asObservable();
   }
 
-  private handleServerPing(pingData: any) {
-  const now = Date.now();
-  
-  // Debug
-  console.log('❤️ Ping del servidor:', pingData);
-  
-  // Calcular latencia
-  if (pingData?.timestamp) {
-    this.latency = now - pingData.timestamp;
-    this.updateLatency(this.latency);
+  getTimeSync(): Observable<any> {
+    return this.timeSyncSubject.asObservable();
   }
-  
-  // Responder siempre con pong
-  if (this.socket?.connected) {
-    const response = {
-      timestamp: pingData?.timestamp || now,
-      clientTime: now,
-      serverTime: pingData?.serverTime,
-      receivedAt: now
-    };
-    
-    console.log('📤 Respondiendo pong:', response);
-    this.socket.emit('pong', response);
-  }
-}
+
 
   // Limpiar recursos
   disconnect() {

@@ -10,13 +10,13 @@
         </dynamic-form>
     </div>
     <div class="flex mt-5 justify-end">
-         <button (click)="close()" class="bg-amber-800 text-white px-4 py-2 mr-4 rounded">cancel</button>
+         <button (click)="close()" class="bg-primary-800 text-white px-4 py-2 mr-4 rounded">cancel</button>
         <button (click)="save()"
                [disabled]="!formData?.valid" 
                [ngClass]="formData?.valid 
-                          ? 'bg-bg-green-800 text-white' 
-                         : 'bg-green-400 cursor-not-allowed'"
-               class="bg-blue-500 text-white px-4 py-2  rounded">
+                          ? 'bg-bg-success-800 text-white' 
+                         : 'bg-success-400 cursor-not-allowed'"
+               class="bg-info-500 text-white px-4 py-2  rounded">
                Guardar 
             </button>
        

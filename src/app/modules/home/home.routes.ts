@@ -71,9 +71,14 @@ export const routes: Routes = [
         component: TransactionsCoffeeComponent,
       },
       {
-     path: 'dashboard',
-     component: AdminDashboardComponent
-    },
+      path: 'dashboard',
+      component: AdminDashboardComponent
+     },
+     {
+       path: 'branding',
+       loadComponent: () => import('./branding/branding-panel.component').then(m => m.BrandingPanelComponent),
+       title: 'Configuración de Marca',
+     },
 
     ]
   },

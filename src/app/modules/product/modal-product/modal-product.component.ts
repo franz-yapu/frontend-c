@@ -8,11 +8,13 @@ import { ProductService } from '../product.service';
 import { ToasterService } from '../../../project/services/toaster.service';
 import { ApiService } from '../../../project/services/api.service';
 import { environment } from '../../../../environments/environment';
+import { TranslateDirective } from '../../../project/directive/translate.directive';
+import { TranslationService } from '../../../project/services/translate.service';
 
 
 @Component({
   selector: 'app-modal-product',
-  imports: [CommonModule, DynamicFormComponent],
+  imports: [CommonModule, DynamicFormComponent, TranslateDirective],
   standalone: true,
   templateUrl: './modal-product.component.html',
   styleUrl: './modal-product.component.scss',
@@ -32,7 +34,8 @@ export class ModalProductComponent implements OnInit {
     public ref: DynamicDialogRef,
     private productService: ProductService,
     private toaster: ToasterService,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private translationService: TranslationService
   ) { }
 
   async ngOnInit() {
@@ -88,8 +91,10 @@ export class ModalProductComponent implements OnInit {
         this.productService.createProducts(this.formData.data).then(res => {
           this.toaster.showToast({
             severity: 'success',
-            summary: 'Guardado',
-            detail: this.initiaData ? 'Los datos se actualizaron correctamente' : 'Los datos se guardaron correctamente',
+            summary: this.translationService.translate('COMMON.SAVE'),
+            detail: this.initiaData 
+              ? this.translationService.translate('PRODUCT.MESSAGES.UPDATE_SUCCESS') 
+              : this.translationService.translate('PRODUCT.MESSAGES.SAVE_SUCCESS'),
           });
           this.ref.close(res);
         });

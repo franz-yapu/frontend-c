@@ -9,7 +9,10 @@
     "DASHBOARD": "Dashboard",
     "ORDERS": "Compras",
     "MY_DATA": "Mis datos",
-    "LOGOUT": "Cerrar sesión"
+    "LOGOUT": "Cerrar sesión",
+    "AUCTIONS": "Subastas",
+    "USERS": "Usuarios",
+    "BRANDING": "Branding"
   },
   "APP": {
     "TITLE": "Altura",
@@ -23,7 +26,7 @@
       "LOGIN_BUTTON": "Ingresar",
       "REGISTER_BUTTON": "Crear Cuenta"
     },
-    "SPONSORS":{
+    "SPONSORS": {
       "TITLE": "Nuestros aliados",
       "SUBTITLE": "Empresas y organizaciones que apoyan nuestra misión"
     },
@@ -99,6 +102,13 @@
       "REGISTER_BUTTON": "Registrarse Ahora",
       "CALENDAR_BUTTON": "Ver Calendario"
     },
+    "TABLE": {
+      "POSITION": "Posición",
+      "COFFEE_INFO": "Información del Café",
+      "BUYER": "Comprador",
+      "SELLER": "Productor",
+      "PRICE": "Precio"
+    },
     "EMPTY": {
       "TITLE": "Subasta en Preparación",
       "SUBTITLE": "Estamos organizando nuestra próxima subasta de cafés especiales. Regresa pronto para descubrir lotes exclusivos.",
@@ -129,14 +139,48 @@
       "POINTS": "pts",
       "METERS": "m",
       "LBS": "lbs",
-      "BASE_PRICE": "Base/libra:",
-      "CURRENT_BID": "Oferta/libra:",
-      "TOTAL": "Total:",
-      "RECENT_BIDS": "Últimas ofertas"
+      "BASE_PRICE": "Precio Base",
+      "CURRENT_BID": "Oferta Actual",
+      "TOTAL": "Total",
+      "RECENT_BIDS": "Últimas ofertas",
+      "INFO": "Información del Café",
+      "VARIETY": "Variedad",
+      "PROCESS": "Proceso",
+      "ALTITUDE": "Altitud",
+      "QUANTITY": "Cantidad",
+      "LOCATION": "Ubicación",
+      "COUNTRY": "País",
+      "REGION": "Región",
+      "MUNICIPALITY": "Municipio",
+      "COMMUNITY": "Comunidad",
+      "SCA_SCORE": "Puntuación SCA",
+      "CURRENT_VALUE": "Valor Actual",
+      "CUPPING_PROFILE": "Perfil de Cata",
+      "BID_HISTORY": "Historial de Pujas",
+      "BIDS_COUNT": "ofertas",
+      "TOTAL_LABEL": "total",
+      "NO_BIDS": "Sin ofertas aún",
+      "FIRST_BID": "Sé el primero en ofertar"
     },
     "EMPTY": {
       "TITLE": "No hay lotes disponibles",
       "SUBTITLE": "Actualmente no hay lotes de café disponibles en subasta."
+    },
+    "WINNERS": {
+      "TITLE": "Ganadores de la Subasta",
+      "SUBTITLE": "Resultados finales de la subasta cerrada",
+      "COUNT": "Ganadores",
+      "LOADING": "Cargando resultados...",
+      "ERROR_TITLE": "Error al cargar resultados",
+      "POSITION": "Posición",
+      "LOT": "Lote",
+      "WINNER": "Ganador",
+      "PRICE_PER_LB": "Precio/libra",
+      "QUANTITY": "Cantidad",
+      "TOTAL": "Total",
+      "PER_LB": "por libra",
+      "EMPTY_TITLE": "No hay ganadores registrados",
+      "EMPTY_SUBTITLE": "No se encontraron resultados para esta subasta."
     }
   },
   "ABOUT": {
@@ -254,17 +298,15 @@
         "CONTACT_INFO_DESC": "Para consultas adicionales, los participantes pueden comunicarse a través del correo electrónico habilitado en la plataforma de subasta."
       }
     },
-     "PDF": {
+    "PDF": {
       "TITLE": "Documento del Reglamento",
       "LOADING": "Cargando documento...",
       "ERROR": "Error al cargar el documento",
       "RETRY": "Reintentar",
       "DOWNLOAD": "Descargar PDF"
     }
-
-
   },
-    "AUCTION-BUYER": {
+  "AUCTION-BUYER": {
     "PREMIUM_AUCTIONS": "Subasta del Cáritas Bolivia 2026",
     "EXCLUSIVE_LOTS": "Los mejores productores de Bolivia 2026",
     "AUCTION_ENDED": "Subasta Finalizada",
@@ -291,7 +333,8 @@
     "MIN_REQUIRED_AMOUNT": "Monto mínimo requerido",
     "YOUR_BID": "Tu oferta",
     "CONFIRM_BID": "Confirmar Puja",
-    "TOTAL_AMOUNT":"Monto total:"
+    "TOTAL_AMOUNT": "Monto total:",
+    "MIN_BID_ERROR": "El monto mínimo es ${{min}}"
   },
   "COMMON": {
     "DAYS": "Días",
@@ -302,11 +345,53 @@
     "PRODUCER": "Productor",
     "METERS": "m",
     "LBS": "lbs",
+    "KG": "kg",
     "AVAILABLE": "disponibles",
+    "PROCESSING": "Procesando...",
+    "FILTERS": "Filtros",
+    "START_DATE": "Fecha Inicio",
+    "END_DATE": "Fecha Fin",
+    "CLEAR_FILTERS": "Limpiar Filtros",
+    "APPLY_FILTERS": "Aplicar Filtros",
+    "AMOUNT": "Monto",
+    "NAME": "Nombre",
+    "DESCRIPTION": "Descripción",
+    "PRICE": "Precio",
+    "STOCK": "Stock",
+    "SAVE": "Guardar",
     "CANCEL": "Cancelar",
-    "PROCESSING": "Procesando..."
+    "SELECT_OPTION": "Seleccione una opción",
+    "CLICK_TO_UPLOAD": "Haga clic para cargar o arrastre y suelte",
+    "FILE_SIZE_LIMIT": "SVG, PNG, JPG o JPEG (MÁX. 2MB)",
+    "VIEW_DOCUMENT": "Ver documento",
+    "LOT": "Lote",
+    "STATUS": "Estado"
   },
-   "TRANSACTIONS": {
+  "VALIDATION": {
+    "REQUIRED": "Este campo es obligatorio",
+    "EMAIL": "Por favor ingrese un correo electrónico válido",
+    "MIN_LENGTH": "Mínimo {{min}} caracteres",
+    "MAX_LENGTH": "Máximo {{max}} caracteres",
+    "PASSWORD_MISMATCH": "Las contraseñas no coinciden",
+    "INVALID_FORMAT": "Formato inválido",
+    "FILE_TYPE_NOT_ALLOWED": "Tipo de archivo no permitido",
+    "FILE_TOO_LARGE": "Archivo demasiado grande",
+    "NOT_A_NUMBER": "Debe ser un número válido",
+    "NO_DECIMALS": "No se permiten decimales",
+    "TOO_MANY_DECIMALS": "Máximo {{max}} decimales permitidos"
+  },
+  "CALENDAR": {
+    "DAYS_SHORT": {
+      "MON": "L",
+      "TUE": "M",
+      "WED": "X",
+      "THU": "J",
+      "FRI": "V",
+      "SAT": "S",
+      "SUN": "D"
+    }
+  },
+  "TRANSACTIONS": {
     "TITLE": "Historial de Transacciones",
     "SUBTITLE": "Seguimiento completo de todas tus transacciones de café",
     "AUCTION": "Subasta",
@@ -350,7 +435,33 @@
     "PREVIOUS": "Anterior",
     "NEXT": "Siguiente"
   },
-   "LOGIN": {
+  "BUYER": {
+    "DASHBOARD": {
+      "TITLE": "Dashboard del Comprador",
+      "TOTAL_BIDS": "Total Pujas",
+      "WATCHED_LOTS": "Lotes Seguidos",
+      "TOP_BID": "Mejor Oferta",
+      "BID_EVOLUTION": "Evolución de Mis Pujas",
+      "PRICE_TRENDS": "Precios por Variedad",
+      "RECENT_BIDS": "Pujas Recientes",
+      "INTEREST_LOTS": "Lotes de Interés",
+      "MY_LAST_BID": "Mi Última Puja",
+      "MARKET_INSIGHTS": "Insights del Mercado",
+      "INITIAL_STATE": "Ingrese un ID de usuario y aplique los filtros para ver el dashboard",
+      "LOADING_ERROR": "Error al cargar el dashboard: {{message}}"
+    }
+  },
+  "PRODUCT": {
+    "LIST": {
+      "TITLE": "Lista de Productos",
+      "ADD_PRODUCT": "Agregar Producto"
+    },
+    "MESSAGES": {
+      "SAVE_SUCCESS": "Los datos se guardaron correctamente",
+      "UPDATE_SUCCESS": "Los datos se actualizaron correctamente"
+    }
+  },
+  "LOGIN": {
     "SUCCESS_MESSAGE": "¡Cuenta verificada exitosamente!",
     "TITLE": "Iniciar Sesión",
     "SUBTITLE": "Accede a tu cuenta para continuar",
@@ -366,13 +477,53 @@
     "TERMS_TEXT": "Al iniciar sesión aceptas nuestros",
     "TERMS_LINK": " Términos y Condiciones"
   },
-    "REGISTER": {
+  "REGISTER": {
     "WELCOME": "¡Bienvenidos!",
     "COFFEE_BEANS": "Granos de café",
     "COFFEE_LEAF": "Hoja de café",
     "TITLE": "Registro",
     "REGISTER_BUTTON": "Registrarse",
-    "GO_BACK": "Volver atrás"
+    "GO_BACK": "Volver atrás",
+    "FIRST_NAME": "Nombre",
+    "LAST_NAME": "Apellido",
+    "COMPANY_NAME": "Nombre de la Empresa o Asociación",
+    "PHONE": "Teléfono",
+    "EMAIL": "Correo Electrónico",
+    "PASSWORD": "Contraseña",
+    "MODAL": {
+      "TITLE": "Proyecto Finalizado ✔️",
+      "DESCRIPTION": "Este sistema de <span class=\"font-semibold\">subastas de café</span> fue desarrollado por <span class=\"font-semibold\">Franz Yapu</span>.<br/><br/>Si deseas <span class=\"font-semibold\">rentar</span> esta plataforma o crear una versión personalizada para tu organización, ofrezco:<br/><br/><span class=\"font-semibold\">• Personalización completa</span> (logos, colores, marca, identidad visual)<br/><span class=\"font-semibold\">• Nuevas funcionalidades</span> a medida<br/><span class=\"font-semibold\">• Optimización y soporte profesional</span><br/><br/>Contáctame directamente al:",
+      "CONTACT_WA": "💬 Contactar por WhatsApp",
+      "CLOSE": "Cerrar"
+    }
+  },
+  "AUCTION_SYNC": {
+    "TIME_SYNCED": "Tiempo sincronizado con servidor",
+    "WS_CONNECTED": "WebSocket conectado",
+    "LOADING_LOTS": "Cargando lotes...",
+    "OFFLINE_BID": "Sin conexión. Las pujas no se podrán realizar.",
+    "SLOW_BID": "Conexión lenta. Las pujas pueden tardar en procesarse.",
+    "SLOW_BID_PROMPT": "Conexión lenta: tu puja podría no procesarse a tiempo.",
+    "BLOCKED_AT_CLOSE": "Pujas bloqueadas temporalmente por alta latencia al cierre.",
+    "SELECT_INCREMENT": "Selecciona un incremento rápido o ingresa un monto personalizado",
+    "PER_LB": "/lb",
+    "QUALITY": {
+      "EXCELLENT": "Excelente",
+      "GOOD": "Buena",
+      "FAIR": "Regular",
+      "POOR": "Mala",
+      "OFFLINE": "Desconectado",
+      "UNKNOWN": "Desconocida"
+    }
+  },
+  "NOTIFICATIONS": {
+    "AUCTION_EXTENDED": "¡Subasta extendida hasta las {{time}}!",
+    "AUCTION_CLOSED": "¡Subasta finalizada definitivamente!",
+    "BID_SUCCESS": "¡Puja realizada exitosamente!",
+    "CONNECTION_RESTORED": "Conexión restablecida",
+    "CONNECTION_SLOW": "Conexión lenta ({{latency}}ms). Las pujas pueden tardar.",
+    "SYNC_ERROR": "Error al cargar datos de la subasta",
+    "AUCTION_ENDED_LOCAL": "Subasta finalizada (verificación local)",
+    "BID_ERROR": "Error al procesar la puja"
   }
-
 }

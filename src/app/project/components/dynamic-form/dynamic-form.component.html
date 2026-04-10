@@ -4,12 +4,12 @@
     <div class="p-6 space-y-8">
       @for (field of fields; track $index + (field.key || 'title')) {
       @if (field.type === 'title') {
-      <h3 class="text-xl font-semibold mb-4 text-primary border-b border-amber-200 pb-2">{{ field.text }}</h3>
+      <h3 class="text-xl font-semibold mb-4 text-primary border-b border-primary-200 pb-2">{{ field.text }}</h3>
       }
 
       @if (field.type === 'title') {
       <h3 [class]="{
-            'text-xl font-semibold mb-4 text-primary border-b border-amber-200 pb-2': !field.style,
+            'text-xl font-semibold mb-4 text-primary border-b border-primary-200 pb-2': !field.style,
             'text-2xl font-bold mb-6 text-primary border-b-2 border-primary pb-3': field.style === 'main'
           }">
         {{ field.text }}
@@ -18,7 +18,7 @@
 
       <!-- Subtítulo para secciones -->
       @if (field.type === 'subtitle') {
-      <h4 class="text-md font-semibold mb-1 text-primary pl-2 border-b-2 border-amber-700">
+      <h4 class="text-md font-semibold mb-1 text-primary pl-2 border-b-2 border-primary-700">
         {{ field.text }}
       </h4>
       }
@@ -33,15 +33,15 @@
           @for (f of column.fields; track f.key || $index) {
           @if (isFieldVisible(f)) {
           <div class="flex flex-col">
-            <label class="text-black font-medium mb-1">
+            <label class="text-black font-medium mb-1" [appTranslate]="f.label || ''">
               {{ f.label }}
               @if (f.validators?.required) {
-              <span class="text-red-700">*</span>
+              <span class="text-danger-700">*</span>
               }
             </label>
 
             @if (f.type === 'subtitle') {
-            <h4 class="text-md font-semibold mb-2 text-amber-700 pl-2 border-l-4 border-green-600">
+            <h4 class="text-md font-semibold mb-2 text-primary-700 pl-2 border-l-4 border-success-600">
 
               {{ f.text }}
             </h4>
@@ -59,12 +59,12 @@
               class="w-full px-4 py-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition duration-200 bg-white/70" />
 
             <!-- Mensajes de error específicos para números -->
-            <div class="text-red-700 text-xs mt-1" *ngIf="getControl(f.key)?.touched && getControl(f.key)?.invalid">
-              <div *ngIf="getControl(f.key)?.errors?.['notANumber']">Debe ser un número válido.</div>
-              <div *ngIf="getControl(f.key)?.errors?.['noDecimalsAllowed']">No se permiten decimales en este campo.
+            <div class="text-danger-700 text-xs mt-1" *ngIf="getControl(f.key)?.touched && getControl(f.key)?.invalid">
+              <div *ngIf="getControl(f.key)?.errors?.['notANumber']" appTranslate="VALIDATION.NOT_A_NUMBER">Debe ser un número válido.</div>
+              <div *ngIf="getControl(f.key)?.errors?.['noDecimalsAllowed']" appTranslate="VALIDATION.NO_DECIMALS">No se permiten decimales en este campo.
               </div>
-              <div *ngIf="getControl(f.key)?.errors?.['tooManyDecimals']">
-                Máximo {{getControl(f.key)?.errors?.['tooManyDecimals'].required}} decimales permitidos.
+              <div *ngIf="getControl(f.key)?.errors?.['tooManyDecimals']" appTranslate="VALIDATION.TOO_MANY_DECIMALS" [translateParams]="{max: '' + (getControl(f.key)?.errors?.['tooManyDecimals']?.required ?? 0)}">
+                Máximo {{getControl(f.key)?.errors?.['tooManyDecimals']?.required}} decimales permitidos.
               </div>
             </div>
             }
@@ -76,7 +76,7 @@
                 class="w-full px-4 py-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-white/70 appearance-none"
                 [min]="f.minDate | date:'yyyy-MM-dd'" [max]="f.maxDate | date:'yyyy-MM-dd'" />
               <!-- Icono de calendario -->
-              <div class="absolute right-3 top-2.5 pointer-events-none text-amber-600">
+              <div class="absolute right-3 top-2.5 pointer-events-none text-primary-600">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                   stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -96,7 +96,7 @@
     <option [value]="opt.value">{{ opt.label }}</option>
     }
   </select>
-  <div class="absolute right-3 top-2.5 pointer-events-none text-amber-600">
+  <div class="absolute right-3 top-2.5 pointer-events-none text-primary-600">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
     </svg>
@@ -120,7 +120,7 @@
               <input type="time" [formControlName]="f.key"
                 class="w-full px-4 py-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition duration-200 bg-white/70 appearance-none [&::-webkit-calendar-picker-indicator]:opacity-0" />
               <!-- Icono de reloj personalizado -->
-              <div class="absolute right-3 top-2.5 pointer-events-none text-amber-600">
+              <div class="absolute right-3 top-2.5 pointer-events-none text-primary-600">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                   stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -135,7 +135,7 @@
               <input type="email" [formControlName]="f.key" placeholder="ejemplo@dominio.com"
                 class="w-full px-4 py-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition duration-200 bg-white/70" />
               @if (getControl(f.key)?.touched && getControl(f.key)?.errors?.['email']) {
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 absolute right-3 top-2.5" fill="none"
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-danger-500 absolute right-3 top-2.5" fill="none"
                 viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -150,7 +150,7 @@
               <input [type]="showPassword[f.key] ? 'text' : 'password'" [formControlName]="f.key"
                 class="w-full px-4 py-2 pr-10 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition duration-200 bg-white/70" />
               <button type="button" (click)="togglePasswordVisibility(f.key)"
-                class="absolute right-3 top-2.5 text-amber-600 hover:text-amber-800">
+                class="absolute right-3 top-2.5 text-primary-600 hover:text-primary-800">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                   stroke="currentColor">
                   @if (showPassword[f.key]) {
@@ -171,7 +171,7 @@
             @if (f.type === 'select') {
             <select [formControlName]="f.key"
               class="w-full px-4 py-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-white/70">
-              <option value="" disabled selected>Seleccione una opción</option>
+              <option value="" disabled selected appTranslate="COMMON.SELECT_OPTION">Seleccione una opción</option>
               @for (opt of f.options || []; track opt.value) {
               <option [value]="opt.value">{{ opt.label }}</option>
               }
@@ -184,8 +184,8 @@
               @for (opt of f.options || []; track opt.value) {
               <label class="inline-flex items-center">
                 <input type="radio" [value]="opt.value" [formControlName]="f.key"
-                  class="form-radio text-green-600 focus:ring-primary" />
-                <span class="ml-2 text-amber-800">{{ opt.label }}</span>
+                  class="form-radio text-success-600 focus:ring-primary" />
+                <span class="ml-2 text-primary-800">{{ opt.label }}</span>
               </label>
               }
             </div>
@@ -200,7 +200,7 @@
                   class="w-full px-4 py-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-white/70 appearance-none"
                   [min]="f.minDate | date:'yyyy-MM-dd'" [max]="f.maxDate | date:'yyyy-MM-dd'" />
                 <!-- Icono de calendario -->
-                <div class="absolute right-3 top-2.5 pointer-events-none text-amber-600">
+                <div class="absolute right-3 top-2.5 pointer-events-none text-primary-600">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -211,17 +211,17 @@
 
               <!-- Selector de fecha personalizado (alternativa visual) -->
               <div *ngIf="showDatepicker[f.key]"
-                class="absolute z-10 mt-1 w-full bg-white border border-amber-200 rounded-lg shadow-lg p-3">
+                class="absolute z-10 mt-1 w-full bg-white border border-primary-200 rounded-lg shadow-lg p-3">
                 <div class="flex justify-between items-center mb-2">
-                  <button (click)="prevMonth(f.key)" class="p-1 rounded-full hover:bg-amber-100">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-amber-600" fill="none"
+                  <button (click)="prevMonth(f.key)" class="p-1 rounded-full hover:bg-primary-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary-600" fill="none"
                       viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                     </svg>
                   </button>
                   <span class="font-medium text-primary">{{ currentMonth[f.key] | date:'MMMM yyyy' }}</span>
-                  <button (click)="nextMonth(f.key)" class="p-1 rounded-full hover:bg-amber-100">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-amber-600" fill="none"
+                  <button (click)="nextMonth(f.key)" class="p-1 rounded-full hover:bg-primary-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary-600" fill="none"
                       viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                     </svg>
@@ -229,13 +229,13 @@
                 </div>
 
                 <div class="grid grid-cols-7 gap-1 text-center text-sm text-primary font-medium mb-1">
-                  <div>L</div>
-                  <div>M</div>
-                  <div>X</div>
-                  <div>J</div>
-                  <div>V</div>
-                  <div>S</div>
-                  <div>D</div>
+                  <div appTranslate="CALENDAR.DAYS_SHORT.MON">L</div>
+                  <div appTranslate="CALENDAR.DAYS_SHORT.TUE">M</div>
+                  <div appTranslate="CALENDAR.DAYS_SHORT.WED">X</div>
+                  <div appTranslate="CALENDAR.DAYS_SHORT.THU">J</div>
+                  <div appTranslate="CALENDAR.DAYS_SHORT.FRI">V</div>
+                  <div appTranslate="CALENDAR.DAYS_SHORT.SAT">S</div>
+                  <div appTranslate="CALENDAR.DAYS_SHORT.SUN">D</div>
                 </div>
 
                 <div class="grid grid-cols-7 gap-1">
@@ -255,32 +255,32 @@
             <div class="w-full">
               <!-- Dropzone / Card input -->
               <div
-                class="relative border-2 border-dashed border-primary rounded-lg p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:border-green-600 transition duration-300 bg-amber-50/50"
+                class="relative border-2 border-dashed border-primary rounded-lg p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:border-success-600 transition duration-300 bg-primary-50/50"
                 (click)="triggerFileInput(f.key)">
-                <svg class="w-10 h-10 text-amber-500 mb-2" fill="none" stroke="currentColor" stroke-width="2"
+                <svg class="w-10 h-10 text-primary-500 mb-2" fill="none" stroke="currentColor" stroke-width="2"
                   viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round"
                     d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M12 12v6m0 0l3-3m-3 3l-3-3M16 8a4 4 0 10-8 0v4" />
                 </svg>
-                <p class="text-amber-700 font-medium">Haga clic para cargar o arrastre y suelte</p>
-                <p class="text-xs text-amber-600 mt-1">SVG, PNG, JPG o JPEG (MÁX. 2MB)</p>
+                <p class="text-primary-700 font-medium" appTranslate="COMMON.CLICK_TO_UPLOAD">Haga clic para cargar o arrastre y suelte</p>
+                <p class="text-xs text-primary-600 mt-1" appTranslate="COMMON.FILE_SIZE_LIMIT">SVG, PNG, JPG o JPEG (MÁX. 2MB)</p>
               </div>
 
               <input type="file" class="hidden" [attr.accept]="f.validators?.fileType?.join(',')"
                 (change)="onFileChange($event, f.key)" [attr.id]="'fileInput_' + f.key" />
 
               <!-- Error de validación -->
-              <div *ngIf="fileErrors[f.key]" class="text-green-700 text-sm mt-1 font-medium">
+              <div *ngIf="fileErrors[f.key]" class="text-success-700 text-sm mt-1 font-medium">
                 {{ fileErrors[f.key] }}
               </div>
 
               <!-- Preview -->
               @if(f.key && previewFiles[f.key]){
-              <div class="mt-3 rounded-md overflow-hidden border border-amber-200 bg-amber-50/30">
+              <div class="mt-3 rounded-md overflow-hidden border border-primary-200 bg-primary-50/30">
                 <img *ngIf="isImage(previewFiles[f.key] ?? '')" [src]="previewFiles[f.key]" alt="Preview"
                   class="w-full object-contain max-h-60" />
                 <a *ngIf="f.key && previewFiles[f.key] && !isImage(previewFiles[f.key])" [href]="previewFiles[f.key]"
-                  target="_blank" class="block text-green-600 hover:text-green-700 underline text-center p-2">Ver
+                  target="_blank" class="block text-success-600 hover:text-success-700 underline text-center p-2" appTranslate="COMMON.VIEW_DOCUMENT">Ver
                   documento</a>
               </div>
               }
@@ -290,15 +290,15 @@
             <!-- Password Confirmation -->
             @if (f.type === 'password' && f.key === 'password') {
             <div class="flex flex-col mt-4">
-              <label class="text-amber-950 font-medium mb-1">
+              <label class="text-primary-950 font-medium mb-1" appTranslate="LOGIN.PASSWORD_LABEL">
                 Repetir contraseña
-                <span class="text-red-700">*</span>
+                <span class="text-danger-700">*</span>
               </label>
               <div class="relative">
                 <input [type]="showRepeatPassword ? 'text' : 'password'" formControlName="repeatPassword"
                   class="w-full px-4 py-2 pr-10 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-white/70" />
                 <button type="button" (click)="showRepeatPassword = !showRepeatPassword"
-                  class="absolute right-3 top-2.5 text-amber-600 hover:text-amber-800">
+                  class="absolute right-3 top-2.5 text-primary-600 hover:text-primary-800">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor">
                     @if (showRepeatPassword) {
@@ -315,26 +315,26 @@
               </div>
 
               <!-- Mensaje de error para repeatPassword -->
-              <div class="text-red-700 text-xs mt-1 "
+              <div class="text-danger-700 text-xs mt-1 "
                 *ngIf="getControl('repeatPassword')?.touched && getControl('repeatPassword')?.invalid">
-                <div *ngIf="getControl('repeatPassword')?.errors?.['required']">Este campo es obligatorio.</div>
-                <div *ngIf="getControl('repeatPassword')?.errors?.['passwordMismatch']">Las contraseñas no coinciden.
+                <div *ngIf="getControl('repeatPassword')?.errors?.['required']" appTranslate="VALIDATION.REQUIRED">Este campo es obligatorio.</div>
+                <div *ngIf="getControl('repeatPassword')?.errors?.['passwordMismatch']" appTranslate="VALIDATION.PASSWORD_MISMATCH">Las contraseñas no coinciden.
                 </div>
               </div>
             </div>
             }
 
             <!-- Validation Errors -->
-            <div class="text-red-700 text-xs mt-1 " *ngIf="getControl(f.key)?.touched && getControl(f.key)?.invalid">
-              <div *ngIf="getControl(f.key)?.errors?.['required']">Este campo es obligatorio.</div>
-              <div *ngIf="getControl(f.key)?.errors?.['email']">Por favor ingrese un correo electrónico válido.</div>
-              <div *ngIf="getControl(f.key)?.errors?.['pattern']">Formato inválido.</div>
-              <div *ngIf="getControl(f.key)?.errors?.['minlength']">Mínimo {{ f.validators?.minLength }} caracteres.
+            <div class="text-danger-700 text-xs mt-1 " *ngIf="getControl(f.key)?.touched && getControl(f.key)?.invalid">
+              <div *ngIf="getControl(f.key)?.errors?.['required']" appTranslate="VALIDATION.REQUIRED">Este campo es obligatorio.</div>
+              <div *ngIf="getControl(f.key)?.errors?.['email']" appTranslate="VALIDATION.EMAIL">Por favor ingrese un correo electrónico válido.</div>
+              <div *ngIf="getControl(f.key)?.errors?.['pattern']" appTranslate="VALIDATION.INVALID_FORMAT">Formato inválido.</div>
+              <div *ngIf="getControl(f.key)?.errors?.['minlength']" appTranslate="VALIDATION.MIN_LENGTH" [translateParams]="{min: '' + (f.validators?.minLength ?? 0)}">Mínimo {{ f.validators?.minLength }} caracteres.
               </div>
-              <div *ngIf="getControl(f.key)?.errors?.['maxlength']">Máximo {{ f.validators?.maxLength }} caracteres.
+              <div *ngIf="getControl(f.key)?.errors?.['maxlength']" appTranslate="VALIDATION.MAX_LENGTH" [translateParams]="{max: '' + (f.validators?.maxLength ?? 0)}">Máximo {{ f.validators?.maxLength }} caracteres.
               </div>
-              <div *ngIf="getControl(f.key)?.errors?.['fileType']">Tipo de archivo no permitido.</div>
-              <div *ngIf="getControl(f.key)?.errors?.['fileSize']">Archivo demasiado grande.</div>
+              <div *ngIf="getControl(f.key)?.errors?.['fileType']" appTranslate="VALIDATION.FILE_TYPE_NOT_ALLOWED">Tipo de archivo no permitido.</div>
+              <div *ngIf="getControl(f.key)?.errors?.['fileSize']" appTranslate="VALIDATION.FILE_TOO_LARGE">Archivo demasiado grande.</div>
             </div>
           </div>
           }

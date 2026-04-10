@@ -1,36 +1,67 @@
-
-
-
-<nav class="bg-gradient-to-b from-amber-900 to-amber-800 shadow-lg md:shadow-none md:fixed md:inset-y-0 md:left-0 md:w-64 md:border-r md:border-amber-800 transition-all duration-300">
-  <!-- Mobile header (siempre visible en móvil) -->
-  <div class="md:hidden flex justify-between items-center px-4 py-4 bg-amber-900">
-    <span class=" font-bold text-xl tracking-wide text-white">
-            <span class="text-amber-200">Cáritas</span>
-          </span>
-    <button (click)="toggleMenu()" class="text-amber-200 hover:text-white">
-      <!-- Iconos de hamburguesa/cerrar -->
-      <svg [class.hidden]="isMenuOpen" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+<nav
+  class="bg-primary-900 shadow-lg md:shadow-none md:fixed md:inset-y-0 md:left-0 md:w-64 md:border-r md:border-primary-800 transition-all duration-300"
+>
+  <!-- Mobile header -->
+  <div
+    class="md:hidden flex justify-between items-center px-4 py-4 bg-primary-900"
+  >
+    <span class="font-bold text-xl tracking-wide text-white">
+      @if ((branding$ | async)?.logoUrl) {
+        <img
+          [src]="(branding$ | async)?.logoUrl"
+          class="h-8 w-auto inline mr-2"
+        />
+      }
+      <span class="text-secondary-200" appTranslate="APP.TITLE_ACCENT">Café</span>
+    </span>
+    <button (click)="toggleMenu()" class="text-secondary-200 hover:text-white">
+      <svg
+        [class.hidden]="isMenuOpen"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 6h16M4 12h16M4 18h16"
+        />
       </svg>
-      <svg [class.hidden]="!isMenuOpen" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      <svg
+        [class.hidden]="!isMenuOpen"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M6 18L18 6M6 6l12 12"
+        />
       </svg>
     </button>
   </div>
 
-  <!-- Contenido del menú (oculto en móvil por defecto) -->
   <div [class.hidden]="!isMenuOpen" class="md:block md:h-full flex flex-col">
-    <!-- Logo (solo visible en desktop) -->
-    <div class="hidden md:flex items-center justify-center py-6 px-4 border-b border-amber-800">
-       <div class="flex items-center space-x-3 hidden md:block">
-        <a class="flex items-center space-x-3">
-          <img 
-            src="assets/img/caritas/logo.png" 
-            alt="Alborada Café" 
-            class="h-12 w-auto rounded-full shadow-md bg-white p-1"
+    <!-- Logo desktop -->
+    <div
+      class="hidden md:flex items-center justify-center py-6 px-4 border-b border-primary-800"
+    >
+      <div class="flex items-center space-x-3">
+        <a class="flex flex-col items-center">
+          <img
+            [src]="
+              (branding$ | async)?.logoUrl || 'assets/img/caritas/logo.png'
+            "
+            alt="Logo"
+            class="h-16 w-auto rounded-lg shadow-md bg-surface p-1 mb-2"
           />
-          <span class="hidden md:block font-bold text-xl tracking-wide text-white">
-            Altura <span class="text-amber-200">Café</span>
+          <span class="font-bold text-lg tracking-wide text-white">
+            <span appTranslate="APP.TITLE">Altura</span> <span class="text-secondary-300" appTranslate="APP.TITLE_ACCENT">Café</span>
           </span>
         </a>
       </div>
@@ -39,31 +70,36 @@
     <!-- Menú -->
     <div class="flex-1 overflow-y-auto px-4 py-4 space-y-1">
       @for (item of menuItems; track item.path) {
-        <a [routerLink]="item.path" routerLinkActive="bg-green-700 text-white"
-           class="flex items-center text-amber-100 hover:bg-amber-800 hover:text-white px-4 py-3 rounded-lg transition-colors duration-200">
+        <a
+          [routerLink]="item.path"
+          routerLinkActive="bg-white/10 text-white font-bold"
+          class="flex items-center text-white/80 hover:bg-white/5 hover:text-white px-4 py-3 rounded-lg transition-all duration-200"
+        >
           <span class="material-symbols-outlined mr-3">{{ item.icon }}</span>
-          {{ item.title }}
+          <span [appTranslate]="item.translateKey">{{ item.title }}</span>
         </a>
       }
     </div>
 
-    <!-- Footer del menú -->
-   <div class="px-4 py-4 border-t border-amber-800 bg-amber-900/50 mt-auto">
+    <!-- Footer -->
+    <div class="px-4 py-4 border-t border-primary-800 bg-black/20 mt-auto">
       <div class="flex items-center">
         <div class="flex-shrink-0">
-          <div class="h-10 w-10 rounded-full bg-green-700 flex items-center justify-center text-white font-medium">
+          <div
+            class="h-10 w-10 rounded-full bg-secondary-500 flex items-center justify-center text-white font-medium"
+          >
             {{ getUserInitials() }}
           </div>
         </div>
         <div class="ml-3">
-          <p class="text-sm font-medium text-white">{{ user?.firstName }} {{ user?.lastName }}</p>
-          <button (click)="logout()"
-            class="text-xs text-amber-200 hover:text-white flex items-center transition-colors duration-200">
-            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-            </svg>
-            Cerrar sesión
+          <p class="text-sm font-medium text-white">
+            {{ user?.firstName }} {{ user?.lastName }}
+          </p>
+          <button
+            (click)="logout()"
+            class="text-xs text-secondary-200 hover:text-white flex items-center transition-colors duration-200"
+          >
+            <span appTranslate="NAV.LOGOUT">Cerrar sesión</span>
           </button>
         </div>
       </div>

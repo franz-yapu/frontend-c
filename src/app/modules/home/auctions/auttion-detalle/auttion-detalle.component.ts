@@ -144,8 +144,8 @@ export class AuttionDetalleComponent implements OnInit {
   }
 
   getStatusClass(lot: CoffeeLot): string {
-    if (lot.isInAuction) return 'bg-blue-100 text-blue-800 border-blue-200';
-    return lot.status === 'AVAILABLE' ? 'bg-green-100 text-green-800 border-green-200' : 'bg-gray-100 text-gray-800 border-gray-200';
+    if (lot.isInAuction) return 'bg-info-100 text-info-800 border-info-200';
+    return lot.status === 'AVAILABLE' ? 'bg-success-100 text-success-800 border-success-200' : 'bg-gray-100 text-gray-800 border-gray-200';
   }
 
   clearSearch() {
@@ -231,8 +231,8 @@ getFilterIcon(filterValue: string): string {
 getStatusClasses(status: string): string {
   const baseClasses = 'px-3 py-1.5 rounded-full text-sm font-medium flex items-center';
   switch(status) {
-    case 'DRAFT': return `${baseClasses} bg-amber-50 text-amber-700 border border-amber-200`;
-    case 'ACTIVE': return `${baseClasses} bg-green-50 text-green-700 border border-green-200`;
+    case 'DRAFT': return `${baseClasses} bg-primary-50 text-primary-700 border border-primary-200`;
+    case 'ACTIVE': return `${baseClasses} bg-success-50 text-success-700 border border-success-200`;
     case 'CLOSED': return `${baseClasses} bg-gray-50 text-gray-700 border border-gray-200`;
     default: return baseClasses;
   }

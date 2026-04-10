@@ -121,8 +121,8 @@ export class CoffeeLotComponent implements OnInit {
   }
 
   getStatusClass(lot: CoffeeLot): string {
-    if (lot.isInAuction) return 'bg-blue-100 text-blue-800 border-blue-200';
-    return lot.status === 'AVAILABLE' ? 'bg-green-100 text-green-800 border-green-200' : 'bg-gray-100 text-gray-800 border-gray-200';
+    if (lot.isInAuction) return 'bg-info-100 text-info-800 border-info-200';
+    return lot.status === 'AVAILABLE' ? 'bg-success-100 text-success-800 border-success-200' : 'bg-gray-100 text-gray-800 border-gray-200';
   }
 
   clearSearch() {

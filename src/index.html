@@ -7,6 +7,51 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
   <link rel="icon" type="image/x-icon" href="taza-icon.png">
+  <script>
+    (function() {
+      const CACHE_KEY = 'branding_config';
+      const root = document.documentElement;
+      
+      function hexToRgb(hex) {
+        if (!hex || typeof hex !== 'string') return '0, 0, 0';
+        const cleaned = hex.replace('#', '');
+        if (cleaned.length !== 6 && cleaned.length !== 3) return '0, 0, 0';
+        const r = parseInt(cleaned.length === 3 ? cleaned[0] + cleaned[0] : cleaned.substring(0, 2), 16);
+        const g = parseInt(cleaned.length === 3 ? cleaned[1] + cleaned[1] : cleaned.substring(2, 4), 16);
+        const b = parseInt(cleaned.length === 3 ? cleaned[2] + cleaned[2] : cleaned.substring(4, 6), 16);
+        return r + ', ' + g + ', ' + b;
+      }
+
+      function apply(config) {
+        if (!config) return;
+        const vars = {
+          '--primary-color': config.primaryColor,
+          '--primary-color-rgb': hexToRgb(config.primaryColor),
+          '--secondary-color': config.secondaryColor,
+          '--secondary-color-rgb': hexToRgb(config.secondaryColor),
+          '--surface-color': config.surfaceColor || '#FFFFFF',
+          '--surface-color-rgb': hexToRgb(config.surfaceColor || '#FFFFFF'),
+          '--text-color': config.textColor || '#1F2937',
+          '--font-family': "'" + (config.fontFamily || 'Inter') + "', sans-serif"
+        };
+        for (const [key, value] of Object.entries(vars)) {
+          if (value) root.style.setProperty(key, value);
+        }
+        if (config.themeMode === 'dark') root.classList.add('dark');
+        console.log('🚀 [BRANDING-BOOTSTRAP] Initial theme applied from cache');
+      }
+
+      try {
+        const raw = localStorage.getItem(CACHE_KEY);
+        if (raw) {
+          const { config } = JSON.parse(raw);
+          apply(config);
+        }
+      } catch (e) {
+        console.warn('⚠️ [BRANDING-BOOTSTRAP] Error loading cache:', e);
+      }
+    })();
+  </script>
 </head>
 <body>
   <app-root></app-root>

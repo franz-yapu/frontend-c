@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ViewChild, ElementRef, AfterViewInit, NgZone } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { TranslateDirective } from '../../../project/directive/translate.directive';
 
@@ -14,6 +14,7 @@ export class ExternalIndexComponent implements OnInit, OnDestroy, AfterViewInit 
   @ViewChild('sponsorsTrack') sponsorsTrack!: ElementRef;
   
   private router = inject(Router);
+  private ngZone = inject(NgZone);
   showModal = false;
   slides = [
     {
@@ -65,9 +66,13 @@ export class ExternalIndexComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   startAutoSlide() {
-    this.intervalId = setInterval(() => {
-      this.nextSlide();
-    }, 5000);
+    this.ngZone.runOutsideAngular(() => {
+      this.intervalId = setInterval(() => {
+        this.ngZone.run(() => {
+          this.nextSlide();
+        });
+      }, 5000);
+    });
   }
 
   stopAutoSlide() {
@@ -79,25 +84,27 @@ export class ExternalIndexComponent implements OnInit, OnDestroy, AfterViewInit 
   startInfiniteScroll() {
     if (!this.sponsorsTrack) return;
 
-    const animate = () => {
-      if (!this.isPaused && this.sponsorsTrack) {
-        this.position -= this.speed;
-        
-        // Cuando hemos desplazado la mitad del track (que contiene los sponsors duplicados),
-        // reiniciamos la posición para crear un efecto infinito suave
-        const trackWidth = this.sponsorsTrack.nativeElement.scrollWidth / 2;
-        
-        if (Math.abs(this.position) >= trackWidth) {
-          this.position = 0;
+    this.ngZone.runOutsideAngular(() => {
+      const animate = () => {
+        if (!this.isPaused && this.sponsorsTrack) {
+          this.position -= this.speed;
+          
+          // Cuando hemos desplazado la mitad del track (que contiene los sponsors duplicados),
+          // reiniciamos la posición para crear un efecto infinito suave
+          const trackWidth = this.sponsorsTrack.nativeElement.scrollWidth / 2;
+          
+          if (Math.abs(this.position) >= trackWidth) {
+            this.position = 0;
+          }
+          
+          this.sponsorsTrack.nativeElement.style.transform = `translateX(${this.position}px)`;
         }
         
-        this.sponsorsTrack.nativeElement.style.transform = `translateX(${this.position}px)`;
-      }
-      
-      this.animationId = requestAnimationFrame(animate);
-    };
+        this.animationId = requestAnimationFrame(animate);
+      };
 
-    this.animationId = requestAnimationFrame(animate);
+      this.animationId = requestAnimationFrame(animate);
+    });
   }
 
   stopInfiniteScroll() {

@@ -3,7 +3,6 @@ import { authGuard } from './core/auth.guard';
 
 
 export const routes: Routes = [
-    { path: '', redirectTo: '', pathMatch: 'full' },
     {
         path: '',
         loadChildren: () => import('./modules/external-home/external.routes').then(m => m.routes),
@@ -22,4 +21,5 @@ export const routes: Routes = [
         canActivate: [authGuard] ,
         title: 'buyer'
     },
+    { path: '**', redirectTo: '' },
 ];

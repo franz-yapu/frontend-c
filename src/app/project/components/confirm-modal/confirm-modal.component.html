@@ -5,9 +5,9 @@
     @if (data.icon) {
     <div class="flex justify-center mb-4 ">
         <div [ngClass]="{
-              'text-blue-500': !data.iconColor ,
-              'text-red-500': data.confirmSeverity === 'danger',
-              'text-green-500': data.confirmSeverity === 'success',
+              'text-info-500': !data.iconColor ,
+              'text-danger-500': data.confirmSeverity === 'danger',
+              'text-success-500': data.confirmSeverity === 'success',
               'text-yellow-500': data.confirmSeverity === 'warn'
             }">
             <span class="material-symbols-outlined text-center  text-7xl">
@@ -30,13 +30,13 @@
     <!-- Actions -->
     <div class="modal-actions flex justify-center gap-3">
         <button (click)="onCancel()"
-            class="px-6 py-3 border border-amber-300 text-amber-700 font-medium rounded-lg hover:bg-amber-50 transition-colors flex items-center justify-center">
+            class="px-6 py-3 border border-primary-300 text-primary-700 font-medium rounded-lg hover:bg-primary-50 transition-colors flex items-center justify-center">
          
             {{ data.cancelText || 'Cancelar' }}
         </button>
 
         <button (click)="onConfirm()"
-            class="px-6 py-3 bg-amber-700 text-white font-medium rounded-lg hover:bg-amber-600 transition-colors flex items-center justify-center shadow-md">
+            class="px-6 py-3 bg-primary-700 text-white font-medium rounded-lg hover:bg-primary-600 transition-colors flex items-center justify-center shadow-md">
         
             {{ data.confirmText || 'Confirmar' }}
         </button>

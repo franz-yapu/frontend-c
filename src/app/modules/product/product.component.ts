@@ -4,11 +4,13 @@ import { CommonModule } from '@angular/common';
 import { ModalProductComponent } from './modal-product/modal-product.component';
 import { ProductService } from './product.service';
 import { GeneralService } from '../../core/gerneral.service';
+import { TranslateDirective } from '../../project/directive/translate.directive';
+import { TranslationService } from '../../project/services/translate.service';
 
 @Component({
   selector: 'app-product',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateDirective],
   templateUrl: './product.component.html',
   styleUrl: './product.component.scss',
   providers: [DialogService],
@@ -19,7 +21,8 @@ export class ProductComponent {
 
   constructor( private productService: ProductService, 
               private dialogService: DialogService,
-              private generalService: GeneralService
+              private generalService: GeneralService,
+              private translationService: TranslationService
             ) { }
 
   ngOnInit(): void {
@@ -34,7 +37,7 @@ export class ProductComponent {
 
   openAddProductModal() {
     this.ref = this.dialogService.open(ModalProductComponent, {
-      header: 'Nuevo Producto',
+      header: this.translationService.translate('PRODUCT.LIST.ADD_PRODUCT'),
       width: '800px',
       closable: true
     });
@@ -49,7 +52,7 @@ export class ProductComponent {
   openEditProductModal(product:any){
     this.ref = this.dialogService.open(ModalProductComponent, {
       data: { data: product},
-      header: 'Nuevo Producto',
+      header: this.translationService.translate('PRODUCT.LIST.ADD_PRODUCT'),
       width: '800px',
       closable: true
     });

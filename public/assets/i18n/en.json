@@ -9,13 +9,16 @@
     "DASHBOARD": "Dashboard",
     "ORDERS": "Shopping",
     "MY_DATA": "My Data",
-    "LOGOUT": "Logout"
+    "LOGOUT": "Logout",
+    "AUCTIONS": "Auctions",
+    "USERS": "Users",
+    "BRANDING": "Branding"
   },
   "APP": {
     "TITLE": "Altitude",
     "TITLE_ACCENT": " Cáritas"
   },
-    "HOME": {
+  "HOME": {
     "HERO": {
       "TITLE": "Cáritas Bolivia 2026 will bring together the winners of the competitions from recent years",
       "SUBTITLE": "creating an unprecedented high-quality event",
@@ -23,7 +26,7 @@
       "LOGIN_BUTTON": "Login",
       "REGISTER_BUTTON": "Create Account"
     },
-    "SPONSORS":{
+    "SPONSORS": {
       "TITLE": "Our allies",
       "SUBTITLE": "Companies and organizations that support our mission"
     },
@@ -64,7 +67,7 @@
     "LOCATION": "La Paz, Bolivia",
     "COPYRIGHT": "© 2026 Cáritas. All rights reserved."
   },
-    "WINNERS": {
+  "WINNERS": {
     "HERO": {
       "TITLE": "Auction Results",
       "SUBTITLE": "Discover the winners of our exclusive specialty coffee auction. Each lot represents the excellence and dedication of our producers."
@@ -99,13 +102,20 @@
       "REGISTER_BUTTON": "Register Now",
       "CALENDAR_BUTTON": "View Calendar"
     },
+    "TABLE": {
+      "POSITION": "Position",
+      "COFFEE_INFO": "Coffee Info",
+      "BUYER": "Buyer",
+      "SELLER": "Producer",
+      "PRICE": "Price"
+    },
     "EMPTY": {
       "TITLE": "Auction in Preparation",
       "SUBTITLE": "We are organizing our next specialty coffee auction. Come back soon to discover exclusive lots.",
       "NOTIFY_BUTTON": "Notify Me"
     }
   },
-     "AUCTION": {
+  "AUCTION": {
     "HERO": {
       "TITLE": "Cáritas Bolivia 2026 Auction",
       "SUBTITLE": "The best producers of Bolivia 2026",
@@ -129,17 +139,52 @@
       "POINTS": "pts",
       "METERS": "m",
       "LBS": "lbs",
-      "BASE_PRICE": "Base/lb:",
-      "CURRENT_BID": "Bid/lb:",
-      "TOTAL": "Total:",
-      "RECENT_BIDS": "Recent Bids"
+      "BASE_PRICE": "Base Price",
+      "CURRENT_BID": "Current Bid",
+      "TOTAL": "Total",
+      "RECENT_BIDS": "Recent bids",
+      "INFO": "Coffee Information",
+      "VARIETY": "Variety",
+      "PROCESS": "Process",
+      "ALTITUDE": "Altitude",
+      "QUANTITY": "Quantity",
+      "LOCATION": "Location",
+      "COUNTRY": "Country",
+      "REGION": "Region",
+      "MUNICIPALITY": "Municipality",
+      "COMMUNITY": "Community",
+      "SCA_SCORE": "SCA Score",
+      "CURRENT_VALUE": "Current Value",
+      "CUPPING_PROFILE": "Cupping Profile",
+      "BID_HISTORY": "Bid History",
+      "BIDS_COUNT": "bids",
+      "TOTAL_LABEL": "total",
+      "NO_BIDS": "No bids yet",
+      "FIRST_BID": "Be the first to bid"
     },
     "EMPTY": {
       "TITLE": "No lots available",
       "SUBTITLE": "There are currently no coffee lots available in auction."
+    },
+    "WINNERS": {
+      "TITLE": "Auction Winners",
+      "SUBTITLE": "Final results of the closed auction",
+      "COUNT": "Winners",
+      "CHAMPIONS": "Champions",
+      "LOADING": "Loading results...",
+      "ERROR_TITLE": "Error loading results",
+      "POSITION": "Position",
+      "LOT": "Lot",
+      "WINNER": "Winner",
+      "PRICE_PER_LB": "Price/pound",
+      "QUANTITY": "Quantity",
+      "TOTAL": "Total",
+      "PER_LB": "per pound",
+      "EMPTY_TITLE": "No winners registered",
+      "EMPTY_SUBTITLE": "No results were found for this auction."
     }
   },
-"ABOUT": {
+  "ABOUT": {
     "HERO": {
       "TITLE": "About Us",
       "SUBTITLE_PART1": "Café Altura orada, an enterprise of",
@@ -254,7 +299,7 @@
         "CONTACT_INFO_DESC": "For additional inquiries, participants can communicate through the email enabled on the auction platform."
       }
     },
-      "PDF": {
+    "PDF": {
       "TITLE": "Regulation Document",
       "LOADING": "Loading document...",
       "ERROR": "Error loading document",
@@ -262,7 +307,7 @@
       "DOWNLOAD": "Download PDF"
     }
   },
-   "AUCTION-BUYER": {
+  "AUCTION-BUYER": {
     "PREMIUM_AUCTIONS": "Cáritas Bolivia 2026 Auction",
     "EXCLUSIVE_LOTS": "The best producers of Bolivia 2026",
     "AUCTION_ENDED": "Auction Ended",
@@ -289,7 +334,8 @@
     "MIN_REQUIRED_AMOUNT": "Minimum required amount",
     "YOUR_BID": "Your bid",
     "CONFIRM_BID": "Confirm Bid",
-    "TOTAL_AMOUNT":"Total amount:"
+    "TOTAL_AMOUNT": "Total amount:",
+    "MIN_BID_ERROR": "Minimum amount is ${{min}}"
   },
   "COMMON": {
     "DAYS": "Days",
@@ -300,9 +346,51 @@
     "PRODUCER": "Producer",
     "METERS": "m",
     "LBS": "lbs",
+    "KG": "kg",
     "AVAILABLE": "available",
+    "PROCESSING": "Processing...",
+    "FILTERS": "Filters",
+    "START_DATE": "Start Date",
+    "END_DATE": "End Date",
+    "CLEAR_FILTERS": "Clear Filters",
+    "APPLY_FILTERS": "Apply Filters",
+    "AMOUNT": "Amount",
+    "NAME": "Name",
+    "DESCRIPTION": "Description",
+    "PRICE": "Price",
+    "STOCK": "Stock",
+    "SAVE": "Save",
     "CANCEL": "Cancel",
-    "PROCESSING": "Processing..."
+    "SELECT_OPTION": "Select an option",
+    "CLICK_TO_UPLOAD": "Click to upload or drag and drop",
+    "FILE_SIZE_LIMIT": "SVG, PNG, JPG or JPEG (MAX 2MB)",
+    "VIEW_DOCUMENT": "View document",
+    "LOT": "Lot",
+    "STATUS": "Status"
+  },
+  "VALIDATION": {
+    "REQUIRED": "This field is required",
+    "EMAIL": "Please enter a valid email address",
+    "MIN_LENGTH": "Minimum {{min}} characters",
+    "MAX_LENGTH": "Maximum {{max}} characters",
+    "PASSWORD_MISMATCH": "Passwords do not match",
+    "INVALID_FORMAT": "Invalid format",
+    "FILE_TYPE_NOT_ALLOWED": "File type not allowed",
+    "FILE_TOO_LARGE": "File too large",
+    "NOT_A_NUMBER": "Must be a valid number",
+    "NO_DECIMALS": "Decimals not allowed",
+    "TOO_MANY_DECIMALS": "Maximum {{max}} decimals allowed"
+  },
+  "CALENDAR": {
+    "DAYS_SHORT": {
+      "MON": "M",
+      "TUE": "T",
+      "WED": "W",
+      "THU": "T",
+      "FRI": "F",
+      "SAT": "S",
+      "SUN": "S"
+    }
   },
   "TRANSACTIONS": {
     "TITLE": "Transaction History",
@@ -318,7 +406,7 @@
     "NO_TRANSACTIONS": "No transactions available",
     "NO_TRANSACTIONS_DESC": "No transactions found in your history"
   },
-   "SETTINGS": {
+  "SETTINGS": {
     "PROFILE_INFO": "Profile Information",
     "ACTIVITY_HISTORY": "Activity History",
     "BASIC_INFO": "Basic Information",
@@ -348,6 +436,32 @@
     "PREVIOUS": "Previous",
     "NEXT": "Next"
   },
+  "BUYER": {
+    "DASHBOARD": {
+      "TITLE": "Buyer Dashboard",
+      "TOTAL_BIDS": "Total Bids",
+      "WATCHED_LOTS": "Watched Lots",
+      "TOP_BID": "Top Bid",
+      "BID_EVOLUTION": "My Bid Evolution",
+      "PRICE_TRENDS": "Prices by Variety",
+      "RECENT_BIDS": "Recent Bids",
+      "INTEREST_LOTS": "Interest Lots",
+      "MY_LAST_BID": "My Last Bid",
+      "MARKET_INSIGHTS": "Market Insights",
+      "INITIAL_STATE": "Enter a user ID and apply filters to see the dashboard",
+      "LOADING_ERROR": "Error loading dashboard: {{message}}"
+    }
+  },
+  "PRODUCT": {
+    "LIST": {
+      "TITLE": "Product List",
+      "ADD_PRODUCT": "Add Product"
+    },
+    "MESSAGES": {
+      "SAVE_SUCCESS": "Data saved successfully",
+      "UPDATE_SUCCESS": "Data updated successfully"
+    }
+  },
   "LOGIN": {
     "SUCCESS_MESSAGE": "Account successfully verified!",
     "TITLE": "Log In",
@@ -369,12 +483,53 @@
     "TERMS_TEXT": "By logging in you accept our",
     "TERMS_LINK": " Terms and Conditions"
   },
-    "REGISTER": {
+  "REGISTER": {
     "WELCOME": "Welcome!",
     "COFFEE_BEANS": "Coffee beans",
     "COFFEE_LEAF": "Coffee leaf",
     "TITLE": "Registration",
     "REGISTER_BUTTON": "Register",
-    "GO_BACK": "Go back"
+    "GO_BACK": "Go back",
+    "FIRST_NAME": "First Name",
+    "LAST_NAME": "Last Name",
+    "COMPANY_NAME": "Company Name or Association",
+    "PHONE": "Phone",
+    "EMAIL": "Email",
+    "PASSWORD": "Password",
+    "MODAL": {
+      "TITLE": "Project Finished ✔️",
+      "DESCRIPTION": "This <span class=\"font-semibold\">coffee auction system</span> was developed by <span class=\"font-semibold\">Franz Yapu</span>.<br/><br/>If you wish to <span class=\"font-semibold\">rent</span> this platform or create a personalized version for your organization, I offer:<br/><br/><span class=\"font-semibold\">• Full customization</span> (logos, colors, branding, visual identity)<br/><span class=\"font-semibold\">• Custom new features</span><br/><span class=\"font-semibold\">• Professional optimization and support</span><br/><br/>Contact me directly at:",
+      "CONTACT_WA": "💬 Contact via WhatsApp",
+      "CLOSE": "Close"
+    }
+  },
+  "AUCTION_SYNC": {
+    "TIME_SYNCED": "Time synchronized with server",
+    "WS_CONNECTED": "WebSocket connected",
+    "LOADING_LOTS": "Loading lots...",
+    "OFFLINE_BID": "Offline. Bids cannot be placed.",
+    "SLOW_BID": "Slow connection. Bids may take longer to process.",
+    "SLOW_BID_PROMPT": "Slow connection: your bid might not be processed in time.",
+    "BLOCKED_AT_CLOSE": "Bids temporarily blocked due to high latency at closing.",
+    "SELECT_INCREMENT": "Select a quick increment or enter a custom amount",
+    "PER_LB": "/lb",
+    "QUALITY": {
+      "EXCELLENT": "Excellent",
+      "GOOD": "Good",
+      "FAIR": "Fair",
+      "POOR": "Poor",
+      "OFFLINE": "Offline",
+      "UNKNOWN": "Unknown"
+    }
+  },
+  "NOTIFICATIONS": {
+    "AUCTION_EXTENDED": "Auction extended until {{time}}!",
+    "AUCTION_CLOSED": "Auction definitively closed!",
+    "BID_SUCCESS": "Bid successfully placed!",
+    "CONNECTION_RESTORED": "Connection restored",
+    "CONNECTION_SLOW": "Slow connection ({{latency}}ms). Bids may be delayed.",
+    "SYNC_ERROR": "Error loading auction data",
+    "AUCTION_ENDED_LOCAL": "Auction ended (local verification)",
+    "BID_ERROR": "Error processing bid"
   }
 }

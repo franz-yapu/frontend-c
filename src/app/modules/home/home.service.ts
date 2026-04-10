@@ -151,7 +151,7 @@ export class HomeService {
        } 
 
        getLastAutionTransactions() {
-        return firstValueFrom(this.http.get(`${environment.backend}/auctions/auction/find-last`, ));
+        return firstValueFrom(this.http.get(`${environment.backend}/auctions/find-last`, ));
        } 
 
        getAuctionsClose() {

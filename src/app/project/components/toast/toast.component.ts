@@ -29,9 +29,9 @@ export class ToastComponent implements OnInit {
 
   toastClasses(severity: string) {
     switch(severity) {
-      case 'success': return 'bg-green-500';
-      case 'error': return 'bg-red-600';
-      case 'info': return 'bg-blue-500';
+      case 'success': return 'bg-success-500';
+      case 'error': return 'bg-danger-600';
+      case 'info': return 'bg-info-500';
       case 'warning': return 'bg-yellow-400 text-black';
       default: return 'bg-gray-500';
     }

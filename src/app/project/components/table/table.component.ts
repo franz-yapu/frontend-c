@@ -114,8 +114,8 @@ export class TableComponent<T extends Record<string, any>> implements OnInit {
   getEstadoClasses(item: any): string {
     const isVerified = item.isVerified || item.verified || item.estado;
     return isVerified 
-      ? 'bg-green-100 text-green-800' 
-      : 'bg-red-100 text-red-800';
+      ? 'bg-success-100 text-success-800' 
+      : 'bg-danger-100 text-danger-800';
   }
 
   // Método para mostrar el texto del estado
@@ -136,10 +136,10 @@ export class TableComponent<T extends Record<string, any>> implements OnInit {
   getButtonClasses(btn: ActionButton): string {
     const baseClasses = 'inline-flex items-center px-4 py-2 border rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2';
     const colorClasses = {
-      primary: 'border-transparent bg-amber-600 text-white hover:bg-amber-700 focus:ring-amber-500',
-      secondary: 'border-transparent bg-green-600 text-white hover:bg-green-700 focus:ring-green-500',
-      danger: 'border-transparent bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
-      success: 'border-transparent bg-green-600 text-white hover:bg-green-700 focus:ring-green-500'
+      primary: 'border-transparent bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500',
+      secondary: 'border-transparent bg-success-600 text-white hover:bg-success-700 focus:ring-green-500',
+      danger: 'border-transparent bg-danger-600 text-white hover:bg-danger-700 focus:ring-red-500',
+      success: 'border-transparent bg-success-600 text-white hover:bg-success-700 focus:ring-green-500'
     };
     return `${baseClasses} ${colorClasses[btn.color || 'primary']}`;
   }
@@ -147,10 +147,10 @@ export class TableComponent<T extends Record<string, any>> implements OnInit {
   getSmallButtonClasses(btn: ActionButton): string {
     const baseClasses = 'inline-flex items-center p-2 border rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2';
     const colorClasses = {
-      primary: 'border-transparent bg-amber-600 text-white hover:bg-amber-700 focus:ring-amber-500',
-      secondary: 'border-transparent bg-green-600 text-white hover:bg-green-700 focus:ring-green-500',
-      danger: 'border-transparent bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
-      success: 'border-transparent bg-green-600 text-white hover:bg-green-700 focus:ring-green-500'
+      primary: 'border-transparent bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500',
+      secondary: 'border-transparent bg-success-600 text-white hover:bg-success-700 focus:ring-green-500',
+      danger: 'border-transparent bg-danger-600 text-white hover:bg-danger-700 focus:ring-red-500',
+      success: 'border-transparent bg-success-600 text-white hover:bg-success-700 focus:ring-green-500'
     };
     return `${baseClasses} ${colorClasses[btn.color || 'primary']}`;
   }

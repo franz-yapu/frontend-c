@@ -1,0 +1,222 @@
+<div class="branding-page">
+  <!-- Header -->
+  <div class="branding-header">
+    <div class="header-content">
+      <h1 class="page-title">
+        <span class="icon">🎨</span>
+        Configuración de Marca
+      </h1>
+      <p class="page-subtitle">Personaliza los colores, logos y apariencia de la plataforma</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-ghost" (click)="resetConfirm()" [disabled]="saving()">
+        🔄 Restablecer
+      </button>
+      <button class="btn btn-primary" (click)="saveChanges()" [disabled]="saving()">
+        @if (saving()) {
+          <span class="spinner"></span> Guardando...
+        } @else {
+          💾 Guardar Cambios
+        }
+      </button>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  @if (toast()) {
+    <div class="toast" [class]="'toast-' + toast()!.type" role="alert">
+      {{ toast()!.message }}
+    </div>
+  }
+
+  <div class="branding-content">
+    <!-- Columna izquierda: Controles -->
+    <div class="controls-panel">
+
+      <!-- COLORES -->
+      <section class="panel-section">
+        <h2 class="section-title">🎨 Colores</h2>
+
+        <div class="color-group">
+          <label>Color Primario</label>
+          <div class="color-input-row">
+            <input type="color" [(ngModel)]="draft.primaryColor" (input)="onColorChange()" class="color-swatch" />
+            <input type="text" [(ngModel)]="draft.primaryColor" (change)="onColorChange()" class="hex-input"
+              placeholder="#CA3636" maxlength="7" />
+          </div>
+          <div class="color-preview" [style.background]="draft.primaryColor"></div>
+        </div>
+
+        <div class="color-group">
+          <label>Color Secundario</label>
+          <div class="color-input-row">
+            <input type="color" [(ngModel)]="draft.secondaryColor" (input)="onColorChange()" class="color-swatch" />
+            <input type="text" [(ngModel)]="draft.secondaryColor" (change)="onColorChange()" class="hex-input"
+              placeholder="#FF9A24" maxlength="7" />
+          </div>
+          <div class="color-preview" [style.background]="draft.secondaryColor"></div>
+        </div>
+      </section>
+
+      <!-- COLORES SEMÁNTICOS -->
+      <section class="panel-section">
+        <h2 class="section-title">🚦 Colores de Estado</h2>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="color-group">
+            <label>Éxito (Success)</label>
+            <input type="color" [(ngModel)]="draft.successColor" (input)="onColorChange()" class="color-swatch w-full" />
+          </div>
+          <div class="color-group">
+            <label>Peligro (Danger)</label>
+            <input type="color" [(ngModel)]="draft.dangerColor" (input)="onColorChange()" class="color-swatch w-full" />
+          </div>
+          <div class="color-group">
+            <label>Advertencia</label>
+            <input type="color" [(ngModel)]="draft.warningColor" (input)="onColorChange()" class="color-swatch w-full" />
+          </div>
+          <div class="color-group">
+            <label>Información</label>
+            <input type="color" [(ngModel)]="draft.infoColor" (input)="onColorChange()" class="color-swatch w-full" />
+          </div>
+        </div>
+      </section>
+
+      <!-- SUPERFICIE Y TEXTO -->
+      <section class="panel-section">
+        <h2 class="section-title">📄 Superficie y Texto</h2>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="color-group">
+            <label>Fondo de Tarjetas</label>
+            <input type="color" [(ngModel)]="draft.surfaceColor" (input)="onColorChange()" class="color-swatch w-full" />
+          </div>
+          <div class="color-group">
+            <label>Color de Texto</label>
+            <input type="color" [(ngModel)]="draft.textColor" (input)="onColorChange()" class="color-swatch w-full" />
+          </div>
+        </div>
+      </section>
+
+      <!-- TEMA -->
+      <section class="panel-section">
+        <h2 class="section-title">🌓 Modo de Tema</h2>
+        <div class="theme-options">
+          @for (mode of themeModes; track mode.value) {
+            <label class="theme-option" [class.active]="draft.themeMode === mode.value">
+              <input type="radio" name="theme" [value]="mode.value" [(ngModel)]="draft.themeMode" />
+              {{ mode.icon }} {{ mode.label }}
+            </label>
+          }
+        </div>
+      </section>
+
+      <!-- TIPOGRAFÍA -->
+      <section class="panel-section">
+        <h2 class="section-title">🔤 Tipografía</h2>
+        <div class="form-group">
+          <label>Familia de fuente</label>
+          <select [(ngModel)]="draft.fontFamily" (change)="onFontChange()" class="form-select">
+            @for (font of fonts; track font) {
+              <option [value]="font">{{ font }}</option>
+            }
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Radio de bordes</label>
+          <div class="radius-slider">
+            <input type="range" min="0" max="24" step="2"
+              [value]="radiusPx()" (input)="onRadiusChange($event)" class="slider" />
+            <span class="radius-label">{{ draft.borderRadius }}</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- LOGOS -->
+      <section class="panel-section">
+        <h2 class="section-title">🖼️ Logos</h2>
+        @for (logo of logos; track logo.type) {
+          <div class="logo-upload-group">
+            <label>{{ logo.label }}</label>
+            <div class="logo-zone" (dragover)="$event.preventDefault()"
+              (drop)="onLogoDrop($event, logo)" [class.has-preview]="logo.preview">
+              @if (logo.preview) {
+                <img [src]="logo.preview" class="logo-preview" [alt]="logo.label" />
+                <button class="remove-logo" (click)="removeLogo(logo)">✕</button>
+              } @else {
+                <div class="upload-placeholder">
+                  <span>📁</span>
+                  <span>Arrastra un archivo aquí o</span>
+                  <label class="upload-btn">
+                    Seleccionar archivo
+                    <input type="file" accept=".jpg,.jpeg,.png,.svg,.ico,.webp" class="hidden-input"
+                      (change)="onLogoSelect($event, logo)" />
+                  </label>
+                  <small>PNG, JPG, SVG, ICO · Máx. 2MB</small>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </section>
+    </div>
+
+    <!-- Columna derecha: Preview -->
+    <div class="preview-panel">
+      <h2 class="section-title sticky-title">👁️ Vista Previa en Vivo</h2>
+      <div class="preview-container">
+        <!-- Header preview -->
+        <div class="preview-header" [style.background]="headerColor()">
+          <div class="preview-logo">
+            @if (logos[0].preview) {
+              <img [src]="logos[0].preview" height="28" alt="Logo" />
+            } @else {
+              <span class="preview-logo-text">☕ CAFÉ</span>
+            }
+          </div>
+          <nav class="preview-nav">
+            <span>Inicio</span>
+            <span>Subastas</span>
+            <span>Ganadores</span>
+          </nav>
+        </div>
+
+        <!-- Buttons preview -->
+        <div class="preview-body">
+          <div class="preview-buttons">
+            <button class="preview-btn-primary"
+              [style.background]="draft.primaryColor"
+              [style.border-radius]="draft.borderRadius">
+              Botón Primario
+            </button>
+            <button class="preview-btn-secondary"
+              [style.background]="draft.secondaryColor"
+              [style.border-radius]="draft.borderRadius">
+              Botón Secundario
+            </button>
+          </div>
+          <div class="preview-card" [style.border-radius]="draft.borderRadius">
+            <div class="preview-card-header" [style.background]="draft.primaryColor + '20'">
+              <strong>Lote #17 - Catai Rojo</strong>
+            </div>
+            <div class="preview-card-body">
+              <span class="preview-price" [style.color]="draft.primaryColor">$15.50/lb</span>
+              <span class="preview-badge" [style.background]="draft.secondaryColor">Specialty</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Historial -->
+      @if (history().length > 0) {
+        <div class="history-section">
+          <h3 class="section-title">📋 Últimos Cambios</h3>
+          @for (entry of history().slice(0, 5); track entry.id) {
+            <div class="history-entry">
+              <span class="history-time">{{ entry.changedAt | date:'dd/MM HH:mm' }}</span>
+              <span class="history-user">{{ entry.changedBy }}</span>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</div>

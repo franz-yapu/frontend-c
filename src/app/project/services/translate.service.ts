@@ -12,14 +12,14 @@ export interface Language {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TranslationService {
   private http = inject(HttpClient);
 
   private availableLanguages: Language[] = [
     { code: 'es', name: 'Español', flag: '🇪🇸' },
-    { code: 'en', name: 'English', flag: '🇺🇸' }
+    { code: 'en', name: 'English', flag: '🇺🇸' },
   ];
 
   private currentLang = signal<string>('es');
@@ -31,10 +31,13 @@ export class TranslationService {
 
   constructor() {
     this.loadTranslations('es');
-    
+
     // Cargar idioma guardado
     const savedLang = localStorage.getItem('preferred-language');
-    if (savedLang && this.availableLanguages.some(l => l.code === savedLang)) {
+    if (
+      savedLang &&
+      this.availableLanguages.some((l) => l.code === savedLang)
+    ) {
       this.loadTranslations(savedLang);
     }
   }
@@ -52,31 +55,44 @@ export class TranslationService {
         if (lang !== 'es') {
           this.loadTranslations('es');
         }
-      }
+      },
     });
   }
 
   useLanguage(lang: string): void {
-    if (this.availableLanguages.some(l => l.code === lang)) {
+    if (this.availableLanguages.some((l) => l.code === lang)) {
       this.loadTranslations(lang);
     }
   }
 
-  translate(key: string): string {
+  translate(key: string, params?: { [key: string]: string }): string {
     const keys = key.split('.');
     let value: any = this.translations();
-    
+
     for (const k of keys) {
       value = value?.[k];
       if (value === undefined) {
         return key; // Fallback a la clave
       }
     }
-    
-    return typeof value === 'string' ? value : key;
+
+    let result = typeof value === 'string' ? value : key;
+
+    // Reemplazar parámetros si existen
+    if (params) {
+      Object.keys(params).forEach((paramKey) => {
+        result = result.replace(`{{${paramKey}}}`, params[paramKey]);
+      });
+    }
+
+    return result;
   }
 
   getCurrentLanguageInfo(): Language {
-    return this.availableLanguages.find(lang => lang.code === this.currentLanguage()) || this.availableLanguages[0];
+    return (
+      this.availableLanguages.find(
+        (lang) => lang.code === this.currentLanguage(),
+      ) || this.availableLanguages[0]
+    );
   }
 }

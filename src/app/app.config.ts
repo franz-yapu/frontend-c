@@ -1,16 +1,18 @@
-import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
+import { APP_INITIALIZER, ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { MultiTranslateHttpLoader } from 'ngx-translate-multi-http-loader';
 import { routes } from './app.routes';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { AuthInterceptor } from './core/auth.interceptor';
 import { HttpBackend, provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import { BrandingService } from './core/branding/branding.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { DateFnsConfigurationService } from 'ngx-date-fns';
 import localeEs from '@angular/common/locales/es';
-import { registerLocaleData } from '@angular/common';
 import es from '@angular/common/locales/es';
+import { registerLocaleData } from '@angular/common';
 registerLocaleData(localeEs, 'es');
+
 
 const datefnConfig = new DateFnsConfigurationService();
 datefnConfig.setLocale(es); 
@@ -29,12 +31,11 @@ export function HttpLoaderFactory(_httpBackend: HttpBackend) {
 
 export const appConfig: ApplicationConfig = {
   providers: [
-   /*  MessageService, */
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideAnimations(),
-     provideHttpClient(withFetch()), // Añadir esto
-    provideHttpClient(withInterceptors([AuthInterceptor])),
+    // Un solo provideHttpClient con todas las features
+    provideHttpClient(withFetch(), withInterceptors([AuthInterceptor])),
     importProvidersFrom(TranslateModule.forRoot({
       loader: {
           provide: TranslateLoader,
@@ -43,6 +44,12 @@ export const appConfig: ApplicationConfig = {
       },
   })),
   { provide: DateFnsConfigurationService, useValue: datefnConfig },
+  {
+    provide: APP_INITIALIZER,
+    useFactory: (brandingService: BrandingService) => () => brandingService.loadConfig(),
+    deps: [BrandingService],
+    multi: true,
+  },
   ],
 };
 

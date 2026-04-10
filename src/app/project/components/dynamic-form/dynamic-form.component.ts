@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators, ValidatorFn, AbstractControl, AsyncValidatorFn, FormControlOptions } from '@angular/forms';
+import { TranslateDirective } from '../../directive/translate.directive';
 
 export interface FieldValidator {
   required?: boolean;
@@ -58,7 +59,7 @@ export interface ColumnField {
 @Component({
   selector: 'dynamic-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateDirective],
   templateUrl: './dynamic-form.component.html',
   styleUrl: './dynamic-form.component.scss'
 })
@@ -427,13 +428,13 @@ getDayClasses(fieldKey: string, day: any): string {
   let classes = 'w-8 h-8 rounded-full text-sm flex items-center justify-center ';
   
   if (day.disabled) {
-    classes += 'text-amber-300 cursor-not-allowed';
+    classes += 'text-primary-300 cursor-not-allowed';
   } else if (day.selected) {
-    classes += 'bg-green-600 text-white font-medium';
+    classes += 'bg-success-600 text-white font-medium';
   } else if (day.currentMonth) {
-    classes += 'text-amber-900 hover:bg-amber-100';
+    classes += 'text-primary-900 hover:bg-primary-100';
   } else {
-    classes += 'text-amber-400';
+    classes += 'text-primary-400';
   }
   
   return classes;

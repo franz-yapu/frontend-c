@@ -8,6 +8,7 @@ import { ApiService } from '../../../project/services/api.service';
 import { ToasterService } from '../../../project/services/toaster.service';
 import { GeneralService } from '../../../core/gerneral.service';
 import { TranslateDirective } from '../../../project/directive/translate.directive';
+import { BrandingService } from '../../../core/branding/branding.service';
 
 
 @Component({
@@ -18,6 +19,9 @@ import { TranslateDirective } from '../../../project/directive/translate.directi
   styleUrl: './login.component.scss',
 })
 export class LoginComponent implements OnInit {
+  private brandingService = inject(BrandingService);
+  public branding$ = this.brandingService.config$;
+
   loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required]

@@ -1,12 +1,12 @@
-<div class="min-h-screen bg-white text-black font-sans">
-
+<div class="min-h-screen bg-surface text-content font-sans">
   <!-- HERO -->
-<section class="relative bg-white text-white overflow-hidden"
-           (mouseenter)="onSliderHover(true)"
-           (mouseleave)="onSliderHover(false)">
-    
+  <section
+    class="relative bg-surface text-content overflow-hidden"
+    (mouseenter)="onSliderHover(true)"
+    (mouseleave)="onSliderHover(false)"
+  >
     <!-- Slider de fondo -->
-   <!--  <div class="absolute inset-0 z-0">
+    <!--  <div class="absolute inset-0 z-0">
       <div class="relative w-full h-full">
         @for (slide of slides; track $index; let i = $index) {
           <div 
@@ -27,35 +27,54 @@
     <div class="max-w-6xl mx-auto px-4 py-24 text-center relative z-30">
       <!-- Logo -->
       <div class="mb-12 flex justify-center">
-        <div class="bg-white rounded-full ">
-          <img src="assets/img/caritas/logo.png" alt="Café Altura" class="h-80 md:h-62 w-auto" />
+        <div class="bg-surface rounded-full">
+          <img
+            src="assets/img/caritas/logo.png"
+            alt="Café Altura"
+            class="h-80 md:h-62 w-auto"
+          />
         </div>
       </div>
 
       <!-- Título -->
-      <h1 class="text-2xl md:text-4xl text-black font-extrabold tracking-tight mb-6" appTranslate="HOME.HERO.TITLE">
+      <h1
+        class="text-2xl md:text-4xl text-content font-extrabold tracking-tight mb-6"
+        appTranslate="HOME.HERO.TITLE"
+      >
         Subasta Premium de Cafés Especiales
       </h1>
 
       <!-- Subtítulo -->
-      <p class="text-lg text-black md:text-xl max-w-2xl mx-auto  leading-relaxed mb-12" appTranslate="HOME.HERO.SUBTITLE">
+      <p
+        class="text-lg text-content md:text-xl max-w-2xl mx-auto leading-relaxed mb-12"
+        appTranslate="HOME.HERO.SUBTITLE"
+      >
         Cafés exclusivos de productores bolivianos, seleccionados por expertos
       </p>
 
       <!-- Botones -->
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <button (click)="goToAuction()"
-           appTranslate="HOME.HERO.AUCTION_BUTTON" class="  px-8 py-3 rounded-xl bg-primary text-white font-semibold border border-black/10 hover:bg-white hover:text-black hover:border-primary transition-all shadow-sm">
+        <button
+          (click)="goToAuction()"
+          appTranslate="HOME.HERO.AUCTION_BUTTON"
+          class="px-8 py-3 rounded-xl bg-primary text-white font-semibold border border-primary/20 hover:bg-secondary transition-all shadow-sm"
+        >
           Ver Subastas
         </button>
 
-        <button (click)="goToLogin()"
-          appTranslate="HOME.HERO.LOGIN_BUTTON" class="px-8 py-3 rounded-xl bg-primary text-white font-semibold border border-black/10 hover:bg-white hover:text-black hover:border-primary transition-all shadow-sm">
+        <button
+          (click)="goToLogin()"
+          appTranslate="HOME.HERO.LOGIN_BUTTON"
+          class="px-8 py-3 rounded-xl bg-primary text-white font-semibold border border-primary/20 hover:bg-secondary transition-all shadow-sm"
+        >
           Ingresar
         </button>
 
-        <button (click)="goToRegister()"
-          appTranslate="HOME.HERO.REGISTER_BUTTON" class="px-8 py-3 rounded-xl bg-primary text-white font-semibold border border-black/10 hover:bg-white hover:text-black hover:border-primary transition-all shadow-sm">
+        <button
+          (click)="goToRegister()"
+          appTranslate="HOME.HERO.REGISTER_BUTTON"
+          class="px-8 py-3 rounded-xl bg-primary text-white font-semibold border border-primary/20 hover:bg-secondary transition-all shadow-sm"
+        >
           Crear Cuenta
         </button>
       </div>
@@ -73,7 +92,7 @@
     </div> -->
 
     <!-- Flechas de navegación -->
-   <!--  <button 
+    <!--  <button 
       (click)="prevSlide()"
       class="absolute left-4 top-1/2 transform -translate-y-1/2 z-30 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-all duration-300">
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -89,12 +108,15 @@
       </svg>
     </button> -->
 
-
-        <!-- Imagen decorativa inferior derecha -->
-     <!-- Imagen decorativa inferior derecha -->
-   <!-- Imagen decorativa superior derecha -->
+    <!-- Imagen decorativa inferior derecha -->
+    <!-- Imagen decorativa inferior derecha -->
+    <!-- Imagen decorativa superior derecha -->
     <div class="absolute top-0 right-0 z-20 w-1/4 max-w-xs">
-      <img src="assets/img/der.svg" alt="Granos de café" class="w-full h-auto" />
+      <img
+        src="assets/img/der.svg"
+        alt="Granos de café"
+        class="w-full h-auto"
+      />
     </div>
 
     <!-- Imagen decorativa superior izquierda -->
@@ -104,185 +126,236 @@
 
     <!-- Imagen decorativa inferior central - AL 100% -->
     <div class="absolute bottom-0 left-0 w-full z-20">
-      <img src="assets/img/2.png" alt="Taza de café" class="w-full h-auto " />
+      <img src="assets/img/2.png" alt="Taza de café" class="w-full h-auto" />
     </div>
   </section>
 
   <!-- FEATURES -->
-   <!-- SPONSORS -->
-  <section class="py-24 bg-white overflow-hidden">
+  <!-- SPONSORS -->
+  <section class="py-24 bg-surface overflow-hidden">
     <div class="max-w-6xl mx-auto px-4">
-
       <div class="text-center mb-5">
-        <h2 class="text-3xl md:text-4xl font-bold mb-4" appTranslate="HOME.SPONSORS.TITLE">
+        <h2
+          class="text-3xl md:text-4xl font-bold mb-4"
+          appTranslate="HOME.SPONSORS.TITLE"
+        >
           Nuestros Sponsors
         </h2>
-        <p class="text-lg text-black/70 max-w-xl mx-auto leading-relaxed" appTranslate="HOME.SPONSORS.SUBTITLE">
+        <p
+          class="text-lg text-content/70 max-w-xl mx-auto leading-relaxed"
+          appTranslate="HOME.SPONSORS.SUBTITLE"
+        >
           Empresas y organizaciones que apoyan nuestra misión
         </p>
       </div>
 
       <!-- Carrusel de Sponsors -->
       <div class="relative overflow-hidden py-2">
-  <div 
-    class="sponsors-marquee"
-    (mouseenter)="onSponsorContainerHover(true)"
-    (mouseleave)="onSponsorContainerHover(false)">
-    
-    <div class="marquee-content">
-      <!-- Primera copia -->
-      @for (sponsor of sponsors; track $index; let i = $index) {
-        <div class="sponsor-item">
-          @if (sponsor.url && sponsor.url !== '#') {
-            <a 
-              [href]="sponsor.url" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              class="block w-48 h-32 bg-white items-center justify-center p-4 border border-gray-100 hover:shadow-lg transition-shadow duration-300 cursor-pointer rounded-lg">
-              <img 
-                [src]="sponsor.logo" 
-                [alt]="sponsor.name" 
-                class="h-full w-full object-contain"
-                [title]="sponsor.name">
-            </a>
-          } @else {
-            <div class="w-48 h-32 bg-white items-center justify-center p-4 border border-gray-100 rounded-lg">
-              <img 
-                [src]="sponsor.logo" 
-                [alt]="sponsor.name" 
-                class="h-full w-full object-contain"
-                [title]="sponsor.name">
-            </div>
-          }
-        </div>
-      }
-      
-      <!-- Segunda copia (para el efecto infinito) -->
-      @for (sponsor of sponsors; track $index; let i = $index) {
-        <div class="sponsor-item">
-          @if (sponsor.url && sponsor.url !== '#') {
-            <a 
-              [href]="sponsor.url" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              class="block w-48 h-32 bg-white items-center justify-center p-4 border border-gray-100 hover:shadow-lg transition-shadow duration-300 cursor-pointer rounded-lg">
-              <img 
-                [src]="sponsor.logo" 
-                [alt]="sponsor.name" 
-                class="h-full w-full object-contain"
-                [title]="sponsor.name">
-            </a>
-          } @else {
-            <div class="w-48 h-32 bg-white items-center justify-center p-4 border border-gray-100 rounded-lg">
-              <img 
-                [src]="sponsor.logo" 
-                [alt]="sponsor.name" 
-                class="h-full w-full object-contain"
-                [title]="sponsor.name">
-            </div>
-          }
-        </div>
-      }
-    </div>
-  </div>
-  
-  <!-- Gradientes para un efecto de desvanecimiento en los bordes -->
-  <div class="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-white to-transparent z-10"></div>
-  <div class="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-white to-transparent z-10"></div>
-</div>
+        <div
+          class="sponsors-marquee"
+          (mouseenter)="onSponsorContainerHover(true)"
+          (mouseleave)="onSponsorContainerHover(false)"
+        >
+          <div class="marquee-content">
+            <!-- Primera copia -->
+            @for (sponsor of sponsors; track $index; let i = $index) {
+              <div class="sponsor-item">
+                @if (sponsor.url && sponsor.url !== "#") {
+                  <a
+                    [href]="sponsor.url"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="block w-48 h-32 bg-surface items-center justify-center p-4 border border-surface-100 hover:shadow-lg transition-shadow duration-300 cursor-pointer rounded-lg"
+                  >
+                    <img
+                      [src]="sponsor.logo"
+                      [alt]="sponsor.name"
+                      class="h-full w-full object-contain"
+                      [title]="sponsor.name"
+                    />
+                  </a>
+                } @else {
+                  <div
+                    class="w-48 h-32 bg-white items-center justify-center p-4 border border-gray-100 rounded-lg"
+                  >
+                    <img
+                      [src]="sponsor.logo"
+                      [alt]="sponsor.name"
+                      class="h-full w-full object-contain"
+                      [title]="sponsor.name"
+                    />
+                  </div>
+                }
+              </div>
+            }
 
+            <!-- Segunda copia (para el efecto infinito) -->
+            @for (sponsor of sponsors; track $index; let i = $index) {
+              <div class="sponsor-item">
+                @if (sponsor.url && sponsor.url !== "#") {
+                  <a
+                    [href]="sponsor.url"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="block w-48 h-32 bg-surface items-center justify-center p-4 border border-surface-100 hover:shadow-lg transition-shadow duration-300 cursor-pointer rounded-lg"
+                  >
+                    <img
+                      [src]="sponsor.logo"
+                      [alt]="sponsor.name"
+                      class="h-full w-full object-contain"
+                      [title]="sponsor.name"
+                    />
+                  </a>
+                } @else {
+                  <div
+                    class="w-48 h-32 bg-white items-center justify-center p-4 border border-gray-100 rounded-lg"
+                  >
+                    <img
+                      [src]="sponsor.logo"
+                      [alt]="sponsor.name"
+                      class="h-full w-full object-contain"
+                      [title]="sponsor.name"
+                    />
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Edge gradients removed for minimalist design -->
+      </div>
     </div>
   </section>
 
-
-
   <!-- FOOTER -->
-  <footer class="bg-black text-white py-16">
+  <footer class="bg-secondary text-surface-50 py-16">
     <div class="max-w-6xl mx-auto px-4">
-
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
-
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-10 text-white">
         <div>
-          <h3 class="text-xl font-semibold mb-3" appTranslate="FOOTER.COMPANY_TITLE">Café Altura</h3>
-          <p class="text-white/60" appTranslate="FOOTER.COMPANY_DESC">Subastas premium desde 2023.</p>
+          <h3
+            class="text-xl font-semibold mb-3"
+            appTranslate="FOOTER.COMPANY_TITLE"
+            [style.color]="'var(--primary-color)'"
+          >
+            Café Altura
+          </h3>
+          <p class="text-white/60" appTranslate="FOOTER.COMPANY_DESC">
+            Subastas premium desde 2023.
+          </p>
         </div>
-
         <div>
-          <h3 class="text-lg font-semibold mb-3" appTranslate="FOOTER.QUICK_LINKS_TITLE">Enlaces</h3>
+          <h3
+            class="text-lg font-semibold mb-3"
+            appTranslate="FOOTER.QUICK_LINKS_TITLE"
+          >
+            Enlaces
+          </h3>
           <ul class="space-y-2 text-white/70">
-            <li><a (click)="goToAuction()" class="hover:text-white cursor-pointer" appTranslate="FOOTER.ACTIVE_AUCTIONS">Subastas</a></li>
-            <li><a class="hover:text-white cursor-pointer" appTranslate="FOOTER.HOW_IT_WORKS">Cómo funciona</a></li>
+            <li>
+              <a
+                (click)="goToAuction()"
+                class="hover:text-primary cursor-pointer transition-colors"
+                appTranslate="FOOTER.ACTIVE_AUCTIONS"
+                >Subastas</a
+              >
+            </li>
+            <li>
+              <a
+                class="hover:text-primary cursor-pointer transition-colors"
+                appTranslate="FOOTER.HOW_IT_WORKS"
+                >Cómo funciona</a
+              >
+            </li>
           </ul>
         </div>
-
         <div>
-          <h3 class="text-lg font-semibold mb-3" appTranslate="FOOTER.SUPPORT_TITLE">Soporte</h3>
+          <h3
+            class="text-lg font-semibold mb-3"
+            appTranslate="FOOTER.SUPPORT_TITLE"
+          >
+            Soporte
+          </h3>
           <ul class="space-y-2 text-white/70">
-            <li><a class="hover:text-white cursor-pointer" appTranslate="FOOTER.TERMS">Términos</a></li>
+            <li>
+              <a
+                class="hover:text-primary cursor-pointer transition-colors"
+                appTranslate="FOOTER.TERMS"
+                >Términos</a
+              >
+            </li>
           </ul>
         </div>
-
         <div>
-          <h3 class="text-lg font-semibold mb-3" appTranslate="FOOTER.CONTACT_TITLE">Contacto</h3>
-         <!--  <p class="text-white/70" appTranslate="FOOTER.CONTACT_PHONE">+591 61139545</p> -->
-          <p class="text-white/70" appTranslate="FOOTER.LOCATION">La Paz, Bolivia</p>
+          <h3
+            class="text-lg font-semibold mb-3"
+            appTranslate="FOOTER.CONTACT_TITLE"
+          >
+            Contacto
+          </h3>
+          <p class="text-white/70" appTranslate="FOOTER.LOCATION">
+            La Paz, Bolivia
+          </p>
         </div>
       </div>
-
-      <div class="text-center text-white/50 mt-12 pt-6 border-t border-white/10">
-        <p appTranslate="FOOTER.COPYRIGHT">© 2025 Café Altura — Todos los derechos reservados.</p>
+      <div
+        class="text-center text-white/50 mt-12 pt-6 border-t border-white/10"
+      >
+        <p appTranslate="FOOTER.COPYRIGHT">
+          © 2025 Café Altura — Todos los derechos reservados.
+        </p>
       </div>
-
     </div>
   </footer>
-
 </div>
-
 
 <!-- MODAL DEL PROYECTO FINALIZADO -->
 @if (showModal) {
-<div 
-  class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[9999]"
->
-  <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center animate-fadeIn">
-
-    <h2 class="text-2xl font-extrabold text-primary mb-4">
-      Proyecto Finalizado ✔️
-    </h2>
-
-    <p class="text-gray-700 leading-relaxed mb-6">
-      Este sistema de <span class="font-semibold">subastas de café</span> fue desarrollado por 
-      <span class="font-semibold">Franz Yapu</span>.
-      <br><br>
-      Si deseas <span class="font-semibold">rentar</span> esta plataforma o crear una versión personalizada
-      para tu organización, ofrezco:
-      <br><br>
-      <span class="font-semibold">• Personalización completa</span> (logos, colores, marca, identidad visual)<br>
-      <span class="font-semibold">• Nuevas funcionalidades</span> a medida<br>
-      <span class="font-semibold">• Optimización y soporte profesional</span>
-      <br><br>
-      Contáctame directamente al:
-      <br>
-      <span class="text-xl font-bold text-black">📞 +591 61139545 (Bolivia)</span>
-    </p>
-
-    <a 
-      href="https://wa.me/59161139545?text=Hola%20Franz,%20estoy%20interesado%20en%20el%20sistema%20de%20subastas%20de%20café%20o%20en%20una%20versión%20personalizada."
-      target="_blank"
-      class="block bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-xl shadow transition mb-4"
+  <div
+    class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[9999]"
+  >
+    <div
+      class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center animate-fadeIn border-2 border-gray-200"
     >
-      💬 Contactar por WhatsApp
-    </a>
+      <h2 class="text-2xl font-extrabold text-primary mb-4" appTranslate="REGISTER.MODAL.TITLE">
+        Proyecto Finalizado ✔️
+      </h2>
 
-    <button
-      (click)="closeModal()"
-      class="w-full py-3 mt-2 rounded-xl bg-gray-200 hover:bg-gray-300 font-semibold transition"
-    >
-      Cerrar
-    </button>
+      <p class="text-gray-700 leading-relaxed mb-6" appTranslate="REGISTER.MODAL.DESCRIPTION" [translateHtml]="true">
+        Este sistema de <span class="font-semibold">subastas de café</span> fue
+        desarrollado por <span class="font-semibold">Franz Yapu</span>.
+        <br /><br />
+        Si deseas <span class="font-semibold">rentar</span> esta plataforma o
+        crear una versión personalizada para tu organización, ofrezco:
+        <br /><br />
+        <span class="font-semibold">• Personalización completa</span> (logos,
+        colores, marca, identidad visual)<br />
+        <span class="font-semibold">• Nuevas funcionalidades</span> a medida<br />
+        <span class="font-semibold">• Optimización y soporte profesional</span>
+        <br /><br />
+        Contáctame directamente al:
+        <br />
+        <span class="text-xl font-bold text-black"
+          >📞 +591 61139545 (Bolivia)</span
+        >
+      </p>
 
+      <a
+        href="https://wa.me/59161139545?text=Hola%20Franz,%20estoy%20interesado%20en%20el%20sistema%20de%20subastas%20de%20café%20o%20en%20una%20versión%20personalizada."
+        target="_blank"
+        class="block bg-success-600 hover:bg-success-700 text-white font-semibold py-3 rounded-xl shadow transition mb-4"
+        appTranslate="REGISTER.MODAL.CONTACT_WA"
+      >
+        💬 Contactar por WhatsApp
+      </a>
+
+      <button
+        (click)="closeModal()"
+        class="w-full py-3 mt-2 rounded-xl bg-gray-200 hover:bg-gray-300 font-semibold transition"
+        appTranslate="REGISTER.MODAL.CLOSE"
+      >
+        Cerrar
+      </button>
+    </div>
   </div>
-</div>
 }
-
-

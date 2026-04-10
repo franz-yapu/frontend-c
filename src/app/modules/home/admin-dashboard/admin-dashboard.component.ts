@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgChartsModule } from 'ng2-charts';
 import { DashboardFilters, DashboardService } from '../../../project/services/dashboard.service';
+import { BrandingService } from '../../../core/branding/branding.service';
 
 
 @Component({
@@ -64,10 +65,17 @@ export class AdminDashboardComponent implements OnInit {
     },
   };
 
-  constructor(private dashboardService: DashboardService) {}
+  constructor(
+    private dashboardService: DashboardService,
+    private brandingService: BrandingService
+  ) {}
 
   ngOnInit() {
     this.loadDashboard();
+    // Suscribirse a cambios de branding para actualizar gráficos si es necesario
+    this.brandingService.config$.subscribe(() => {
+       // Los gráficos se repintarán si sus métodos de data se llaman de nuevo
+    });
   }
 
   loadDashboard() {
@@ -105,11 +113,12 @@ export class AdminDashboardComponent implements OnInit {
     
     const data = this.dashboardData.auctionSummary.byStatus.map((item: any) => item.count);
     
+    const config = this.brandingService.currentConfig;
     const backgroundColors = [
-      '#10B981', // verde para activas
-      '#EF4444', // rojo para cerradas  
-      '#6B7280', // gris para borrador
-      '#F59E0B', // amber para otras
+      config.successColor, // verde para activas
+      config.dangerColor,  // rojo para cerradas  
+      '#6B7280',           // gris para borrador (puedes usar surface-400 si quieres)
+      config.warningColor, // primary para otras
     ];
 
     return {
@@ -131,14 +140,15 @@ export class AdminDashboardComponent implements OnInit {
     const labels = this.dashboardData.lotPerformance.byScore.map((item: any) => item.range);
     const data = this.dashboardData.lotPerformance.byScore.map((item: any) => item.count);
 
+    const config = this.brandingService.currentConfig;
     return {
       labels,
       datasets: [
         {
           label: 'Número de Lotes',
           data,
-          backgroundColor: '#8B5CF6',
-          borderColor: '#7C3AED',
+          backgroundColor: config.secondaryColor,
+          borderColor: config.secondaryColor,
           borderWidth: 1,
         },
       ],
@@ -151,6 +161,7 @@ export class AdminDashboardComponent implements OnInit {
     const labels = this.dashboardData.transactionAnalytics.revenueByMonth.map((item: any) => item.month);
     const data = this.dashboardData.transactionAnalytics.revenueByMonth.map((item: any) => item.revenue);
 
+    const config = this.brandingService.currentConfig;
     return {
       labels,
       datasets: [
@@ -158,8 +169,8 @@ export class AdminDashboardComponent implements OnInit {
           label: 'Ingresos ($)',
           data,
           fill: true,
-          backgroundColor: 'rgba(16, 185, 129, 0.2)',
-          borderColor: '#10B981',
+          backgroundColor: `rgba(var(--primary-color-rgb), 0.2)`,
+          borderColor: config.primaryColor,
           tension: 0.4,
         },
       ],
@@ -172,12 +183,13 @@ export class AdminDashboardComponent implements OnInit {
     const labels = this.dashboardData.userActivity.byRole.map((item: any) => item.role);
     const data = this.dashboardData.userActivity.byRole.map((item: any) => item.count);
 
+    const config = this.brandingService.currentConfig;
     const backgroundColors = [
-      '#3B82F6', // azul
-      '#10B981', // verde
-      '#F59E0B', // amber
-      '#EF4444', // rojo
-      '#8B5CF6', // violeta
+      config.infoColor,      // azul
+      config.successColor,   // verde
+      config.warningColor,   // primary
+      config.dangerColor,    // rojo
+      config.secondaryColor, // violeta/secundario
     ];
 
     return {
@@ -195,11 +207,11 @@ export class AdminDashboardComponent implements OnInit {
 
   getStatusBadgeClass(status: string): string {
     const classes: any = {
-      'ACTIVE': 'bg-green-100 text-green-800',
-      'CLOSED': 'bg-red-100 text-red-800', 
-      'DRAFT': 'bg-gray-100 text-gray-800',
-      'CANCELLED': 'bg-orange-100 text-orange-800',
+      'ACTIVE': 'bg-success-100 text-success-700',
+      'CLOSED': 'bg-danger-100 text-danger-700', 
+      'DRAFT': 'bg-surface-100 text-content/60',
+      'CANCELLED': 'bg-warning-100 text-warning-700',
     };
-    return classes[status] || 'bg-gray-100 text-gray-800';
+    return classes[status] || 'bg-surface-100 text-content/50';
   }
 }

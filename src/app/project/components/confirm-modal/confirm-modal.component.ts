@@ -11,8 +11,8 @@ export interface ConfirmModalData {
   cancelText?: string;
   confirmSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warn' | 'help' | 'danger';
   icon?: string;
-  iconColor?: 'text-blue-500' | 'text-green-500' | 'text-yellow-500' | 'text-red-500' | 'text-gray-500';
-  iconBackground?: 'bg-blue-100' | 'bg-green-100' | 'bg-yellow-100' | 'bg-red-100' | 'bg-gray-100';
+  iconColor?: 'text-info-500' | 'text-success-500' | 'text-yellow-500' | 'text-danger-500' | 'text-gray-500';
+  iconBackground?: 'bg-info-100' | 'bg-success-100' | 'bg-yellow-100' | 'bg-danger-100' | 'bg-gray-100';
 }
 @Component({
   selector: 'app-confirm-modal',

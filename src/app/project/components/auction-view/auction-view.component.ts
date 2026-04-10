@@ -11,13 +11,17 @@ import { TimeSyncService } from '../../services/time-sync.service';
 
 import { ExternalWinnersComponent } from "../../../modules/external-home/external-winners/external-winners.component";
 import { environment } from '../../../../environments/environment';
+import { TranslationService } from '../../services/translate.service';
+
+import { ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-auction-view',
   standalone: true,
   imports: [CommonModule, FormsModule, LotDetailComponent, TranslateDirective, ExternalWinnersComponent, ExternalWinnersComponent],
   templateUrl: './auction-view.component.html',
-  styleUrls: ['./auction-view.component.scss']
+  styleUrls: ['./auction-view.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AuctionViewComponent implements OnInit, OnDestroy {
   auctionData: any[] = [];
@@ -36,6 +40,7 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
   showExtensionNotification: boolean = false;
   extensionMessage: string = '';
   private notificationTimeout: any;
+  timeLeft: any = { days: 0, hours: 0, minutes: 0, seconds: 0, hasStarted: false, hasEnded: false };
 
   private subscriptions: Subscription[] = [];
   private timerSubscription: Subscription | null = null;
@@ -56,7 +61,9 @@ private connectionLost = false;
   constructor(
     private buyerService: BuyerService, private homeService: HomeService,
     private timeSyncService: TimeSyncService,
-    @Inject(PLATFORM_ID) private platformId: any
+    private translationService: TranslationService,
+    @Inject(PLATFORM_ID) private platformId: any,
+    private cdr: ChangeDetectorRef
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
@@ -125,11 +132,9 @@ private async checkHttpConnection() {
     }
     
     if (!isBackendOnline && !this.connectionLost) {
-      console.warn('⚠️ Backend no responde');
       this.connectionLost = true;
       this.showConnectionWarning();
     } else if (isBackendOnline && this.connectionLost) {
-      console.log('✅ Backend restablecido');
       this.connectionLost = false;
       this.hideConnectionWarning();
       
@@ -139,14 +144,13 @@ private async checkHttpConnection() {
     }
     
   } catch (error) {
-    console.error('Error verificando conexión HTTP:', error);
   }
 }
 
 private showConnectionWarning() {
   // Mostrar notificación de conexión perdida
   this.showExtensionNotification = true;
-  this.extensionMessage = '⚠️ Problemas de conexión. Los datos pueden estar desactualizados.';
+  this.extensionMessage = '⚠️ ' + this.translationService.translate('NOTIFICATIONS.CONNECTION_SLOW').replace('{{latency}}', '???');
   
   if (this.notificationTimeout) {
     clearTimeout(this.notificationTimeout);
@@ -159,7 +163,7 @@ private showConnectionWarning() {
 
 private hideConnectionWarning() {
   this.showExtensionNotification = true;
-  this.extensionMessage = '✅ Conexión restablecida. Sincronizando datos...';
+  this.extensionMessage = '✅ ' + this.translationService.translate('NOTIFICATIONS.CONNECTION_RESTORED');
   
   if (this.notificationTimeout) {
     clearTimeout(this.notificationTimeout);
@@ -172,7 +176,6 @@ private hideConnectionWarning() {
 
 private async reloadAuctionData() {
   try {
-    console.log('🔄 Recargando datos de subasta...');
     await this.loadAuctionData();
     
     // Reunirse a la sala WebSocket
@@ -180,7 +183,6 @@ private async reloadAuctionData() {
       this.buyerService.joinAuctionRoom(this.auctionData[0].id);
     }
   } catch (error) {
-    console.error('Error recargando datos:', error);
   }
 }
 
@@ -194,8 +196,6 @@ private async loadAuctionData() {
 
     const data = await this.buyerService.getAutionsLotsActive();
     this.auctionData = Array.isArray(data) ? data : [];
-
-    console.log('Datos de subasta cargados:', data);
 
     if (this.auctionData.length > 0 && this.auctionData[0].auctionDetails) {
       this.filteredLots = [...this.auctionData[0].auctionDetails];
@@ -218,13 +218,11 @@ private async loadAuctionData() {
 
       // Verificar si la subasta ya terminó (hace más de 3 minutos)
       if (now.getTime() - endDate.getTime() > 3 * 60 * 1000) {
-        console.log('⏰ Subasta terminada hace más de 3 minutos, cargando ganadores...');
         await this.loadWinners();
       }
     }
 
   } catch (error) {
-    console.error('Error loading auction data:', error);
     this.error = 'Error al cargar los datos de la subasta';
   } finally {
     this.loading = false;
@@ -250,10 +248,26 @@ shouldShowWinners(): boolean {
 }
 
 hasActiveAuction(): boolean {
-  // Retorna true si hay una subasta activa con lotes
-  return this.auctionData.length > 0 && 
-         this.auctionData[0]?.auctionDetails?.length > 0 &&
-         this.auctionData[0]?.status === 'ACTIVE';
+  // Retorna true si hay una subasta activa con lotes o si cerró hace menos de 2 minutos
+  if (this.auctionData.length === 0 || !this.auctionData[0]?.auctionDetails?.length) {
+    return false;
+  }
+  
+  const status = this.auctionData[0]?.status;
+  if (status === 'ACTIVE') return true;
+  
+  if (status === 'CLOSED') {
+    const auction = this.auctionData[0];
+    const endDate = new Date(auction.endDate);
+    const now = this.timeSyncService.getCurrentTime();
+    
+    // Si la subasta terminó hace menos de 2 minutos (120000ms), la seguimos mostrando
+    if (now.getTime() - endDate.getTime() <= 2 * 60 * 1000) {
+      return true;
+    }
+  }
+  
+  return false;
 }
 
 shouldShowLots(): boolean {
@@ -279,6 +293,10 @@ shouldShowLots(): boolean {
     // Usar tiempo sincronizado
     this.timerSubscription = this.timeSyncService.getCurrentTimeObservable().subscribe(time => {
       this.currentTime = time;
+      if (this.auctionData.length > 0) {
+        this.timeLeft = this.calculateTimeRemaining(this.auctionData[0]);
+      }
+      this.cdr.markForCheck();
 
       // Verificar si la subasta debería haber terminado
       this.checkAuctionStatus();
@@ -290,12 +308,10 @@ shouldShowLots(): boolean {
 
   // Verificar si el tiempo está sincronizado
   if (!this.timeSyncService.isTimeSynchronized()) {
-    console.warn('⚠️ Tiempo no sincronizado, verificando estado de subasta...');
     
     // Intentar resincronizar
     this.timeSyncService.forceResync().then(success => {
       if (success) {
-        console.log('✅ Tiempo resincronizado, verificando estado nuevamente');
         this.checkAuctionStatus(); // Re-verificar con tiempo sincronizado
       }
     });
@@ -308,11 +324,10 @@ shouldShowLots(): boolean {
 
   // Verificar si la subasta debería haber terminado
   if (timeRemaining.hasEnded && !this.auctionEnded) {
-    console.log('⚠️ Subasta debería haber terminado según tiempo sincronizado');
     this.auctionEnded = true;
     this.auctionData[0].status = 'CLOSED';
     this.showExtensionNotification = true;
-    this.extensionMessage = '¡Subasta finalizada! Los resultados estarán disponibles en 3 minutos.';
+    this.extensionMessage = this.translationService.translate('NOTIFICATIONS.AUCTION_CLOSED');
 
     if (this.notificationTimeout) {
       clearTimeout(this.notificationTimeout);
@@ -323,9 +338,7 @@ shouldShowLots(): boolean {
     }, 10000);
 
     // Programar carga de ganadores para 3 minutos después
-    console.log('⏰ Programando carga de ganadores para 3 minutos...');
     setTimeout(() => {
-      console.log('🔄 Cargando ganadores automáticamente...');
       this.loadWinners();
     }, 3 * 60 * 1000);
   }
@@ -392,12 +405,10 @@ private async checkAndLoadWinners() {
 
         this.winnersLoaded = true;
 
-        console.log('Ganadores cargados:', this.winners);
       }
 
     } catch (error) {
-      console.error('Error loading winners:', error);
-      this.winnersError = 'Error al cargar los resultados de la subasta';
+      this.winnersError = this.translationService.translate('AUCTION.WINNERS.ERROR_TITLE');
     } finally {
       this.loadingWinners = false;
     }
@@ -444,7 +455,6 @@ private async checkAndLoadWinners() {
     const bidSubscription = this.buyerService.getNewBids()
       .pipe(
         catchError(error => {
-          console.warn('WebSocket error:', error);
           return of(null);
         })
       )
@@ -455,14 +465,12 @@ private async checkAndLoadWinners() {
           }
         },
         error: (error) => {
-          console.error('WebSocket subscription error:', error);
         }
       });
 
     const auctionExtendedSubscription = this.buyerService.getAuctionExtended()
       .pipe(
         catchError(error => {
-          console.warn('WebSocket auctionExtended error:', error);
           return of(null);
         })
       )
@@ -473,14 +481,12 @@ private async checkAndLoadWinners() {
           }
         },
         error: (error) => {
-          console.error('Auction extended subscription error:', error);
         }
       });
 
     const auctionClosedSubscription = this.buyerService.getAuctionClosed()
       .pipe(
         catchError(error => {
-          console.warn('WebSocket auctionClosed error:', error);
           return of(null);
         })
       )
@@ -488,14 +494,21 @@ private async checkAndLoadWinners() {
         next: (closeData) => {
           if (closeData) {
             this.handleAuctionClosed(closeData);
+            this.cdr.markForCheck();
           }
-        },
-        error: (error) => {
-          console.error('Auction closed subscription error:', error);
         }
       });
 
-    this.subscriptions.push(bidSubscription, auctionExtendedSubscription, auctionClosedSubscription);
+    const timeSyncSubscription = this.buyerService.getTimeSync().subscribe(syncData => {
+      if (this.auctionData.length > 0 && this.auctionData[0].id === syncData.auctionId) {
+        if (syncData.endDate) {
+          this.auctionData[0].endDate = syncData.endDate;
+        }
+        this.cdr.markForCheck();
+      }
+    });
+
+    this.subscriptions.push(bidSubscription, auctionExtendedSubscription, auctionClosedSubscription, timeSyncSubscription);
   }
 
 private handleAuctionExtension(extensionData: any) {
@@ -510,13 +523,12 @@ private handleAuctionExtension(extensionData: any) {
       this.winners = []; // Limpiar ganadores
       this.winnersLoaded = false; // Permitir recarga
       
-      console.log('🔄 Subasta reactivada después de extensión');
     }
     
     this.showExtensionNotification = true;
     const newEndTime = new Date(extensionData.newEndDate);
     const formattedTime = newEndTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    this.extensionMessage = `¡Subasta extendida hasta las ${formattedTime}!`;
+    this.extensionMessage = this.translationService.translate('NOTIFICATIONS.AUCTION_EXTENDED').replace('{{time}}', formattedTime);
     
     if (this.notificationTimeout) {
       clearTimeout(this.notificationTimeout);
@@ -528,7 +540,6 @@ private handleAuctionExtension(extensionData: any) {
 
     this.currentTime = this.timeSyncService.getCurrentTime();
     
-    console.log('🔄 Subasta extendida en AuctionViewComponent');
   }
 }
 
@@ -538,7 +549,7 @@ private handleAuctionClosed(closeData: any) {
     this.auctionData[0].status = 'CLOSED';
     
     this.showExtensionNotification = true;
-    this.extensionMessage = '¡Subasta finalizada definitivamente!';
+    this.extensionMessage = this.translationService.translate('NOTIFICATIONS.AUCTION_CLOSED');
     
     if (this.notificationTimeout) {
       clearTimeout(this.notificationTimeout);
@@ -550,7 +561,6 @@ private handleAuctionClosed(closeData: any) {
 
     this.currentTime = this.timeSyncService.getCurrentTime();
     
-    console.log('🔚 Subasta finalizada en AuctionViewComponent');
     
     // ✅ MEJORADO: Esperar 3 minutos antes de cargar ganadores
     setTimeout(() => {
@@ -578,11 +588,9 @@ private setupConnectionMonitoring() {
       this.isConnected = connected;
       
       if (connected) {
-        console.log('✅ WebSocket reconectado en AuctionViewComponent');
         // Recargar datos cuando se reconecta
         this.loadAuctionData();
       } else {
-        console.warn('⚠️ WebSocket desconectado en AuctionViewComponent');
       }
     });
 

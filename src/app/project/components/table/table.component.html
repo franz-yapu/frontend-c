@@ -1,16 +1,16 @@
-<div class="bg-white rounded-lg shadow-sm border border-amber-100 p-4">
+<div class="bg-white rounded-lg shadow-sm border border-primary-100 p-4">
   <!-- Barra de búsqueda -->
   <div class="mb-4 flex items-center justify-between">
     <div class="relative flex-1 max-w-md">
       <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-        <svg class="h-5 w-3 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
+        <svg class="h-5 w-3 text-primary-500" fill="currentColor" viewBox="0 0 20 20">
           <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
         </svg>
       </div>
       <input 
         [(ngModel)]="searchTerm" 
         (input)="onSearch()"
-        class="block w-full pl-10 pr-3 py-2 border border-amber-300 rounded-md leading-5 bg-white placeholder-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 sm:text-sm" 
+        class="block w-full pl-10 pr-3 py-2 border border-primary-300 rounded-md leading-5 bg-white placeholder-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 sm:text-sm" 
         placeholder="Buscar..." 
         type="search">
     </div>
@@ -19,8 +19,8 @@
       @if (showReload) {
         <button 
           (click)="onReload()"
-          class="inline-flex items-center p-2 sm:px-3 sm:py-2 border border-amber-300 rounded-md shadow-sm text-sm font-medium text-amber-700 bg-white hover:bg-amber-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500">
-          <svg class="h-5 w-5 sm:-ml-1 sm:mr-2 text-amber-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          class="inline-flex items-center p-2 sm:px-3 sm:py-2 border border-primary-300 rounded-md shadow-sm text-sm font-medium text-primary-700 bg-white hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+          <svg class="h-5 w-5 sm:-ml-1 sm:mr-2 text-primary-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
           </svg>
           <span class="hidden sm:inline">Recargar</span>
@@ -59,8 +59,8 @@
 
   <!-- Tabla -->
   <div class="overflow-x-auto">
-    <table class="min-w-full divide-y divide-amber-200">
-      <thead class="bg-amber-50">
+    <table class="min-w-full divide-y divide-primary-200">
+      <thead class="bg-primary-50">
         <tr>
           @for (col of columns; track col.key) {
             <th 
@@ -68,7 +68,7 @@
               [class.active-sort]="sortField === col.key && sortDirection !== 'none'"
               [style.width]="col.width || 'auto'"
               (click)="col.sortable ? onSort(col.key) : null"
-              class="px-6 py-3 text-left text-xs font-medium text-amber-800 uppercase tracking-wider">
+              class="px-6 py-3 text-left text-xs font-medium text-primary-800 uppercase tracking-wider">
               <div class="flex items-center">
                 {{col.label}}
                 @if (col.sortable) {
@@ -81,7 +81,7 @@
           }
         </tr>
       </thead>
-      <tbody class="bg-white divide-y divide-amber-200">
+      <tbody class="bg-white divide-y divide-primary-200">
         @for (item of filteredData; track $index) {
           <tr 
             (click)="onRowClick(item)"
@@ -110,7 +110,7 @@
         
         @if (filteredData.length === 0) {
           <tr>
-            <td [colSpan]="columns.length" class="px-6 py-4 text-center text-sm text-amber-600">
+            <td [colSpan]="columns.length" class="px-6 py-4 text-center text-sm text-primary-600">
               No se encontraron resultados
             </td>
           </tr>
@@ -122,7 +122,7 @@
   <!-- Paginación -->
   @if (totalItems > pageSize) {
     <div class="mt-4 flex items-center justify-between">
-      <div class="text-sm text-amber-700">
+      <div class="text-sm text-primary-700">
         Mostrando {{(currentPage - 1) * pageSize + 1}} a 
         {{ (currentPage * pageSize) > totalItems ? totalItems : (currentPage * pageSize) }} de {{totalItems}} registros
       </div>
@@ -131,8 +131,8 @@
           <button
             (click)="onPageChange(page)"
             [class]="currentPage === page ? 
-              'px-3 py-1 rounded-md bg-amber-600 text-white font-medium' :
-              'px-3 py-1 rounded-md text-amber-700 hover:bg-amber-100'">
+              'px-3 py-1 rounded-md bg-primary-600 text-white font-medium' :
+              'px-3 py-1 rounded-md text-primary-700 hover:bg-primary-100'">
             {{page}}
           </button>
         }

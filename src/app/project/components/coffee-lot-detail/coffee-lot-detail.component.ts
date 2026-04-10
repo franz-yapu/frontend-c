@@ -77,8 +77,8 @@ export class CoffeeLotDetailComponent {
   }
 
   getStatusClass(): string {
-    if (this.coffeeLot?.isInAuction) return 'bg-blue-100 text-blue-800 border-blue-200';
-    return this.coffeeLot?.status === 'AVAILABLE' ? 'bg-green-100 text-green-800 border-green-200' : 'bg-gray-100 text-gray-800 border-gray-200';
+    if (this.coffeeLot?.isInAuction) return 'bg-info-100 text-info-800 border-info-200';
+    return this.coffeeLot?.status === 'AVAILABLE' ? 'bg-success-100 text-success-800 border-success-200' : 'bg-gray-100 text-gray-800 border-gray-200';
   }
 
   formatDate(dateString: string): string {
@@ -110,7 +110,7 @@ export class CoffeeLotDetailComponent {
       confirmSeverity: 'success',
       showIcon: true,
       icon: 'check_circle',
-      iconColor: 'text-red-500',
+      iconColor: 'text-danger-500',
       iconSeverity: 'success'
       },
       showHeader: false,
@@ -139,7 +139,7 @@ export class CoffeeLotDetailComponent {
       confirmSeverity: 'warn',
       showIcon: true,
       icon: 'error',
-      iconColor: 'text-red-500',
+      iconColor: 'text-danger-500',
       iconSeverity: 'success'
       },
       showHeader: false,

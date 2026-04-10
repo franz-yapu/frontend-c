@@ -59,7 +59,7 @@
             <!-- En el contador regresivo, agregar indicador de tiempo sincronizado -->
             @if (auctionData.length > 0) {
             <div class="bg-primary/80 backdrop-blur-sm rounded-xl p-4 border border-black/30 shadow-lg">
-              @if (calculateTimeRemaining(auctionData[0]).hasEnded || auctionEnded) {
+              @if (timeLeft.hasEnded || auctionEnded) {
               <div class="text-center">
                 <div class="w-10 h-10 bg-primary/30 rounded-full flex items-center justify-center mx-auto mb-2">
                   <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -71,24 +71,19 @@
                 <p class="text-md text-black mt-1" appTranslate="AUCTION.TIMER.RESULTS_AVAILABLE">Resultados disponibles
                 </p>
                 <!-- Indicador de tiempo sincronizado -->
-                <div class="mt-2 text-xs text-black/70">
-                  <svg class="w-3 h-3 inline-block mr-1" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
-                      clip-rule="evenodd"></path>
-                  </svg>
-                  Tiempo sincronizado
-                </div>
+                  <div class="mt-2 text-xs text-black/70" appTranslate="AUCTION_SYNC.TIME_SYNCED">
+                    Tiempo sincronizado
+                  </div>
               </div>
               } @else {
               <div class="flex flex-col items-center">
-                @if(calculateTimeRemaining(auctionData[0]).hasStarted){
+                @if(timeLeft.hasStarted){
                 <span class="text-sm text-white mb-4 uppercase tracking-wider font-medium"
                   appTranslate="AUCTION.TIMER.ENDS_IN">
                   Finaliza en
                 </span>
                 }
-                @if(!calculateTimeRemaining(auctionData[0]).hasStarted){
+                @if(!timeLeft.hasStarted){
                 <span class="text-sm text-white mb-4 uppercase tracking-wider font-medium"
                   appTranslate="AUCTION.TIMER.STARTS_IN">
                   Comienza en
@@ -97,33 +92,28 @@
 
                 <div class="grid grid-cols-4 gap-1">
                   <div class="bg-white text-black px-2 py-2 rounded-lg text-center min-w-[60px] backdrop-blur-sm">
-                    <span class="block text-xl font-bold">{{ calculateTimeRemaining(auctionData[0]).days }}</span>
+                    <span class="block text-xl font-bold">{{ timeLeft.days }}</span>
                     <span class="block text-xs mt-1 opacity-80" appTranslate="AUCTION.TIMER.DAYS">Días</span>
                   </div>
                   <div class="bg-white text-black px-2 py-2 rounded-lg text-center min-w-[60px] backdrop-blur-sm">
-                    <span class="block text-xl font-bold">{{ calculateTimeRemaining(auctionData[0]).hours | number:'2.0'
+                    <span class="block text-xl font-bold">{{ timeLeft.hours | number:'2.0'
                       }}</span>
                     <span class="block text-xs mt-1 opacity-80" appTranslate="AUCTION.TIMER.HOURS">Horas</span>
                   </div>
                   <div class="bg-white text-black px-2 py-2 rounded-lg text-center min-w-[60px] backdrop-blur-sm">
-                    <span class="block text-xl font-bold">{{ calculateTimeRemaining(auctionData[0]).minutes |
+                    <span class="block text-xl font-bold">{{ timeLeft.minutes |
                       number:'2.0' }}</span>
                     <span class="block text-xs mt-1 opacity-80" appTranslate="AUCTION.TIMER.MINUTES">Min</span>
                   </div>
                   <div class="bg-white text-black px-2 py-2 rounded-lg text-center min-w-[60px] backdrop-blur-sm">
-                    <span class="block text-xl font-bold">{{ calculateTimeRemaining(auctionData[0]).seconds |
+                    <span class="block text-xl font-bold">{{ timeLeft.seconds |
                       number:'2.0' }}</span>
                     <span class="block text-xs mt-1 opacity-80" appTranslate="AUCTION.TIMER.SECONDS">Seg</span>
                   </div>
                 </div>
 
                 <!-- Indicador de tiempo sincronizado -->
-                <div class="mt-3 text-xs text-white/70">
-                  <svg class="w-3 h-3 inline-block mr-1" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
-                      clip-rule="evenodd"></path>
-                  </svg>
+                <div class="mt-3 text-xs text-white/70" appTranslate="AUCTION_SYNC.TIME_SYNCED">
                   Time synchronized with server
                 </div>
               </div>
@@ -163,7 +153,7 @@
           class="bg-white  shadow-lg overflow-hidden border border-gray-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer group">
 
 
-          <div class="bg-gradient-to-br from-primary to-primary/90 relative overflow-hidden">
+          <div class="bg-primary relative overflow-hidden">
             <div class="p-4">
 
               <div class="flex justify-between items-start ">
@@ -246,7 +236,7 @@
                   <div class="text-right">
                     <span class="text-xl font-black text-black">{{ detail.currentPrice | currency:'USD':'symbol' }}
                     </span>
-                    <span class="text-xs text-black/70 block font-semibold">/libra</span>
+                    <span class="text-xs text-black/70 block font-semibold" appTranslate="AUCTION_SYNC.PER_LB">/libra</span>
                   </div>
                 </div>
                 <div class="mt-1 text-sm font-bold text-black text-right">

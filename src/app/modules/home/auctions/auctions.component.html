@@ -10,7 +10,7 @@
       </div>
 
       <button (click)="openAddModal()"
-        class="w-full sm:w-auto px-4 py-2.5 bg-amber-700 text-white font-medium rounded-lg hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 transition-all duration-200 flex items-center justify-center shadow-md hover:shadow-lg">
+        class="w-full sm:w-auto px-4 py-2.5 bg-primary-700 text-white font-medium rounded-lg hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-all duration-200 flex items-center justify-center shadow-md hover:shadow-lg">
         <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
         </svg>
@@ -29,7 +29,7 @@
           </svg>
         </div>
         <input type="text" [(ngModel)]="searchTerm" (input)="filterAuctions()"
-          class="block w-full pl-9 sm:pl-10 pr-4 py-2.5 sm:py-3 border border-gray-200 rounded-lg leading-5 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-300 text-sm sm:text-base shadow-sm transition-all duration-150"
+          class="block w-full pl-9 sm:pl-10 pr-4 py-2.5 sm:py-3 border border-gray-200 rounded-lg leading-5 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-300 text-sm sm:text-base shadow-sm transition-all duration-150"
           placeholder="Buscar subastas..." />
         <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
           <button *ngIf="searchTerm" (click)="clearSearch()" class="text-gray-400 hover:text-gray-500">
@@ -47,9 +47,9 @@
   <!-- Filtros por estado - Versión móvil mejorada -->
   <div class="mb-6">
     <div class="flex flex-wrap gap-2">
-      <button *ngFor="let filter of statusFilters" [class.bg-green-700]="activeFilter === filter.value"
-        [class.text-white]="activeFilter === filter.value" [class.bg-amber-100]="activeFilter !== filter.value"
-        [class.text-amber-800]="activeFilter !== filter.value"
+      <button *ngFor="let filter of statusFilters" [class.bg-success-700]="activeFilter === filter.value"
+        [class.text-white]="activeFilter === filter.value" [class.bg-primary-100]="activeFilter !== filter.value"
+        [class.text-primary-800]="activeFilter !== filter.value"
         class="px-3 py-1.5 sm:px-4 sm:py-2 rounded-md font-medium text-xs sm:text-sm transition-colors whitespace-nowrap"
         (click)="setFilter(filter.value)">
         {{ filter.label }}
@@ -66,9 +66,9 @@
         <!-- Título y estado -->
         <div class="flex justify-between items-start mb-3 sm:mb-4">
           <h3 class="text-lg sm:text-xl font-bold text-gray-800 truncate max-w-[65%]">{{ auction.title }}</h3>
-          <span [class.bg-amber-50]="auction.status === 'DRAFT'" [class.text-amber-700]="auction.status === 'DRAFT'"
-            [class.border-amber-200]="auction.status === 'DRAFT'" [class.bg-green-50]="auction.status === 'ACTIVE'"
-            [class.text-green-700]="auction.status === 'ACTIVE'" [class.border-green-200]="auction.status === 'ACTIVE'"
+          <span [class.bg-primary-50]="auction.status === 'DRAFT'" [class.text-primary-700]="auction.status === 'DRAFT'"
+            [class.border-primary-200]="auction.status === 'DRAFT'" [class.bg-success-50]="auction.status === 'ACTIVE'"
+            [class.text-success-700]="auction.status === 'ACTIVE'" [class.border-success-200]="auction.status === 'ACTIVE'"
             [class.bg-gray-50]="auction.status === 'CLOSED'" [class.text-gray-700]="auction.status === 'CLOSED'"
             [class.border-gray-200]="auction.status === 'CLOSED'"
             class="px-2 py-0.5 sm:px-3 sm:py-1 text-xs rounded-full border flex items-center">
@@ -103,7 +103,7 @@
         <!-- Detalles de la subasta -->
         <div class="space-y-2 sm:space-y-3 text-xs sm:text-sm text-gray-600">
           <div class="flex items-center">
-            <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 text-amber-600" fill="none" stroke="currentColor"
+            <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 text-primary-600" fill="none" stroke="currentColor"
               viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
@@ -111,14 +111,14 @@
             <span><span class="font-medium text-gray-700">Inicio:</span> {{ auction.startDate | date:'dd MMM yyyy HH:mm'  }}</span>
           </div>
           <div class="flex items-center">
-            <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 text-amber-600" fill="none" stroke="currentColor"
+            <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 text-primary-600" fill="none" stroke="currentColor"
               viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7"></path>
             </svg>
             <span><span class="font-medium text-gray-700">Fin:</span>  {{ auction.endDate | date:'dd MMM yyyy HH:mm'  }}</span>
           </div>
           <div class="flex items-center">
-            <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 text-green-600" fill="none" stroke="currentColor"
+            <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 text-success-600" fill="none" stroke="currentColor"
               viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6">
               </path>
@@ -143,7 +143,7 @@
            
             @if( auction.status !== 'CLOSED'){
             <button (click)="editAddModal(auction)"
-              class="flex-1 px-3 py-2 bg-amber-700 text-white text-xs sm:text-sm font-medium rounded-lg hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all duration-200 flex items-center justify-center">
+              class="flex-1 px-3 py-2 bg-primary-700 text-white text-xs sm:text-sm font-medium rounded-lg hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all duration-200 flex items-center justify-center">
               <span class="material-symbols-outlined text-sm sm:text-base mr-1 sm:mr-2">
                 edit
               </span>
@@ -153,7 +153,7 @@
 
 
             <button (click)="viewDetails(auction.id)"
-              class="flex-1 px-3 py-2 bg-green-700 text-white text-xs sm:text-sm font-medium rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all duration-200 flex items-center justify-center">
+              class="flex-1 px-3 py-2 bg-success-500 text-white text-xs sm:text-sm font-medium rounded-lg hover:bg-success-600 focus:outline-none focus:ring-2 focus:ring-success-500 transition-all duration-200 flex items-center justify-center">
               <span class="truncate">Detalles</span>
               <svg class="w-3 h-3 sm:w-4 sm:h-4 ml-1 sm:ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
