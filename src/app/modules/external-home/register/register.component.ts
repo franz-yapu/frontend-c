@@ -8,7 +8,6 @@ import { CommonModule } from '@angular/common';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { registerFormFields } from './schema-register';
 import { DynamicFormComponent } from '../../../project/components/dynamic-form/dynamic-form.component';
-import { ProductService } from '../../product/product.service';
 import { ToasterService } from '../../../project/services/toaster.service';
 import { ApiService } from '../../../project/services/api.service';
 import { TranslateDirective } from '../../../project/directive/translate.directive';
@@ -31,8 +30,6 @@ export class RegisterComponent implements OnInit {
   public disabled = false;
   public view = false
   constructor(
-
-    private productService: ProductService,
     private toaster: ToasterService,
     private apiService: ApiService,
     private router: Router,

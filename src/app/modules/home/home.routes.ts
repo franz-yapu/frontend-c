@@ -1,8 +1,6 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './home.component';
-import { ProductComponent } from '../product/product.component';
 import { ExampleCssComponent } from '../example-css/example-css.component';
-import { CategoriesComponent } from '../categories/categories.component';
 import { UsersComponent } from './users/users.component';
 import { UserDetailComponent } from './users/user-detail/user-detail.component';
 import { SellersComponent } from './sellers/sellers.component';

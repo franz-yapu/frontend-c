@@ -51,7 +51,7 @@ interface StatusFilter {
 export class AuttionDetalleComponent implements OnInit {
    public breadcrumbItems = [
     { label: 'Subastas', icon: 'gavel', routerLink: '/home/auctions' },
-    { label: 'Lotes', icon: 'dataset', routerLink: '/students' }
+    { label: 'Lotes', icon: 'dataset' }
   ];
   public auctionId: any;
 

@@ -20,7 +20,7 @@ export class AutionLotComponent implements OnInit {
 this.breadcrumbItems = [
     { label: 'Subastas', icon: 'gavel', routerLink: '/home/auctions' },
     { label: 'Lotes', icon: 'dataset', routerLink: '/home/auctions/'+this.auctionId },
-    { label: 'Cafe', icon: 'coffee', routerLink: '/students' }
+    { label: 'Cafe', icon: 'coffee' }
   ];
 
  }
