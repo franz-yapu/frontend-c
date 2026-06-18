@@ -1,6 +1,7 @@
 import { Directive, ElementRef, inject, Input, OnDestroy, OnInit, effect, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslationService } from '../services/translate.service';
+import { BrandingService } from '../../core/branding/branding.service';
 
 @Directive({
   selector: '[appTranslate]',
@@ -9,11 +10,13 @@ import { TranslationService } from '../services/translate.service';
 export class TranslateDirective implements OnInit, OnDestroy {
   private elementRef = inject(ElementRef);
   private translationService = inject(TranslationService);
+  private brandingService = inject(BrandingService);
   private sanitizer = inject(DomSanitizer);
   
   private updateEffect = effect(() => {
-    // Se ejecuta cuando currentLanguage cambia
+    // Se ejecuta cuando cambia el idioma O el config de branding
     this.translationService.currentLanguage();
+    this.brandingService.configSignal(); // reacciona a cambios de branding
     this.updateTranslation();
   });
 
@@ -37,8 +40,14 @@ export class TranslateDirective implements OnInit, OnDestroy {
     if (translation === this.key) {
       console.warn(`Translation key not found: ${this.key}`);
     }
+
+    // Auto-resolver placeholders de branding ({{institutionName}}, {{institutionShortName}})
+    const config = this.brandingService.configSignal();
+    translation = translation
+      .replace(/\{\{institutionName\}\}/g, config.institutionName || 'Institución')
+      .replace(/\{\{institutionShortName\}\}/g, config.institutionShortName || 'Inst.');
     
-    // Reemplazar parámetros si existen
+    // Reemplazar parámetros adicionales si existen
     if (this.translateParams && translation) {
       Object.keys(this.translateParams).forEach(param => {
         translation = translation.replace(`{{${param}}}`, this.translateParams![param]);

@@ -1,57 +1,71 @@
 <div class="min-h-screen flex flex-col md:flex-row">
-    <!-- Sección de imagen (oculta en móviles) -->
-    <div class="hidden md:block md:w-1/2 bg-cover bg-center">
-        <div class="h-full  flex items-center justify-center p-12">
-            <div class="text-white text-center max-w-md">
-                <div class="mb-2 flex justify-center">
-                    <div class="bg-white rounded-full ">
-                        <img src="assets/img/caritas/logo.png" alt="Café Altura" class="h-40 md:h-60 w-auto" />
-                    </div>
-                </div>
-                <h1 class="text-4xl text-black font-bold mb-4" appTranslate="REGISTER.WELCOME">¡Bienvenidos!</h1>
-
-            </div>
+  <!-- Sección de imagen (oculta en móviles) -->
+  <div class="hidden md:block md:w-1/2 bg-cover bg-center">
+    <div class="h-full flex items-center justify-center p-12">
+      <div class="text-white text-center max-w-md">
+        <div class="mb-2 flex justify-center">
+          <div class="bg-white rounded-full">
+            <img
+              src="assets/img/caritas/logo.png"
+              alt="Café Altura"
+              class="h-40 md:h-60 w-auto"
+            />
+          </div>
         </div>
-       <!--  <div class="absolute bottom-0 right-0 z-2 w-1/4 max-w-lg">
+        <h1
+          class="text-4xl text-black font-bold mb-4"
+          appTranslate="REGISTER.WELCOME"
+        >
+          ¡Bienvenidos!
+        </h1>
+      </div>
+    </div>
+    <!--  <div class="absolute bottom-0 right-0 z-2 w-1/4 max-w-lg">
             <img src="assets/img/der.svg" alt="Granos de café" class="w-full h-auto" />
         </div> -->
 
-        <!-- Imagen decorativa superior izquierda -->
-      <!--   <div class="absolute top-10 left-8 z-1 w-1/4 max-w-lg">
+    <!-- Imagen decorativa superior izquierda -->
+    <!--   <div class="absolute top-10 left-8 z-1 w-1/4 max-w-lg">
             <img src="assets/img/izq.svg" alt="Hoja de café" class="w-full h-auto" />
         </div> -->
-    </div>
+  </div>
 
-    <!-- Sección del formulario -->
-    <div class="w-full md:w-1/2 flex items-center justify-center  md:p-8 bg-white">
-        <div class="max-w-md w-full  rounded-lg">
-            <!-- Botón para volver atrás -->
-            <!--    <button (click)="home()" class="flex items-center text-primary ">
+  <!-- Sección del formulario -->
+  <div class="w-full md:w-1/2 flex items-center justify-center md:p-8 bg-white">
+    <div class="max-w-md w-full rounded-lg">
+      <!-- Botón para volver atrás -->
+      <!--    <button (click)="home()" class="flex items-center text-primary ">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
                 Volver atrás
             </button> -->
 
-            <div class="text-center ">
-                <h2 class="text-3xl font-bold text-black" appTranslate="REGISTER.TITLE">Registro</h2>
+      <div class="text-center">
+        <h2 class="text-3xl font-bold text-black" appTranslate="REGISTER.TITLE">
+          Registro
+        </h2>
+      </div>
 
+      <dynamic-form
+        [fields]="PatientsFormFields(catalogs)"
+        [initialData]="initiaData"
+        [askfor]="onFormCreated"
+        (onFormChange)="handleFormChange($event)"
+      >
+      </dynamic-form>
 
-            </div>
-
-            <dynamic-form [fields]="PatientsFormFields(catalogs)" [initialData]="initiaData" [askfor]="onFormCreated"
-                (onFormChange)="handleFormChange($event)">
-            </dynamic-form>
-
-            <!-- Contenedor de botones -->
-            <div class="mx-5 px-2 flex flex-col space-y-4">
-                <button (click)="save()" [disabled]="!formData?.valid || disabled"
-                    class="w-full py-3 px-5 bg-primary text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                    appTranslate="REGISTER.REGISTER_BUTTON">
-                    Registrarse
-                </button>
-
-            </div>
-        </div>
+      <!-- Contenedor de botones -->
+      <div class="mx-5 px-2 flex flex-col space-y-4">
+        <button
+          (click)="save()"
+          [disabled]="!formData?.valid || disabled"
+          class="w-full py-3 px-5 bg-secondary text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+          appTranslate="REGISTER.REGISTER_BUTTON"
+        >
+          Registrarse
+        </button>
+      </div>
     </div>
+  </div>
 </div>

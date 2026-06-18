@@ -1,6 +1,7 @@
-import { Component, OnInit, OnDestroy, inject, ViewChild, ElementRef, AfterViewInit, NgZone } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ViewChild, ElementRef, AfterViewInit, NgZone, computed } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { TranslateDirective } from '../../../project/directive/translate.directive';
+import { BrandingService } from '../../../core/branding/branding.service';
 
 @Component({
   selector: 'app-external-index',
@@ -15,6 +16,13 @@ export class ExternalIndexComponent implements OnInit, OnDestroy, AfterViewInit 
   
   private router = inject(Router);
   private ngZone = inject(NgZone);
+  private brandingService = inject(BrandingService);
+
+  // Institution name from branding
+  institutionName = computed(() => this.brandingService.configSignal().institutionName || 'Cáritas Bolivia');
+  institutionShortName = computed(() => this.brandingService.configSignal().institutionShortName || 'Cáritas');
+  currentYear = new Date().getFullYear();
+
   showModal = false;
   slides = [
     {

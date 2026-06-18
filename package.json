@@ -23,6 +23,7 @@
     "@angular/platform-server": "^19.2.13",
     "@angular/router": "^19.2.13",
     "@angular/ssr": "^19.2.13",
+    "@fontsource/manrope": "^5.2.8",
     "@ngx-translate/core": "^16.0.4",
     "@ngx-translate/http-loader": "^17.0.0",
     "@tailwindcss/postcss": "^4.1.7",

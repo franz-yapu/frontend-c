@@ -65,13 +65,19 @@ export class NavbarComponent implements OnInit {
        translateKey: 'NAV.USERS'
      },
      {
-       title: 'Branding', 
+       title: 'Branding',
        path: 'branding',
        icon: 'palette',
        translateKey: 'NAV.BRANDING'
      },
-   
-  
+     {
+       title: 'Textos',
+       path: 'translations',
+       icon: 'translate',
+       translateKey: 'NAV.TRANSLATIONS'
+     },
+
+
   ];
 
   constructor(

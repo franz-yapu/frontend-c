@@ -270,3 +270,88 @@
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
+
+// ── Institution Name Section ──────────────────────────────
+.section-description {
+  font-size: 12px;
+  color: #888;
+  margin: -10px 0 16px;
+  line-height: 1.5;
+}
+
+.form-input {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  background: white;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+
+  &:focus {
+    outline: none;
+    border-color: var(--primary-color, #CA3636);
+    box-shadow: 0 0 0 3px rgba(202, 54, 54, 0.08);
+  }
+}
+
+.form-hint {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  color: #aaa;
+}
+
+.institution-preview {
+  margin-top: 16px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  border: 1px solid #e8e8e8;
+  overflow: hidden;
+  font-size: 12px;
+
+  .institution-preview-label {
+    display: block;
+    padding: 6px 12px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #aaa;
+    background: #f0f0f0;
+    border-bottom: 1px solid #e8e8e8;
+  }
+
+  .institution-preview-nav {
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px dashed #e2e8f0;
+    background: white;
+
+    .institution-preview-mobile {
+      background: var(--primary-color, #CA3636);
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    .institution-preview-desktop {
+      font-size: 13px;
+      font-weight: 600;
+      color: #333;
+    }
+  }
+
+  .institution-preview-footer {
+    padding: 8px 12px;
+    color: #777;
+    font-size: 11px;
+    font-style: italic;
+    background: #fafafa;
+  }
+}

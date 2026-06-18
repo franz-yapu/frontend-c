@@ -1,5 +1,5 @@
 import { Component, OnInit, signal, computed, ChangeDetectionStrategy, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, UpperCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BrandingService, BrandingConfig } from '../../../core/branding/branding.service';
 import { finalize } from 'rxjs';
@@ -14,7 +14,7 @@ interface LogoUpload {
 @Component({
   selector: 'app-branding-panel',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, UpperCasePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './branding-panel.component.html',
   styleUrl: './branding-panel.component.scss'
@@ -34,6 +34,8 @@ export class BrandingPanelComponent implements OnInit {
     themeMode: 'light',
     fontFamily: 'Inter',
     borderRadius: '4px',
+    institutionName: 'Cáritas Bolivia',
+    institutionShortName: 'Cáritas',
   };
 
   saving = signal(false);
@@ -56,6 +58,7 @@ export class BrandingPanelComponent implements OnInit {
 
   // Minimalist solid header instead of gradient
   headerColor = computed(() => this.draft.primaryColor);
+  currentYear = new Date().getFullYear();
 
 
   ngOnInit(): void {

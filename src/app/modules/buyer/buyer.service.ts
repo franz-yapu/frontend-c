@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { firstValueFrom, Observable, Subject, BehaviorSubject } from 'rxjs';
 import { io, Socket } from 'socket.io-client';
+import { GeneralService } from '../../core/gerneral.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,14 +21,15 @@ export class BuyerService {
 
   constructor(
     private http: HttpClient,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private general: GeneralService
   ) {
     this.initializeSocket();
   }
 
   private initializeSocket() {
     if (this.isInitialized) return;
-    
+
     try {
       this.socket = io(`${environment.Socket}/bids`, {
         path: '/socket.io',
@@ -35,7 +37,11 @@ export class BuyerService {
         timeout: 10000,
         reconnectionAttempts: 5,
         reconnectionDelay: 2000,
-        autoConnect: true
+        autoConnect: true,
+        // Enviar el JWT en el handshake. Al ser una función, socket.io la
+        // reevalúa en cada (re)conexión y toma el token fresco tras el login.
+        auth: (cb: (data: { token: string }) => void) =>
+          cb({ token: this.general.getToken() || '' })
       });
 
       this.setupSocketListeners();

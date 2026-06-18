@@ -130,6 +130,50 @@
         </div>
       </section>
 
+      <!-- IDENTIDAD DE LA INSTITUCIÓN -->
+      <section class="panel-section">
+        <h2 class="section-title">🏛️ Identidad de la Institución</h2>
+        <p class="section-description">Este nombre aparecerá en toda la plataforma: navegación, pie de página, correos electrónicos y más.</p>
+
+        <div class="form-group">
+          <label for="institutionName">Nombre Completo de la Institución</label>
+          <input
+            id="institutionName"
+            type="text"
+            [(ngModel)]="draft.institutionName"
+            class="form-input"
+            placeholder="Ej: Cáritas Bolivia"
+            maxlength="100"
+          />
+          <small class="form-hint">Se usa en el pie de página, correos y vista previa del sistema.</small>
+        </div>
+
+        <div class="form-group">
+          <label for="institutionShortName">Nombre Corto / Abreviado</label>
+          <input
+            id="institutionShortName"
+            type="text"
+            [(ngModel)]="draft.institutionShortName"
+            class="form-input"
+            placeholder="Ej: Cáritas"
+            maxlength="50"
+          />
+          <small class="form-hint">Se usa en la barra de navegación y títulos compactos.</small>
+        </div>
+
+        <!-- Preview inline del nombre -->
+        <div class="institution-preview">
+          <span class="institution-preview-label">Vista previa:</span>
+          <div class="institution-preview-nav">
+            <span class="institution-preview-mobile">{{ (draft.institutionShortName || 'INSTITUCIÓN') | uppercase }}</span>
+            <span class="institution-preview-desktop">{{ draft.institutionShortName || 'Institución' }}</span>
+          </div>
+          <div class="institution-preview-footer">
+            © {{ currentYear }} {{ draft.institutionName || 'Nombre de la Institución' }}. Todos los derechos reservados.
+          </div>
+        </div>
+      </section>
+
       <!-- LOGOS -->
       <section class="panel-section">
         <h2 class="section-title">🖼️ Logos</h2>

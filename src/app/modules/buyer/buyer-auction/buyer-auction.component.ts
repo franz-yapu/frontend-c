@@ -76,7 +76,7 @@ interface Bid {
 @Component({
   selector: 'app-buyer-auction',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateDirective, TranslatePipe],
+  imports: [CommonModule, FormsModule, TranslateDirective],
   templateUrl: './buyer-auction.component.html',
   styleUrl: './buyer-auction.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

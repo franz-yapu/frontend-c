@@ -1,4 +1,4 @@
-import { Injectable, Inject, PLATFORM_ID, inject } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID, signal } from '@angular/core';
 import { HttpClient, HttpBackend } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap, catchError, of, firstValueFrom, timeout } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
@@ -20,6 +20,8 @@ export interface BrandingConfig {
   themeMode: string;
   fontFamily?: string;
   borderRadius?: string;
+  institutionName?: string;
+  institutionShortName?: string;
   isActive?: boolean;
 }
 
@@ -35,6 +37,8 @@ const DEFAULT_CONFIG: BrandingConfig = {
   themeMode: 'light',
   fontFamily: 'Inter',
   borderRadius: '4px',
+  institutionName: 'Cáritas Bolivia',
+  institutionShortName: 'Cáritas',
 };
 
 const CACHE_KEY = 'branding_config';
@@ -45,6 +49,8 @@ export class BrandingService {
   private readonly apiUrl = `${environment.backend}/v1/branding`;
   private configSubject = new BehaviorSubject<BrandingConfig>(DEFAULT_CONFIG);
   config$ = this.configSubject.asObservable();
+  // Angular signal for reactive computed() in components
+  readonly configSignal = signal<BrandingConfig>(DEFAULT_CONFIG);
   private configLoaded = false;
 
   constructor(
@@ -57,9 +63,8 @@ export class BrandingService {
       const cached = this.getCachedConfig();
       if (cached) {
         console.log('📦 [BRANDING-DIAGNOSTIC] Constructor applying cached config:', cached.primaryColor);
-        // No llamamos a applyBranding aquí porque el script de index.html ya lo hizo
-        // Pero sí actualizamos el subject para que los componentes lo vean
-        this.configSubject.next({ ...DEFAULT_CONFIG, ...cached });
+        const merged = { ...DEFAULT_CONFIG, ...cached };
+        this.pushConfig(merged);
       }
     }
   }
@@ -74,7 +79,7 @@ export class BrandingService {
     if (cached) {
       console.log('📦 [BRANDING-DIAGNOSTIC] Applying cached config:', cached.primaryColor);
       this.applyBranding(cached);
-      this.configSubject.next(cached);
+      this.pushConfig(cached);
     }
 
     const cleanHttp = new HttpClient(this.httpBackend);
@@ -83,13 +88,13 @@ export class BrandingService {
 
     return firstValueFrom(
       cleanHttp.get<BrandingConfig>(`${this.apiUrl}/config?t=${timestamp}`).pipe(
-        timeout(10000), // Aumentar a 10s
+        timeout(4000), // Tope del arranque: ya se aplicó caché antes, no bloquear más de 4s
         tap((config) => {
           console.log('✅ [BRANDING-DIAGNOSTIC] Received from Server:', config?.primaryColor);
           if (config && config.primaryColor) {
             const safeConfig = { ...DEFAULT_CONFIG, ...config };
             this.applyBranding(safeConfig);
-            this.configSubject.next(safeConfig);
+            this.pushConfig(safeConfig);
             this.setCachedConfig(safeConfig);
             this.configLoaded = true;
           }
@@ -116,9 +121,11 @@ export class BrandingService {
 
     const root = document.documentElement;
 
-    // Colores con fallbacks de seguridad total
-    const primary = config.primaryColor || DEFAULT_CONFIG.primaryColor;
-    const secondary = config.secondaryColor || DEFAULT_CONFIG.secondaryColor;
+    // Colores con fallbacks de seguridad total. Si un color viene null, vacío o
+    // con formato inválido (#GGG, "rojo", etc.) se usa el default: así un valor
+    // corrupto NUNCA puede dejar la UI en negro ni romper las opacidades Tailwind.
+    const primary = this.safeColor(config.primaryColor, DEFAULT_CONFIG.primaryColor);
+    const secondary = this.safeColor(config.secondaryColor, DEFAULT_CONFIG.secondaryColor);
 
     root.style.setProperty('--primary-color', primary);
     root.style.setProperty('--primary-color-rgb', this.hexToRgb(primary));
@@ -126,12 +133,12 @@ export class BrandingService {
     root.style.setProperty('--secondary-color-rgb', this.hexToRgb(secondary));
 
     // Colores Semánticos
-    const success = config.successColor || DEFAULT_CONFIG.successColor!;
-    const warning = config.warningColor || DEFAULT_CONFIG.warningColor!;
-    const danger = config.dangerColor || DEFAULT_CONFIG.dangerColor!;
-    const info = config.infoColor || DEFAULT_CONFIG.infoColor!;
-    const surface = config.surfaceColor || DEFAULT_CONFIG.surfaceColor!;
-    const text = config.textColor || DEFAULT_CONFIG.textColor!;
+    const success = this.safeColor(config.successColor, DEFAULT_CONFIG.successColor!);
+    const warning = this.safeColor(config.warningColor, DEFAULT_CONFIG.warningColor!);
+    const danger = this.safeColor(config.dangerColor, DEFAULT_CONFIG.dangerColor!);
+    const info = this.safeColor(config.infoColor, DEFAULT_CONFIG.infoColor!);
+    const surface = this.safeColor(config.surfaceColor, DEFAULT_CONFIG.surfaceColor!);
+    const text = this.safeColor(config.textColor, DEFAULT_CONFIG.textColor!);
 
     root.style.setProperty('--success-color', success);
     root.style.setProperty('--success-color-rgb', this.hexToRgb(success));
@@ -184,6 +191,9 @@ export class BrandingService {
   }
 
   private loadGoogleFont(font: string): void {
+    // Solo inyectamos fuentes de la lista blanca: evita cargar recursos de
+    // terceros arbitrarios desde un fontFamily manipulado.
+    if (!BrandingService.ALLOWED_FONTS.has(font)) return;
     const fontId = `google-font-${font.replace(/\s+/g, '-').toLowerCase()}`;
     if (document.getElementById(fontId)) return;
 
@@ -200,7 +210,7 @@ export class BrandingService {
     return this.http.post<BrandingConfig>(`${this.apiUrl}/config`, config).pipe(
       tap((newConfig) => {
         this.applyBranding(newConfig);
-        this.configSubject.next(newConfig);
+        this.pushConfig(newConfig);
         this.setCachedConfig(newConfig);
       })
     );
@@ -210,7 +220,7 @@ export class BrandingService {
     return this.http.put<BrandingConfig>(`${this.apiUrl}/config/${id}`, config).pipe(
       tap((updated) => {
         this.applyBranding(updated);
-        this.configSubject.next(updated);
+        this.pushConfig(updated);
         this.setCachedConfig(updated);
       })
     );
@@ -233,7 +243,7 @@ export class BrandingService {
     return this.http.post<BrandingConfig>(`${this.apiUrl}/config/reset`, {}).pipe(
       tap((config) => {
         this.applyBranding(config);
-        this.configSubject.next(config);
+        this.pushConfig(config);
         this.invalidateCache();
       })
     );
@@ -244,7 +254,26 @@ export class BrandingService {
     return this.configSubject.getValue();
   }
 
+  /** Sync both BehaviorSubject and Angular signal */
+  private pushConfig(config: BrandingConfig): void {
+    this.configSubject.next(config);
+    this.configSignal.set(config);
+  }
+
   // ─── Helpers ───────────────────────────────────────────────────────────────
+
+  // Regex hex (3 o 6 dígitos) — misma validación que el backend.
+  private static readonly HEX_RE = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
+  // Fuentes permitidas (las mismas que ofrece el panel admin). Solo estas se
+  // inyectan desde Google Fonts; cualquier otro valor cae al fallback CSS.
+  private static readonly ALLOWED_FONTS = new Set([
+    'Inter', 'Roboto', 'Outfit', 'Poppins', 'Open Sans', 'Lato', 'Montserrat',
+  ]);
+
+  /** Devuelve `value` solo si es un hex válido; si no, el fallback (default). */
+  private safeColor(value: string | undefined, fallback: string): string {
+    return value && BrandingService.HEX_RE.test(value) ? value : fallback;
+  }
 
   private hexToRgb(hex: string): string {
     if (!hex || typeof hex !== 'string') return '0, 0, 0';

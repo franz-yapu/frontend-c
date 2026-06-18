@@ -17,7 +17,11 @@ export class GeneralService {
 
   setSaveToken(data: any) {
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem(environment.appCode + '.token', data.token);
+      // El backend devuelve `access_token` (no `token`). Antes se guardaba
+      // `undefined`; era latente porque el REST no exigía auth, pero con el guard
+      // global del backend un token inválido provoca 401 + logout en bucle.
+      const token = data?.access_token ?? data?.token;
+      localStorage.setItem(environment.appCode + '.token', token);
       localStorage.setItem(environment.appCode + '.userData',  JSON.stringify(data.user));
     }
   }

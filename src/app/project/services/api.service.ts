@@ -78,8 +78,8 @@ export class ApiService {
     return firstValueFrom(this.http.get(`${environment.backend}/dms/${id}`));
   }
   getRoles() {
-    
-    return firstValueFrom(this.http.get(`${environment.backend}/dynamic/role`));
+    // Endpoint público dedicado: el CRUD genérico /dynamic ya exige JWT.
+    return firstValueFrom(this.http.get(`${environment.backend}/auth/roles`));
   }
  //users seller
   getUserSellers() {

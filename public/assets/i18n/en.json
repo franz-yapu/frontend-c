@@ -12,15 +12,16 @@
     "LOGOUT": "Logout",
     "AUCTIONS": "Auctions",
     "USERS": "Users",
-    "BRANDING": "Branding"
+    "BRANDING": "Branding",
+    "TRANSLATIONS": "Texts"
   },
   "APP": {
     "TITLE": "Altitude",
-    "TITLE_ACCENT": " Cáritas"
+    "TITLE_ACCENT": " {{institutionShortName}}"
   },
   "HOME": {
     "HERO": {
-      "TITLE": "Cáritas Bolivia 2026 will bring together the winners of the competitions from recent years",
+      "TITLE": "{{institutionName}} 2026 will bring together the winners of the competitions from recent years",
       "SUBTITLE": "creating an unprecedented high-quality event",
       "AUCTION_BUTTON": "View Active Auctions",
       "LOGIN_BUTTON": "Login",
@@ -53,10 +54,11 @@
       "SUBTITLE": "Join our community of coffee lovers and discover exclusive lots directly from producers",
       "REGISTER_BUTTON": "Create Account",
       "LOGIN_BUTTON": "Login"
-    }
+    },
+    "TITLE_ACCENT": " {{institutionShortName}}"
   },
   "FOOTER": {
-    "COMPANY_TITLE": "Coffee Auctions",
+    "COMPANY_TITLE": "{{institutionShortName}} Auctions",
     "COMPANY_DESC": "Connecting producers with coffee lovers since 2023",
     "QUICK_LINKS_TITLE": "Quick Links",
     "ACTIVE_AUCTIONS": "Active Auctions",
@@ -65,7 +67,7 @@
     "TERMS": "Terms",
     "CONTACT_TITLE": "Contact",
     "LOCATION": "La Paz, Bolivia",
-    "COPYRIGHT": "© 2026 Cáritas. All rights reserved."
+    "COPYRIGHT": "© 2026 {{institutionName}}. All rights reserved."
   },
   "WINNERS": {
     "HERO": {
@@ -117,7 +119,7 @@
   },
   "AUCTION": {
     "HERO": {
-      "TITLE": "Cáritas Bolivia 2026 Auction",
+      "TITLE": "{{institutionName}} 2026 Auction",
       "SUBTITLE": "The best producers of Bolivia 2026",
       "START_DATE": "Start",
       "END_DATE": "End"
@@ -182,7 +184,8 @@
       "PER_LB": "per pound",
       "EMPTY_TITLE": "No winners registered",
       "EMPTY_SUBTITLE": "No results were found for this auction."
-    }
+    },
+    "PREMIUM_AUCTIONS": "{{institutionName}} 2026 Auction"
   },
   "ABOUT": {
     "HERO": {
@@ -308,7 +311,7 @@
     }
   },
   "AUCTION-BUYER": {
-    "PREMIUM_AUCTIONS": "Cáritas Bolivia 2026 Auction",
+    "PREMIUM_AUCTIONS": "{{institutionName}} 2026 Auction",
     "EXCLUSIVE_LOTS": "The best producers of Bolivia 2026",
     "AUCTION_ENDED": "Auction Ended",
     "RESULTS_AVAILABLE": "Results available",
@@ -466,20 +469,15 @@
     "SUCCESS_MESSAGE": "Account successfully verified!",
     "TITLE": "Log In",
     "SUBTITLE": "Access your account to continue",
-
     "EMAIL_LABEL": "Email Address",
     "EMAIL_PLACEHOLDER": "yourmail@example.com",
     "EMAIL_REQUIRED": "Email is required",
     "EMAIL_INVALID": "Please enter a valid email address",
-
     "PASSWORD_LABEL": "Password",
     "PASSWORD_REQUIRED": "Password is required",
-
     "LOGIN_BUTTON": "Log In",
-
     "NO_ACCOUNT": "Don’t have an account?",
     "REGISTER_LINK": " Sign Up",
-
     "TERMS_TEXT": "By logging in you accept our",
     "TERMS_LINK": " Terms and Conditions"
   },

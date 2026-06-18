@@ -12,15 +12,16 @@
     "LOGOUT": "Cerrar sesión",
     "AUCTIONS": "Subastas",
     "USERS": "Usuarios",
-    "BRANDING": "Branding"
+    "BRANDING": "Branding",
+    "TRANSLATIONS": "Textos"
   },
   "APP": {
     "TITLE": "Altura",
-    "TITLE_ACCENT": " Cáritas"
+    "TITLE_ACCENT": " {{institutionShortName}}"
   },
   "HOME": {
     "HERO": {
-      "TITLE": "Cáritas Bolivia 2026 reunirá a los ganadores de las competencias de los últimos años",
+      "TITLE": "{{institutionName}} 2026 reunirá a los ganadores de las competencias de los últimos años",
       "SUBTITLE": "creando un encuentro de calidad sin precedentes",
       "AUCTION_BUTTON": "Ver Subastas Activas",
       "LOGIN_BUTTON": "Ingresar",
@@ -53,10 +54,11 @@
       "SUBTITLE": "Únete a nuestra comunidad de amantes del café y descubre lotes exclusivos directamente de los productores",
       "REGISTER_BUTTON": "Crear Cuenta",
       "LOGIN_BUTTON": "Ingresar"
-    }
+    },
+    "TITLE_ACCENT": " {{institutionShortName}}"
   },
   "FOOTER": {
-    "COMPANY_TITLE": "Café Subastas",
+    "COMPANY_TITLE": "{{institutionShortName}} Subastas",
     "COMPANY_DESC": "Conectando productores con amantes del café desde 2023",
     "QUICK_LINKS_TITLE": "Enlaces Rápidos",
     "ACTIVE_AUCTIONS": "Subastas Activas",
@@ -65,7 +67,7 @@
     "TERMS": "Términos",
     "CONTACT_TITLE": "Contacto",
     "LOCATION": "La Paz, Bolivia",
-    "COPYRIGHT": "© 2026 Cáritas. Todos los derechos reservados."
+    "COPYRIGHT": "© 2026 {{institutionName}}. Todos los derechos reservados."
   },
   "WINNERS": {
     "HERO": {
@@ -117,7 +119,7 @@
   },
   "AUCTION": {
     "HERO": {
-      "TITLE": "Subasta del Cáritas Bolivia 2026",
+      "TITLE": "Subasta de {{institutionName}} 2026",
       "SUBTITLE": "Los mejores productores de Bolivia 2026",
       "START_DATE": "Inicio",
       "END_DATE": "Fin"
@@ -181,7 +183,8 @@
       "PER_LB": "por libra",
       "EMPTY_TITLE": "No hay ganadores registrados",
       "EMPTY_SUBTITLE": "No se encontraron resultados para esta subasta."
-    }
+    },
+    "PREMIUM_AUCTIONS": "Subasta de {{institutionName}} 2026"
   },
   "ABOUT": {
     "HERO": {
@@ -307,7 +310,7 @@
     }
   },
   "AUCTION-BUYER": {
-    "PREMIUM_AUCTIONS": "Subasta del Cáritas Bolivia 2026",
+    "PREMIUM_AUCTIONS": "Subasta de {{institutionName}} 2026",
     "EXCLUSIVE_LOTS": "Los mejores productores de Bolivia 2026",
     "AUCTION_ENDED": "Subasta Finalizada",
     "RESULTS_AVAILABLE": "Resultados disponibles",

@@ -1,9 +1,18 @@
-import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, OnDestroy, effect, signal } from '@angular/core';
+import { CommonModule, UpperCasePipe } from '@angular/common';
+import {
+  Component,
+  inject,
+  OnInit,
+  OnDestroy,
+  effect,
+  signal,
+  computed,
+} from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { TranslationService } from '../../../project/services/translate.service';
 import { TranslateDirective } from '../../../project/directive/translate.directive';
 import { Language } from '../../../project/services/translate.service'; // Asegúrate de importar la interfaz
+import { BrandingService } from '../../../core/branding/branding.service';
 
 interface NavItem {
   name: string;
@@ -14,42 +23,73 @@ interface NavItem {
 
 @Component({
   selector: 'app-external-nav',
-  imports: [CommonModule, RouterModule, TranslateDirective],
+  imports: [CommonModule, RouterModule, TranslateDirective, UpperCasePipe],
   templateUrl: './external-nav.component.html',
-  styleUrl: './external-nav.component.scss'
+  styleUrl: './external-nav.component.scss',
 })
 export class ExternalNavComponent implements OnInit, OnDestroy {
   private translationService = inject(TranslationService);
-  
+  private brandingService = inject(BrandingService);
+
+  // Institution name from branding config
+  institutionName = computed(() => this.brandingService.configSignal().institutionName || 'Cáritas Bolivia');
+  institutionShortName = computed(() => this.brandingService.configSignal().institutionShortName || 'Cáritas');
+
   // Effect para reaccionar a cambios de idioma
   private languageEffect = effect(() => {
     this.translationService.currentLanguage();
-    this.currentLanguageInfo.set(this.translationService.getCurrentLanguageInfo());
+    this.currentLanguageInfo.set(
+      this.translationService.getCurrentLanguageInfo(),
+    );
   });
 
   navItems: NavItem[] = [
-    { name: 'Inicio', route: '/index', isActive: false, translateKey: 'NAV.HOME' },
-    { name: 'Subasta Activa', route: '/auction', isActive: false, translateKey: 'NAV.AUCTION' },
-     { name: 'Ingresar', route: '/login', isActive: false, translateKey: 'HOME.CTA.LOGIN_BUTTON' },
-    { name: 'Crear cuenta', route: '/register', isActive: false, translateKey: 'HOME.CTA.REGISTER_BUTTON' },
-    { name: 'Ganadores', route: '/winners', isActive: false, translateKey: 'NAV.WINNERS' },
-    { name: 'Reglamento', route: '/regulation', isActive: false, translateKey: 'NAV.REGULATION' },
-   /*  { name: 'Acerca de nosotros', route: '/Coffee/about', isActive: false, translateKey: 'NAV.ABOUT' }, */
+    {
+      name: 'Inicio',
+      route: '/index',
+      isActive: false,
+      translateKey: 'NAV.HOME',
+    },
+    {
+      name: 'Subasta Activa',
+      route: '/auction',
+      isActive: false,
+      translateKey: 'NAV.AUCTION',
+    },
+    //  { name: 'Ingresar', route: '/login', isActive: false, translateKey: 'HOME.CTA.LOGIN_BUTTON' },
+    // { name: 'Crear cuenta', route: '/register', isActive: false, translateKey: 'HOME.CTA.REGISTER_BUTTON' },
+    {
+      name: 'Ganadores',
+      route: '/winners',
+      isActive: false,
+      translateKey: 'NAV.WINNERS',
+    },
+    {
+      name: 'Reglamento',
+      route: '/regulation',
+      isActive: false,
+      translateKey: 'NAV.REGULATION',
+    },
+    /*  { name: 'Acerca de nosotros', route: '/Coffee/about', isActive: false, translateKey: 'NAV.ABOUT' }, */
   ];
 
   // Usar los Signals directamente del servicio
   availableLanguages = this.translationService.languages;
   currentLanguage = this.translationService.currentLanguage;
-  
+
   // Crear un signal para currentLanguageInfo
-  currentLanguageInfo = signal<Language>(this.translationService.getCurrentLanguageInfo());
-  
+  currentLanguageInfo = signal<Language>(
+    this.translationService.getCurrentLanguageInfo(),
+  );
+
   isMobileMenuOpen: boolean = false;
   isLanguageDropdownOpen: boolean = false;
 
   ngOnInit(): void {
     // Inicializar currentLanguageInfo
-    this.currentLanguageInfo.set(this.translationService.getCurrentLanguageInfo());
+    this.currentLanguageInfo.set(
+      this.translationService.getCurrentLanguageInfo(),
+    );
   }
 
   toggleMobileMenu(): void {
@@ -65,8 +105,8 @@ export class ExternalNavComponent implements OnInit, OnDestroy {
   }
 
   setActiveItem(item: NavItem): void {
-    this.navItems.forEach(navItem => {
-      navItem.isActive = (navItem === item);
+    this.navItems.forEach((navItem) => {
+      navItem.isActive = navItem === item;
     });
   }
 

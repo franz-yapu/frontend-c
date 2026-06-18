@@ -79,6 +79,11 @@ export const routes: Routes = [
        loadComponent: () => import('./branding/branding-panel.component').then(m => m.BrandingPanelComponent),
        title: 'Configuración de Marca',
      },
+     {
+       path: 'translations',
+       loadComponent: () => import('./translations/translations-panel.component').then(m => m.TranslationsPanelComponent),
+       title: 'Textos de la plataforma',
+     },
 
     ]
   },
