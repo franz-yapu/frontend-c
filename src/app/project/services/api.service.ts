@@ -50,6 +50,7 @@ export class ApiService {
 
 
   
+  // Perfil de un usuario ARBITRARIO por id (solo ADMIN: usa el CRUD genérico).
   getUser(id:string) {
     const where =  {id:{equals:id}};
     const include = {"role":true}
@@ -57,6 +58,11 @@ export class ApiService {
       .set('where', JSON.stringify(where))
       .set('include', JSON.stringify(include));
     return firstValueFrom(this.http.get(`${environment.backend}/dynamic/user/all/paginate`, { params }));
+  }
+
+  // Perfil del usuario autenticado (cualquier rol). El id sale del JWT en el back.
+  getMe() {
+    return firstValueFrom(this.http.get(`${environment.backend}/users/me`));
   }
 
   //  Método de logout

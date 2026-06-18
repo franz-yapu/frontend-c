@@ -20,11 +20,11 @@ export class BuyerDataComponent implements OnInit {
   async ngOnInit() {
     const dataUser:any =this.generalService.getUser();
       this.userId = dataUser.id;
-      console.log(this.userId);
-      
-   this.userData= await this.apiSevice.getUser(this.userId);
-   this.user= this.userData.data[0];
-   console.log(this.userData);
+
+   // Perfil propio vía /users/me (el back lo resuelve por el JWT); ya no usa el
+   // CRUD genérico /dynamic, que ahora es solo ADMIN.
+   this.user = await this.apiSevice.getMe();
+   this.userData = this.user;
    
 }
 
