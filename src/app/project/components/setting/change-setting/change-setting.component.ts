@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { DynamicFormComponent } from '../../dynamic-form/dynamic-form.component';
+import { TranslateDirective } from '../../../directive/translate.directive';
 import { CommonModule } from '@angular/common';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { FormGroup } from '@angular/forms';
@@ -9,7 +10,7 @@ import { changeFormFields } from './change-schema';
 
 @Component({
   selector: 'app-change-setting',
-  imports: [CommonModule, DynamicFormComponent],
+  imports: [CommonModule, DynamicFormComponent, TranslateDirective],
   templateUrl: './change-setting.component.html',
   styleUrl: './change-setting.component.scss'
 })

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { DynamicFormComponent } from '../dynamic-form/dynamic-form.component';
+import { TranslateDirective } from '../../directive/translate.directive';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { FormGroup } from '@angular/forms';
 import { HomeService } from '../../../modules/home/home.service';
@@ -12,7 +13,7 @@ import { GeneralService } from '../../../core/gerneral.service';
 
 @Component({
   selector: 'app-new-coffeelot',
-  imports: [CommonModule, DynamicFormComponent],
+  imports: [CommonModule, DynamicFormComponent, TranslateDirective],
   templateUrl: './new-coffeelot.component.html',
   styleUrl: './new-coffeelot.component.scss'
 })

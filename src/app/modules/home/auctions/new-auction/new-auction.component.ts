@@ -1,5 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { DynamicFormComponent } from '../../../../project/components/dynamic-form/dynamic-form.component';
+import { TranslateDirective } from '../../../../project/directive/translate.directive';
 import { CommonModule } from '@angular/common';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { FormGroup } from '@angular/forms';
@@ -10,7 +11,7 @@ import { GeneralService } from '../../../../core/gerneral.service';
 
 @Component({
   selector: 'app-new-auction',
-  imports: [CommonModule, DynamicFormComponent],
+  imports: [CommonModule, DynamicFormComponent, TranslateDirective],
   templateUrl: './new-auction.component.html',
   styleUrl: './new-auction.component.scss'
 })

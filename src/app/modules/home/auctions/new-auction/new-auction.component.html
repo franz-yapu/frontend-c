@@ -9,7 +9,7 @@
         </dynamic-form>
     </div>
     <div class="flex  justify-end">
-         <button (click)="close()" class="bg-secondary-500 text-white px-4 py-2 mr-4 rounded">cancel</button>
+         <button appTranslate="COMMON.CANCEL" (click)="close()" class="bg-secondary-500 text-white px-4 py-2 mr-4 rounded">Cancelar</button>
         <button (click)="save()"
                [disabled]="!formData?.valid" 
                [ngClass]="formData?.valid 

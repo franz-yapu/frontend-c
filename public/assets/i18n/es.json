@@ -357,6 +357,7 @@
     "CLEAR_FILTERS": "Limpiar Filtros",
     "APPLY_FILTERS": "Aplicar Filtros",
     "AMOUNT": "Monto",
+    "DATE": "Fecha",
     "NAME": "Nombre",
     "DESCRIPTION": "Descripción",
     "PRICE": "Precio",
@@ -410,6 +411,7 @@
   },
   "SETTINGS": {
     "PROFILE_INFO": "Información del Perfil",
+    "RESET_PASSWORD": "Restablecer contraseña",
     "ACTIVITY_HISTORY": "Historial de Actividad",
     "BASIC_INFO": "Información Básica",
     "CONTACT_INFO": "Información de Contacto",

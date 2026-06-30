@@ -6,11 +6,12 @@ import { ApiService } from '../../../../project/services/api.service';
 import { FormGroup } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { DynamicFormComponent } from '../../../../project/components/dynamic-form/dynamic-form.component';
+import { TranslateDirective } from '../../../../project/directive/translate.directive';
 import { userFormFields } from './user-schema';
 
 @Component({
   selector: 'app-user-modal',
-  imports: [CommonModule,DynamicFormComponent],
+  imports: [CommonModule,DynamicFormComponent,TranslateDirective],
   templateUrl: './user-modal.component.html',
   styleUrl: './user-modal.component.scss'
 })

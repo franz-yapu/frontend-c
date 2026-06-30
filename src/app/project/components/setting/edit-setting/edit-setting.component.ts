@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { DynamicFormComponent } from '../../dynamic-form/dynamic-form.component';
+import { TranslateDirective } from '../../../directive/translate.directive';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { FormGroup } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -10,7 +11,7 @@ import { userEditFormFields } from './edit-schema';
 
 @Component({
   selector: 'app-edit-setting',
-  imports: [CommonModule, DynamicFormComponent],
+  imports: [CommonModule, DynamicFormComponent, TranslateDirective],
   templateUrl: './edit-setting.component.html',
   styleUrl: './edit-setting.component.scss'
 })
