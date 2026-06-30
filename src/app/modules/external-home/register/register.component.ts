@@ -29,6 +29,9 @@ export class RegisterComponent implements OnInit {
   catalogs: any = {};
   public disabled = false;
   public view = false
+  // Modal de éxito tras registrarse (avisa que se envió el correo de confirmación).
+  public registered = false;
+  public registeredEmail = '';
   constructor(
     private toaster: ToasterService,
     private apiService: ApiService,
@@ -36,12 +39,17 @@ export class RegisterComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-   
-    const roles: any = await this.apiService.getRoles()
-    this.catalogs.roles = roles.map((m: any) => ({
-      label: this.roleName(m.name),
-      value: m.name,
-    }))
+    // getRoles es opcional (el campo de rol está oculto, el registro fuerza
+    // BUYER). Si falla, el formulario debe renderizarse igual.
+    try {
+      const roles: any = await this.apiService.getRoles()
+      this.catalogs.roles = (roles || []).map((m: any) => ({
+        label: this.roleName(m.name),
+        value: m.name,
+      }))
+    } catch (e) {
+      this.catalogs.roles = [];
+    }
 
     this.view = true
   }
@@ -71,24 +79,30 @@ export class RegisterComponent implements OnInit {
     
     if (this.formData?.valid && !this.disabled) {
        this.disabled= true
-     
+
       delete this.formData.data.repeatPassword;
       this.formData.data.roleName = 'BUYER';
+      const email = this.formData.data.email;
       if( this.formData.data.companyName === ''){
              delete this.formData.data.companyName;
 
       }
       this.apiService.register(this.formData.data).then((res: any) => {
         this.disabled= false;
+        // Modal visible en vez de toast fugaz + redirección automática: deja
+        // claro que hay que confirmar la cuenta por correo antes de loguearse.
+        this.registeredEmail = email;
+        this.registered = true;
+
+      }).catch((err: any) => {
+        // Rehabilitar el botón y avisar: antes un fallo dejaba el form bloqueado
+        // sin feedback.
+        this.disabled = false;
         this.toaster.showToast({
-          severity: 'success',
-          summary: 'Registro exitoso',
-          detail: 'Usuario registrado correctamente',
+          severity: 'error',
+          summary: 'Error en el registro',
+          detail: err?.error?.message || 'No se pudo completar el registro. Intenta de nuevo.',
         });
-        setTimeout(() => {    
-        this.router.navigate(['/login']);
-        },800); // Espera 2 segundos antes de redirigir
-      
       });
     }
   }
@@ -96,6 +110,11 @@ export class RegisterComponent implements OnInit {
 
   home() {
     this.router.navigate(['/']);
+  }
+
+  goToLogin() {
+    this.registered = false;
+    this.router.navigate(['/login']);
   }
 
   roleName(name: string): string {

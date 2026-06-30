@@ -1,11 +1,14 @@
 
 # Build Angular
+# BUILD_CMD elige la variante: 'buildcafe' (dominio, por defecto),
+# 'buildprod' o 'buildlocal' (backend local para pruebas en Docker).
 FROM node:20-alpine AS build
+ARG BUILD_CMD=buildcafe
 WORKDIR /app
 COPY package*.json ./
 RUN npm install --legacy-peer-deps
 COPY . .
-RUN npm run buildcafe
+RUN npm run ${BUILD_CMD}
 
 # Servir con Nginx
 FROM nginx:alpine

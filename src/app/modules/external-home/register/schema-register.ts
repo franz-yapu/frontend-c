@@ -30,10 +30,13 @@ export const registerFormFields = (catalogs: any) => {
                             validators: { maxLength: 100, minLength: 0 },
                         },
                         {
+                            // Teléfono como TEXTO (no number): admite +, espacios y
+                            // ceros a la izquierda, y evita el desbordamiento numérico.
+                            // El pattern muestra "Formato inválido" si trae letras.
                             key: 'phone',
                             label: 'REGISTER.PHONE',
-                            type: 'number',
-                            validators: { required: true  ,minLength:8 ,maxLength: 30 },
+                            type: 'text',
+                            validators: { required: true, minLength: 7, maxLength: 20, pattern: '^[0-9+()\\s-]{7,20}$' },
 
                         },
                        /*  {

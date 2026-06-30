@@ -1,266 +1,318 @@
-<div class="branding-page">
-  <!-- Header -->
-  <div class="branding-header">
-    <div class="header-content">
-      <h1 class="page-title">
-        <span class="icon">🎨</span>
-        Configuración de Marca
-      </h1>
-      <p class="page-subtitle">Personaliza los colores, logos y apariencia de la plataforma</p>
+<div class="min-h-screen bg-slate-50">
+  <!-- Barra superior fija con acciones -->
+  <header class="sticky top-0 z-20 bg-white/90 backdrop-blur border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <span class="grid place-items-center w-10 h-10 rounded-xl text-white shrink-0"
+              [style.background]="draft.primaryColor">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M12 3c4.97 0 9 3.58 9 8 0 2.5-2 4-4 4h-1.5a1.5 1.5 0 0 0-1 2.6c.3.3.5.7.5 1.1 0 .9-.8 1.3-1.6 1.3C8.6 21 3 17 3 11c0-4.42 4.03-8 9-8Z" />
+            <circle cx="7.5" cy="10.5" r="1" fill="currentColor" />
+            <circle cx="12" cy="8" r="1" fill="currentColor" />
+            <circle cx="16.5" cy="10.5" r="1" fill="currentColor" />
+          </svg>
+        </span>
+        <div>
+          <h1 class="text-lg font-semibold text-slate-800 leading-tight">Identidad de marca</h1>
+          <p class="text-xs text-slate-500">Colores, logos y apariencia de toda la plataforma</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button
+          class="px-3 py-2 text-sm font-medium text-slate-600 rounded-lg hover:bg-slate-100 transition disabled:opacity-50"
+          (click)="resetConfirm()" [disabled]="saving()">
+          Restablecer
+        </button>
+        <button
+          class="px-4 py-2 text-sm font-semibold text-white rounded-lg shadow-sm transition disabled:opacity-60 flex items-center gap-2"
+          [style.background]="draft.primaryColor"
+          (click)="saveChanges()" [disabled]="saving()">
+          @if (saving()) {
+            <span class="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin"></span>
+            Guardando…
+          } @else {
+            Guardar cambios
+          }
+        </button>
+      </div>
     </div>
-    <div class="header-actions">
-      <button class="btn btn-ghost" (click)="resetConfirm()" [disabled]="saving()">
-        🔄 Restablecer
-      </button>
-      <button class="btn btn-primary" (click)="saveChanges()" [disabled]="saving()">
-        @if (saving()) {
-          <span class="spinner"></span> Guardando...
-        } @else {
-          💾 Guardar Cambios
-        }
-      </button>
+  </header>
+
+  <!-- Aviso de sesión: el guardado exige ADMIN autenticado -->
+  @if (!isAdmin()) {
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-3">
+      <div class="flex items-start gap-3 bg-amber-50 border border-amber-200 text-amber-800 rounded-xl px-4 py-3 text-sm">
+        <span class="text-lg leading-none">🔒</span>
+        <div>
+          <p class="font-semibold">No tienes una sesión de administrador activa.</p>
+          <p class="text-amber-700">
+            @if (!hasToken()) {
+              No hay sesión iniciada. Inicia sesión con <b>admin&#64;cafe.test</b> / <b>sample</b> para poder guardar.
+            } @else {
+              Tu sesión es de rol <b>{{ sessionRole() || 'desconocido' }}</b>, no ADMIN. Los cambios no se guardarán (403). Entra con una cuenta de administrador.
+            }
+          </p>
+        </div>
+      </div>
     </div>
-  </div>
+  }
 
   <!-- Toast -->
   @if (toast()) {
-    <div class="toast" [class]="'toast-' + toast()!.type" role="alert">
+    <div class="fixed top-20 right-4 z-30 px-4 py-3 rounded-lg shadow-lg text-sm font-medium text-white"
+         [class.bg-emerald-600]="toast()!.type === 'success'"
+         [class.bg-red-600]="toast()!.type === 'error'"
+         role="alert">
       {{ toast()!.message }}
     </div>
   }
 
-  <div class="branding-content">
-    <!-- Columna izquierda: Controles -->
-    <div class="controls-panel">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- ───────── Columna de controles ───────── -->
+    <div class="lg:col-span-2 space-y-6">
 
-      <!-- COLORES -->
-      <section class="panel-section">
-        <h2 class="section-title">🎨 Colores</h2>
-
-        <div class="color-group">
-          <label>Color Primario</label>
-          <div class="color-input-row">
-            <input type="color" [(ngModel)]="draft.primaryColor" (input)="onColorChange()" class="color-swatch" />
-            <input type="text" [(ngModel)]="draft.primaryColor" (change)="onColorChange()" class="hex-input"
-              placeholder="#CA3636" maxlength="7" />
-          </div>
-          <div class="color-preview" [style.background]="draft.primaryColor"></div>
+      <!-- Colores de marca -->
+      <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-sm font-semibold text-slate-800 uppercase tracking-wide">Colores de marca</h2>
+          <span class="text-xs text-slate-400">Definen botones, enlaces y acentos</span>
         </div>
-
-        <div class="color-group">
-          <label>Color Secundario</label>
-          <div class="color-input-row">
-            <input type="color" [(ngModel)]="draft.secondaryColor" (input)="onColorChange()" class="color-swatch" />
-            <input type="text" [(ngModel)]="draft.secondaryColor" (change)="onColorChange()" class="hex-input"
-              placeholder="#FF9A24" maxlength="7" />
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <!-- Primario -->
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1.5">Color primario</label>
+            <div class="flex items-center gap-2">
+              <input type="color" [(ngModel)]="draft.primaryColor" (input)="onColorChange()"
+                class="w-11 h-11 rounded-lg border border-slate-200 cursor-pointer bg-transparent p-0.5" />
+              <input type="text" [(ngModel)]="draft.primaryColor" (input)="onColorChange()" maxlength="7"
+                placeholder="#CA3636"
+                class="flex-1 font-mono text-sm border rounded-lg px-3 py-2 uppercase focus:outline-none focus:ring-2 focus:ring-offset-0"
+                [class.border-slate-300]="isValidHex(draft.primaryColor)"
+                [class.border-red-400]="!isValidHex(draft.primaryColor)" />
+            </div>
+            @if (!isValidHex(draft.primaryColor)) {
+              <p class="text-xs text-red-500 mt-1">Formato hex inválido (ej. #CA3636)</p>
+            }
           </div>
-          <div class="color-preview" [style.background]="draft.secondaryColor"></div>
-        </div>
-      </section>
-
-      <!-- COLORES SEMÁNTICOS -->
-      <section class="panel-section">
-        <h2 class="section-title">🚦 Colores de Estado</h2>
-        <div class="grid grid-cols-2 gap-4">
-          <div class="color-group">
-            <label>Éxito (Success)</label>
-            <input type="color" [(ngModel)]="draft.successColor" (input)="onColorChange()" class="color-swatch w-full" />
-          </div>
-          <div class="color-group">
-            <label>Peligro (Danger)</label>
-            <input type="color" [(ngModel)]="draft.dangerColor" (input)="onColorChange()" class="color-swatch w-full" />
-          </div>
-          <div class="color-group">
-            <label>Advertencia</label>
-            <input type="color" [(ngModel)]="draft.warningColor" (input)="onColorChange()" class="color-swatch w-full" />
-          </div>
-          <div class="color-group">
-            <label>Información</label>
-            <input type="color" [(ngModel)]="draft.infoColor" (input)="onColorChange()" class="color-swatch w-full" />
+          <!-- Secundario -->
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1.5">Color secundario</label>
+            <div class="flex items-center gap-2">
+              <input type="color" [(ngModel)]="draft.secondaryColor" (input)="onColorChange()"
+                class="w-11 h-11 rounded-lg border border-slate-200 cursor-pointer bg-transparent p-0.5" />
+              <input type="text" [(ngModel)]="draft.secondaryColor" (input)="onColorChange()" maxlength="7"
+                placeholder="#FF9A24"
+                class="flex-1 font-mono text-sm border rounded-lg px-3 py-2 uppercase focus:outline-none focus:ring-2"
+                [class.border-slate-300]="isValidHex(draft.secondaryColor)"
+                [class.border-red-400]="!isValidHex(draft.secondaryColor)" />
+            </div>
+            @if (!isValidHex(draft.secondaryColor)) {
+              <p class="text-xs text-red-500 mt-1">Formato hex inválido (ej. #FF9A24)</p>
+            }
           </div>
         </div>
       </section>
 
-      <!-- SUPERFICIE Y TEXTO -->
-      <section class="panel-section">
-        <h2 class="section-title">📄 Superficie y Texto</h2>
-        <div class="grid grid-cols-2 gap-4">
-          <div class="color-group">
-            <label>Fondo de Tarjetas</label>
-            <input type="color" [(ngModel)]="draft.surfaceColor" (input)="onColorChange()" class="color-swatch w-full" />
-          </div>
-          <div class="color-group">
-            <label>Color de Texto</label>
-            <input type="color" [(ngModel)]="draft.textColor" (input)="onColorChange()" class="color-swatch w-full" />
-          </div>
+      <!-- Colores de estado -->
+      <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+        <h2 class="text-sm font-semibold text-slate-800 uppercase tracking-wide mb-4">Colores de estado</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <label class="flex flex-col items-center gap-2 p-3 rounded-xl border border-slate-100 bg-slate-50">
+            <input type="color" [(ngModel)]="draft.successColor" (input)="onColorChange()"
+              class="w-12 h-12 rounded-full border border-slate-200 cursor-pointer bg-transparent p-0.5" />
+            <span class="text-xs font-medium text-slate-600">Éxito</span>
+          </label>
+          <label class="flex flex-col items-center gap-2 p-3 rounded-xl border border-slate-100 bg-slate-50">
+            <input type="color" [(ngModel)]="draft.dangerColor" (input)="onColorChange()"
+              class="w-12 h-12 rounded-full border border-slate-200 cursor-pointer bg-transparent p-0.5" />
+            <span class="text-xs font-medium text-slate-600">Peligro</span>
+          </label>
+          <label class="flex flex-col items-center gap-2 p-3 rounded-xl border border-slate-100 bg-slate-50">
+            <input type="color" [(ngModel)]="draft.warningColor" (input)="onColorChange()"
+              class="w-12 h-12 rounded-full border border-slate-200 cursor-pointer bg-transparent p-0.5" />
+            <span class="text-xs font-medium text-slate-600">Advertencia</span>
+          </label>
+          <label class="flex flex-col items-center gap-2 p-3 rounded-xl border border-slate-100 bg-slate-50">
+            <input type="color" [(ngModel)]="draft.infoColor" (input)="onColorChange()"
+              class="w-12 h-12 rounded-full border border-slate-200 cursor-pointer bg-transparent p-0.5" />
+            <span class="text-xs font-medium text-slate-600">Información</span>
+          </label>
         </div>
       </section>
 
-      <!-- TEMA -->
-      <section class="panel-section">
-        <h2 class="section-title">🌓 Modo de Tema</h2>
-        <div class="theme-options">
-          @for (mode of themeModes; track mode.value) {
-            <label class="theme-option" [class.active]="draft.themeMode === mode.value">
-              <input type="radio" name="theme" [value]="mode.value" [(ngModel)]="draft.themeMode" />
-              {{ mode.icon }} {{ mode.label }}
+      <!-- Superficie, tema y tipografía -->
+      <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-5">
+        <h2 class="text-sm font-semibold text-slate-800 uppercase tracking-wide">Superficie y apariencia</h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1.5">Fondo de tarjetas</label>
+            <input type="color" [(ngModel)]="draft.surfaceColor" (input)="onColorChange()"
+              class="w-full h-11 rounded-lg border border-slate-200 cursor-pointer bg-transparent p-0.5" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1.5">Color de texto</label>
+            <input type="color" [(ngModel)]="draft.textColor" (input)="onColorChange()"
+              class="w-full h-11 rounded-lg border border-slate-200 cursor-pointer bg-transparent p-0.5" />
+          </div>
+        </div>
+
+        <!-- Modo de tema -->
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-2">Modo de tema</label>
+          <div class="grid grid-cols-3 gap-2">
+            @for (mode of themeModes; track mode.value) {
+              <label class="flex items-center justify-center gap-2 py-2.5 rounded-lg border cursor-pointer text-sm font-medium transition"
+                [class.border-slate-200]="draft.themeMode !== mode.value"
+                [class.text-slate-600]="draft.themeMode !== mode.value"
+                [class.text-white]="draft.themeMode === mode.value"
+                [style.background]="draft.themeMode === mode.value ? draft.primaryColor : 'transparent'">
+                <input type="radio" name="theme" class="sr-only" [value]="mode.value" [(ngModel)]="draft.themeMode" />
+                {{ mode.icon }} {{ mode.label }}
+              </label>
+            }
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1.5">Familia tipográfica</label>
+            <select [(ngModel)]="draft.fontFamily" (change)="onFontChange()"
+              class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2.5 bg-white focus:outline-none focus:ring-2">
+              @for (font of fonts; track font) {
+                <option [value]="font">{{ font }}</option>
+              }
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1.5">
+              Radio de bordes <span class="text-slate-400 font-normal">· {{ draft.borderRadius }}</span>
             </label>
+            <input type="range" min="0" max="24" step="2" [value]="radiusPx()" (input)="onRadiusChange($event)"
+              class="w-full mt-3 accent-slate-700" />
+          </div>
+        </div>
+      </section>
+
+      <!-- Identidad institucional -->
+      <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-4">
+        <div>
+          <h2 class="text-sm font-semibold text-slate-800 uppercase tracking-wide">Identidad de la institución</h2>
+          <p class="text-xs text-slate-500 mt-1">Aparece en navegación, pie de página y correos.</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1.5">Nombre completo</label>
+            <input type="text" [(ngModel)]="draft.institutionName" maxlength="100" placeholder="Ej: Cáritas Bolivia"
+              class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1.5">Nombre corto</label>
+            <input type="text" [(ngModel)]="draft.institutionShortName" maxlength="50" placeholder="Ej: Cáritas"
+              class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2" />
+          </div>
+        </div>
+        <div class="rounded-xl bg-slate-50 border border-slate-100 px-4 py-3 text-sm text-slate-600">
+          <span class="text-xs uppercase tracking-wide text-slate-400">Vista previa</span>
+          <div class="font-semibold text-slate-800 mt-0.5">{{ draft.institutionShortName || 'Institución' }}</div>
+          <div class="text-xs text-slate-400 mt-1">
+            © {{ currentYear }} {{ draft.institutionName || 'Nombre de la institución' }}. Todos los derechos reservados.
+          </div>
+        </div>
+      </section>
+
+      <!-- Logos -->
+      <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+        <h2 class="text-sm font-semibold text-slate-800 uppercase tracking-wide mb-4">Logos</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          @for (logo of logos; track logo.type) {
+            <div>
+              <label class="block text-xs font-medium text-slate-500 mb-1.5">{{ logo.label }}</label>
+              <div class="relative aspect-video rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 grid place-items-center overflow-hidden transition hover:border-slate-300"
+                   (dragover)="$event.preventDefault()" (drop)="onLogoDrop($event, logo)">
+                @if (logo.preview) {
+                  <img [src]="logo.preview" class="max-h-full max-w-full object-contain p-2" [alt]="logo.label" />
+                  <button class="absolute top-1 right-1 w-6 h-6 grid place-items-center rounded-full bg-white/90 text-slate-500 hover:text-red-600 shadow"
+                    (click)="removeLogo(logo)">✕</button>
+                } @else {
+                  <label class="flex flex-col items-center gap-1 text-center cursor-pointer px-2">
+                    <svg class="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 16V4m0 0L8 8m4-4 4 4M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
+                    </svg>
+                    <span class="text-xs font-medium text-slate-500">Subir archivo</span>
+                    <span class="text-[10px] text-slate-400">PNG · JPG · SVG · máx 2MB</span>
+                    <input type="file" accept=".jpg,.jpeg,.png,.svg,.ico,.webp" class="hidden"
+                      (change)="onLogoSelect($event, logo)" />
+                  </label>
+                }
+              </div>
+            </div>
           }
         </div>
       </section>
-
-      <!-- TIPOGRAFÍA -->
-      <section class="panel-section">
-        <h2 class="section-title">🔤 Tipografía</h2>
-        <div class="form-group">
-          <label>Familia de fuente</label>
-          <select [(ngModel)]="draft.fontFamily" (change)="onFontChange()" class="form-select">
-            @for (font of fonts; track font) {
-              <option [value]="font">{{ font }}</option>
-            }
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Radio de bordes</label>
-          <div class="radius-slider">
-            <input type="range" min="0" max="24" step="2"
-              [value]="radiusPx()" (input)="onRadiusChange($event)" class="slider" />
-            <span class="radius-label">{{ draft.borderRadius }}</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- IDENTIDAD DE LA INSTITUCIÓN -->
-      <section class="panel-section">
-        <h2 class="section-title">🏛️ Identidad de la Institución</h2>
-        <p class="section-description">Este nombre aparecerá en toda la plataforma: navegación, pie de página, correos electrónicos y más.</p>
-
-        <div class="form-group">
-          <label for="institutionName">Nombre Completo de la Institución</label>
-          <input
-            id="institutionName"
-            type="text"
-            [(ngModel)]="draft.institutionName"
-            class="form-input"
-            placeholder="Ej: Cáritas Bolivia"
-            maxlength="100"
-          />
-          <small class="form-hint">Se usa en el pie de página, correos y vista previa del sistema.</small>
-        </div>
-
-        <div class="form-group">
-          <label for="institutionShortName">Nombre Corto / Abreviado</label>
-          <input
-            id="institutionShortName"
-            type="text"
-            [(ngModel)]="draft.institutionShortName"
-            class="form-input"
-            placeholder="Ej: Cáritas"
-            maxlength="50"
-          />
-          <small class="form-hint">Se usa en la barra de navegación y títulos compactos.</small>
-        </div>
-
-        <!-- Preview inline del nombre -->
-        <div class="institution-preview">
-          <span class="institution-preview-label">Vista previa:</span>
-          <div class="institution-preview-nav">
-            <span class="institution-preview-mobile">{{ (draft.institutionShortName || 'INSTITUCIÓN') | uppercase }}</span>
-            <span class="institution-preview-desktop">{{ draft.institutionShortName || 'Institución' }}</span>
-          </div>
-          <div class="institution-preview-footer">
-            © {{ currentYear }} {{ draft.institutionName || 'Nombre de la Institución' }}. Todos los derechos reservados.
-          </div>
-        </div>
-      </section>
-
-      <!-- LOGOS -->
-      <section class="panel-section">
-        <h2 class="section-title">🖼️ Logos</h2>
-        @for (logo of logos; track logo.type) {
-          <div class="logo-upload-group">
-            <label>{{ logo.label }}</label>
-            <div class="logo-zone" (dragover)="$event.preventDefault()"
-              (drop)="onLogoDrop($event, logo)" [class.has-preview]="logo.preview">
-              @if (logo.preview) {
-                <img [src]="logo.preview" class="logo-preview" [alt]="logo.label" />
-                <button class="remove-logo" (click)="removeLogo(logo)">✕</button>
-              } @else {
-                <div class="upload-placeholder">
-                  <span>📁</span>
-                  <span>Arrastra un archivo aquí o</span>
-                  <label class="upload-btn">
-                    Seleccionar archivo
-                    <input type="file" accept=".jpg,.jpeg,.png,.svg,.ico,.webp" class="hidden-input"
-                      (change)="onLogoSelect($event, logo)" />
-                  </label>
-                  <small>PNG, JPG, SVG, ICO · Máx. 2MB</small>
-                </div>
-              }
-            </div>
-          </div>
-        }
-      </section>
     </div>
 
-    <!-- Columna derecha: Preview -->
-    <div class="preview-panel">
-      <h2 class="section-title sticky-title">👁️ Vista Previa en Vivo</h2>
-      <div class="preview-container">
-        <!-- Header preview -->
-        <div class="preview-header" [style.background]="headerColor()">
-          <div class="preview-logo">
+    <!-- ───────── Columna de preview + historial (sticky) ───────── -->
+    <aside class="lg:sticky lg:top-20 self-start space-y-6">
+      <section class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="px-5 py-3 border-b border-slate-100">
+          <h2 class="text-sm font-semibold text-slate-800 uppercase tracking-wide">Vista previa en vivo</h2>
+        </div>
+
+        <!-- Mock header -->
+        <div class="flex items-center justify-between px-4 py-3 text-white text-sm" [style.background]="headerColor()">
+          <div class="flex items-center gap-2 font-semibold">
             @if (logos[0].preview) {
-              <img [src]="logos[0].preview" height="28" alt="Logo" />
+              <img [src]="logos[0].preview" class="h-6 object-contain" alt="Logo" />
             } @else {
-              <span class="preview-logo-text">☕ CAFÉ</span>
+              <span>☕ {{ draft.institutionShortName || 'CAFÉ' }}</span>
             }
           </div>
-          <nav class="preview-nav">
-            <span>Inicio</span>
-            <span>Subastas</span>
-            <span>Ganadores</span>
+          <nav class="flex gap-3 text-xs opacity-90">
+            <span>Inicio</span><span>Subastas</span><span>Ganadores</span>
           </nav>
         </div>
 
-        <!-- Buttons preview -->
-        <div class="preview-body">
-          <div class="preview-buttons">
-            <button class="preview-btn-primary"
-              [style.background]="draft.primaryColor"
-              [style.border-radius]="draft.borderRadius">
-              Botón Primario
-            </button>
-            <button class="preview-btn-secondary"
-              [style.background]="draft.secondaryColor"
-              [style.border-radius]="draft.borderRadius">
-              Botón Secundario
-            </button>
+        <!-- Mock body -->
+        <div class="p-4 space-y-4" [style.background]="draft.surfaceColor">
+          <div class="flex gap-2">
+            <button class="px-3 py-2 text-sm font-medium text-white shadow-sm"
+              [style.background]="draft.primaryColor" [style.border-radius]="draft.borderRadius">Botón primario</button>
+            <button class="px-3 py-2 text-sm font-medium text-white shadow-sm"
+              [style.background]="draft.secondaryColor" [style.border-radius]="draft.borderRadius">Secundario</button>
           </div>
-          <div class="preview-card" [style.border-radius]="draft.borderRadius">
-            <div class="preview-card-header" [style.background]="draft.primaryColor + '20'">
-              <strong>Lote #17 - Catai Rojo</strong>
+          <div class="border border-slate-200 overflow-hidden" [style.border-radius]="draft.borderRadius">
+            <div class="px-3 py-2 text-sm font-semibold" [style.background]="draft.primaryColor + '20'"
+              [style.color]="draft.textColor">Lote #17 — Catai Rojo</div>
+            <div class="px-3 py-3 flex items-center justify-between" [style.color]="draft.textColor">
+              <span class="text-lg font-bold" [style.color]="draft.primaryColor">$15.50/lb</span>
+              <span class="px-2 py-1 text-xs font-medium text-white rounded-full"
+                [style.background]="draft.secondaryColor">Specialty</span>
             </div>
-            <div class="preview-card-body">
-              <span class="preview-price" [style.color]="draft.primaryColor">$15.50/lb</span>
-              <span class="preview-badge" [style.background]="draft.secondaryColor">Specialty</span>
-            </div>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-2 py-1 text-xs font-medium text-white rounded" [style.background]="draft.successColor">Éxito</span>
+            <span class="px-2 py-1 text-xs font-medium text-white rounded" [style.background]="draft.dangerColor">Peligro</span>
+            <span class="px-2 py-1 text-xs font-medium text-white rounded" [style.background]="draft.warningColor">Aviso</span>
+            <span class="px-2 py-1 text-xs font-medium text-white rounded" [style.background]="draft.infoColor">Info</span>
           </div>
         </div>
-      </div>
+      </section>
 
-      <!-- Historial -->
       @if (history().length > 0) {
-        <div class="history-section">
-          <h3 class="section-title">📋 Últimos Cambios</h3>
-          @for (entry of history().slice(0, 5); track entry.id) {
-            <div class="history-entry">
-              <span class="history-time">{{ entry.changedAt | date:'dd/MM HH:mm' }}</span>
-              <span class="history-user">{{ entry.changedBy }}</span>
-            </div>
-          }
-        </div>
+        <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+          <h3 class="text-sm font-semibold text-slate-800 uppercase tracking-wide mb-3">Últimos cambios</h3>
+          <ul class="space-y-2">
+            @for (entry of history().slice(0, 5); track entry.id) {
+              <li class="flex items-center justify-between text-xs text-slate-500 border-b border-slate-50 pb-2 last:border-0">
+                <span class="font-mono">{{ entry.changedAt | date:'dd/MM HH:mm' }}</span>
+                <span class="truncate ml-2 text-slate-600">{{ entry.changedBy }}</span>
+              </li>
+            }
+          </ul>
+        </section>
       }
-    </div>
+    </aside>
   </div>
 </div>

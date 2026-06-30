@@ -68,4 +68,34 @@
       </div>
     </div>
   </div>
+
+  <!-- Modal de éxito: confirma de forma visible que se envió el correo de
+       verificación. Sustituye al toast fugaz + redirección automática. -->
+  @if (registered) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+    <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-8 text-center">
+      <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-success-100">
+        <svg class="h-9 w-9 text-success-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 4h16v16H4z" opacity="0" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l9 6 9-6M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+        </svg>
+      </div>
+      <h3 class="text-2xl font-bold text-black mb-2" appTranslate="REGISTER.SUCCESS_TITLE">¡Registro exitoso!</h3>
+      <p class="text-gray-600 mb-1" appTranslate="REGISTER.SUCCESS_MESSAGE">
+        Te enviamos un correo de confirmación a:
+      </p>
+      <p class="font-semibold text-black mb-3 break-all">{{ registeredEmail }}</p>
+      <p class="text-sm text-gray-500 mb-6" appTranslate="REGISTER.SUCCESS_HINT">
+        Ábrelo y confirma tu cuenta para poder iniciar sesión. Revisa también la carpeta de spam.
+      </p>
+      <button
+        (click)="goToLogin()"
+        class="w-full py-3 px-5 bg-secondary text-white rounded-lg"
+        appTranslate="REGISTER.GO_TO_LOGIN"
+      >
+        Ir a iniciar sesión
+      </button>
+    </div>
+  </div>
+  }
 </div>

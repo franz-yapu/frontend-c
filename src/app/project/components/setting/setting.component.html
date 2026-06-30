@@ -119,7 +119,7 @@
         <div class="flex flex-col sm:flex-row justify-end gap-3 mb-4">
           @if(userAdmin.role.name =="ADMIN"){
 
-          <button *ngIf="user?.isVerified" (click)="activateUser()"
+          <button *ngIf="user?.isActive" (click)="activateUser()"
             class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-warning-600 hover:bg-warning-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-warning-500">
             <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd"
@@ -129,7 +129,7 @@
             <span appTranslate="SETTINGS.DEACTIVATE_USER">Desactivar Usuario</span>
           </button>
           
-          <button *ngIf="!user?.isVerified" (click)="activateUser()"
+          <button *ngIf="!user?.isActive" (click)="activateUser()"
             class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-success-600 hover:bg-success-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-success-500">
             <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd"
@@ -149,6 +149,19 @@
             </svg>
             <span appTranslate="SETTINGS.DELETE_USER">Eliminar Usuario</span>
           </button>
+
+          <!-- Reset de contraseña por ADMIN sobre OTRO usuario: genera una nueva
+               y la envía por email. En el perfil propio se usa el cambio con
+               contraseña actual (botón de abajo). -->
+          <button *ngIf="!isOwnProfile" (click)="resetPasswordByAdmin()"
+            class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+            <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd"
+                d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                clip-rule="evenodd" />
+            </svg>
+            <span appTranslate="SETTINGS.RESET_PASSWORD">Restablecer Contraseña</span>
+          </button>
           }
 
           <button (click)="openUserDialog()"
@@ -160,6 +173,10 @@
             <span appTranslate="SETTINGS.EDIT_PROFILE">Editar Perfil</span>
           </button>
 
+          <!-- El cambio de contraseña solo aplica al perfil propio: el backend
+               deriva el userId del JWT, así que un admin no puede cambiar la de
+               otro usuario desde aquí. -->
+          @if(isOwnProfile){
           <button (click)="openChangeDialog()"
             class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
             <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
@@ -170,6 +187,7 @@
             </svg>
             <span appTranslate="SETTINGS.CHANGE_PASSWORD">Cambiar Contraseña</span>
           </button>
+          }
         </div>
       </div>
     </div>

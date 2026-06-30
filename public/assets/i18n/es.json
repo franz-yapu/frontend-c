@@ -498,7 +498,11 @@
       "DESCRIPTION": "Este sistema de <span class=\"font-semibold\">subastas de café</span> fue desarrollado por <span class=\"font-semibold\">Franz Yapu</span>.<br/><br/>Si deseas <span class=\"font-semibold\">rentar</span> esta plataforma o crear una versión personalizada para tu organización, ofrezco:<br/><br/><span class=\"font-semibold\">• Personalización completa</span> (logos, colores, marca, identidad visual)<br/><span class=\"font-semibold\">• Nuevas funcionalidades</span> a medida<br/><span class=\"font-semibold\">• Optimización y soporte profesional</span><br/><br/>Contáctame directamente al:",
       "CONTACT_WA": "💬 Contactar por WhatsApp",
       "CLOSE": "Cerrar"
-    }
+    },
+    "SUCCESS_TITLE": "¡Registro exitoso!",
+    "SUCCESS_MESSAGE": "Te enviamos un correo de confirmación a:",
+    "SUCCESS_HINT": "Ábrelo y confirma tu cuenta para poder iniciar sesión. Revisa también la carpeta de spam.",
+    "GO_TO_LOGIN": "Ir a iniciar sesión"
   },
   "AUCTION_SYNC": {
     "TIME_SYNCED": "Tiempo sincronizado con servidor",

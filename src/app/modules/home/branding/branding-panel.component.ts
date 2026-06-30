@@ -1,8 +1,9 @@
-import { Component, OnInit, signal, computed, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, computed, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule, UpperCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BrandingService, BrandingConfig } from '../../../core/branding/branding.service';
-import { finalize } from 'rxjs';
+import { GeneralService } from '../../../core/gerneral.service';
+import { finalize, Subscription } from 'rxjs';
 
 interface LogoUpload {
   type: 'main' | 'favicon' | 'email';
@@ -19,8 +20,16 @@ interface LogoUpload {
   templateUrl: './branding-panel.component.html',
   styleUrl: './branding-panel.component.scss'
 })
-export class BrandingPanelComponent implements OnInit {
+export class BrandingPanelComponent implements OnInit, OnDestroy {
   private brandingService = inject(BrandingService);
+  private session = inject(GeneralService);
+  private subs = new Subscription();
+
+  // Estado de sesión: el guardado requiere un ADMIN autenticado. Lo exponemos
+  // para mostrar un aviso claro y evitar el opaco "Unauthorized" del backend.
+  sessionRole = signal<string | null>(null);
+  hasToken = signal<boolean>(false);
+  isAdmin = computed(() => this.hasToken() && this.sessionRole() === 'ADMIN');
 
   draft: BrandingConfig = {
     primaryColor: '#CA3636',
@@ -62,24 +71,44 @@ export class BrandingPanelComponent implements OnInit {
 
 
   ngOnInit(): void {
+    // Estado de sesión (para el aviso de "no eres admin / sin sesión").
+    this.hasToken.set(!!this.session.getToken());
+    this.sessionRole.set(this.session.getUser()?.role?.name ?? null);
+
     // Sincronización inicial
     this.draft = { ...this.brandingService.currentConfig };
-    
-    // Suscribirse para actualizaciones futuras (ej. cuando termine el fetch del servidor)
-    this.brandingService.config$.subscribe(config => {
-      if (config) {
-        this.draft = { ...config };
-        if (config.logoUrl) this.logos[0].preview = config.logoUrl;
-        if (config.faviconUrl) this.logos[1].preview = config.faviconUrl;
-        if (config.emailLogoUrl) this.logos[2].preview = config.emailLogoUrl;
-      }
-    });
 
-    this.brandingService.getHistory().subscribe((h: any[]) => this.history.set(h));
+    // Suscribirse para actualizaciones futuras (ej. cuando termine el fetch del servidor)
+    this.subs.add(
+      this.brandingService.config$.subscribe(config => {
+        if (config) {
+          this.draft = { ...config };
+          if (config.logoUrl) this.logos[0].preview = config.logoUrl;
+          if (config.faviconUrl) this.logos[1].preview = config.faviconUrl;
+          if (config.emailLogoUrl) this.logos[2].preview = config.emailLogoUrl;
+        }
+      })
+    );
+
+    this.subs.add(
+      this.brandingService.getHistory().subscribe({
+        next: (h: any[]) => this.history.set(h),
+        error: () => this.history.set([]),
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
+  }
+
+  /** Valida formato hex (#RGB o #RRGGBB) para feedback visual en el input. */
+  isValidHex(value: string | undefined): boolean {
+    return !!value && /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(value);
   }
 
   onColorChange(): void {
-    // Live preview sin guardar
+    // Live preview sin guardar (applyBranding ya ignora hex inválidos vía safeColor).
     this.brandingService.applyBranding(this.draft);
   }
 
@@ -138,7 +167,7 @@ export class BrandingPanelComponent implements OnInit {
             this.uploadPendingLogos(created.id!);
             this.showToast('success', '✅ Configuración creada exitosamente');
           },
-          error: () => this.showToast('error', '❌ Error al crear la configuración'),
+          error: (err) => this.showToast('error', this.authError(err, 'crear la configuración')),
         });
     } else {
       this.saving.set(true);
@@ -151,9 +180,24 @@ export class BrandingPanelComponent implements OnInit {
             this.brandingService.applyBranding(updated);
             this.showToast('success', '✅ Cambios guardados exitosamente');
           },
-          error: () => this.showToast('error', '❌ Error al guardar los cambios'),
+          error: (err) => this.showToast('error', this.authError(err, 'guardar los cambios')),
         });
     }
+  }
+
+  /** Traduce errores HTTP a mensajes accionables (clave del problema actual). */
+  private authError(err: any, action: string): string {
+    const status = err?.status;
+    if (status === 401) {
+      return '🔒 Sesión inválida o expirada (401). Cierra sesión y entra de nuevo como admin.';
+    }
+    if (status === 403) {
+      return '⛔ Tu usuario no es ADMIN (403). Inicia sesión con una cuenta de administrador.';
+    }
+    if (status === 0) {
+      return '🌐 No se pudo contactar al servidor. ¿Está el backend arriba en localhost:3010?';
+    }
+    return `❌ Error al ${action}` + (status ? ` (HTTP ${status})` : '');
   }
 
   private uploadPendingLogos(id: string): void {

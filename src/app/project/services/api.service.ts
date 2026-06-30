@@ -44,6 +44,12 @@ export class ApiService {
     return firstValueFrom(this.http.post(`${environment.backend}/auth/change-password`, data));
   }
 
+  // Reset de contraseña por ADMIN sobre otro usuario: el backend genera la nueva
+  // contraseña y la envía por email (solo se envía el userId objetivo).
+  adminResetPassword(userId: string) {
+    return firstValueFrom(this.http.post(`${environment.backend}/auth/admin-reset-password`, { userId }));
+  }
+
    verifyRegistrationToken(token: any) {
     return firstValueFrom(this.http.post(`${environment.backend}/auth/confirm`, {token:token}));
   }

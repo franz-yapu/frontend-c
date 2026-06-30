@@ -9,7 +9,7 @@ import { BrandingService } from './core/branding/branding.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { DateFnsConfigurationService } from 'ngx-date-fns';
 import localeEs from '@angular/common/locales/es';
-import es from '@angular/common/locales/es';
+import { es } from 'date-fns/locale';
 import { registerLocaleData } from '@angular/common';
 registerLocaleData(localeEs, 'es');
 

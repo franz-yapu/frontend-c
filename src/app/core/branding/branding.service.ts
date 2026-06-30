@@ -42,7 +42,9 @@ const DEFAULT_CONFIG: BrandingConfig = {
 };
 
 const CACHE_KEY = 'branding_config';
-const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutos
+// TTL corto: el cache solo evita el flicker inicial; el valor del servidor manda.
+// Con 60s la ventana de "color viejo" en una sesión nueva es mínima.
+const CACHE_TTL_MS = 60 * 1000; // 60 segundos
 
 @Injectable({ providedIn: 'root' })
 export class BrandingService {
@@ -62,10 +64,25 @@ export class BrandingService {
     if (isPlatformBrowser(this.platformId)) {
       const cached = this.getCachedConfig();
       if (cached) {
-        console.log('📦 [BRANDING-DIAGNOSTIC] Constructor applying cached config:', cached.primaryColor);
         const merged = { ...DEFAULT_CONFIG, ...cached };
         this.pushConfig(merged);
       }
+
+      // Sincronización entre pestañas: si el admin guarda branding en otra pestaña,
+      // el cache de localStorage cambia y aquí re-aplicamos al instante (sin refrescar).
+      window.addEventListener('storage', (e) => {
+        if (e.key !== CACHE_KEY || !e.newValue) return;
+        try {
+          const { config } = JSON.parse(e.newValue);
+          if (config) {
+            const merged = { ...DEFAULT_CONFIG, ...config };
+            this.applyBranding(merged);
+            this.pushConfig(merged);
+          }
+        } catch {
+          /* valor corrupto: se ignora, el servidor corregirá en el próximo fetch */
+        }
+      });
     }
   }
 
@@ -77,20 +94,19 @@ export class BrandingService {
     // 1. Intentar cargar desde caché para evitar flicker inicial
     const cached = this.getCachedConfig();
     if (cached) {
-      console.log('📦 [BRANDING-DIAGNOSTIC] Applying cached config:', cached.primaryColor);
       this.applyBranding(cached);
       this.pushConfig(cached);
     }
 
+    // 2. Siempre traer el valor fresco del servidor (cache-bust con ?t=) y aplicarlo:
+    // así una carga normal de la sección externa refleja los últimos colores/textos.
     const cleanHttp = new HttpClient(this.httpBackend);
     const timestamp = new Date().getTime();
-    console.log('📡 [BRANDING-DIAGNOSTIC] Fetching config from server...');
 
     return firstValueFrom(
       cleanHttp.get<BrandingConfig>(`${this.apiUrl}/config?t=${timestamp}`).pipe(
         timeout(4000), // Tope del arranque: ya se aplicó caché antes, no bloquear más de 4s
         tap((config) => {
-          console.log('✅ [BRANDING-DIAGNOSTIC] Received from Server:', config?.primaryColor);
           if (config && config.primaryColor) {
             const safeConfig = { ...DEFAULT_CONFIG, ...config };
             this.applyBranding(safeConfig);
@@ -99,20 +115,13 @@ export class BrandingService {
             this.configLoaded = true;
           }
         }),
-        catchError((err) => {
-          console.warn('⚠️ [BRANDING-DIAGNOSTIC] Fetch failed, keeping current/cached state:', err.message);
-          // Si falló pero tenemos algo en el subject (del caché), no hacemos nada
-          if (!this.configSubject.getValue() || this.configSubject.getValue().primaryColor === DEFAULT_CONFIG.primaryColor) {
-             // Solo si no hay nada o es el default, intentamos aplicar algo sensato 
-             // Pero si el script de index.html ya lo puso, el subject debería estar actualizado si lo llamamos temprano
-          }
+        catchError(() => {
+          // Si el servidor no responde, conservamos el cache ya aplicado (sin romper la UI).
           this.configLoaded = true;
           return of(null);
         })
       )
-    ).then(() => {
-      console.log('🏁 [BRANDING-DIAGNOSTIC] loadConfig flow finished');
-    });
+    ).then(() => undefined);
   }
 
   /** Aplicar colores y variables CSS dinámicas al documento */

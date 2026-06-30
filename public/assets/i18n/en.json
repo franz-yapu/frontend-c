@@ -499,7 +499,11 @@
       "DESCRIPTION": "This <span class=\"font-semibold\">coffee auction system</span> was developed by <span class=\"font-semibold\">Franz Yapu</span>.<br/><br/>If you wish to <span class=\"font-semibold\">rent</span> this platform or create a personalized version for your organization, I offer:<br/><br/><span class=\"font-semibold\">• Full customization</span> (logos, colors, branding, visual identity)<br/><span class=\"font-semibold\">• Custom new features</span><br/><span class=\"font-semibold\">• Professional optimization and support</span><br/><br/>Contact me directly at:",
       "CONTACT_WA": "💬 Contact via WhatsApp",
       "CLOSE": "Close"
-    }
+    },
+    "SUCCESS_TITLE": "Registration successful!",
+    "SUCCESS_MESSAGE": "We sent a confirmation email to:",
+    "SUCCESS_HINT": "Open it and confirm your account to be able to log in. Check your spam folder too.",
+    "GO_TO_LOGIN": "Go to login"
   },
   "AUCTION_SYNC": {
     "TIME_SYNCED": "Time synchronized with server",

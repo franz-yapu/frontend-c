@@ -5,8 +5,6 @@ import { Subscription, catchError, of } from 'rxjs';
 import { BuyerService } from '../../../modules/buyer/buyer.service';
 import { LotDetailComponent } from './lot-detail/lot-detail.component';
 import { TranslateDirective } from '../../directive/translate.directive';
-import { HomeService } from '../../../modules/home/home.service';
-import { WinnersTableComponent } from './winners-table/winners-table.component';
 import { TimeSyncService } from '../../services/time-sync.service';
 
 import { ExternalWinnersComponent } from "../../../modules/external-home/external-winners/external-winners.component";
@@ -18,7 +16,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 @Component({
   selector: 'app-auction-view',
   standalone: true,
-  imports: [CommonModule, FormsModule, LotDetailComponent, TranslateDirective, ExternalWinnersComponent, ExternalWinnersComponent],
+  imports: [CommonModule, FormsModule, LotDetailComponent, TranslateDirective, ExternalWinnersComponent],
   templateUrl: './auction-view.component.html',
   styleUrls: ['./auction-view.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -45,13 +43,6 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   private timerSubscription: Subscription | null = null;
 
-  // Nuevas propiedades para manejar ganadores
-  showWinners: boolean = false;
-  winners: any[] = [];
-  loadingWinners: boolean = false;
-  winnersError: string | null = null;
-  private winnersCheckInterval: any;
-  private winnersLoaded: boolean = false;
 // Agregar nuevas propiedades
 private connectionCheckInterval: any;
 private lastSuccessfulSync: Date | null = null;
@@ -59,7 +50,7 @@ private connectionLost = false;
 
 
   constructor(
-    private buyerService: BuyerService, private homeService: HomeService,
+    private buyerService: BuyerService,
     private timeSyncService: TimeSyncService,
     private translationService: TranslationService,
     @Inject(PLATFORM_ID) private platformId: any,
@@ -79,7 +70,6 @@ private connectionLost = false;
     if (this.isBrowser) {
       this.setupWebSocketListeners();
       this.setupConnectionMonitoring();
-      this.startWinnersCheck();
       this.setupHttpConnectionMonitoring();
     }
   }
@@ -191,8 +181,6 @@ private async loadAuctionData() {
   try {
     this.loading = true;
     this.error = null;
-    this.showWinners = false;
-    this.winnersLoaded = false;
 
     const data = await this.buyerService.getAutionsLotsActive();
     this.auctionData = Array.isArray(data) ? data : [];
@@ -210,16 +198,6 @@ private async loadAuctionData() {
 
       await this.loadBidHistory();
       this.sortLots();
-      
-      // ✅ CORREGIDO: Usar tiempo sincronizado
-      const auction = this.auctionData[0];
-      const endDate = new Date(auction.endDate);
-      const now = this.timeSyncService.getCurrentTime(); // Usar tiempo sincronizado
-
-      // Verificar si la subasta ya terminó (hace más de 3 minutos)
-      if (now.getTime() - endDate.getTime() > 3 * 60 * 1000) {
-        await this.loadWinners();
-      }
     }
 
   } catch (error) {
@@ -227,24 +205,6 @@ private async loadAuctionData() {
   } finally {
     this.loading = false;
   }
-}
-
-// Agregar método para determinar qué mostrar
-shouldShowWinners(): boolean {
-  // Solo mostrar ganadores si hay una subasta activa que ya terminó
-  if (!this.hasActiveAuction()) return false;
-  
-  if (this.auctionData.length === 0) return false;
-  
-  const auction = this.auctionData[0];
-  const endDate = new Date(auction.endDate);
-  const now = this.timeSyncService.getCurrentTime();
-  
-  const timeSinceEnd = now.getTime() - endDate.getTime();
-  
-  return this.auctionEnded && 
-         timeSinceEnd > 3 * 60 * 1000 && 
-         this.winners.length > 0;
 }
 
 hasActiveAuction(): boolean {
@@ -336,83 +296,8 @@ shouldShowLots(): boolean {
     this.notificationTimeout = setTimeout(() => {
       this.showExtensionNotification = false;
     }, 10000);
-
-    // Programar carga de ganadores para 3 minutos después
-    setTimeout(() => {
-      this.loadWinners();
-    }, 3 * 60 * 1000);
   }
 }
-
-  private startWinnersCheck() {
-    // Verificar cada 30 segundos si la subasta ha terminado y cargar ganadores
-    this.winnersCheckInterval = setInterval(() => {
-      this.checkAndLoadWinners();
-    }, 30000); // 30 segundos
-
-    // Verificar inmediatamente
-    setTimeout(() => {
-      this.checkAndLoadWinners();
-    }, 1000);
-  }
-
-// Modificar checkAndLoadWinners para usar tiempo sincronizado:
-private async checkAndLoadWinners() {
-  if (this.winnersLoaded || this.loadingWinners) return;
-  
-  // Verificar si la subasta ha terminado
-  if (this.auctionData.length > 0) {
-    const auction = this.auctionData[0];
-    const endDate = new Date(auction.endDate);
-    const now = this.timeSyncService.getCurrentTime(); // Usar tiempo sincronizado
-    
-    // Si la subasta terminó hace más de 3 minutos
-    if (now.getTime() - endDate.getTime() > 3 * 60 * 1000) {
-      await this.loadWinners();
-    }
-  }
-}
-
-  // Método para cargar los ganadores
-  private async loadWinners() {
-    if (this.winnersLoaded || this.loadingWinners || this.auctionData.length === 0) return;
-
-    try {
-      this.loadingWinners = true;
-      this.winnersError = null;
-
-      const auctionId = this.auctionData[0].id;
-
-      // Obtener transacciones de la subasta
-      const transactions = await this.homeService.getAutionTransactions(auctionId);
-
-      if (transactions && Array.isArray(transactions)) {
-        this.winners = transactions.map(transaction => ({
-          id: transaction.id,
-          position: transaction.coffeeLot?.position,
-          variety: transaction.coffeeLot?.variety,
-          region: transaction.coffeeLot?.region,
-          country: transaction.coffeeLot?.country,
-          cupScore: transaction.coffeeLot?.cupScore,
-          quantityLbs: transaction.coffeeLot?.quantityLbs,
-          quantity: transaction.coffeeLot?.quantity,
-          winningBid: transaction.amount,
-          winnerName: transaction.buyer?.firstName + ' ' + transaction.buyer?.lastName,
-          winnerCompany: transaction.buyer?.companyName,
-          buyerName: transaction.buyer?.firstName + ' ' + transaction.buyer?.lastName,
-          companyName: transaction.buyer?.companyName
-        }));
-
-        this.winnersLoaded = true;
-
-      }
-
-    } catch (error) {
-      this.winnersError = this.translationService.translate('AUCTION.WINNERS.ERROR_TITLE');
-    } finally {
-      this.loadingWinners = false;
-    }
-  }
 
   // Modificar calculateTimeRemaining para usar tiempo sincronizado:
   calculateTimeRemaining(auction: any): {
@@ -519,10 +404,6 @@ private handleAuctionExtension(extensionData: any) {
     if (this.auctionEnded) {
       this.auctionEnded = false;
       this.auctionData[0].status = 'ACTIVE';
-      this.showWinners = false;
-      this.winners = []; // Limpiar ganadores
-      this.winnersLoaded = false; // Permitir recarga
-      
     }
     
     this.showExtensionNotification = true;
@@ -560,16 +441,6 @@ private handleAuctionClosed(closeData: any) {
     }, 5000);
 
     this.currentTime = this.timeSyncService.getCurrentTime();
-    
-    
-    // ✅ MEJORADO: Esperar 3 minutos antes de cargar ganadores
-    setTimeout(() => {
-      this.loadWinners();
-    }, 3 * 60 * 1000); // Esperar 3 minutos exactos
-    
-    // Mostrar mensaje de "procesando resultados" inmediatamente
-    this.showWinners = false;
-    this.winners = []; // Limpiar ganadores anteriores
   }
 }
 

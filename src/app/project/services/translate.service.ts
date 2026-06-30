@@ -49,7 +49,7 @@ export class TranslationService {
   }
 
   private loadTranslations(lang: string): void {
-    this.http.get<Translation>(`./assets/i18n/${lang}.json`).subscribe({
+    this.http.get<Translation>(`/assets/i18n/${lang}.json`).subscribe({
       next: (translations) => {
         this.translations.set(translations);
         this.currentLang.set(lang);

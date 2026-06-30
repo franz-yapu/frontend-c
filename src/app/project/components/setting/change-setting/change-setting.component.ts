@@ -36,10 +36,15 @@ export class ChangeSettingComponent {
   }
 async save() {
     if (this.formData?.valid) {
-       
-       this.formData.data.userId = this.initiaData.id;
-       console.log(this.formData.data);
-        this.apiService.changePassword(this.formData.data).then(res => {
+       // El form usa la key 'password' (para activar la confirmación del
+       // DynamicForm); el backend espera 'newPassword'. Se mapea y se descartan
+       // los campos auxiliares antes de enviar.
+       const payload = {
+         userId: this.initiaData.id,
+         currentPassword: this.formData.data.currentPassword,
+         newPassword: this.formData.data.password,
+       };
+        this.apiService.changePassword(payload).then(res => {
           this.ref.close(res);
           this.toaster.showToast({
           severity: 'success',

@@ -31,8 +31,8 @@ export const userFormFields = (catalogs: any) => {
                         {
                             key: 'phone',
                             label: 'Telefono',
-                            type: 'number',
-                            validators: { required: true },
+                            type: 'text',
+                            validators: { required: true, minLength: 7, maxLength: 20, pattern: '^[0-9+()\\s-]{7,20}$' },
 
                         },
                         

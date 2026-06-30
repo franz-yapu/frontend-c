@@ -18,10 +18,14 @@ export const changeFormFields = (catalogs: any) => {
                             validators: { required: true },
                         },
                         {
-                            key: 'newPassword',
+                            // key 'password' (no 'newPassword') para que el
+                            // DynamicForm añada el campo de confirmación
+                            // ("Repetir contraseña") y valide que coincidan.
+                            // En save() se mapea a newPassword para el backend.
+                            key: 'password',
                             label: 'Nueva contraseña',
                             type: 'password',
-                            validators: { required: true},
+                            validators: { required: true, minLength: 6 },
                         },
                        
                         

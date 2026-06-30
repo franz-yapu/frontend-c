@@ -3,7 +3,7 @@ import { AuctionViewComponent } from "../../../project/components/auction-view/a
 
 @Component({
   selector: 'app-external-auction',
-  imports: [AuctionViewComponent,AuctionViewComponent],
+  imports: [AuctionViewComponent],
   templateUrl: './external-auction.component.html',
   styleUrl: './external-auction.component.scss'
 })

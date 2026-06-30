@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 
 
 import { CommonModule } from '@angular/common';
@@ -14,7 +14,7 @@ import { BrandingService } from '../../../core/branding/branding.service';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule,TranslateDirective],
+  imports: [CommonModule, ReactiveFormsModule,TranslateDirective, RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
@@ -130,7 +130,7 @@ export class LoginComponent implements OnInit {
             break;
             
           case 'ACCOUNT_NOT_VERIFIED':
-            
+
             this.toaster.showToast({
               severity: 'info',
               summary: 'Cuenta no verificada',
@@ -138,7 +138,16 @@ export class LoginComponent implements OnInit {
               life: 10000,
             });
             break;
-            
+
+          case 'ACCOUNT_DISABLED':
+            this.toaster.showToast({
+              severity: 'warning',
+              summary: 'Cuenta desactivada',
+              detail: errorMessage,
+              life: 10000,
+            });
+            break;
+
           default:
             // Manejar por status code como fallback
             if (status === 401) {

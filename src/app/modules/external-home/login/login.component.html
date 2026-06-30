@@ -35,6 +35,9 @@
                     <div *ngIf="loginForm.get('email')?.errors?.['required']" appTranslate="LOGIN.EMAIL_REQUIRED">
                         El correo electrónico es requerido
                     </div>
+                    <div *ngIf="loginForm.get('email')?.errors?.['email']" appTranslate="LOGIN.EMAIL_INVALID">
+                        El correo electrónico no es válido
+                    </div>
                 </div>
             </div>
 
@@ -64,7 +67,7 @@
 
             <div class="text-center text-content/60 font-bold text-sm">
                 <span appTranslate="LOGIN.NO_ACCOUNT">¿No tienes una cuenta?</span>
-                <a href="register" class="text-secondary font-bold" appTranslate="LOGIN.REGISTER_LINK">Regístrate</a>
+                <a routerLink="/register" class="text-secondary font-bold cursor-pointer" appTranslate="LOGIN.REGISTER_LINK">Regístrate</a>
             </div>
         </form>
 

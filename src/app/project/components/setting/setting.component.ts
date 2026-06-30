@@ -56,6 +56,11 @@ Math: any;
     this.userAdmin = this.generalService.getUser();
   }
 
+  // Verdadero solo cuando el perfil mostrado es el del usuario autenticado.
+  get isOwnProfile(): boolean {
+    return !!this.user?.id && this.user.id === this.userAdmin?.id;
+  }
+
   getTabClass(tab: string): string {
     const baseClasses = 'flex items-center px-4 py-3 text-sm font-medium rounded-t-lg border-b-2';
     if (this.activeTab === tab) {
@@ -207,6 +212,46 @@ getActionDescription(log: any): string {
     });
   }
 
+  // Reset de contraseña por ADMIN sobre OTRO usuario: el backend genera una
+  // contraseña aleatoria y la envía por email. El admin no la define ni la ve.
+  resetPasswordByAdmin() {
+    this.ref = this.dialogService.open(ConfirmModalComponent, {
+      data: {
+        title: 'Restablecer Contraseña',
+        message: 'Se generará una nueva contraseña y se enviará al correo del usuario. ¿Continuar?',
+        confirmText: 'Restablecer',
+        cancelText: 'Cancelar',
+        confirmSeverity: 'warning',
+        showIcon: true,
+        icon: 'lock_reset',
+        iconColor: 'text-warning-500',
+        iconSeverity: 'warning'
+      },
+      showHeader: false,
+      baseZIndex: 10000,
+      closable: false,
+      dismissableMask: true
+    });
+
+    this.ref.onClose.subscribe((action: any) => {
+      if (action) {
+        this.apiService.adminResetPassword(this.user.id).then(res => {
+          this.toaster.showToast({
+            severity: 'success',
+            summary: 'Exito',
+            detail: 'Se envió la nueva contraseña al correo del usuario',
+          });
+        }).catch(err => {
+          this.toaster.showToast({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'No se pudo restablecer la contraseña',
+          });
+        });
+      }
+    });
+  }
+
   reloadData() {
     this.reload.emit();
   }
@@ -316,15 +361,18 @@ getPageNumbers(): number[] {
  
 
   activateUser() {
+    // La habilitación de la cuenta se controla con isActive (gestionado por
+    // ADMIN), independiente de isVerified (verificación de email).
+    const isActive = this.user.isActive;
     this.ref = this.dialogService.open(ConfirmModalComponent, {
       data: {
-        title: this.user.isVerified ?  'Desactivar Usuario':'Activar Usuario' ,
-        message: this.user.isVerified ?  '¿Estás seguro de que deseas desactivar al usuario?':'¿Estás seguro de que deseas activar al usuario?' ,
-        confirmText: this.user.isVerified ?  'Desactivar':'Activar',
+        title: isActive ?  'Desactivar Usuario':'Activar Usuario' ,
+        message: isActive ?  '¿Estás seguro de que deseas desactivar al usuario?':'¿Estás seguro de que deseas activar al usuario?' ,
+        confirmText: isActive ?  'Desactivar':'Activar',
         cancelText: 'Cancelar',
-        confirmSeverity: this.user.isVerified ? 'warning':  'success',
+        confirmSeverity: isActive ? 'warning':  'success',
         showIcon: true,
-        icon: this.user.isVerified ?  'block':'check_circle',
+        icon: isActive ?  'block':'check_circle',
         iconColor: 'text-danger-500',
         iconSeverity: 'success'
       },
@@ -336,20 +384,28 @@ getPageNumbers(): number[] {
 
     this.ref.onClose.subscribe( (action: any) => {
       if (action) {
-        
-        this.user.isVerified=!this.user.isVerified;
+        // Flip optimista con rollback si el PATCH falla: la UI no debe quedar
+        // mostrando un estado que el backend no llegó a guardar.
+        const previous = this.user.isActive;
+        this.user.isActive = !previous;
         const data ={
-          isVerified : this.user.isVerified,
+          isActive : this.user.isActive,
           id: this.user.id
          }
 
         this.apiService.updateUser(this.user.id,data).then(res => {
           this.toaster.showToast({
-          severity: 'success',
-          summary: 'Exito',
-          detail: 'Se actualizó el perfil correctamente',
-        });
-
+            severity: 'success',
+            summary: 'Exito',
+            detail: this.user.isActive ? 'Usuario activado correctamente' : 'Usuario desactivado correctamente',
+          });
+        }).catch(err => {
+          this.user.isActive = previous;
+          this.toaster.showToast({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'No se pudo actualizar el estado del usuario',
+          });
         });
       }
     });
