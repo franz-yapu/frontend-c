@@ -6,6 +6,7 @@ import { ToastComponent } from './project/components/toast/toast.component';
 import { LoadingOverlayComponent } from './project/components/loading-overlay/loading-overlay.component';
 import { BrandingService } from './core/branding/branding.service';
 import { Title } from '@angular/platform-browser';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +20,8 @@ export class AppComponent implements OnInit {
   private titleService = inject(Title);
 
   title = 'Subastas de Café';
+  // Versión de la app web para el badge global (ver app.component.html).
+  appVersion = environment.appVersion;
 
   constructor() {
     // React to branding config changes and update document title

@@ -4,4 +4,9 @@
   <main class="min-h-screen bg-surface-50 relative z-10">
     <router-outlet></router-outlet>
   </main>
+  <!-- Badge de versión discreto, visible en toda la app (no interactivo). -->
+  <span
+    class="fixed bottom-1 right-2 z-50 text-[10px] leading-none text-surface-400/70 select-none pointer-events-none"
+    >v{{ appVersion }}</span
+  >
 </div>
