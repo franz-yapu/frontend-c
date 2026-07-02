@@ -1,5 +1,5 @@
 export const environmentDefault = {
-    appVersion: '0.0.1', // Versión de la app web (SemVer, independiente por repo).
+    appVersion: '0.0.2', // Versión de la app web (SemVer, independiente por repo).
     appCode: 'back-f',
     platformSeed: '8e9502ad469',
     ekey: 'simn_mobile_key',
