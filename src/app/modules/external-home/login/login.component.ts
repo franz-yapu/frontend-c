@@ -31,6 +31,13 @@ export class LoginComponent implements OnInit {
   private token: string | null = null;
   public tokenVerified: boolean = false;
 
+  // Mostrar/ocultar contraseña (mismo patrón de ojito que dynamic-form).
+  public showPassword: boolean = false;
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
   constructor(
     private apiService: ApiService,
     private router: Router,
