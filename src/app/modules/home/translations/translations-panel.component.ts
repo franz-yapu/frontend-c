@@ -284,7 +284,7 @@ export class TranslationsPanelComponent implements OnInit {
         } else if (status === 403) {
           this.error = 'Tu usuario no es ADMIN (403). Inicia sesión con una cuenta de administrador.';
         } else if (status === 0) {
-          this.error = 'No se pudo contactar al servidor (¿backend en localhost:3010?).';
+          this.error = 'No se pudo contactar al servidor (¿backend en localhost:8090?).';
         } else {
           this.error = 'No se pudieron guardar los textos' + (status ? ` (HTTP ${status})` : '') + '.';
         }

@@ -195,7 +195,7 @@ export class BrandingPanelComponent implements OnInit, OnDestroy {
       return '⛔ Tu usuario no es ADMIN (403). Inicia sesión con una cuenta de administrador.';
     }
     if (status === 0) {
-      return '🌐 No se pudo contactar al servidor. ¿Está el backend arriba en localhost:3010?';
+      return '🌐 No se pudo contactar al servidor. ¿Está el backend arriba en localhost:8090?';
     }
     return `❌ Error al ${action}` + (status ? ` (HTTP ${status})` : '');
   }
