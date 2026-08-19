@@ -34,14 +34,14 @@ app-loading-overlay {
   &::before {
     top: 20px;
     left: 20px;
-    background-image: url('/public/assets/img/der.svg');
+    background-image: url('/assets/img/der.svg');
     transform: rotate(-15deg);
   }
   
   &::after {
     bottom: 20px;
     right: 20px;
-   background-image: url('/public/assets/img/izq.svg');
+   background-image: url('/assets/img/izq.svg');
     transform: rotate(15deg);
   }
 }

@@ -14,8 +14,9 @@ export class TranslatePipe implements PipeTransform {
     
     let translation = this.translationService.translate(key);
     
-    // Si no se encuentra la traducción, devolver la clave
-    if (translation === key) {
+    // Si no se encuentra la traducción, devolver la clave. Igual que en la
+    // directiva, solo se avisa una vez cargado el JSON de idioma.
+    if (translation === key && this.translationService.cargado()) {
       console.warn(`Translation key not found: ${key}`);
     }
     

@@ -62,12 +62,13 @@ export class HomeService {
       getSellers() {
         const orderBy ={"createdAt":"desc"}
         const where = {"roleId":{"equals":"58005159-2d57-4db9-aa4a-34bf3f5b20ff"}}
-        const include ={"coffeeLots": true}
+        // Sin `include`: el modelo User NO tiene relacion `coffeeLots` (el lote
+        // guarda el vendedor en el campo `seller`, un String con el id), y
+        // pedirla hacia que Prisma devolviera 500 y la pantalla saliera vacia.
 
         const params = new HttpParams()
       .set('orderBy', JSON.stringify(orderBy))
       .set('where', JSON.stringify(where))
-      .set('include', JSON.stringify(include))
       .set('perPage', JSON.stringify(1000))
         return firstValueFrom(this.http.get(`${environment.backend}/dynamic/user/all/paginate`,{params}));
       }
@@ -86,7 +87,10 @@ export class HomeService {
 
       getCoofeeLot(sellerId: string) {
         const orderBy ={"createdAt":"desc"}
-        const where = {"sellerId":{"equals":sellerId}}
+        // El modelo CoffeeLot guarda el id del vendedor en `seller` (String);
+        // `sellerId` no existe en esa tabla, asi que este filtro no casaba con
+        // ningun lote y la pantalla de lotes del vendedor salia siempre vacia.
+        const where = {"seller":{"equals":sellerId}}
         const include ={"auction": true}
 
         const params = new HttpParams()

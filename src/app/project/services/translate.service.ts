@@ -35,6 +35,9 @@ export class TranslationService {
   // Asegúrate de que esta propiedad exista
   public languages = computed(() => this.availableLanguages);
   public currentLanguage = computed(() => this.currentLang());
+  /** false hasta que llega el JSON de idioma. Antes de eso `translate()`
+   *  devuelve la clave sin que eso signifique que falte. */
+  public cargado = computed(() => Object.keys(this.translations()).length > 0);
 
   constructor() {
     // Idioma inicial: el guardado (solo en browser) o español por defecto.

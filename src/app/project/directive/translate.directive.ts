@@ -36,8 +36,10 @@ export class TranslateDirective implements OnInit, OnDestroy {
 
     let translation = this.translationService.translate(this.key);
     
-    // Si no se encuentra la traducción, mostrar la clave
-    if (translation === this.key) {
+    // Si no se encuentra la traducción, mostrar la clave. Solo se avisa cuando
+    // el JSON ya está cargado: antes toda clave "falta" y el aviso era ruido
+    // que tapaba los errores de verdad.
+    if (translation === this.key && this.translationService.cargado()) {
       console.warn(`Translation key not found: ${this.key}`);
     }
 
