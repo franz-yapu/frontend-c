@@ -61,7 +61,29 @@
     </button>
   </div>
 
+  <!-- Forma de ver los lotes -->
+  <div class="flex justify-end mb-4">
+    <app-view-mode-toggle [mode]="viewMode()" (modeChange)="cambiarVista($event)"></app-view-mode-toggle>
+  </div>
+
   <!-- Lista de lotes de café -->
+  @if (viewMode() === 'table') {
+  <app-lots-table [rows]="filasTabla" [columns]="columnasTabla" [acciones]="accionesTabla"
+    [ordenable]="false" [etiquetasPersonalizadas]="etiquetasTabla"
+    [textoVacio]="'AUCTION-BUYER.NO_LOTS' | translate"
+    (rowClick)="viewCoffeeLotDetails($event.id)"></app-lots-table>
+
+  <ng-template #accionesTabla let-lot>
+    <button type="button" (click)="viewCoffeeLotDetails(lot.id)"
+      [title]="'AUCTION-BUYER.VIEW_DETAIL' | translate"
+      [attr.aria-label]="'AUCTION-BUYER.VIEW_DETAIL' | translate"
+      class="px-3 py-1.5 bg-success-700 text-white text-sm font-medium rounded-lg hover:bg-success-600 transition-colors whitespace-nowrap">
+      {{ 'AUCTION-BUYER.VIEW_DETAIL' | translate }}
+    </button>
+  </ng-template>
+  }
+
+  @if (viewMode() === 'cards') {
   <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
     @for (lot of filteredCoffeeLots; track lot.id) {
       <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-300 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
@@ -121,7 +143,7 @@
               Creado: {{ lot.createdAt | date:'shortDate' }}
             </div>
             <button (click)="viewCoffeeLotDetails(lot.id)"
-              class="px-4 py-2 bg-success-800 text-white text-sm font-medium rounded-lg hover:bg-success-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-200 flex items-center"
+              class="px-4 py-2 bg-success-700 text-white text-sm font-medium rounded-lg hover:bg-success-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-200 flex items-center"
             >
               Ver detalles
               <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -141,4 +163,5 @@
       </div>
     }
   </div>
+  }
 </div>

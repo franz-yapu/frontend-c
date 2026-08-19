@@ -7,6 +7,9 @@ import {
   PLATFORM_ID,
   ChangeDetectorRef,
   ChangeDetectionStrategy,
+  HostListener,
+  inject,
+  signal,
 } from '@angular/core';
 import { BuyerService } from '../buyer.service';
 import { Subscription } from 'rxjs';
@@ -18,6 +21,17 @@ import { TimeSyncService } from '../../../project/services/time-sync.service';
 import { TranslationService } from '../../../project/services/translate.service';
 import { TranslateDirective } from '../../../project/directive/translate.directive';
 import { TranslatePipe } from '../../../project/pipe/translate.pipe';
+import { LotDetailComponent } from '../../../project/components/auction-view/lot-detail/lot-detail.component';
+import {
+  LotsTableComponent,
+  LotColumn,
+  LotRow,
+} from '../../../project/components/lots-view/lots-table.component';
+import { ViewModeToggleComponent } from '../../../project/components/lots-view/view-mode-toggle.component';
+import {
+  ViewMode,
+  ViewModeService,
+} from '../../../project/components/lots-view/view-mode.service';
 
 interface CoffeeLot {
   id: string;
@@ -76,14 +90,130 @@ interface Bid {
 @Component({
   selector: 'app-buyer-auction',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateDirective],
+  imports: [
+    CommonModule,
+    FormsModule,
+    TranslateDirective,
+    TranslatePipe,
+    LotDetailComponent,
+    LotsTableComponent,
+    ViewModeToggleComponent,
+  ],
   templateUrl: './buyer-auction.component.html',
   styleUrl: './buyer-auction.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BuyerAuctionComponent implements OnInit, OnDestroy {
   userId: string = '';
-  quickIncrements: number[] = [1, 2, 3, 5, 8, 13, 21];
+
+  // ---------------------------------------------------------- vista tabla --
+  private viewModeService = inject(ViewModeService);
+  readonly viewMode = signal<ViewMode>(
+    this.viewModeService.leer('buyer', 'table'),
+  );
+  readonly columnasTabla: LotColumn[] = [
+    'position',
+    'name',
+    'score',
+    'process',
+    'origin',
+    'quantity',
+    'price',
+    'leader',
+    'value',
+  ];
+  /** Lote cuya fila parpadea porque acaba de recibir una puja. */
+  pulsoLotId: string | null = null;
+  private pulsoTimeout: any;
+
+  /** Lote abierto en el modal de descripcion (antes solo existia en la vista
+   *  publica: el comprador pujaba sin poder leer la ficha del cafe). */
+  lotDetalle: AuctionDetail | null = null;
+
+  cambiarVista(modo: ViewMode): void {
+    this.viewMode.set(modo);
+    this.viewModeService.guardar('buyer', modo);
+  }
+
+  /** Traduce los lotes a la forma que entiende la tabla compartida. */
+  get filasTabla(): LotRow[] {
+    return this.filteredLots.map((detail) => {
+      const lote = detail.coffeeLot;
+      const precio = this.currentHighestFor(detail);
+      const ganando = this.esGanador(detail);
+      return {
+        id: detail.id,
+        lotId: lote.id,
+        position: lote.position,
+        name: lote.name,
+        subtitle: [lote.variety, lote.producerName || lote.seller]
+          .filter((x) => !!x)
+          .join(' • '),
+        score: lote.cupScore ?? null,
+        process: lote.process,
+        altitude: lote.altitude ?? null,
+        origin: this.lotLocation(lote),
+        quantity: lote.quantityLbs ?? null,
+        price: precio ?? null,
+        value: precio ? precio * (lote.quantityLbs || 0) : null,
+        bidsCount: null,
+        leaderName: this.nombreLider(detail),
+        destacada: ganando,
+        destacadaTexto: ganando
+          ? this.translationService.translate('AUCTION-BUYER.YOU_ARE_WINNING')
+          : null,
+        raw: detail,
+      } as LotRow;
+    });
+  }
+
+  /** La puja mas alta que conocemos de un lote, o null si no hay ninguna. */
+  private mejorPuja(lotId: string): any | null {
+    const pujas = this.lastBids.get(lotId) || [];
+    if (!pujas.length) return null;
+    return pujas.reduce((a: any, b: any) =>
+      Number(b.amount) > Number(a.amount) ? b : a,
+    );
+  }
+
+  /** true si la puja mas alta que conocemos de ese lote es del usuario. */
+  esGanador(detail: AuctionDetail): boolean {
+    if (!this.userId) return false;
+    const mayor = this.mejorPuja(detail.coffeeLot.id);
+    return !!mayor && (mayor.userId || mayor.user?.id) === this.userId;
+  }
+
+  /** Quien va ganando el lote: la empresa del mejor postor y, si no la tiene,
+   *  su nombre y apellido. Null mientras no haya pujas. */
+  nombreLider(detail: AuctionDetail): string | null {
+    const mayor = this.mejorPuja(detail.coffeeLot.id);
+    if (!mayor) return null;
+    const u = mayor.user || {};
+    const empresa = (u.companyName || '').trim();
+    if (empresa) return empresa;
+    const persona = [u.firstName, u.lastName]
+      .map((x: any) => (x || '').trim())
+      .filter((x: string) => x.length > 0)
+      .join(' ');
+    return persona || null;
+  }
+
+  openLotDetail(detail: AuctionDetail): void {
+    this.lotDetalle = detail;
+    this.lockPageScroll(true);
+    this.cdr.markForCheck();
+  }
+
+  closeLotDetail(): void {
+    this.lotDetalle = null;
+    // Si el modal de puja sigue abierto, el scroll debe quedarse bloqueado.
+    this.lockPageScroll(this.showBidModal);
+    this.cdr.markForCheck();
+  }
+  get quickIncrements(): number[] {
+    const paso = Number(this.auctionData[0]?.minIncrement) || 1;
+    return [1, 2, 4, 10].map((n) => this.roundMoney(paso * n));
+  }
 
   auctionData: Auction[] = [];
   currentTime: Date = new Date();
@@ -352,15 +482,16 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
       return lot;
     });
 
-    this.filteredLots = updatedLots.sort((a, b) => {
-      return (
-        (Number(a.coffeeLot?.position) || 0) -
-        (Number(b.coffeeLot?.position) || 0)
-      );
-    });
+    // Antes se reordenaba a la fuerza por posicion en cada puja, lo que tiraba
+    // por tierra el orden que hubiera elegido el usuario (se nota mucho en la
+    // tabla: ordenas por precio, alguien puja y saltan las filas). Ahora se
+    // respeta el criterio activo.
+    this.filteredLots = updatedLots;
+    this.sortLots();
 
     this.highestBids.set(bid.coffeeLotId, bid.amount);
     this.updateBidHistory(bid);
+    this.marcarPulso(bid.coffeeLotId);
 
     // 2. Sincronización redundante de fecha de fin
     if (
@@ -381,6 +512,18 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
     if (this.selectedLot?.coffeeLot?.id === bid.coffeeLotId) {
       this.selectedLot = { ...this.selectedLot, currentPrice: bid.amount };
     }
+  }
+
+  /** Resalta un segundo la fila del lote que acaba de recibir una puja. En
+   *  tarjetas se nota porque cambia el precio; en una tabla densa hay que
+   *  señalarlo o pasa desapercibido. */
+  private marcarPulso(lotId: string): void {
+    this.pulsoLotId = lotId;
+    if (this.pulsoTimeout) clearTimeout(this.pulsoTimeout);
+    this.pulsoTimeout = setTimeout(() => {
+      this.pulsoLotId = null;
+      this.cdr.markForCheck();
+    }, 1200);
   }
 
   updateBidHistory(newBid: any) {
@@ -442,13 +585,18 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
 
   openBidModal(lot: AuctionDetail) {
     this.selectedLot = lot;
-    this.bidAmount = lot.currentPrice;
+    // Se precarga el minimo valido en vez del precio actual: asi la puja mas
+    // habitual (subir lo justo) es un solo clic y el boton nace habilitado, en
+    // lugar de aparecer gris sin explicar por que.
+    this.bidAmount = this.roundMoney(this.calculateMinBidAmount(lot));
     this.selectedIncrement = null;
-    this.showManualBidInput = false;
+    this.showManualBidInput = true;
     this.modalStep = 'select';
     this.bidError = '';
     this.totalLotValue = 0;
+    this.calculateTotalValue();
     this.showBidModal = true;
+    this.lockPageScroll(true);
     this.cdr.markForCheck();
   }
 
@@ -456,7 +604,70 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
     this.showBidModal = false;
     this.selectedLot = null;
     this.modalStep = 'select';
+    this.lockPageScroll(false);
     this.cdr.markForCheck();
+  }
+
+  // Con el modal abierto la rueda del raton movia la pagina de detras. Se
+  // congela el scroll del documento mientras esta abierto y se devuelve al
+  // cerrarlo (tambien en ngOnDestroy, por si se navega con el modal abierto).
+  private lockPageScroll(bloquear: boolean): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+    document.body.style.overflow = bloquear ? 'hidden' : '';
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscapePressed(): void {
+    // La ficha se abre por encima del modal de puja, asi que se cierra primero.
+    if (this.lotDetalle) {
+      this.closeLotDetail();
+      return;
+    }
+    if (this.showBidModal) this.closeBidModal();
+  }
+
+  private roundMoney(valor: number): number {
+    return Math.round((Number(valor) + Number.EPSILON) * 100) / 100;
+  }
+
+  // Precio a superar: el mayor entre la ultima puja llegada por socket y el
+  // precio guardado en el lote.
+  currentHighestFor(lot: AuctionDetail): number {
+    return this.highestBids.get(lot.coffeeLot.id) || lot.currentPrice;
+  }
+
+  // Minimo del lote abierto, para no repetir el calculo en la plantilla.
+  get minBidForSelected(): number {
+    return this.selectedLot
+      ? this.roundMoney(this.calculateMinBidAmount(this.selectedLot))
+      : 0;
+  }
+
+  // Cuanto sube la puja respecto a la oferta actual (mensaje de ayuda en vivo).
+  get bidIncreaseOverCurrent(): number {
+    if (!this.selectedLot) return 0;
+    return this.roundMoney(
+      Number(this.bidAmount) - this.currentHighestFor(this.selectedLot),
+    );
+  }
+
+  // Precio final al que deja la puja cada boton de incremento; se enseña dentro
+  // del propio boton para no tener que calcularlo de cabeza.
+  quickIncrementResult(increment: number): number {
+    if (!this.selectedLot) return 0;
+    return this.roundMoney(
+      Math.max(
+        this.currentHighestFor(this.selectedLot) + increment,
+        this.minBidForSelected,
+      ),
+    );
+  }
+
+  isBidValid(): boolean {
+    const monto = Number(this.bidAmount);
+    return (
+      !!this.selectedLot && !isNaN(monto) && monto >= this.minBidForSelected
+    );
   }
 
   calculateMinBidAmount(lot: AuctionDetail): number {
@@ -467,13 +678,13 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
   }
 
   selectQuickIncrement(increment: number): void {
-    if (this.selectedLot) {
-      this.bidAmount = this.selectedLot.currentPrice + increment;
-      this.selectedIncrement = increment;
-      this.showManualBidInput = false;
-      this.calculateTotalValue();
-      this.cdr.markForCheck();
-    }
+    if (!this.selectedLot) return;
+    this.bidAmount = this.quickIncrementResult(increment);
+    this.selectedIncrement = increment;
+    this.showManualBidInput = true;
+    this.bidError = '';
+    this.calculateTotalValue();
+    this.cdr.markForCheck();
   }
 
   showManualInput(): void {
@@ -488,22 +699,29 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
 
   onManualBidChange(): void {
     if (!this.selectedLot) return;
-    const minBid = this.calculateMinBidAmount(this.selectedLot);
-    if (this.bidAmount < minBid) {
-      this.bidError = this.translationService
-        .translate('AUCTION_BUYER.MIN_BID_ERROR')
-        .replace('${{min}}', minBid.toFixed(2));
-    } else {
-      this.bidError = '';
-      this.calculateTotalValue();
+    this.showManualBidInput = true;
+    // Si el monto escrito ya no coincide con el incremento pulsado, se apaga su
+    // resaltado para que no queden dos cosas marcadas a la vez.
+    if (
+      this.selectedIncrement !== null &&
+      Number(this.bidAmount) !== this.quickIncrementResult(this.selectedIncrement)
+    ) {
+      this.selectedIncrement = null;
     }
+    // El aviso de monto insuficiente lo pinta la propia plantilla debajo del
+    // campo; bidError queda reservado para los errores del servidor o de la
+    // conexion, para no enseñar dos veces el mismo mensaje.
+    this.bidError = '';
+    this.calculateTotalValue();
     this.cdr.markForCheck();
   }
 
   calculateTotalValue(): void {
-    if (this.selectedLot && this.bidAmount > 0) {
+    if (this.selectedLot && Number(this.bidAmount) > 0) {
       this.totalLotValue =
-        this.bidAmount * this.selectedLot.coffeeLot.quantityLbs;
+        Number(this.bidAmount) * this.selectedLot.coffeeLot.quantityLbs;
+    } else {
+      this.totalLotValue = 0;
     }
   }
 
@@ -520,12 +738,7 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
   }
 
   canProceedToConfirm(): boolean {
-    if (!this.selectedLot) return false;
-    const minBid = this.calculateMinBidAmount(this.selectedLot);
-    return (
-      this.selectedIncrement !== null ||
-      (this.showManualBidInput && this.bidAmount >= minBid && !this.bidError)
-    );
+    return this.isBidValid() && !this.bidError;
   }
 
   canConfirmBid(): boolean {
@@ -630,6 +843,16 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
           valueA = a.coffeeLot?.cupScore || 0;
           valueB = b.coffeeLot?.cupScore || 0;
           break;
+        // 'price' y 'quantity' no estaban contemplados y caian en el default,
+        // asi que ordenar por ellos ordenaba en realidad por posicion.
+        case 'price':
+          valueA = Number(this.currentHighestFor(a)) || 0;
+          valueB = Number(this.currentHighestFor(b)) || 0;
+          break;
+        case 'quantity':
+          valueA = Number(a.coffeeLot?.quantityLbs) || 0;
+          valueB = Number(b.coffeeLot?.quantityLbs) || 0;
+          break;
         default:
           valueA = Number(a.coffeeLot?.position) || 0;
           valueB = Number(b.coffeeLot?.position) || 0;
@@ -715,6 +938,8 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.lockPageScroll(false);
+    if (this.pulsoTimeout) clearTimeout(this.pulsoTimeout);
     if (isPlatformBrowser(this.platformId)) {
       document.removeEventListener('visibilitychange', this.onVisibilityChange);
     }
@@ -729,6 +954,15 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
     if (this.notificationTimeout) clearTimeout(this.notificationTimeout);
     if (this.auctionData.length > 0)
       this.buyerService.leaveAuctionRoom(this.auctionData[0].id);
+  }
+
+  // Municipio/region/pais unidos saltandose los vacios: sin esto los lotes sin
+  // municipio se enseñaban como ", Caranavi, Bolivia".
+  lotLocation(lot: CoffeeLot): string {
+    return [lot.municipality, lot.region, lot.country]
+      .map((parte) => (parte || '').trim())
+      .filter((parte) => parte.length > 0)
+      .join(', ');
   }
 
   getBidHistory(lotId: string): any[] {

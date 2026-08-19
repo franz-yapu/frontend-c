@@ -11,17 +11,115 @@ import { ExternalWinnersComponent } from "../../../modules/external-home/externa
 import { environment } from '../../../../environments/environment';
 import { TranslationService } from '../../services/translate.service';
 
-import { ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  inject,
+  signal,
+} from '@angular/core';
+import { TranslatePipe } from '../../pipe/translate.pipe';
+import {
+  LotsTableComponent,
+  LotColumn,
+  LotRow,
+} from '../lots-view/lots-table.component';
+import { ViewModeToggleComponent } from '../lots-view/view-mode-toggle.component';
+import { ViewMode, ViewModeService } from '../lots-view/view-mode.service';
 
 @Component({
   selector: 'app-auction-view',
   standalone: true,
-  imports: [CommonModule, FormsModule, LotDetailComponent, TranslateDirective, ExternalWinnersComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    LotDetailComponent,
+    TranslateDirective,
+    TranslatePipe,
+    ExternalWinnersComponent,
+    LotsTableComponent,
+    ViewModeToggleComponent,
+  ],
   templateUrl: './auction-view.component.html',
   styleUrls: ['./auction-view.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AuctionViewComponent implements OnInit, OnDestroy {
+  // ---------------------------------------------------------- vista tabla --
+  private viewModeService = inject(ViewModeService);
+  readonly viewMode = signal<ViewMode>(
+    this.viewModeService.leer('public', 'table'),
+  );
+  readonly columnasTabla: LotColumn[] = [
+    'position',
+    'name',
+    'score',
+    'process',
+    'origin',
+    'quantity',
+    'price',
+    'leader',
+    'value',
+  ];
+
+  cambiarVista(modo: ViewMode): void {
+    this.viewMode.set(modo);
+    this.viewModeService.guardar('public', modo);
+    this.cdr.markForCheck();
+  }
+
+  /** Quien va ganando el lote: la empresa del mejor postor y, si no la tiene,
+   *  su nombre y apellido. Aqui no hay sesion, asi que nunca es "vas ganando".
+   */
+  nombreLider(lotId: string): string | null {
+    const pujas = this.lastBids.get(lotId) || [];
+    if (!pujas.length) return null;
+    const mayor = pujas.reduce((a: any, b: any) =>
+      Number(b.amount) > Number(a.amount) ? b : a,
+    );
+    const u = mayor.user || {};
+    const empresa = (u.companyName || '').trim();
+    if (empresa) return empresa;
+    const persona = [u.firstName, u.lastName]
+      .map((x: any) => (x || '').trim())
+      .filter((x: string) => x.length > 0)
+      .join(' ');
+    return persona || null;
+  }
+
+  /** Municipio/region/pais saltandose los vacios. */
+  lotLocation(lote: any): string {
+    return [lote?.municipality, lote?.region, lote?.country]
+      .map((parte: any) => (parte || '').trim())
+      .filter((parte: string) => parte.length > 0)
+      .join(', ');
+  }
+
+  get filasTabla(): LotRow[] {
+    return this.filteredLots.map((detail: any) => {
+      const lote = detail.coffeeLot;
+      const precio = Number(detail.currentPrice) || null;
+      return {
+        id: detail.id,
+        lotId: lote.id,
+        position: lote.position,
+        name: lote.name,
+        subtitle: [lote.variety, lote.producerName || lote.seller]
+          .filter((x: any) => !!x)
+          .join(' • '),
+        score: lote.cupScore ?? null,
+        process: lote.process ?? null,
+        altitude: lote.altitude ?? null,
+        origin: this.lotLocation(lote),
+        quantity: lote.quantityLbs ?? null,
+        price: precio,
+        value: precio ? precio * (lote.quantityLbs || 0) : null,
+        bidsCount: null,
+        leaderName: this.nombreLider(lote.id),
+        raw: detail,
+      } as LotRow;
+    });
+  }
+
   auctionData: any[] = [];
   filteredLots: any[] = [];
   loading = true;

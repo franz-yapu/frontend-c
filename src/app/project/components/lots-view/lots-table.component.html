@@ -1,0 +1,151 @@
+<!-- El scroll horizontal vive AQUI, nunca en la pagina: si la tabla no cabe se
+     mueve ella sola y el resto de la pantalla se queda quieto. -->
+<div class="overflow-x-auto overscroll-x-contain rounded-2xl border border-primary/20 bg-surface shadow-sm"
+  [ngClass]="rows.length > 15 ? 'max-h-[75vh] overflow-y-auto' : ''">
+  <table class="w-full min-w-max text-xs sm:text-sm border-collapse">
+    <thead class="sticky top-0 z-10 bg-surface">
+      <tr class="border-b-2 border-primary/30">
+        @for (col of columns; track col) {
+        <th scope="col" [class]="claseColumna(col)"
+          class="px-2 sm:px-3 py-3 align-middle font-bold text-content/70 text-[11px] sm:text-xs uppercase tracking-wide whitespace-nowrap"
+          [class.text-right]="esNumerica(col)" [class.text-left]="!esNumerica(col)"
+          [attr.aria-sort]="sortBy === criterio(col) ? (sortDirection === 'asc' ? 'ascending' : 'descending') : null">
+          @if (esOrdenable(col)) {
+          <button type="button" (click)="ordenarPor(col)"
+            class="inline-flex items-center gap-1 uppercase tracking-wide hover:text-primary transition-colors"
+            [class.flex-row-reverse]="esNumerica(col)">
+            <span>{{ etiqueta(col) | translate }}</span>
+            <span class="text-[10px] text-primary">{{ flecha(col) }}</span>
+          </button>
+          } @else {
+          <span>{{ etiqueta(col) | translate }}</span>
+          }
+        </th>
+        }
+        @if (acciones) {
+        <!-- Pegada a la derecha para que no se pierda si la tabla scrollea -->
+        <th scope="col"
+          class="sticky right-0 z-20 bg-surface px-2 sm:px-3 py-3 text-right font-bold text-content/70 text-[11px] sm:text-xs uppercase tracking-wide whitespace-nowrap shadow-[-6px_0_6px_-6px_rgba(0,0,0,0.15)]">
+          {{ 'AUCTION-BUYER.COL_ACTIONS' | translate }}
+        </th>
+        }
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (row of rows; track row.id) {
+      <tr class="border-b border-primary/20 last:border-0 transition-colors hover:bg-primary/5 cursor-pointer"
+        [ngClass]="pulsa(row) ? 'animate-pulse bg-primary/10' : ''" (click)="rowClick.emit(row.raw)">
+
+        @for (col of columns; track col) {
+        <td [class]="claseColumna(col)" class="px-2 sm:px-3 py-3 align-middle"
+          [class.text-right]="esNumerica(col)" [class.tabular-nums]="esNumerica(col)">
+
+          @switch (col) {
+          @case ('position') {
+          <span class="font-bold text-primary whitespace-nowrap">#{{ row.position }}</span>
+          }
+          @case ('name') {
+          <div class="min-w-[8.5rem] sm:min-w-[12rem] max-w-[11.5rem] sm:max-w-[20rem]">
+            <p class="font-semibold text-content truncate">{{ row.name }}</p>
+            <p class="text-xs text-content/50 truncate">{{ row.subtitle }}</p>
+            <!-- Resumen de movil: en pantallas estrechas las columnas de precio
+                 y puntaje estan ocultas, asi que su dato se enseña aqui. -->
+            @if (pide('price') || pide('score')) {
+            <p class="sm:hidden mt-1 text-xs">
+              @if (pide('price') && row.price) {
+              <span class="font-bold text-primary tabular-nums">
+                {{ row.price | currency:'USD':'symbol':'1.2-2' }}</span>
+              }
+              @if (pide('score') && row.score !== null) {
+              <span class="text-content/50"> · {{ row.score }} pts</span>
+              }
+            </p>
+            }
+            <!-- Quien va ganando: en movil la columna esta oculta, asi que el
+                 dato se enseña aqui debajo. -->
+            @if (pide('leader') && (row.destacada || row.leaderName)) {
+            <p class="sm:hidden mt-0.5 text-xs truncate">
+              @if (row.destacada) {
+              <span class="font-semibold text-success-700">{{ row.destacadaTexto }}</span>
+              } @else {
+              <span class="text-primary font-semibold">{{ 'AUCTION-BUYER.COL_LEADER' | translate }}:</span>
+              <span class="text-content font-bold"> {{ row.leaderName }}</span>
+              }
+            </p>
+            }
+          </div>
+          }
+          @case ('score') {
+          @if (row.score !== null) {
+          <span class="inline-block px-2 py-0.5 rounded-full bg-primary/10 text-primary font-bold whitespace-nowrap">
+            {{ row.score }}
+          </span>
+          } @else { <span class="text-content/30">—</span> }
+          }
+          @case ('process') {
+          <span class="text-content/80">{{ row.process || '—' }}</span>
+          }
+          @case ('altitude') {
+          <span class="text-content/80 whitespace-nowrap">
+            @if (row.altitude) { {{ row.altitude }} {{ 'COMMON.METERS' | translate }} } @else { — }
+          </span>
+          }
+          @case ('origin') {
+          <span class="text-content/80 block max-w-[14rem] truncate">{{ row.origin || '—' }}</span>
+          }
+          @case ('quantity') {
+          <span class="text-content whitespace-nowrap">
+            @if (row.quantity) { {{ row.quantity }} {{ 'COMMON.LBS' | translate }} } @else { — }
+          </span>
+          }
+          @case ('price') {
+          <span class="font-bold text-primary whitespace-nowrap">
+            {{ row.price ? (row.price | currency:'USD':'symbol':'1.2-2') : '—' }}
+          </span>
+          }
+          @case ('value') {
+          <span class="text-content/80 whitespace-nowrap">
+            {{ row.value ? (row.value | currency:'USD':'symbol':'1.2-2') : '—' }}
+          </span>
+          }
+          @case ('bids') {
+          <span class="text-content/80">{{ row.bidsCount ?? 0 }}</span>
+          }
+          @case ('leader') {
+          @if (row.destacada) {
+          <span
+            class="inline-block px-2 py-0.5 rounded-full bg-success-500 text-white text-[11px] font-bold whitespace-nowrap">
+            {{ row.destacadaTexto }}
+          </span>
+          } @else if (row.leaderName) {
+          <span class="text-content font-bold block max-w-[12rem] truncate">{{ row.leaderName }}</span>
+          } @else {
+          <span class="text-content/30">—</span>
+          }
+          }
+          @case ('status') {
+          <span class="text-content/80">{{ row.status || '—' }}</span>
+          }
+          }
+        </td>
+        }
+
+        @if (acciones) {
+        <!-- stopPropagation: pulsar un boton no debe abrir ademas el detalle -->
+        <td class="sticky right-0 z-10 bg-surface px-2 sm:px-3 py-3 text-right whitespace-nowrap shadow-[-6px_0_6px_-6px_rgba(0,0,0,0.15)]"
+          (click)="$event.stopPropagation()">
+          <ng-container *ngTemplateOutlet="acciones; context: { $implicit: row.raw, row: row }"></ng-container>
+        </td>
+        }
+      </tr>
+      } @empty {
+      <tr>
+        <td [attr.colspan]="columns.length + (acciones ? 1 : 0)" class="px-3 py-10 text-center text-content/50">
+          {{ textoVacio }}
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>

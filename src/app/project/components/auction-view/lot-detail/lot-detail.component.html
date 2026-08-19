@@ -1,8 +1,11 @@
+<!-- Pulsar fuera cierra la ficha, como en el modal de puja -->
 <div class="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50 backdrop-blur-sm transition-opacity duration-150"
-     [class]="lot ? 'opacity-100' : 'opacity-0 pointer-events-none'">
-     
+     [class]="lot ? 'opacity-100' : 'opacity-0 pointer-events-none'"
+     (click)="closeModal()">
+
   <div class="bg-white rounded-xl shadow-lg max-w-3xl w-full max-h-[85vh] overflow-hidden transform transition-all duration-150 border-2 border-gray-200"
-       [class]="lot ? 'scale-100 opacity-100' : 'scale-95 opacity-0'">
+       [class]="lot ? 'scale-100 opacity-100' : 'scale-95 opacity-0'"
+       role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
     
     <!-- Header Compacto -->
     <div class="border-b border-gray-100 p-4">

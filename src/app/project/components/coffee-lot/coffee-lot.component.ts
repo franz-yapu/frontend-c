@@ -1,10 +1,26 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  inject,
+  signal,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { HomeService } from '../../../modules/home/home.service';
 import { NewCoffeelotComponent } from '../new-coffeelot/new-coffeelot.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslatePipe } from '../../pipe/translate.pipe';
+import {
+  LotsTableComponent,
+  LotColumn,
+  LotRow,
+} from '../lots-view/lots-table.component';
+import { ViewModeToggleComponent } from '../lots-view/view-mode-toggle.component';
+import { ViewMode, ViewModeService } from '../lots-view/view-mode.service';
 
 
 interface CoffeeLot {
@@ -39,12 +55,61 @@ interface StatusFilter {
 
 @Component({
   selector: 'app-coffee-lot',
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    TranslatePipe,
+    LotsTableComponent,
+    ViewModeToggleComponent,
+  ],
   templateUrl: './coffee-lot.component.html',
   styleUrl: './coffee-lot.component.scss',
   providers: [DialogService],
 })
 export class CoffeeLotComponent implements OnInit {
+ // ---------------------------------------------------------- vista tabla --
+ private viewModeService = inject(ViewModeService);
+ readonly viewMode = signal<ViewMode>(this.viewModeService.leer('admin', 'table'));
+ /** El lote de admin no tiene posicion ni puja: se enseñan calidad, origen,
+  *  cantidad, precio sugerido y estado. */
+ readonly columnasTabla: LotColumn[] = [
+   'name',
+   'score',
+   'process',
+   'origin',
+   'quantity',
+   'price',
+   'status',
+ ];
+
+ /** En admin la columna de precio es el sugerido del lote, no una puja. */
+ readonly etiquetasTabla = { price: 'AUCTION-BUYER.COL_SUGGESTED_PRICE' };
+
+ cambiarVista(modo: ViewMode): void {
+   this.viewMode.set(modo);
+   this.viewModeService.guardar('admin', modo);
+ }
+
+ get filasTabla(): LotRow[] {
+   return this.filteredCoffeeLots.map((lot) => ({
+     id: lot.id,
+     lotId: lot.id,
+     position: null,
+     name: lot.name,
+     subtitle: [lot.harvestYear, lot.quality].filter((x) => !!x).join(' • '),
+     score: lot.cupScore ?? null,
+     process: lot.process ?? null,
+     altitude: lot.altitude ?? null,
+     origin: [lot.origin, lot.country].filter((x) => !!x).join(', '),
+     quantity: lot.quantity ?? null,
+     price: lot.suggestedPrice ?? null,
+     value: lot.suggestedPrice ? lot.suggestedPrice * (lot.quantity || 0) : null,
+     bidsCount: null,
+     status: this.getStatusLabel(lot),
+     raw: lot,
+   })) as LotRow[];
+ }
+
  @Input()sellerId: any ;
  @Output()coffeeLotDetails = new EventEmitter<any>();
  

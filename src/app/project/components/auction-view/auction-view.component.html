@@ -198,8 +198,42 @@
               <span appTranslate="AUCTION.LOTS_COUNT" class="ml-1">Lotes</span>
             </span>
           </div>
+          <app-view-mode-toggle
+            [mode]="viewMode()"
+            (modeChange)="cambiarVista($event)"
+          ></app-view-mode-toggle>
         </div>
-        @if (shouldShowLots()) {
+        @if (shouldShowLots() && viewMode() === 'table') {
+          <!-- Sin sesion no se puede pujar: la unica accion es abrir la ficha -->
+          <app-lots-table
+            [rows]="filasTabla"
+            [columns]="columnasTabla"
+            [sortBy]="sortBy"
+            [sortDirection]="sortDirection"
+            [acciones]="accionesTabla"
+            [textoVacio]="'AUCTION-BUYER.NO_LOTS' | translate"
+            (sortChange)="changeSort($event)"
+            (rowClick)="openLotDetail($event)"
+          ></app-lots-table>
+
+          <ng-template #accionesTabla let-detail>
+            <button
+              type="button"
+              (click)="openLotDetail(detail)"
+              [title]="'AUCTION-BUYER.VIEW_DETAIL' | translate"
+              [attr.aria-label]="'AUCTION-BUYER.VIEW_DETAIL' | translate"
+              class="p-1.5 rounded-lg border border-primary/20 text-content/60 hover:text-primary hover:bg-primary/10 transition-colors"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+              </svg>
+            </button>
+          </ng-template>
+        }
+        @if (shouldShowLots() && viewMode() === 'cards') {
           <!-- Grid de Lotes optimizado para pantallas gigantes y TVs -->
           <div
             class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-6 min-[1920px]:grid-cols-6 min-[2560px]:grid-cols-10 min-[3840px]:grid-cols-14 gap-6"
