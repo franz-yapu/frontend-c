@@ -15,13 +15,13 @@
             <span class="material-symbols-outlined text-success-700 mr-1">
               calendar_month
             </span>
-            {{ auction?.startDate | date:'dd MMM yyyy hh:mm' }}
+            {{ auction?.startDate | date:'dd MMM yyyy HH:mm':undefined:'es' }}
           </div>
           <div class="flex items-center text-gray-700 text-sm">
             <span class="material-symbols-outlined text-success-700 mr-1">
               event_available
             </span>
-            {{ auction?.endDate | date:'dd MMM yyyy hh:mm' }}
+            {{ auction?.endDate | date:'dd MMM yyyy HH:mm':undefined:'es' }}
           </div>
           <div class="flex-shrink-0">
         <span [class]="getStatusClasses(auction.status)" 
@@ -172,7 +172,7 @@
                 d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
                 clip-rule="evenodd"></path>
             </svg>
-            Creado: {{ lot.createdAt | date:'dd MMM yyyy' }}
+            Creado: {{ lot.createdAt | date:'dd MMM yyyy':undefined:'es' }}
           </div>
           <button (click)="viewCoffeeLotDetails(lot.id)"
             class="w-full mt-2 px-3 py-2 bg-success-700 text-white text-xs sm:text-sm font-medium rounded-lg hover:bg-success-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all duration-200 flex items-center justify-center">

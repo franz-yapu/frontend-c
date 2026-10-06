@@ -38,7 +38,7 @@
                </div>
                <!--  <div class="flex-shrink-0">
                   <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-white/20 backdrop-blur-sm text-white border border-white/30">
-                    {{ tx.paymentDate | date:'shortDate' }}
+                    {{ tx.paymentDate | date:'shortDate':undefined:'es' }}
                   </span>
                 </div> -->
               </div>
@@ -136,7 +136,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
-                <span class="font-medium" appTranslate="TRANSACTIONS.PAYMENT">Pago</span>: {{ tx.paymentDate | date:'medium' }}
+                <span class="font-medium" appTranslate="TRANSACTIONS.PAYMENT">Pago</span>: {{ tx.paymentDate | date:'dd MMM yyyy HH:mm':undefined:'es' }}
               </div> -->
 
               <!-- Acordeón de pujas mejorado -->

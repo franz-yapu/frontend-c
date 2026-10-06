@@ -24,14 +24,14 @@
             <svg class="w-5 h-5 text-primary-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
             </svg>
-            <span class="text-primary-800"><strong>Inicio:</strong> {{ auction?.startDate | date:'mediumDate' }}</span>
+            <span class="text-primary-800"><strong>Inicio:</strong> {{ auction?.startDate | date:'mediumDate':undefined:'es' }}</span>
           </div>
           
           <div class="flex items-center">
             <svg class="w-5 h-5 text-primary-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
-            <span class="text-primary-800"><strong>Fin:</strong> {{ auction?.endDate | date:'mediumDate' }}</span>
+            <span class="text-primary-800"><strong>Fin:</strong> {{ auction?.endDate | date:'mediumDate':undefined:'es' }}</span>
           </div>
         </div>
       </div>
@@ -138,7 +138,7 @@
           <!-- Transaction Meta -->
          <!--  <div class="mt-4 pt-4 border-t border-primary-200">
             <div class="flex justify-between items-center text-xs text-primary-600">
-              <span>Fecha de pago: {{ transaction.paymentDate | date:'medium' }}</span>
+              <span>Fecha de pago: {{ transaction.paymentDate | date:'dd MMM yyyy HH:mm':undefined:'es' }}</span>
               <span>ID: {{ transaction.transactionId.slice(0, 8) }}...</span>
             </div>
           </div> -->

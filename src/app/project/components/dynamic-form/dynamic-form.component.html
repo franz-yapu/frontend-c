@@ -219,7 +219,7 @@
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                     </svg>
                   </button>
-                  <span class="font-medium text-primary">{{ currentMonth[f.key] | date:'MMMM yyyy' }}</span>
+                  <span class="font-medium text-primary">{{ currentMonth[f.key] | date:'MMMM yyyy':undefined:'es' }}</span>
                   <button (click)="nextMonth(f.key)" class="p-1 rounded-full hover:bg-primary-100">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary-600" fill="none"
                       viewBox="0 0 24 24" stroke="currentColor">

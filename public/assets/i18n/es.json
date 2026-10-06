@@ -562,6 +562,8 @@
     "AUCTION_EXTENDED": "¡Subasta extendida hasta las {{time}}!",
     "AUCTION_CLOSED": "¡Subasta finalizada definitivamente!",
     "BID_SUCCESS": "¡Puja realizada exitosamente!",
+    "OUTBID": "Te superaron la puja en {{lot}}: ahora va en ${{price}}.",
+    "CLOSE": "Cerrar aviso",
     "CONNECTION_RESTORED": "Conexión restablecida",
     "CONNECTION_SLOW": "Conexión lenta ({{latency}}ms). Las pujas pueden tardar.",
     "SYNC_ERROR": "Error al cargar datos de la subasta",

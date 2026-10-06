@@ -563,6 +563,8 @@
     "AUCTION_EXTENDED": "Auction extended until {{time}}!",
     "AUCTION_CLOSED": "Auction definitively closed!",
     "BID_SUCCESS": "Bid successfully placed!",
+    "OUTBID": "You were outbid on {{lot}}: the price is now ${{price}}.",
+    "CLOSE": "Close notice",
     "CONNECTION_RESTORED": "Connection restored",
     "CONNECTION_SLOW": "Slow connection ({{latency}}ms). Bids may be delayed.",
     "SYNC_ERROR": "Error loading auction data",

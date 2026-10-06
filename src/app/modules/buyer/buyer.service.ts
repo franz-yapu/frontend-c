@@ -13,6 +13,7 @@ export class BuyerService {
   private bidSubject = new Subject<any>();
   private auctionExtendedSubject = new Subject<any>();
   private auctionClosedSubject = new Subject<any>();
+  private outbidSubject = new Subject<any>();
   private timeSyncSubject = new Subject<any>();
   private connectionStatus = new BehaviorSubject<boolean>(false);
   private connectionQuality = new BehaviorSubject<'excellent' | 'good' | 'fair' | 'poor' | 'offline'>('good');
@@ -66,6 +67,13 @@ export class BuyerService {
     this.socket.on('auctionExtended', (data: any) => {
       this.ngZone.run(() => {
         this.auctionExtendedSubject.next(data);
+      });
+    });
+
+    // Aviso personal: otra persona superó tu puja (llega solo a tu sala user-<id>).
+    this.socket.on('outbid', (data: any) => {
+      this.ngZone.run(() => {
+        this.outbidSubject.next(data);
       });
     });
 
@@ -259,6 +267,11 @@ private handlePing(pingData: any) {
 
   getAuctionClosed(): Observable<any> {
     return this.auctionClosedSubject.asObservable();
+  }
+
+  /** Aviso de que otra persona superó tu puja en un lote. */
+  getOutbid(): Observable<any> {
+    return this.outbidSubject.asObservable();
   }
 
   getTimeSync(): Observable<any> {

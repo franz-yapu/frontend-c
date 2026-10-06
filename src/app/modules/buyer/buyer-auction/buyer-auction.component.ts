@@ -238,6 +238,8 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
   isLoading: boolean = false;
   showExtensionNotification: boolean = false;
   extensionMessage: string = '';
+  notificationType: string = 'info';
+  private outbidSubscription?: Subscription;
   auctionEnded: boolean = false;
 
   private notificationTimeout: any;
@@ -426,6 +428,14 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
         }
       });
 
+    this.outbidSubscription?.unsubscribe();
+    this.outbidSubscription = this.buyerService.getOutbid().subscribe((data) => {
+      if (data && this.auctionData[0]?.id === data.auctionId) {
+        this.handleOutbid(data);
+        this.cdr.markForCheck();
+      }
+    });
+
     this.buyerService.getTimeSync().subscribe(() => {
       this.timeSyncService.syncWithServer().then(() => {
         this.cdr.markForCheck();
@@ -572,7 +582,32 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Otra persona superó tu puja: aviso fijo en pantalla (se ve aunque estés abajo
+   * en la tabla; la fila ya parpadea por el `newBid`). Antes solo cambiaba el
+   * número del precio y nadie se enteraba.
+   */
+  handleOutbid(data: any) {
+    const lote =
+      data.lotName ||
+      this.auctionData[0]?.auctionDetails?.find(
+        (d: any) => (d.coffeeLotId ?? d.coffeeLot?.id) === data.coffeeLotId,
+      )?.coffeeLot?.name ||
+      '';
+    this.showNotification(
+      this.translationService
+        .translate('NOTIFICATIONS.OUTBID')
+        .replace('{{lot}}', lote)
+        .replace('{{price}}', Number(data.currentPrice).toFixed(2)),
+      'warning',
+    );
+    if (isPlatformBrowser(this.platformId) && 'vibrate' in navigator) {
+      navigator.vibrate?.(200);
+    }
+  }
+
   showNotification(message: string, type: string) {
+    this.notificationType = type;
     this.extensionMessage = message;
     this.showExtensionNotification = true;
     if (this.notificationTimeout) clearTimeout(this.notificationTimeout);
@@ -949,6 +984,7 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
       this.auctionExtendedSubscription.unsubscribe();
     if (this.auctionClosedSubscription)
       this.auctionClosedSubscription.unsubscribe();
+    this.outbidSubscription?.unsubscribe();
     if (this.connectionCheckInterval)
       clearInterval(this.connectionCheckInterval);
     if (this.notificationTimeout) clearTimeout(this.notificationTimeout);

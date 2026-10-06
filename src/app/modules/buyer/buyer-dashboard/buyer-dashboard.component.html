@@ -188,7 +188,7 @@
                   class="border-b border-primary-100 hover:bg-primary-50">
                 <td class="py-3 text-sm">{{ bid.coffeeLot.name }}</td>
                 <td class="py-3 text-sm font-semibold text-success-600">{{ bid.amount | currency:'USD':'symbol' }}</td>
-                <td class="py-3 text-sm">{{ bid.createdAt | date:'short' }}</td>
+                <td class="py-3 text-sm">{{ bid.createdAt | date:'dd/MM/yyyy HH:mm' }}</td>
               </tr>
             </tbody>
           </table>

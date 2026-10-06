@@ -34,14 +34,14 @@
                   <div class="flex items-center gap-1.5">
                     <span appTranslate="AUCTION.HERO.START_DATE">Inicio:</span>
                     <span class="text-gray-800">{{
-                      auctionData[0].startDate | date: "dd MMM yyyy hh:mm"
+                      auctionData[0].startDate | date:"dd MMM yyyy HH:mm":undefined:"es"
                     }}</span>
                   </div>
                   <span class="hidden sm:inline text-gray-300">|</span>
                   <div class="flex items-center gap-1.5">
                     <span appTranslate="AUCTION.HERO.END_DATE">Fin:</span>
                     <span class="text-gray-800">{{
-                      auctionData[0].endDate | date: "dd MMM yyyy hh:mm"
+                      auctionData[0].endDate | date:"dd MMM yyyy HH:mm":undefined:"es"
                     }}</span>
                   </div>
                 </div>
@@ -397,7 +397,7 @@
                               >
                               <span
                                 class="text-[9px] text-gray-400 font-bold tracking-wider uppercase"
-                                >{{ bid.createdAt | date: "shortTime" }}</span
+                                >{{ bid.createdAt | date:"shortTime":undefined:"es" }}</span
                               >
                             </div>
                             <span

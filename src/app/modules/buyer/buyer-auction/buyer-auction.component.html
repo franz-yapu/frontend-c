@@ -3,18 +3,19 @@
 
     <!-- Notificación de sistema -->
     @if (showExtensionNotification) {
-    <div class="mb-6 animate-fade-in">
-      <div
-        class="bg-info-500 text-white p-4 rounded-xl shadow-lg border border-info-400 flex justify-between items-center">
+    <!-- Fijo en pantalla: si estaba arriba del todo, quien pujaba abajo en la tabla no lo veía. -->
+    <div class="fixed top-20 inset-x-4 md:inset-x-auto md:right-6 md:w-[28rem] z-50 animate-fade-in" role="status" aria-live="polite">
+      <div class="text-white p-4 rounded-xl shadow-lg border flex justify-between items-center gap-3"
+        [ngClass]="notificationType === 'warning' ? 'bg-warning-500 border-warning-600' : 'bg-info-500 border-info-400'">
         <div class="flex items-center">
-          <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+          <svg class="w-5 h-5 mr-3 shrink-0" fill="currentColor" viewBox="0 0 20 20">
             <path fill-rule="evenodd"
               d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
               clip-rule="evenodd"></path>
           </svg>
           <span class="font-medium">{{ extensionMessage }}</span>
         </div>
-        <button (click)="closeExtensionNotification()" class="text-white hover:text-info-100">
+        <button (click)="closeExtensionNotification()" class="text-white hover:opacity-80 shrink-0 p-2 -m-2" [attr.aria-label]="'NOTIFICATIONS.CLOSE' | translate">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
           </svg>
@@ -171,7 +172,7 @@
             </div>
             <div>
               <p class="text-content/60 text-sm font-medium mb-1" appTranslate="AUCTION-BUYER.START_DATE">Inicio</p>
-              <p class="font-semibold text-content">{{ auctionData[0].startDate | date:'medium' }}</p>
+              <p class="font-semibold text-content">{{ auctionData[0].startDate | date:'dd MMM yyyy HH:mm':undefined:'es' }}</p>
             </div>
           </div>
 
@@ -185,7 +186,7 @@
             </div>
             <div>
               <p class="text-content/60 text-sm font-medium mb-1" appTranslate="AUCTION-BUYER.END_DATE">Fin</p>
-              <p class="font-semibold text-content">{{ auctionData[0].endDate | date:'medium' }}</p>
+              <p class="font-semibold text-content">{{ auctionData[0].endDate | date:'dd MMM yyyy HH:mm':undefined:'es' }}</p>
             </div>
           </div>
         </div>
@@ -405,7 +406,7 @@
                     </span>
                   </div>
                   <div class="text-content/50 text-xs mt-1 font-medium">
-                    {{ bid.createdAt | date:'dd MMM YYYY' }} {{ bid.createdAt | date:'shortTime' }}
+                    {{ bid.createdAt | date:'dd MMM YYYY':undefined:'es' }} {{ bid.createdAt | date:'shortTime':undefined:'es' }}
                   </div>
                 </div>
                 }
