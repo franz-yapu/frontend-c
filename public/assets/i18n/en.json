@@ -411,6 +411,7 @@
     "MIN_LENGTH": "Minimum {{min}} characters",
     "MAX_LENGTH": "Maximum {{max}} characters",
     "PASSWORD_MISMATCH": "Passwords do not match",
+    "PASSWORD_RULE": "At least 8 characters, with at least one letter and one number.",
     "INVALID_FORMAT": "Invalid format",
     "FILE_TYPE_NOT_ALLOWED": "File type not allowed",
     "FILE_TOO_LARGE": "File too large",
@@ -529,6 +530,7 @@
     "PHONE": "Phone",
     "EMAIL": "Email",
     "PASSWORD": "Password",
+    "REPEAT_PASSWORD": "Confirm password",
     "MODAL": {
       "TITLE": "Project Finished ✔️",
       "DESCRIPTION": "This <span class=\"font-semibold\">coffee auction system</span> was developed by <span class=\"font-semibold\">Franz Yapu</span>.<br/><br/>If you wish to <span class=\"font-semibold\">rent</span> this platform or create a personalized version for your organization, I offer:<br/><br/><span class=\"font-semibold\">• Full customization</span> (logos, colors, branding, visual identity)<br/><span class=\"font-semibold\">• Custom new features</span><br/><span class=\"font-semibold\">• Professional optimization and support</span><br/><br/>Contact me directly at:",
@@ -558,6 +560,14 @@
       "OFFLINE": "Offline",
       "UNKNOWN": "Unknown"
     }
+  },
+  "COFFEE_PROCESS": {
+    "WASHED": "Washed",
+    "NATURAL": "Natural",
+    "HONEY": "Honey",
+    "ANAEROBIC": "Anaerobic",
+    "PULPED": "Pulped",
+    "OTHER": "Other"
   },
   "NOTIFICATIONS": {
     "AUCTION_EXTENDED": "Auction extended until {{time}}!",

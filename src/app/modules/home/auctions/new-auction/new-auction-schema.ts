@@ -60,6 +60,22 @@ export const auctionFormFields = (catalogs: any) => {
                 decimalPlaces: 2
               }
             },
+            {
+              key: 'extensionEnabled',
+              label: 'Extender si alguien puja en los últimos minutos',
+              type: 'select',
+              options: [
+                { label: 'Sí', value: 'si' },
+                { label: 'No', value: 'no' },
+              ],
+              validators: { required: true },
+            },
+            {
+              key: 'extensionMinutes',
+              label: 'Minutos de extensión (1 a 30)',
+              type: 'number',
+              validators: { required: true },
+            },
           ]
         },
       ]

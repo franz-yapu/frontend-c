@@ -410,6 +410,7 @@
     "MIN_LENGTH": "Mínimo {{min}} caracteres",
     "MAX_LENGTH": "Máximo {{max}} caracteres",
     "PASSWORD_MISMATCH": "Las contraseñas no coinciden",
+    "PASSWORD_RULE": "Mínimo 8 caracteres, con al menos una letra y un número.",
     "INVALID_FORMAT": "Formato inválido",
     "FILE_TYPE_NOT_ALLOWED": "Tipo de archivo no permitido",
     "FILE_TOO_LARGE": "Archivo demasiado grande",
@@ -528,6 +529,7 @@
     "PHONE": "Teléfono",
     "EMAIL": "Correo Electrónico",
     "PASSWORD": "Contraseña",
+    "REPEAT_PASSWORD": "Confirmar contraseña",
     "MODAL": {
       "TITLE": "Proyecto Finalizado ✔️",
       "DESCRIPTION": "Este sistema de <span class=\"font-semibold\">subastas de café</span> fue desarrollado por <span class=\"font-semibold\">Franz Yapu</span>.<br/><br/>Si deseas <span class=\"font-semibold\">rentar</span> esta plataforma o crear una versión personalizada para tu organización, ofrezco:<br/><br/><span class=\"font-semibold\">• Personalización completa</span> (logos, colores, marca, identidad visual)<br/><span class=\"font-semibold\">• Nuevas funcionalidades</span> a medida<br/><span class=\"font-semibold\">• Optimización y soporte profesional</span><br/><br/>Contáctame directamente al:",
@@ -557,6 +559,14 @@
       "OFFLINE": "Desconectado",
       "UNKNOWN": "Desconocida"
     }
+  },
+  "COFFEE_PROCESS": {
+    "WASHED": "Lavado",
+    "NATURAL": "Natural",
+    "HONEY": "Honey",
+    "ANAEROBIC": "Anaeróbico",
+    "PULPED": "Despulpado",
+    "OTHER": "Otro"
   },
   "NOTIFICATIONS": {
     "AUCTION_EXTENDED": "¡Subasta extendida hasta las {{time}}!",

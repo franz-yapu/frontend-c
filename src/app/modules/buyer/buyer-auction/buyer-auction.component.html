@@ -249,14 +249,14 @@
         <div class="flex items-center justify-end gap-2">
           @if (auctionData.length > 0 && timeLeft.hasStarted && !timeLeft.hasEnded) {
           <button type="button" (click)="openBidModal(detail)"
-            class="px-3 py-1.5 bg-primary text-white rounded-lg text-sm font-bold hover:bg-primary/90 transition-colors whitespace-nowrap shadow-sm">
+            class="px-3 py-1.5 min-h-11 md:min-h-0 bg-primary text-white rounded-lg text-sm font-bold hover:bg-primary/90 transition-colors whitespace-nowrap shadow-sm">
             {{ 'AUCTION-BUYER.CONFIRM_SHORT' | translate }}
           </button>
           }
           <button type="button" (click)="openLotDetail(detail)"
             [title]="'AUCTION-BUYER.VIEW_DETAIL' | translate"
             [attr.aria-label]="'AUCTION-BUYER.VIEW_DETAIL' | translate"
-            class="p-1.5 rounded-lg border border-primary/20 text-content/60 hover:text-primary hover:bg-primary/10 transition-colors">
+            class="p-1.5 min-h-11 min-w-11 md:min-h-0 md:min-w-0 inline-flex items-center justify-center rounded-lg border border-primary/20 text-content/60 hover:text-primary hover:bg-primary/10 transition-colors">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>

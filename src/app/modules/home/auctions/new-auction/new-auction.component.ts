@@ -22,7 +22,8 @@ export class NewAuctionComponent implements OnInit {
   onFormCreated = (form: FormGroup) => {
     this.formReference = form;
   };
-  initiaData = this.dynamicDialogConfig.data?.data;
+  // La extensión viaja como booleano, pero el select del formulario usa 'si'/'no'.
+  initiaData = this.conExtension(this.dynamicDialogConfig.data?.data);
   catalogs: any = {};
   user: any;
    
@@ -36,6 +37,15 @@ export class NewAuctionComponent implements OnInit {
   async ngOnInit() {
     this.user = this.generalService.getUser();
     console.log('📝 Datos iniciales:', this.initiaData);
+  }
+
+  /** Valores iniciales: los de la subasta (si se edita) con la extensión en formato de formulario. */
+  private conExtension(data: any) {
+    return {
+      ...(data ?? {}),
+      extensionEnabled: data?.extensionEnabled === false ? 'no' : 'si',
+      extensionMinutes: data?.extensionMinutes ?? 3,
+    };
   }
 
   PatientsFormFields(catalogs: any): any[] {
@@ -71,6 +81,8 @@ if (formData.endDate && formData.endTime) {
 }
       formData.minIncrement = formData.minIncrement;
       formData.adminId = this.user?.id;
+      formData.extensionEnabled = formData.extensionEnabled !== 'no';
+      formData.extensionMinutes = Math.min(Math.max(Math.round(Number(formData.extensionMinutes) || 3), 1), 30);
 
       console.log('📅 Datos a enviar al backend:', formData);
       console.log('📅 StartDate (UTC):', formData.startDate);

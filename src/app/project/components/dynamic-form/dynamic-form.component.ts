@@ -196,6 +196,11 @@ export class DynamicFormComponent implements OnInit {
         { validators: [...baseValidators, this.passwordMatchValidator.bind(this)], nonNullable: false }
       );
       this.form.addControl('repeatPassword', passwordControl);
+      // Si cambia la contraseña, se vuelve a comprobar la confirmación: antes solo
+      // se validaba al editar la confirmación y se podía enviar con dos distintas.
+      control.valueChanges.subscribe(() =>
+        passwordControl.updateValueAndValidity({ emitEvent: false }),
+      );
     }
   }
 

@@ -1,10 +1,11 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslatePipe } from '../../../pipe/translate.pipe';
 
 @Component({
   selector: 'app-lot-detail',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslatePipe],
   templateUrl: './lot-detail.component.html',
   styleUrls: ['./lot-detail.component.scss']
 })

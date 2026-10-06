@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { HomeService } from '../../../modules/home/home.service';
 import { CommonModule } from '@angular/common';
+import { TranslatePipe } from '../../pipe/translate.pipe';
 import { SafeResourceUrl } from '@angular/platform-browser';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { NewCoffeelotComponent } from '../new-coffeelot/new-coffeelot.component';
@@ -9,7 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-coffee-lot-detail',
-  imports: [CommonModule],
+  imports: [CommonModule, TranslatePipe],
   templateUrl: './coffee-lot-detail.component.html',
   styleUrl: './coffee-lot-detail.component.scss',
   providers: [DialogService],

@@ -84,7 +84,7 @@
           } @else { <span class="text-content/30">—</span> }
           }
           @case ('process') {
-          <span class="text-content/80">{{ row.process || '—' }}</span>
+          <span class="text-content/80">{{ row.process ? (('COFFEE_PROCESS.' + row.process) | translate) : '—' }}</span>
           }
           @case ('altitude') {
           <span class="text-content/80 whitespace-nowrap">

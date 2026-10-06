@@ -290,8 +290,8 @@
             <!-- Password Confirmation -->
             @if (f.type === 'password' && f.key === 'password') {
             <div class="flex flex-col mt-4">
-              <label class="text-primary-950 font-medium mb-1" appTranslate="LOGIN.PASSWORD_LABEL">
-                Repetir contraseña
+              <label class="text-primary-950 font-medium mb-1" appTranslate="REGISTER.REPEAT_PASSWORD">
+                Confirmar contraseña
                 <span class="text-danger-700">*</span>
               </label>
               <div class="relative">
@@ -328,8 +328,9 @@
             <div class="text-danger-700 text-xs mt-1 " *ngIf="getControl(f.key)?.touched && getControl(f.key)?.invalid">
               <div *ngIf="getControl(f.key)?.errors?.['required']" appTranslate="VALIDATION.REQUIRED">Este campo es obligatorio.</div>
               <div *ngIf="getControl(f.key)?.errors?.['email']" appTranslate="VALIDATION.EMAIL">Por favor ingrese un correo electrónico válido.</div>
-              <div *ngIf="getControl(f.key)?.errors?.['pattern']" appTranslate="VALIDATION.INVALID_FORMAT">Formato inválido.</div>
-              <div *ngIf="getControl(f.key)?.errors?.['minlength']" appTranslate="VALIDATION.MIN_LENGTH" [translateParams]="{min: '' + (f.validators?.minLength ?? 0)}">Mínimo {{ f.validators?.minLength }} caracteres.
+              <div *ngIf="getControl(f.key)?.errors?.['pattern'] && f.key !== 'password'" appTranslate="VALIDATION.INVALID_FORMAT">Formato inválido.</div>
+              <div *ngIf="getControl(f.key)?.errors?.['pattern'] && f.key === 'password'" appTranslate="VALIDATION.PASSWORD_RULE">Mínimo 8 caracteres, con al menos una letra y un número.</div>
+              <div *ngIf="getControl(f.key)?.errors?.['minlength'] && !(f.key === 'password' && getControl(f.key)?.errors?.['pattern'])" appTranslate="VALIDATION.MIN_LENGTH" [translateParams]="{min: '' + (f.validators?.minLength ?? 0)}">Mínimo {{ f.validators?.minLength }} caracteres.
               </div>
               <div *ngIf="getControl(f.key)?.errors?.['maxlength']" appTranslate="VALIDATION.MAX_LENGTH" [translateParams]="{max: '' + (f.validators?.maxLength ?? 0)}">Máximo {{ f.validators?.maxLength }} caracteres.
               </div>

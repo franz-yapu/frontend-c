@@ -47,7 +47,7 @@
                 </div>
                 <div class="flex justify-between">
                   <span class="text-xs text-gray-600" appTranslate="AUCTION.LOT.PROCESS">Proceso</span>
-                  <span class="text-sm font-medium text-gray-900">{{ lot.coffeeLot.process }}</span>
+                  <span class="text-sm font-medium text-gray-900">{{ lot.coffeeLot.process ? (('COFFEE_PROCESS.' + lot.coffeeLot.process) | translate) : '—' }}</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-xs text-gray-600" appTranslate="AUCTION.LOT.ALTITUDE">Altitud</span>

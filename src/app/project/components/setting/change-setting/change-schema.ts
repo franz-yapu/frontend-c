@@ -25,7 +25,7 @@ export const changeFormFields = (catalogs: any) => {
                             key: 'password',
                             label: 'Nueva contraseña',
                             type: 'password',
-                            validators: { required: true, minLength: 6 },
+                            validators: { required: true, minLength: 8, maxLength: 30, pattern: '^(?=.*[A-Za-z])(?=.*\\d).{8,30}$' },
                         },
                        
                         

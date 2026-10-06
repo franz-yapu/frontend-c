@@ -59,7 +59,7 @@ export const registerFormFields = (catalogs: any) => {
                             label: 'REGISTER.PASSWORD',
                             type: 'password',
 
-                            validators: { required: true,   maxLength: 30 ,minLength:6},
+                            validators: { required: true, maxLength: 30, minLength: 8, pattern: '^(?=.*[A-Za-z])(?=.*\\d).{8,30}$' },
 
                         },
 

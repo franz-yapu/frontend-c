@@ -95,7 +95,7 @@
 
             <div class="flex justify-between items-center py-3 border-b border-primary-100">
               <span class="font-semibold text-primary-800">PROCESO:</span>
-              <span class="text-gray-700">{{ coffeeLot.process || '-' }}</span>
+              <span class="text-gray-700">{{ coffeeLot.process ? (('COFFEE_PROCESS.' + coffeeLot.process) | translate) : '-' }}</span>
             </div>
 
             <div class="flex justify-between items-center py-3 border-b border-primary-100">
