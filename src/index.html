@@ -1,11 +1,28 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="utf-8">
   <title>Cáritas</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <!--
+    Fuente de iconos. Se carga SIN bloquear el pintado: el truco de media="print"
+    hace que el navegador la baje con baja prioridad y la aplique al terminar
+    (`onload`). Antes era una hoja de estilo bloqueante contra un servidor
+    externo: con internet lento, la página entera esperaba a Google. El <noscript>
+    cubre el caso de JS desactivado.
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
+    media="print"
+    onload="this.media='all'"
+  />
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" />
+  </noscript>
   <link rel="icon" type="image/x-icon" href="taza-icon.png">
   <script>
     (function() {
@@ -52,8 +69,58 @@
       }
     })();
   </script>
+  <style>
+    #app-splash {
+      position: fixed;
+      inset: 0;
+      z-index: 9998;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface-color, #ffffff);
+    }
+    app-root:not(:empty) + #app-splash { display: none; }
+    #app-splash .s-track { fill: none; stroke: rgba(var(--primary-color-rgb, 111, 78, 55), .15); stroke-width: 4; }
+    #app-splash .s-arc {
+      fill: none; stroke: var(--primary-color, #6f4e37); stroke-width: 4; stroke-linecap: round;
+      stroke-dasharray: 70 213; transform-origin: 50% 50%; animation: splash-spin 1.4s linear infinite;
+    }
+    #app-splash .s-body { fill: var(--surface-color, #fff); stroke: var(--primary-color, #6f4e37); stroke-width: 3.5; stroke-linejoin: round; }
+    #app-splash .s-handle, #app-splash .s-saucer { fill: none; stroke: var(--primary-color, #6f4e37); stroke-width: 3.5; stroke-linecap: round; }
+    #app-splash .s-surface { transform: translate(50px, 40px) scaleY(.22); }
+    #app-splash .s-coffee { fill: var(--primary-color, #6f4e37); }
+    #app-splash .s-swirl { transform-origin: 0 0; animation: splash-spin 1.9s linear infinite; }
+    #app-splash .s-swirl path { fill: none; stroke: rgba(var(--surface-color-rgb, 255, 255, 255), .55); stroke-width: 6; stroke-linecap: round; }
+    @keyframes splash-spin { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) {
+      #app-splash .s-arc, #app-splash .s-swirl { animation: none; }
+    }
+  </style>
 </head>
 <body>
   <app-root></app-root>
+
+  <!--
+    Pantalla de bienvenida: se ve mientras el navegador descarga la app (lo que
+    más se nota con internet lento). Es HTML+CSS puro, sin JS: en cuanto Angular
+    pinta dentro de <app-root>, la regla `:not(:empty)` de abajo la oculta sola.
+  -->
+  <div id="app-splash" aria-hidden="true">
+    <svg viewBox="0 0 100 100" width="96" height="96">
+      <circle class="s-track" cx="50" cy="50" r="45" />
+      <circle class="s-arc" cx="50" cy="50" r="45" />
+      <path class="s-handle" d="M71 47 c12 0 12 17 0 17" />
+      <path class="s-body" d="M28 40 h44 l-4 27 q-1 7 -8 7 H40 q-7 0 -8 -7 Z" />
+      <g class="s-surface">
+        <ellipse class="s-coffee" cx="0" cy="0" rx="22" ry="22" />
+        <g class="s-swirl">
+          <path d="M-13 0 a13 13 0 0 1 26 0" />
+          <path d="M7 0 a7 7 0 0 1 -14 0" />
+        </g>
+      </g>
+      <ellipse class="s-saucer" cx="50" cy="79" rx="30" ry="5" />
+    </svg>
+  </div>
+
 </body>
 </html>

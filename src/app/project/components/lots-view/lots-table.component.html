@@ -12,10 +12,10 @@
           [attr.aria-sort]="sortBy === criterio(col) ? (sortDirection === 'asc' ? 'ascending' : 'descending') : null">
           @if (esOrdenable(col)) {
           <button type="button" (click)="ordenarPor(col)"
-            class="inline-flex items-center gap-1 uppercase tracking-wide hover:text-primary transition-colors"
+            class="inline-flex items-center gap-1 uppercase tracking-wide hover:text-primary-ink transition-colors"
             [class.flex-row-reverse]="esNumerica(col)">
             <span>{{ etiqueta(col) | translate }}</span>
-            <span class="text-[10px] text-primary">{{ flecha(col) }}</span>
+            <span class="text-[10px] text-primary-ink">{{ flecha(col) }}</span>
           </button>
           } @else {
           <span>{{ etiqueta(col) | translate }}</span>
@@ -34,7 +34,9 @@
 
     <tbody>
       @for (row of rows; track row.id) {
+      <!-- data-tour: el tour del comprador resalta la fila que va ganando. -->
       <tr class="border-b border-primary/20 last:border-0 transition-colors hover:bg-primary/5 cursor-pointer"
+        [attr.data-tour]="row.destacada ? 'ganando' : null"
         [ngClass]="pulsa(row) ? 'animate-pulse bg-primary/10' : ''" (click)="rowClick.emit(row.raw)">
 
         @for (col of columns; track col) {
@@ -43,7 +45,7 @@
 
           @switch (col) {
           @case ('position') {
-          <span class="font-bold text-primary whitespace-nowrap">#{{ row.position }}</span>
+          <span class="font-bold text-primary-ink whitespace-nowrap">#{{ row.position }}</span>
           }
           @case ('name') {
           <div class="min-w-[8.5rem] sm:min-w-[12rem] max-w-[11.5rem] sm:max-w-[20rem]">
@@ -54,7 +56,7 @@
             @if (pide('price') || pide('score')) {
             <p class="sm:hidden mt-1 text-xs">
               @if (pide('price') && row.price) {
-              <span class="font-bold text-primary tabular-nums">
+              <span class="font-bold text-primary-ink tabular-nums">
                 {{ row.price | currency:'USD':'symbol':'1.2-2' }}</span>
               }
               @if (pide('score') && row.score !== null) {
@@ -69,7 +71,9 @@
               @if (row.destacada) {
               <span class="font-semibold text-success-700">{{ row.destacadaTexto }}</span>
               } @else {
-              <span class="text-primary font-semibold">{{ 'AUCTION-BUYER.COL_LEADER' | translate }}:</span>
+              <!-- La etiqueta sale de etiqueta('leader'), no fija: con la subasta
+                   terminada las vistas la cambian a "Ganador". -->
+              <span class="text-primary-ink font-semibold">{{ etiqueta('leader') | translate }}:</span>
               <span class="text-content font-bold"> {{ row.leaderName }}</span>
               }
             </p>
@@ -78,13 +82,13 @@
           }
           @case ('score') {
           @if (row.score !== null) {
-          <span class="inline-block px-2 py-0.5 rounded-full bg-primary/10 text-primary font-bold whitespace-nowrap">
+          <span class="inline-block px-2 py-0.5 rounded-full bg-primary/10 text-primary-ink font-bold whitespace-nowrap">
             {{ row.score }}
           </span>
           } @else { <span class="text-content/30">—</span> }
           }
           @case ('process') {
-          <span class="text-content/80">{{ row.process ? (('COFFEE_PROCESS.' + row.process) | translate) : '—' }}</span>
+          <span class="text-content/80">{{ row.process | procesoCafe }}</span>
           }
           @case ('altitude') {
           <span class="text-content/80 whitespace-nowrap">
@@ -100,7 +104,7 @@
           </span>
           }
           @case ('price') {
-          <span class="font-bold text-primary whitespace-nowrap">
+          <span class="font-bold text-primary-ink whitespace-nowrap">
             {{ row.price ? (row.price | currency:'USD':'symbol':'1.2-2') : '—' }}
           </span>
           }
@@ -115,7 +119,7 @@
           @case ('leader') {
           @if (row.destacada) {
           <span
-            class="inline-block px-2 py-0.5 rounded-full bg-success-500 text-white text-[11px] font-bold whitespace-nowrap">
+            class="inline-block px-2 py-0.5 rounded-full bg-success-500 text-on-success text-[11px] font-bold whitespace-nowrap">
             {{ row.destacadaTexto }}
           </span>
           } @else if (row.leaderName) {

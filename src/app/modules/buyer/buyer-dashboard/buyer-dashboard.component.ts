@@ -11,11 +11,12 @@ import { GeneralService } from '../../../core/gerneral.service';
 import { BrandingService } from '../../../core/branding/branding.service';
 import { TranslationService } from '../../../project/services/translate.service';
 import { TranslateDirective } from '../../../project/directive/translate.directive';
+import { CoffeeLoaderComponent } from '../../../project/components/coffee-loader/coffee-loader.component';
 
 @Component({
   selector: 'app-buyer-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgChartsModule, TranslateDirective],
+  imports: [CommonModule, FormsModule, NgChartsModule, TranslateDirective, CoffeeLoaderComponent],
   templateUrl: './buyer-dashboard.component.html',
   styleUrls: ['./buyer-dashboard.component.scss'],
 })

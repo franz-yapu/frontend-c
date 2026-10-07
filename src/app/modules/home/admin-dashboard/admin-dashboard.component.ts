@@ -5,12 +5,13 @@ import { FormsModule } from '@angular/forms';
 import { NgChartsModule } from 'ng2-charts';
 import { DashboardFilters, DashboardService } from '../../../project/services/dashboard.service';
 import { BrandingService } from '../../../core/branding/branding.service';
+import { CoffeeLoaderComponent } from '../../../project/components/coffee-loader/coffee-loader.component';
 
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgChartsModule],
+  imports: [CommonModule, FormsModule, NgChartsModule, CoffeeLoaderComponent],
   templateUrl: './admin-dashboard.component.html',
   styleUrls: ['./admin-dashboard.component.scss']
 })

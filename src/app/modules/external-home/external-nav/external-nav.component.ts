@@ -11,19 +11,22 @@ import {
 import { RouterModule } from '@angular/router';
 import { TranslationService } from '../../../project/services/translate.service';
 import { TranslateDirective } from '../../../project/directive/translate.directive';
+import { TranslatePipe } from '../../../project/pipe/translate.pipe';
 import { Language } from '../../../project/services/translate.service'; // Asegúrate de importar la interfaz
 import { BrandingService } from '../../../core/branding/branding.service';
 
 interface NavItem {
   name: string;
   route: string;
+  /** Item que solo se pinta cuando la sección de Ganadores está encendida. */
+  soloConGanadores?: boolean;
   isActive: boolean;
   translateKey: string;
 }
 
 @Component({
   selector: 'app-external-nav',
-  imports: [CommonModule, RouterModule, TranslateDirective, UpperCasePipe],
+  imports: [CommonModule, RouterModule, TranslateDirective, TranslatePipe, UpperCasePipe],
   templateUrl: './external-nav.component.html',
   styleUrl: './external-nav.component.scss',
 })
@@ -63,6 +66,8 @@ export class ExternalNavComponent implements OnInit, OnDestroy {
       route: '/winners',
       isActive: false,
       translateKey: 'NAV.WINNERS',
+      // Solo aparece si el admin enciende showWinnersSection en Branding.
+      soloConGanadores: true,
     },
     {
       name: 'Reglamento',
@@ -72,6 +77,21 @@ export class ExternalNavComponent implements OnInit, OnDestroy {
     },
     /*  { name: 'Acerca de nosotros', route: '/Coffee/about', isActive: false, translateKey: 'NAV.ABOUT' }, */
   ];
+
+  /** Lo que se pinta de verdad en el menú.
+   *
+   *  Con una sola subasta por edición (el caso de Cáritas: se corre, se cierra y
+   *  el sistema arranca de cero para la siguiente) el enlace "Ganadores" duplica
+   *  lo que ya enseña "Subasta Activa" al cerrarse, así que viene apagado. La
+   *  ruta /winners y su componente siguen ahí — de hecho auction-view los usa —
+   *  y basta encender el interruptor en Branding para recuperar el enlace. */
+  visibleNavItems = computed(() => {
+    const mostrarGanadores =
+      this.brandingService.configSignal().showWinnersSection === true;
+    return this.navItems.filter(
+      (item) => !item.soloConGanadores || mostrarGanadores,
+    );
+  });
 
   // Usar los Signals directamente del servicio
   availableLanguages = this.translationService.languages;

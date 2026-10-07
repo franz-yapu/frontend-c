@@ -9,6 +9,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { TranslatePipe } from '../../pipe/translate.pipe';
 
+import { ProcesoCafePipe } from '../../pipe/proceso-cafe.pipe';
 /** Columnas que sabe pintar la tabla. Cada pantalla pide las suyas. */
 export type LotColumn =
   | 'position'
@@ -61,7 +62,7 @@ export interface LotRow {
 @Component({
   selector: 'app-lots-table',
   standalone: true,
-  imports: [CommonModule, TranslatePipe],
+  imports: [ProcesoCafePipe, CommonModule, TranslatePipe],
   templateUrl: './lots-table.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

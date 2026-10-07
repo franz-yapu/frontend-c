@@ -47,7 +47,7 @@
                 </div>
                 <div class="flex justify-between">
                   <span class="text-xs text-gray-600" appTranslate="AUCTION.LOT.PROCESS">Proceso</span>
-                  <span class="text-sm font-medium text-gray-900">{{ lot.coffeeLot.process ? (('COFFEE_PROCESS.' + lot.coffeeLot.process) | translate) : '—' }}</span>
+                  <span class="text-sm font-medium text-gray-900">{{ lot.coffeeLot.process | procesoCafe }}</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-xs text-gray-600" appTranslate="AUCTION.LOT.ALTITUDE">Altitud</span>
@@ -115,11 +115,13 @@
 
               <div class="flex justify-between items-center p-3 bg-success-50 rounded-lg border border-success-100">
                 <div>
-                  <p class="text-xs text-success-600" appTranslate="AUCTION.LOT.CURRENT_BID">Oferta Actual</p>
+                  <p class="text-xs text-success-600"
+                     [appTranslate]="terminada ? 'WINNERS.TABLE.FINAL_PRICE' : 'AUCTION.LOT.CURRENT_BID'">Oferta Actual</p>
                   <p class="text-lg font-bold text-success-700">{{ lot.currentPrice | currency:'USD':'symbol' }}/<span appTranslate="AUCTION.LOT.LBS">lb</span></p>
                 </div>
                 <div class="text-right">
-                  <p class="text-xs text-success-600" appTranslate="AUCTION.LOT.CURRENT_VALUE">Valor Actual</p>
+                  <p class="text-xs text-success-600"
+                     [appTranslate]="terminada ? 'WINNERS.TABLE.TOTAL' : 'AUCTION.LOT.CURRENT_VALUE'">Valor Actual</p>
                   <p class="text-lg font-bold text-success-700">
                     {{ (lot.currentPrice * lot.coffeeLot.quantityLbs) | currency:'USD':'symbol' }}
                   </p>

@@ -1,5 +1,11 @@
 <div class="min-h-screen bg-gray-50 py-8">
-  @if (auction && transactions?.length > 0) {
+  @if (loading) {
+    <!-- Mientras no sepamos si hay resultados, la tacita: nunca el mensaje de
+         "no hay nada", que sería mentira hasta que responda el servidor. -->
+    <div class="min-h-[70vh] flex items-center justify-center px-6">
+      <app-coffee-loader [size]="96"></app-coffee-loader>
+    </div>
+  } @else if (auction && transactions?.length > 0) {
     <!-- Header Section -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
       <div class="text-center">
@@ -49,108 +55,48 @@
     </div>
 
     <!-- Winners Table -->
+    <!--
+      Misma tabla que la de la subasta (app-lots-table): mismas columnas, mismos
+      anchos y el mismo comportamiento en móvil. Antes era una tabla aparte,
+      escrita a mano, que se parecía pero no era igual.
+    -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-      <div class="bg-white shadow-md overflow-hidden border border-primary-200">
-        <!-- Table Container -->
-        <div class="overflow-x-auto">
-          <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-primary">
-              <tr>
-                <!-- Position -->
-                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider" appTranslate="WINNERS.TABLE.POSITION">
-                  Posición
-                </th>
-                
-                <!-- Coffee Info -->
-                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider" appTranslate="WINNERS.TABLE.COFFEE_INFO">
-                  Información del Café
-                </th>
-                
-                <!-- Buyer -->
-                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider" appTranslate="WINNERS.TABLE.BUYER">
-                  Comprador
-                </th>
-                
-                <!-- Seller -->
-                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider" appTranslate="WINNERS.TABLE.SELLER">
-                  Productor
-                </th>
-                
-                <!-- Pricing -->
-                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider" appTranslate="WINNERS.TABLE.PRICE">
-                  Precio
-                </th>
-                
-                <!-- Total -->
-                <!-- <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
-                  Total
-                </th> -->
-              </tr>
-            </thead>
-            
-            <tbody class="bg-white divide-y divide-gray-200">
-              <tr *ngFor="let transaction of transactions; let i = index" 
-                  class="hover:bg-gray-50">
-                
-                <!-- Position -->
-                <td class="px-4 py-3 whitespace-nowrap">
-                  <div class="w-8 h-8 bg-primary rounded flex items-center justify-center">
-                    <span class="text-white font-bold text-sm">#{{ transaction.position }}</span>
-                  </div>
-                </td>
-                
-                <!-- Coffee Info -->
-                <td class="px-4 py-3">
-                  <div class="space-y-1">
-                    <div class="font-medium text-gray-900">{{ transaction.lotName }}</div>
-                    <div class="text-sm text-gray-600">
-                      {{ transaction.variety }} • {{ transaction.region }}
-                    </div>
-                    <div class="text-xs text-gray-500">
-                      {{ transaction.cupScore }} pts • {{ transaction.quantityLbs }} lbs
-                    </div>
-                  </div>
-                </td>
-                
-                <!-- Buyer -->
-                <td class="px-4 py-3">
-                  <div class="space-y-1">
-                    <div class="font-medium text-gray-900">{{ transaction.buyer.name }}</div>
-                    <div class="text-sm text-gray-600">{{ transaction.buyer.company }}</div>
-                  </div>
-                </td>
-                
-                <!-- Seller -->
-                <td class="px-4 py-3">
-                  <div class="space-y-1">
-                    <div class="font-medium text-gray-900">{{ transaction.seller }}</div>
-                  </div>
-                </td>
-                
-                <!-- Pricing -->
-                <td class="px-4 py-3">
-                  <div class="space-y-1">
-                    <div class="font-bold text-emerald-700">
-                      {{ transaction.pricing.finalPrice | currency:'USD':'symbol' }}
-                    </div>
-                    <div class="text-xs text-gray-500">
-                      Inicial: {{ transaction.pricing.startingPrice | currency:'USD':'symbol' }}
-                    </div>
-                  </div>
-                </td>
-                
-                <!-- Total -->
-               <!--  <td class="px-4 py-3">
-                  <div class="font-bold text-primary-700">
-                    {{ transaction.pricing.finalPrice * transaction.quantityLbs | currency:'USD':'symbol' }}
-                  </div>
-                </td> -->
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <app-lots-table
+        [rows]="filasTabla"
+        [columns]="columnasTabla"
+        [ordenable]="false"
+        [acciones]="accionesTabla"
+        [etiquetasPersonalizadas]="etiquetasTabla"
+        [textoVacio]="'WINNERS.EMPTY.TITLE' | translate"
+        (rowClick)="abrirFicha($event)">
+      </app-lots-table>
+
+      <!-- La misma ficha que durante la subasta: así se puede repasar cada lote
+           y su historial de pujas cuando ya terminó. -->
+      <ng-template #accionesTabla let-row>
+        @if (tieneDetalle(row.lotId)) {
+        <button
+          type="button"
+          (click)="abrirFicha(row)"
+          [title]="'AUCTION-BUYER.VIEW_DETAIL' | translate"
+          [attr.aria-label]="'AUCTION-BUYER.VIEW_DETAIL' | translate"
+          class="p-1.5 rounded-lg border border-primary/20 text-content/60 hover:text-primary-ink hover:bg-primary/10 transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+          </svg>
+        </button>
+        }
+      </ng-template>
     </div>
+
+    @if (selectedLot) {
+    <app-lot-detail [lot]="selectedLot" [lastBids]="lastBids" [terminada]="true"
+                    (close)="cerrarFicha()"></app-lot-detail>
+    }
+
   } @else {
     <!-- Empty State -->
     <div class="flex flex-col items-center justify-center min-h-[70vh] text-center px-6">
@@ -167,7 +113,7 @@
           Estamos organizando nuestra próxima subasta de cafés especiales. 
           Regresa pronto para descubrir lotes exclusivos.
         </p>
-        <button class="bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-lg font-medium transition-colors w-full" appTranslate="WINNERS.EMPTY.NOTIFY_BUTTON">
+        <button class="bg-primary-500 hover:bg-primary-600 text-on-primary px-6 py-3 rounded-lg font-medium transition-colors w-full" appTranslate="WINNERS.EMPTY.NOTIFY_BUTTON">
           Notificarme
         </button>
       </div>

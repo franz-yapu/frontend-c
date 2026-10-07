@@ -21,7 +21,7 @@ export class TransactionsCoffeeComponent implements OnInit {
       this.auctionId = this.activeRouter.snapshot.paramMap.get('id');
         this.auction = await this.homeService.getAution( this.auctionId);
       if (this.auction) {
-     this.transactions = await this.homeService.getAutionTransactions(this.auctionId );
+     this.transactions = await this.homeService.getAutionTransactionsWithContact(this.auctionId);
      this.transactions = (this.transactions  || []).sort((a:any, b:any) => (a.position ?? 0) - (b.position ?? 0));
 
       console.log('Transacciones:', this.transactions);

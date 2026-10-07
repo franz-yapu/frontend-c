@@ -16,6 +16,7 @@ import { Subscription } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GeneralService } from '../../../core/gerneral.service';
+import { TourService } from '../../../core/tour/tour.service';
 import { ConnectionQualityService } from '../../../project/services/connection-quality.service';
 import { TimeSyncService } from '../../../project/services/time-sync.service';
 import { TranslationService } from '../../../project/services/translate.service';
@@ -28,11 +29,14 @@ import {
   LotRow,
 } from '../../../project/components/lots-view/lots-table.component';
 import { ViewModeToggleComponent } from '../../../project/components/lots-view/view-mode-toggle.component';
+import { CoffeeLoaderComponent } from '../../../project/components/coffee-loader/coffee-loader.component';
+import { ExternalWinnersComponent } from '../../external-home/external-winners/external-winners.component';
 import {
   ViewMode,
   ViewModeService,
 } from '../../../project/components/lots-view/view-mode.service';
 
+import { ProcesoCafePipe } from '../../../project/pipe/proceso-cafe.pipe';
 interface CoffeeLot {
   id: string;
   name: string;
@@ -90,7 +94,7 @@ interface Bid {
 @Component({
   selector: 'app-buyer-auction',
   standalone: true,
-  imports: [
+  imports: [ProcesoCafePipe, 
     CommonModule,
     FormsModule,
     TranslateDirective,
@@ -98,6 +102,8 @@ interface Bid {
     LotDetailComponent,
     LotsTableComponent,
     ViewModeToggleComponent,
+    CoffeeLoaderComponent,
+    ExternalWinnersComponent,
   ],
   templateUrl: './buyer-auction.component.html',
   styleUrl: './buyer-auction.component.scss',
@@ -136,6 +142,21 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
   }
 
   /** Traduce los lotes a la forma que entiende la tabla compartida. */
+
+  /** La columna de quien va en cabeza: mientras la subasta corre es "Ganando";
+   *  una vez terminada ya no va ganando nadie, ganó. */
+  get etiquetasTabla(): Partial<Record<LotColumn, string>> {
+    return this.subastaTerminada
+      ? { leader: 'AUCTION-BUYER.COL_WINNER' }
+      : {};
+  }
+
+  /** ¿Ya no se puede pujar? (terminó el tiempo o el servidor la cerró) */
+  private get subastaTerminada(): boolean {
+    return this.auctionEnded || this.timeLeft?.hasEnded ||
+      this.auctionData[0]?.status === 'CLOSED';
+  }
+
   get filasTabla(): LotRow[] {
     return this.filteredLots.map((detail) => {
       const lote = detail.coffeeLot;
@@ -159,8 +180,13 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
         bidsCount: null,
         leaderName: this.nombreLider(detail),
         destacada: ganando,
+        // Mientras corre, "Vas ganando"; cuando ya terminó, "Ganaste".
         destacadaTexto: ganando
-          ? this.translationService.translate('AUCTION-BUYER.YOU_ARE_WINNING')
+          ? this.translationService.translate(
+              this.subastaTerminada
+                ? 'AUCTION-BUYER.YOU_WON'
+                : 'AUCTION-BUYER.YOU_ARE_WINNING',
+            )
           : null,
         raw: detail,
       } as LotRow;
@@ -196,6 +222,20 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
       .filter((x: string) => x.length > 0)
       .join(' ');
     return persona || null;
+  }
+
+  /** Contexto que necesita el tour: si hay subasta en curso y cuándo cierra. */
+  private contextoDelTour() {
+    const subasta = this.auctionData[0];
+    const enCurso = !!subasta && this.timeLeft?.hasStarted && !this.timeLeft?.hasEnded && !this.auctionEnded;
+    return {
+      subastaActiva: !!enCurso,
+      cierra: subasta?.endDate ? new Date(subasta.endDate) : null,
+    };
+  }
+
+  private lanzarTour() {
+    this.tour.arrancarSiToca(this.contextoDelTour());
   }
 
   openLotDetail(detail: AuctionDetail): void {
@@ -236,6 +276,16 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
   bidAmount: number = 0;
   bidError: string = '';
   isLoading: boolean = false;
+  /**
+   * Solo mientras se envía la puja propia. Antes el botón de confirmar usaba
+   * `isLoading`, que también se enciende en cada recarga de la sala (al entrar,
+   * al reconectar, tras cada puja...), y con internet lento el botón quedaba en
+   * "Procesando…" hasta ~36 s sin que el comprador hubiera pujado.
+   */
+  isPlacingBid: boolean = false;
+  /** Recarga en curso y si llegó otra petición de recarga mientras tanto. */
+  private recargaEnCurso: Promise<void> | null = null;
+  private recargaPendiente = false;
   showExtensionNotification: boolean = false;
   extensionMessage: string = '';
   notificationType: string = 'info';
@@ -251,7 +301,9 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
   totalLotValue: number = 0;
 
   private onVisibilityChange = async () => {
-    if (document.visibilityState === 'visible' && !this.auctionEnded) {
+    // Se recarga aunque la pantalla crea que la subasta terminó: si el admin
+    // corrió la hora de cierre, ese es justo el estado del que hay que salir.
+    if (document.visibilityState === 'visible') {
       try {
         await this.timeSyncService.syncWithServer();
         await this.loadAuctionData();
@@ -281,6 +333,7 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
     private connectionQualityService: ConnectionQualityService,
     public timeSyncService: TimeSyncService,
     private translationService: TranslationService,
+    private tour: TourService,
     @Inject(PLATFORM_ID) private platformId: any,
     private cdr: ChangeDetectorRef,
   ) {}
@@ -296,6 +349,11 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
       this.setupWebSocketListeners();
       this.setupConnectionQuality();
       this.setupConnectionMonitoring();
+
+      // Tour de bienvenida: solo comprador, solo las 3 primeras veces y nunca
+      // pegado al cierre. Se lanza tras pintar los lotes, con un respiro para
+      // que los elementos que resalta existan ya.
+      setTimeout(() => this.lanzarTour(), 1200);
 
       this.timerSubscription = this.timeSyncService
         .getCurrentTimeObservable()
@@ -333,11 +391,48 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
     }
   }
 
-  async loadAuctionData() {
+  /**
+   * Recarga los datos de la sala. Si ya hay una en curso no se lanza otra en
+   * paralelo: se anota y se hace UNA más al terminar (con red lenta, varias
+   * recargas superpuestas multiplicaban las peticiones).
+   */
+  async loadAuctionData(): Promise<void> {
+    if (this.recargaEnCurso) {
+      this.recargaPendiente = true;
+      return this.recargaEnCurso;
+    }
+    this.recargaEnCurso = (async () => {
+      do {
+        this.recargaPendiente = false;
+        await this.cargarDatosSubasta();
+      } while (this.recargaPendiente);
+    })();
+    try {
+      await this.recargaEnCurso;
+    } finally {
+      this.recargaEnCurso = null;
+    }
+  }
+
+  private async cargarDatosSubasta() {
     try {
       this.isLoading = true;
       const data = await this.buyerService.getAuctionsLotsActive().toPromise();
       this.auctionData = data || [];
+
+      // Si el servidor dice que la subasta sigue viva —porque le corrieron la
+      // hora de cierre— hay que salir del estado "finalizada" que el contador
+      // local pudo haber puesto: si no, se recargan los datos pero el botón de
+      // pujar sigue bloqueado.
+      const subasta = this.auctionData[0];
+      if (
+        this.auctionEnded &&
+        subasta?.status === 'ACTIVE' &&
+        new Date(subasta.endDate).getTime() >
+          this.timeSyncService.getCurrentTime().getTime()
+      ) {
+        this.auctionEnded = false;
+      }
 
       if (this.auctionData.length > 0 && this.auctionData[0].auctionDetails) {
         this.filteredLots = [...this.auctionData[0].auctionDetails].sort(
@@ -350,8 +445,7 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
         );
 
         this.buyerService.joinAuctionRoom(this.auctionData[0].id);
-        await this.loadHighestBids();
-        await this.loadBidHistory();
+        await Promise.all([this.loadHighestBids(), this.loadBidHistory()]);
       }
       this.cdr.markForCheck();
     } catch (error) {
@@ -365,33 +459,39 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
     }
   }
 
+  // Las peticiones por lote van en paralelo: en serie, con 2 s de latencia,
+  // 8 lotes eran 16 s solo en esto.
   async loadHighestBids() {
-    for (const lot of this.filteredLots) {
-      try {
-        const highestBid = await this.buyerService
-          .getHighestBidForCoffeeLot(lot.auctionId, lot.coffeeLot.id)
-          .toPromise();
+    await Promise.all(
+      this.filteredLots.map(async (lot) => {
+        try {
+          const highestBid = await this.buyerService
+            .getHighestBidForCoffeeLot(lot.auctionId, lot.coffeeLot.id)
+            .toPromise();
 
-        if (highestBid) {
-          this.highestBids.set(lot.coffeeLot.id, highestBid.amount);
-          lot.currentPrice = highestBid.amount;
-        }
-      } catch (error) {}
-    }
+          if (highestBid) {
+            this.highestBids.set(lot.coffeeLot.id, highestBid.amount);
+            lot.currentPrice = highestBid.amount;
+          }
+        } catch (error) {}
+      }),
+    );
     this.cdr.markForCheck();
   }
 
   async loadBidHistory() {
-    for (const lot of this.filteredLots) {
-      try {
-        const bids = await this.buyerService
-          .getLastBids(lot.auctionId, lot.coffeeLot.id, 5)
-          .toPromise();
-        this.lastBids.set(lot.coffeeLot.id, bids || []);
-      } catch (error) {
-        this.lastBids.set(lot.coffeeLot.id, []);
-      }
-    }
+    await Promise.all(
+      this.filteredLots.map(async (lot) => {
+        try {
+          const bids = await this.buyerService
+            .getLastBids(lot.auctionId, lot.coffeeLot.id, 5)
+            .toPromise();
+          this.lastBids.set(lot.coffeeLot.id, bids || []);
+        } catch (error) {
+          this.lastBids.set(lot.coffeeLot.id, []);
+        }
+      }),
+    );
     this.cdr.markForCheck();
   }
 
@@ -436,7 +536,32 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.buyerService.getTimeSync().subscribe(() => {
+    this.buyerService.getLotsChanged().subscribe((data) => {
+      if (data && this.auctionData[0]?.id === data.auctionId) {
+        this.loadAuctionData();
+      }
+    });
+
+    this.buyerService.getEndDateChanged().subscribe((data) => {
+      if (data) {
+        this.aplicarFinDeSubasta(data.auctionId, data.newEndDate, {
+          avisar: true,
+        });
+      }
+    });
+
+    // El servidor manda `timeSync` cada ~30 s con la fecha de cierre vigente.
+    // Este es el ÚNICO aviso que llega cuando el admin cambia la hora de fin y
+    // no pasa nada más (nadie puja, no hay extensión automática). Antes solo se
+    // usaba para ajustar el reloj y se ignoraba la fecha: el comprador se
+    // quedaba con el contador viejo y, si le habían alargado la subasta, su
+    // pantalla decía "finalizada" y no le dejaba pujar hasta recargar a mano.
+    this.buyerService.getTimeSync().subscribe((syncData) => {
+      if (syncData) {
+        this.aplicarFinDeSubasta(syncData.auctionId, syncData.endDate, {
+          avisar: true,
+        });
+      }
       this.timeSyncService.syncWithServer().then(() => {
         this.cdr.markForCheck();
       });
@@ -503,21 +628,9 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
     this.updateBidHistory(bid);
     this.marcarPulso(bid.coffeeLotId);
 
-    // 2. Sincronización redundante de fecha de fin
-    if (
-      (bid as any).auctionEndDate &&
-      this.auctionData.length > 0 &&
-      this.auctionData[0].id === bid.auctionId
-    ) {
-      const serverEndDate = (bid as any).auctionEndDate;
-      if (this.auctionData[0].endDate !== serverEndDate) {
-        this.auctionData[0].endDate = serverEndDate;
-        if (this.auctionEnded) {
-          this.auctionEnded = false;
-          this.auctionData[0].status = 'ACTIVE';
-        }
-      }
-    }
+    // 2. Sincronización redundante de la fecha de fin: cada puja trae de vuelta
+    // la fecha vigente en el servidor.
+    this.aplicarFinDeSubasta(bid.auctionId, (bid as any).auctionEndDate);
 
     if (this.selectedLot?.coffeeLot?.id === bid.coffeeLotId) {
       this.selectedLot = { ...this.selectedLot, currentPrice: bid.amount };
@@ -542,16 +655,68 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
     this.lastBids.set(newBid.coffeeLotId, updatedBids);
   }
 
+  /**
+   * Pone en la pantalla la fecha de cierre que dice el servidor, venga por donde
+   * venga (sincronización periódica, una puja o una extensión automática).
+   *
+   * Si el cierre se movió hacia adelante y el contador local ya había llegado a
+   * cero, reactiva la subasta: si no, la pantalla se queda "finalizada" y con el
+   * botón de pujar bloqueado mientras el servidor sigue aceptando pujas.
+   *
+   * Devuelve true si la fecha realmente cambió.
+   */
+  private aplicarFinDeSubasta(
+    auctionId: string,
+    nuevoFin: string | Date | undefined | null,
+    opciones: { avisar?: boolean } = {},
+  ): boolean {
+    if (!nuevoFin || this.auctionData.length === 0) return false;
+
+    const subasta = this.auctionData[0];
+    if (!subasta || subasta.id !== auctionId) return false;
+
+    const nuevo = new Date(nuevoFin).getTime();
+    if (Number.isNaN(nuevo)) return false;
+
+    // Se comparan instantes, no cadenas: la misma fecha puede llegar escrita de
+    // formas distintas según el canal.
+    const actual = subasta.endDate ? new Date(subasta.endDate).getTime() : 0;
+    if (Math.abs(nuevo - actual) < 1000) return false;
+
+    subasta.endDate = nuevoFin as any;
+
+    const ahora = this.timeSyncService.getCurrentTime().getTime();
+    if (this.auctionEnded && nuevo > ahora) {
+      this.auctionEnded = false;
+      subasta.status = 'ACTIVE';
+    }
+
+    if (opciones.avisar) {
+      const hora = new Date(nuevo).toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+      this.showNotification(
+        this.translationService
+          .translate('NOTIFICATIONS.AUCTION_END_CHANGED')
+          .replace('{{time}}', hora),
+        'info',
+      );
+    }
+
+    this.cdr.markForCheck();
+    return true;
+  }
+
   handleAuctionExtension(extensionData: any) {
     if (
       this.auctionData.length > 0 &&
       this.auctionData[0].id === extensionData.auctionId
     ) {
-      this.auctionData[0].endDate = extensionData.newEndDate;
-      if (this.auctionEnded) {
-        this.auctionEnded = false;
-        this.auctionData[0].status = 'ACTIVE';
-      }
+      this.aplicarFinDeSubasta(
+        extensionData.auctionId,
+        extensionData.newEndDate,
+      );
       const newEndTime = new Date(extensionData.newEndDate);
       const formattedTime = newEndTime.toLocaleTimeString([], {
         hour: '2-digit',
@@ -777,11 +942,11 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
   }
 
   canConfirmBid(): boolean {
-    return this.canProceedToConfirm() && !this.isLoading;
+    return this.canProceedToConfirm() && !this.isPlacingBid;
   }
 
   async placeBid() {
-    if (!this.selectedLot || this.isLoading || this.auctionEnded) return;
+    if (!this.selectedLot || this.isPlacingBid || this.auctionEnded) return;
 
     if (this.auctionData.length > 0) {
       const timeLeft = this.calculateTimeRemaining(this.auctionData[0]);
@@ -799,7 +964,7 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
       }
     }
 
-    this.isLoading = true;
+    this.isPlacingBid = true;
     this.bidError = '';
 
     const bidData = {
@@ -818,14 +983,14 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
           'success',
         );
         this.closeBidModal();
-        this.isLoading = false;
+        this.isPlacingBid = false;
         this.cdr.markForCheck();
       },
       error: (error) => {
         this.bidError =
           error.message ||
           this.translationService.translate('NOTIFICATIONS.BID_ERROR');
-        this.isLoading = false;
+        this.isPlacingBid = false;
         this.cdr.markForCheck();
       },
     });

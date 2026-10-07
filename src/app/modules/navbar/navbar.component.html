@@ -12,9 +12,10 @@
           class="h-8 w-auto inline mr-2"
         />
       }
-      <span class="text-secondary-200" appTranslate="APP.TITLE_ACCENT">Café</span>
+      <span class="text-secondary" appTranslate="APP.TITLE_ACCENT">Café</span>
     </span>
-    <button (click)="toggleMenu()" class="text-secondary-200 hover:text-white">
+    <button (click)="toggleMenu()" class="text-white/80 hover:text-white"
+      [attr.aria-label]="'COMMON.MENU' | translate" [attr.aria-expanded]="isMenuOpen">
       <svg
         [class.hidden]="isMenuOpen"
         class="h-6 w-6"
@@ -61,7 +62,7 @@
             class="h-16 w-auto rounded-lg shadow-md bg-surface p-1 mb-2"
           />
           <span class="font-bold text-lg tracking-wide text-white">
-            <span appTranslate="APP.TITLE">Altura</span> <span class="text-secondary-300" appTranslate="APP.TITLE_ACCENT">Café</span>
+            <span appTranslate="APP.TITLE">Altura</span> <span class="text-secondary" appTranslate="APP.TITLE_ACCENT">Café</span>
           </span>
         </a>
       </div>
@@ -86,7 +87,7 @@
       <div class="flex items-center">
         <div class="flex-shrink-0">
           <div
-            class="h-10 w-10 rounded-full bg-secondary-500 flex items-center justify-center text-white font-medium"
+            class="h-10 w-10 rounded-full bg-secondary-500 flex items-center justify-center text-on-secondary font-medium"
           >
             {{ getUserInitials() }}
           </div>
@@ -97,7 +98,7 @@
           </p>
           <button
             (click)="logout()"
-            class="text-xs text-secondary-200 hover:text-white flex items-center transition-colors duration-200"
+            class="text-xs text-white/80 hover:text-white flex items-center transition-colors duration-200"
           >
             <span appTranslate="NAV.LOGOUT">Cerrar sesión</span>
           </button>

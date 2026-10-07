@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, tap, catchError, of, firstValueFrom, timeo
 import { isPlatformBrowser } from '@angular/common';
 import { environment } from '../../../environments/environment';
 
+import { tonosDeMarca } from './contraste';
 export interface BrandingConfig {
   id?: string;
   primaryColor: string;
@@ -22,6 +23,10 @@ export interface BrandingConfig {
   borderRadius?: string;
   institutionName?: string;
   institutionShortName?: string;
+  /** Enseña el enlace "Ganadores" en el menú público. Ver nota en el schema de
+   *  Prisma: apagado por defecto porque la tabla de ganadores ya sale dentro de
+   *  Subasta Activa cuando la subasta cierra. */
+  showWinnersSection?: boolean;
   isActive?: boolean;
 }
 
@@ -39,6 +44,7 @@ const DEFAULT_CONFIG: BrandingConfig = {
   borderRadius: '4px',
   institutionName: 'Cáritas Bolivia',
   institutionShortName: 'Cáritas',
+  showWinnersSection: false,
 };
 
 const CACHE_KEY = 'branding_config';
@@ -161,6 +167,20 @@ export class BrandingService {
     root.style.setProperty('--surface-color-rgb', this.hexToRgb(surface));
     root.style.setProperty('--text-color', text);
     root.style.setProperty('--text-color-rgb', this.hexToRgb(text));
+
+    // Contraste automático según los colores elegidos en Branding: tonos 600-950
+    // que siempre se leen sobre la superficie, el texto (blanco u oscuro) que va
+    // encima de cada color y la "tinta" para usar el color como texto. Así un
+    // naranja o un amarillo claros no dejan textos ilegibles.
+    const marca: Record<string, string> = { primary, secondary, success, warning, danger, info };
+    for (const [nombre, color] of Object.entries(marca)) {
+      const t = tonosDeMarca(color, surface);
+      for (const [tono, valor] of Object.entries(t.tonos)) {
+        root.style.setProperty(`--${nombre}-${tono}`, valor);
+      }
+      root.style.setProperty(`--on-${nombre}-color`, t.textoEncima);
+      root.style.setProperty(`--${nombre}-ink-color`, t.tinta);
+    }
 
     // Tipografía y bordes
     const fontFamily = config.fontFamily || 'Inter';

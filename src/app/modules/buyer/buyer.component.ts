@@ -1,12 +1,14 @@
 import { Component, inject, OnInit, OnDestroy, effect, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterModule } from '@angular/router';
+import { Router, RouterLink, RouterModule } from '@angular/router';
 import { GeneralService } from '../../core/gerneral.service';
 import { ApiService } from '../../project/services/api.service';
 import { TranslationService } from '../../project/services/translate.service';
 
 import { Language } from '../../project/services/translate.service';
 import { TranslateDirective } from '../../project/directive/translate.directive';
+import { TranslatePipe } from '../../project/pipe/translate.pipe';
+import { TourService } from '../../core/tour/tour.service';
 
 interface NavItem {
   name: string;
@@ -17,7 +19,7 @@ interface NavItem {
 
 @Component({
   selector: 'app-buyer',
-  imports: [CommonModule, RouterLink, RouterModule, TranslateDirective],
+  imports: [CommonModule, RouterLink, RouterModule, TranslateDirective, TranslatePipe],
   templateUrl: './buyer.component.html',
   styleUrl: './buyer.component.scss'
 })
@@ -25,6 +27,8 @@ export class BuyerComponent implements OnInit, OnDestroy {
   private translationService = inject(TranslationService);
   private generalService = inject(GeneralService);
   private service = inject(ApiService);
+  private tour = inject(TourService);
+  private router = inject(Router);
   
   // Effect para reaccionar a cambios de idioma
   private languageEffect = effect(() => {
@@ -81,6 +85,21 @@ export class BuyerComponent implements OnInit, OnDestroy {
   changeLanguage(langCode: string): void {
     this.translationService.useLanguage(langCode);
     this.isLanguageDropdownOpen = false;
+  }
+
+  /**
+   * "Ver tutorial": lleva a la sala de subasta y lanza el tour a mano, aunque
+   * el usuario lo hubiera apagado con "No volver a mostrar".
+   */
+  async verTutorial() {
+    await this.router.navigate(['/buyer/auction']);
+    setTimeout(() => {
+      this.tour.arrancar({
+        // Si el reloj está en pantalla, hay subasta en curso y el tour enseña
+        // también los pasos de pujar.
+        subastaActiva: !!document.querySelector('[data-tour="reloj"]'),
+      });
+    }, 800);
   }
 
   logout() {

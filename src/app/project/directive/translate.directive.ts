@@ -35,6 +35,12 @@ export class TranslateDirective implements OnInit, OnDestroy {
     }
 
     let translation = this.translationService.translate(this.key);
+
+    // Mientras no llega el JSON de idioma, dejar el texto de la plantilla en vez
+    // de pintar la clave: con internet lento se veían "COMMON.LOADING", "NAV.HOME"...
+    if (translation === this.key && !this.translationService.cargado()) {
+      return;
+    }
     
     // Si no se encuentra la traducción, mostrar la clave. Solo se avisa cuando
     // el JSON ya está cargado: antes toda clave "falta" y el aviso era ruido

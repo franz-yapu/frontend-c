@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Inject, PLATFORM_ID, HostListener } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Subscription, catchError, of } from 'rxjs';
+import { Subscription, catchError, firstValueFrom, of } from 'rxjs';
 import { BuyerService } from '../../../modules/buyer/buyer.service';
 import { LotDetailComponent } from './lot-detail/lot-detail.component';
 import { TranslateDirective } from '../../directive/translate.directive';
@@ -24,6 +24,7 @@ import {
   LotRow,
 } from '../lots-view/lots-table.component';
 import { ViewModeToggleComponent } from '../lots-view/view-mode-toggle.component';
+import { CoffeeLoaderComponent } from '../coffee-loader/coffee-loader.component';
 import { ViewMode, ViewModeService } from '../lots-view/view-mode.service';
 
 @Component({
@@ -38,6 +39,7 @@ import { ViewMode, ViewModeService } from '../lots-view/view-mode.service';
     ExternalWinnersComponent,
     LotsTableComponent,
     ViewModeToggleComponent,
+    CoffeeLoaderComponent,
   ],
   templateUrl: './auction-view.component.html',
   styleUrls: ['./auction-view.component.scss'],
@@ -92,6 +94,21 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
       .map((parte: any) => (parte || '').trim())
       .filter((parte: string) => parte.length > 0)
       .join(', ');
+  }
+
+
+  /** La columna de quien va en cabeza: mientras la subasta corre es "Ganando";
+   *  una vez terminada ya no va ganando nadie, ganó. */
+  get etiquetasTabla(): Partial<Record<LotColumn, string>> {
+    return this.subastaTerminada
+      ? { leader: 'AUCTION-BUYER.COL_WINNER' }
+      : {};
+  }
+
+  /** ¿Ya no se puede pujar? (terminó el tiempo o el servidor la cerró) */
+  private get subastaTerminada(): boolean {
+    return this.auctionEnded || this.timeLeft?.hasEnded ||
+      this.auctionData[0]?.status === 'CLOSED';
   }
 
   get filasTabla(): LotRow[] {
@@ -294,15 +311,29 @@ private async loadAuctionData() {
         }, 1000);
       }
 
-      await this.loadBidHistory();
       this.sortLots();
+
+      // El historial de pujas NO bloquea la pantalla: los lotes se pintan en
+      // cuanto llega la subasta y las últimas pujas van entrando después. Con
+      // 3G esto es la diferencia entre ver los lotes en 1 s o en 10 s.
+      void this.loadBidHistory().then(() => this.cdr.markForCheck());
     }
 
   } catch (error) {
     this.error = 'Error al cargar los datos de la subasta';
   } finally {
     this.loading = false;
+    this.cdr.markForCheck();
   }
+}
+
+/**
+ * Primera carga en curso: aún no sabemos si hay subasta o no. Solo mientras no
+ * haya datos todavía, para que una recarga posterior (al reconectar el socket,
+ * por ejemplo) no haga desaparecer la subasta que ya se está viendo.
+ */
+isFirstLoad(): boolean {
+  return this.loading && this.auctionData.length === 0;
 }
 
 hasActiveAuction(): boolean {
@@ -482,6 +513,29 @@ shouldShowLots(): boolean {
         }
       });
 
+    const lotesSubscription = this.buyerService
+      .getLotsChanged()
+      .subscribe((data) => {
+        if (data && this.auctionData.length > 0 && this.auctionData[0].id === data.auctionId) {
+          this.reloadAuctionData();
+        }
+      });
+
+    // El admin movió la hora de cierre: se refleja al momento (esta vista ya se
+    // corregía sola con el `timeSync` periódico, pero tardaba hasta medio minuto).
+    const endDateSubscription = this.buyerService
+      .getEndDateChanged()
+      .subscribe((data) => {
+        if (data && this.auctionData.length > 0 && this.auctionData[0].id === data.auctionId) {
+          this.auctionData[0].endDate = data.newEndDate;
+          if (this.auctionEnded && new Date(data.newEndDate).getTime() > this.timeSyncService.getCurrentTime().getTime()) {
+            this.auctionEnded = false;
+            this.auctionData[0].status = 'ACTIVE';
+          }
+          this.cdr.markForCheck();
+        }
+      });
+
     const timeSyncSubscription = this.buyerService.getTimeSync().subscribe(syncData => {
       if (this.auctionData.length > 0 && this.auctionData[0].id === syncData.auctionId) {
         if (syncData.endDate) {
@@ -491,7 +545,7 @@ shouldShowLots(): boolean {
       }
     });
 
-    this.subscriptions.push(bidSubscription, auctionExtendedSubscription, auctionClosedSubscription, timeSyncSubscription);
+    this.subscriptions.push(bidSubscription, auctionExtendedSubscription, auctionClosedSubscription, timeSyncSubscription, endDateSubscription, lotesSubscription);
   }
 
 private handleAuctionExtension(extensionData: any) {
@@ -577,29 +631,40 @@ private setupConnectionMonitoring() {
     this.updateBidHistory(bid);
   }
 
+  /**
+   * Últimas pujas de cada lote. Se piden TODAS a la vez: antes era un `await`
+   * por lote, o sea 12 idas y vueltas en fila india — en una conexión lenta eso
+   * son varios segundos de espera para algo secundario.
+   */
   private async loadBidHistory() {
-    for (const lot of this.filteredLots) {
-      try {
-        if (lot.auctionId && lot.coffeeLot?.id) {
-          const bids = await this.buyerService.getLastBids(
-            lot.auctionId,
-            lot.coffeeLot.id,
-            5
-          ).pipe(
-            catchError(error => {
-              console.warn('Error loading bid history:', error);
-              return of([]);
-            })
-          ).toPromise();
+    const lots = this.filteredLots.filter(
+      (lot) => lot.auctionId && lot.coffeeLot?.id,
+    );
 
-          const uniqueBids = this.removeDuplicateBids(bids || []);
-          this.lastBids.set(lot.coffeeLot.id, uniqueBids);
+    await Promise.all(
+      lots.map(async (lot) => {
+        try {
+          const bids = await firstValueFrom(
+            this.buyerService
+              .getLastBids(lot.auctionId, lot.coffeeLot.id, 5)
+              .pipe(
+                catchError((error) => {
+                  console.warn('Error loading bid history:', error);
+                  return of([]);
+                }),
+              ),
+          );
+
+          this.lastBids.set(
+            lot.coffeeLot.id,
+            this.removeDuplicateBids(bids || []),
+          );
+        } catch (error) {
+          console.error('Error loading bid history:', error);
+          this.lastBids.set(lot.coffeeLot.id, []);
         }
-      } catch (error) {
-        console.error('Error loading bid history:', error);
-        this.lastBids.set(lot.coffeeLot.id, []);
-      }
-    }
+      }),
+    );
   }
 
   private removeDuplicateBids(bids: any[]): any[] {

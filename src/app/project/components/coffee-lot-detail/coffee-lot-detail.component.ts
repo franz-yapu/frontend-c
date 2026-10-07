@@ -7,10 +7,12 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { NewCoffeelotComponent } from '../new-coffeelot/new-coffeelot.component';
 import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
 import { ActivatedRoute } from '@angular/router';
+import { CoffeeLoaderComponent } from '../coffee-loader/coffee-loader.component';
 
+import { ProcesoCafePipe } from '../../pipe/proceso-cafe.pipe';
 @Component({
   selector: 'app-coffee-lot-detail',
-  imports: [CommonModule, TranslatePipe],
+  imports: [ProcesoCafePipe, CommonModule, CoffeeLoaderComponent, TranslatePipe],
   templateUrl: './coffee-lot-detail.component.html',
   styleUrl: './coffee-lot-detail.component.scss',
   providers: [DialogService],

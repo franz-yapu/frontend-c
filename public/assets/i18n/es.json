@@ -109,7 +109,10 @@
       "COFFEE_INFO": "Información del Café",
       "BUYER": "Comprador",
       "SELLER": "Productor",
-      "PRICE": "Precio"
+      "PRICE": "Precio",
+      "WINNER": "Ganador",
+      "FINAL_PRICE": "Precio final",
+      "TOTAL": "Valor total"
     },
     "EMPTY": {
       "TITLE": "Subasta en Preparación",
@@ -370,7 +373,10 @@
     "SORT_PRICE": "Oferta actual",
     "SORT_QUANTITY": "Cantidad",
     "COL_SUGGESTED_PRICE": "Precio sugerido",
-    "COL_LEADER": "Ganando"
+    "COL_LEADER": "Ganando",
+    "LOADING_LOTS": "Cargando lotes...",
+    "COL_WINNER": "Ganador",
+    "YOU_WON": "Ganaste"
   },
   "COMMON": {
     "DAYS": "Días",
@@ -402,7 +408,12 @@
     "FILE_SIZE_LIMIT": "SVG, PNG, JPG o JPEG (MÁX. 2MB)",
     "VIEW_DOCUMENT": "Ver documento",
     "LOT": "Lote",
-    "STATUS": "Estado"
+    "STATUS": "Estado",
+    "LOADING": "Cargando...",
+    "LOADING_SLOW": "La conexión está lenta, un momento...",
+    "MENU": "Menú",
+    "SHOW_PASSWORD": "Mostrar contraseña",
+    "HIDE_PASSWORD": "Ocultar contraseña"
   },
   "VALIDATION": {
     "REQUIRED": "Este campo es obligatorio",
@@ -578,6 +589,43 @@
     "CONNECTION_SLOW": "Conexión lenta ({{latency}}ms). Las pujas pueden tardar.",
     "SYNC_ERROR": "Error al cargar datos de la subasta",
     "AUCTION_ENDED_LOCAL": "Subasta finalizada (verificación local)",
-    "BID_ERROR": "Error al procesar la puja"
+    "BID_ERROR": "Error al procesar la puja",
+    "AUCTION_END_CHANGED": "La hora de cierre cambió: ahora finaliza a las {{time}}"
+  },
+  "TOUR": {
+    "NEXT": "Siguiente",
+    "PREV": "Atrás",
+    "DONE": "Entendido",
+    "DISMISS": "No volver a mostrar",
+    "PROGRESS": "{{current}} de {{total}}",
+    "REPLAY": "Ver tutorial",
+    "WELCOME": {
+      "TITLE": "Hola, {{nombre}}",
+      "TEXT": "Te enseño la sala de subasta en unos pocos pasos. Puedes salir cuando quieras."
+    },
+    "CLOCK": {
+      "TITLE": "El tiempo que queda",
+      "TEXT": "Aquí ves cuánto falta para el cierre. Ojo: si alguien puja en los últimos 3 minutos, la subasta se alarga 3 minutos más, así que puede terminar más tarde de lo previsto."
+    },
+    "LOTS": {
+      "TITLE": "Los lotes",
+      "TEXT": "Cada fila es un lote de café con su puntaje, su origen y la oferta actual. Con el botón de arriba puedes verlos como tarjetas o como tabla."
+    },
+    "DETAIL": {
+      "TITLE": "La ficha del lote",
+      "TEXT": "Abre la ficha para leer las notas de cata, la altura, el productor y el historial completo de pujas del lote."
+    },
+    "BID": {
+      "TITLE": "Cómo pujar",
+      "TEXT": "Al pujar te aparece el monto mínimo ya escrito. Puedes subirlo con los botones de incremento o escribir el tuyo, y confirmar."
+    },
+    "WINNING": {
+      "TITLE": "Cuando vas ganando",
+      "TEXT": "Tu lote se resalta en verde mientras eres el mejor postor. Si alguien te supera, la pantalla se actualiza sola y la app del móvil te avisa."
+    },
+    "MENU": {
+      "TITLE": "Tu menú",
+      "TEXT": "En Compras están los lotes que ganaste con su pago, y en Mis datos puedes corregir tu información. Desde aquí también puedes volver a ver este tutorial."
+    }
   }
 }

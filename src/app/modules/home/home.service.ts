@@ -150,13 +150,38 @@ export class HomeService {
         return firstValueFrom(this.http.get(`${environment.backend}/auctions/${id}`, ));
        }
 
+      /** Ganadores de una subasta, versión pública: nombre y empresa, SIN correo. */
       getAutionTransactions(id: string) {
         return firstValueFrom(this.http.get(`${environment.backend}/transactions/auction/${id}/sales`, ));
+       }
+
+      /**
+       * Igual que el anterior pero con el correo del comprador, para el panel
+       * del administrador. Es otra ruta porque la pública la lee cualquiera sin
+       * iniciar sesión y ahí los correos de los ganadores no deben aparecer.
+       */
+      getAutionTransactionsWithContact(id: string) {
+        return firstValueFrom(this.http.get(`${environment.backend}/transactions/auction/${id}/sales/contact`, ));
        } 
 
        getLastAutionTransactions() {
         return firstValueFrom(this.http.get(`${environment.backend}/auctions/find-last`, ));
        } 
+
+      /**
+       * Lotes de una subasta ya cerrada con su ficha completa (variedad, notas
+       * de cata, altitud…). La página de resultados los necesita para poder
+       * abrir el detalle de cada lote, igual que durante la subasta.
+       */
+      getClosedAuctionLots(id: string) {
+        return firstValueFrom(this.http.get(`${environment.backend}/auctions/${id}/closed-lots`));
+      }
+
+      /** Historial de pujas de un lote (ruta pública, también tras el cierre). */
+      getLastBids(auctionId: string, coffeeLotId: string, limit = 20) {
+        return firstValueFrom(this.http.get(
+          `${environment.backend}/bids/last-bids/${auctionId}/${coffeeLotId}?limit=${limit}`));
+      }
 
        getAuctionsClose() {
         const orderBy ={"createdAt":"asc"}

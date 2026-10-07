@@ -7,7 +7,10 @@
         <button
           type="button"
           (click)="toggleMobileMenu()"
-          class="p-2 text-gray-800 hover:text-primary hover:bg-gray-100 transition-colors rounded-md"
+          [attr.aria-label]="'COMMON.MENU' | translate"
+          [attr.aria-expanded]="isMobileMenuOpen"
+          data-tour="menu"
+          class="p-2 text-gray-800 hover:text-primary-ink hover:bg-gray-100 transition-colors rounded-md"
         >
           <svg *ngIf="!isMobileMenuOpen" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-16 6h16" />
@@ -32,7 +35,7 @@
       </div>
 
       <!-- Desktop Menu (Center) -->
-      <div class="hidden md:flex flex-1 justify-center space-x-8 items-center">
+      <div data-tour="menu" class="hidden md:flex flex-1 justify-center space-x-8 items-center">
         <a
           *ngFor="let item of navItems"
           [routerLink]="item.route"
@@ -57,7 +60,7 @@
           <button
             type="button"
             (click)="toggleLanguageDropdown()"
-            class="flex text-gray-700 space-x-2 px-3 py-2 text-base font-semibold tracking-wide transition-all hover:text-primary rounded-md items-center"
+            class="flex text-gray-700 space-x-2 px-3 py-2 text-base font-semibold tracking-wide transition-all hover:text-primary-ink rounded-md items-center"
           >
             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -74,7 +77,7 @@
             <button
               *ngFor="let lang of availableLanguages()"
               (click)="changeLanguage(lang.code)"
-              class="flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:text-primary hover:bg-gray-100 transition-colors w-full text-left"
+              class="flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:text-primary-ink hover:bg-gray-100 transition-colors w-full text-left"
               [class.text-primary]="currentLanguage() === lang.code"
             >
               <span class="text-lg">{{ lang.flag }}</span>
@@ -87,7 +90,7 @@
         <div class="hidden md:flex items-center space-x-3">
           <!-- Avatar -->
           <div class="relative">
-            <div class="h-9 w-9 rounded-full bg-primary flex items-center justify-center text-white font-semibold text-sm shadow-md">
+            <div class="h-9 w-9 rounded-full bg-primary flex items-center justify-center text-on-primary font-semibold text-sm shadow-md">
               {{ (user?.firstName?.charAt(0) || '') + (user?.lastName?.charAt(0) || '') }}
             </div>
             <div class="absolute -bottom-1 -right-1 h-3 w-3 rounded-full bg-success-500 border-2 border-white"></div>
@@ -96,6 +99,14 @@
           <span class="font-semibold text-gray-800 text-sm">
             {{ user?.firstName + ' ' + user?.lastName }}
           </span>
+          <!-- Volver a ver el tour guiado, aunque se haya apagado -->
+          <button
+            (click)="verTutorial()"
+            class="px-3 py-1.5 rounded-lg border border-primary/30 text-primary-ink hover:bg-primary/10 text-sm font-semibold transition-colors"
+            appTranslate="TOUR.REPLAY"
+          >
+            Ver tutorial
+          </button>
           <!-- Logout -->
           <button
             (click)="logout()"
@@ -111,7 +122,7 @@
           <button
             type="button"
             (click)="toggleLanguageDropdown()"
-            class="p-2 text-gray-700 hover:text-primary hover:bg-gray-100 transition-all rounded-md"
+            class="p-2 text-gray-700 hover:text-primary-ink hover:bg-gray-100 transition-all rounded-md"
           >
             <span class="text-xl">{{ currentLanguageInfo().flag }}</span>
           </button>
@@ -129,7 +140,7 @@
         [routerLink]="item.route"
         (click)="setActiveItem(item); toggleMobileMenu()"
         routerLinkActive="text-primary border-primary bg-primary/5"
-        class="block px-3 py-2 text-md font-semibold tracking-wide transition-colors border-l-4 text-gray-700 border-transparent hover:text-primary hover:bg-primary/5"
+        class="block px-3 py-2 text-md font-semibold tracking-wide transition-colors border-l-4 text-gray-700 border-transparent hover:text-primary-ink hover:bg-primary/5"
         [appTranslate]="item.translateKey"
       >
         {{ item.name }}
@@ -139,13 +150,20 @@
     <!-- User info + logout mobile -->
     <div class="px-3 py-3 border-t border-gray-100">
       <div class="flex items-center space-x-3 px-2 py-2 mb-2">
-        <div class="h-9 w-9 rounded-full bg-primary flex items-center justify-center text-white font-semibold text-sm shadow">
+        <div class="h-9 w-9 rounded-full bg-primary flex items-center justify-center text-on-primary font-semibold text-sm shadow">
           {{ (user?.firstName?.charAt(0) || '') + (user?.lastName?.charAt(0) || '') }}
         </div>
         <span class="font-semibold text-gray-800 text-sm">
           {{ user?.firstName + ' ' + user?.lastName }}
         </span>
       </div>
+      <button
+        (click)="verTutorial(); toggleMobileMenu()"
+        class="w-full text-left px-3 py-2 text-sm font-semibold text-primary-ink hover:bg-primary/10 rounded-lg transition-colors"
+        appTranslate="TOUR.REPLAY"
+      >
+        Ver tutorial
+      </button>
       <button
         (click)="logout(); toggleMobileMenu()"
         class="w-full text-left px-3 py-2 text-sm font-semibold text-red-600 hover:bg-red-50 rounded-lg transition-colors"
@@ -163,7 +181,7 @@
       <button
         *ngFor="let lang of availableLanguages()"
         (click)="changeLanguage(lang.code); toggleMobileMenu()"
-        class="flex items-center space-x-3 px-3 py-2 text-base text-gray-700 hover:text-primary hover:bg-primary/5 cursor-pointer transition-colors w-full text-left rounded-md"
+        class="flex items-center space-x-3 px-3 py-2 text-base text-gray-700 hover:text-primary-ink hover:bg-primary/5 cursor-pointer transition-colors w-full text-left rounded-md"
         [class.text-primary]="currentLanguage() === lang.code"
       >
         <span class="text-lg">{{ lang.flag }}</span>

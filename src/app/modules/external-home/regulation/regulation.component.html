@@ -3,7 +3,7 @@
     
     <!-- Header del Reglamento -->
     <div class="bg-primary overflow-hidden mb-4 border border-primary">
-      <div class="p-8 text-white relative overflow-hidden">
+      <div class="p-8 text-on-primary relative overflow-hidden">
         <div class="relative z-10 text-center">
           <h1 class="text-3xl md:text-4xl font-bold mb-4 tracking-tight" appTranslate="REGULATION.HERO.TITLE">Reglamento de la Subasta</h1>
           <!-- <p class="text-black text-2xl font-bold mb-6">{{ auctionTitle }}</p> -->
@@ -45,7 +45,7 @@
     <!-- Contenedor del PDF -->
     <div class="bg-white shadow-lg border border-primary overflow-hidden">
       <div class="p-4 border-b border-primary bg-primary/5">
-        <h2 class="text-xl font-bold text-primary text-center" appTranslate="REGULATION.PDF.TITLE">
+        <h2 class="text-xl font-bold text-primary-ink text-center" appTranslate="REGULATION.PDF.TITLE">
           Documento del Reglamento
         </h2>
       </div>
@@ -69,7 +69,7 @@
               <p appTranslate="REGULATION.PDF.ERROR">Error al cargar el documento</p>
               <button 
                 (click)="loadPdf()"
-                class="mt-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/80 transition-colors"
+                class="mt-2 px-4 py-2 bg-primary text-on-primary rounded hover:bg-primary/80 transition-colors"
                 appTranslate="REGULATION.PDF.RETRY"
               >
                 Reintentar
@@ -91,7 +91,7 @@
         <a 
           [href]="currentPdfPath" 
           target="_blank"
-          class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/80 transition-colors flex items-center space-x-2"
+          class="px-6 py-2 bg-primary text-on-primary rounded-lg hover:bg-primary/80 transition-colors flex items-center space-x-2"
           appTranslate="REGULATION.PDF.DOWNLOAD"
         >
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -103,15 +103,15 @@
     </div>
 
     <!-- Información de contacto -->
-    <div class="bg-primary shadow-lg mt-8 p-6 text-white">
+    <div class="bg-primary shadow-lg mt-8 p-6 text-on-primary">
       <div class="flex items-center justify-between">
         <div>
           <h3 class="text-xl font-bold mb-2" appTranslate="REGULATION.CONTACT.TITLE">¿Tienes preguntas?</h3>
-          <p class="text-success-100" appTranslate="REGULATION.CONTACT.SUBTITLE">Contáctanos para resolver cualquier duda sobre el reglamento</p>
+          <p class="text-on-primary" appTranslate="REGULATION.CONTACT.SUBTITLE">Contáctanos para resolver cualquier duda sobre el reglamento</p>
         </div>
         <a 
           href="mailto:contact@hirrobrothers.com"
-          class="bg-white text-primary px-6 py-3 rounded-xl font-semibold hover:bg-success-50 transition-colors"
+          class="bg-white text-primary-ink px-6 py-3 rounded-xl font-semibold hover:bg-success-50 transition-colors"
           appTranslate="REGULATION.CONTACT.BUTTON"
         >
           Contactar

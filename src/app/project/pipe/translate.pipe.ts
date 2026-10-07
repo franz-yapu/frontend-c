@@ -13,6 +13,13 @@ export class TranslatePipe implements PipeTransform {
     if (!key) return '';
     
     let translation = this.translationService.translate(key);
+
+    // Mientras no llega el JSON de idioma, no mostrar la clave (con internet
+    // lento se veía "AUCTION-BUYER.CONFIRM_SHORT"...). El pipe es impuro: al
+    // cargar el idioma se vuelve a evaluar y aparece el texto.
+    if (translation === key && !this.translationService.cargado()) {
+      return '';
+    }
     
     // Si no se encuentra la traducción, devolver la clave. Igual que en la
     // directiva, solo se avisa una vez cargado el JSON de idioma.

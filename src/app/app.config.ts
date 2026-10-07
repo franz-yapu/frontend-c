@@ -4,6 +4,7 @@ import { MultiTranslateHttpLoader } from 'ngx-translate-multi-http-loader';
 import { routes } from './app.routes';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { AuthInterceptor } from './core/auth.interceptor';
+import { LoadingInterceptor } from './core/loading.interceptor';
 import { HttpBackend, provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { BrandingService } from './core/branding/branding.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -17,16 +18,11 @@ registerLocaleData(localeEs, 'es');
 const datefnConfig = new DateFnsConfigurationService();
 datefnConfig.setLocale(es); 
 export function HttpLoaderFactory(_httpBackend: HttpBackend) {
-  return new MultiTranslateHttpLoader(_httpBackend, [
-    '/assets/i18n/',
-    // '/assets/i18n/zn4-confirm-password/',
-    // '/assets/i18n/zn4-anonymization/',
-    '/assets/i18n/zn4-core-forms/',
-    '/assets/i18n/zn4-core-browser-2/',
-    '/assets/i18n/zn4-core-dms/',
-    '/assets/i18n/zn4-core-multiple-upload/',
-    '/assets/i18n/zn4-core-table/',
-  ]);
+  // Solo /assets/i18n/. Las carpetas zn4-core-* eran restos de la plantilla y no
+  // existen: cada arranque pedía seis archivos inexistentes y el servidor, por
+  // el `try_files` del SPA, devolvía el index.html entero (10 kB) que
+  // ngx-translate intentaba leer como JSON. Seis viajes de red tirados.
+  return new MultiTranslateHttpLoader(_httpBackend, ['/assets/i18n/']);
 }
 
 export const appConfig: ApplicationConfig = {
@@ -35,7 +31,10 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideAnimations(),
     // Un solo provideHttpClient con todas las features
-    provideHttpClient(withFetch(), withInterceptors([AuthInterceptor])),
+    provideHttpClient(
+      withFetch(),
+      withInterceptors([AuthInterceptor, LoadingInterceptor]),
+    ),
     importProvidersFrom(TranslateModule.forRoot({
       loader: {
           provide: TranslateLoader,

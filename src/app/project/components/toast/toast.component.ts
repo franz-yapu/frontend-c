@@ -29,11 +29,11 @@ export class ToastComponent implements OnInit {
 
   toastClasses(severity: string) {
     switch(severity) {
-      case 'success': return 'bg-success-500';
-      case 'error': return 'bg-danger-600';
-      case 'info': return 'bg-info-500';
+      case 'success': return 'bg-success-500 text-on-success';
+      case 'error': return 'bg-danger-600 text-white';
+      case 'info': return 'bg-info-500 text-on-info';
       case 'warning': return 'bg-yellow-400 text-black';
-      default: return 'bg-gray-500';
+      default: return 'bg-gray-600 text-white';
     }
   }
 }

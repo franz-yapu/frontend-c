@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators, ValidatorFn, AbstractControl, AsyncValidatorFn, FormControlOptions } from '@angular/forms';
 import { TranslateDirective } from '../../directive/translate.directive';
+import { TranslatePipe } from '../../pipe/translate.pipe';
 
 export interface FieldValidator {
   required?: boolean;
@@ -59,11 +60,19 @@ export interface ColumnField {
 @Component({
   selector: 'dynamic-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateDirective],
+  imports: [CommonModule, ReactiveFormsModule, TranslateDirective, TranslatePipe],
   templateUrl: './dynamic-form.component.html',
   styleUrl: './dynamic-form.component.scss'
 })
 export class DynamicFormComponent implements OnInit {
+  // Prefijo único por formulario para unir cada <label for> con su campo (lectores de
+  // pantalla) sin choques si hay dos formularios en la misma página.
+  private static siguienteId = 0;
+  private readonly uid = `df${++DynamicFormComponent.siguienteId}`;
+  campo(key: string): string {
+    return `${this.uid}-${key}`;
+  }
+
   showDatepicker: Record<string, boolean> = {};
   currentMonth: Record<string, Date> = {};
   selectedDate: Record<string, Date | null> = {};

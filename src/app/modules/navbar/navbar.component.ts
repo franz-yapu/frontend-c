@@ -15,11 +15,12 @@ interface MenuItem {
 }
 
 import { TranslateDirective } from '../../project/directive/translate.directive';
+import { TranslatePipe } from '../../project/pipe/translate.pipe';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, TranslateDirective],
+  imports: [CommonModule, RouterLink, RouterLinkActive, TranslateDirective, TranslatePipe],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })

@@ -109,7 +109,10 @@
       "COFFEE_INFO": "Coffee Info",
       "BUYER": "Buyer",
       "SELLER": "Producer",
-      "PRICE": "Price"
+      "PRICE": "Price",
+      "WINNER": "Winner",
+      "FINAL_PRICE": "Final price",
+      "TOTAL": "Total value"
     },
     "EMPTY": {
       "TITLE": "Auction in Preparation",
@@ -371,7 +374,10 @@
     "SORT_PRICE": "Current bid",
     "SORT_QUANTITY": "Quantity",
     "COL_SUGGESTED_PRICE": "Suggested price",
-    "COL_LEADER": "Leading"
+    "COL_LEADER": "Leading",
+    "LOADING_LOTS": "Loading lots...",
+    "COL_WINNER": "Winner",
+    "YOU_WON": "You won"
   },
   "COMMON": {
     "DAYS": "Days",
@@ -403,7 +409,12 @@
     "FILE_SIZE_LIMIT": "SVG, PNG, JPG or JPEG (MAX 2MB)",
     "VIEW_DOCUMENT": "View document",
     "LOT": "Lot",
-    "STATUS": "Status"
+    "STATUS": "Status",
+    "LOADING": "Loading...",
+    "LOADING_SLOW": "Slow connection, one moment...",
+    "MENU": "Menu",
+    "SHOW_PASSWORD": "Show password",
+    "HIDE_PASSWORD": "Hide password"
   },
   "VALIDATION": {
     "REQUIRED": "This field is required",
@@ -579,6 +590,43 @@
     "CONNECTION_SLOW": "Slow connection ({{latency}}ms). Bids may be delayed.",
     "SYNC_ERROR": "Error loading auction data",
     "AUCTION_ENDED_LOCAL": "Auction ended (local verification)",
-    "BID_ERROR": "Error processing bid"
+    "BID_ERROR": "Error processing bid",
+    "AUCTION_END_CHANGED": "The closing time changed: it now ends at {{time}}"
+  },
+  "TOUR": {
+    "NEXT": "Next",
+    "PREV": "Back",
+    "DONE": "Got it",
+    "DISMISS": "Don't show again",
+    "PROGRESS": "{{current}} of {{total}}",
+    "REPLAY": "View tutorial",
+    "WELCOME": {
+      "TITLE": "Hi, {{nombre}}",
+      "TEXT": "Let me show you the auction room in a few steps. You can leave any time."
+    },
+    "CLOCK": {
+      "TITLE": "Time remaining",
+      "TEXT": "This is how long is left before closing. Note: if someone bids in the last 3 minutes, the auction is extended by 3 more minutes, so it may end later than planned."
+    },
+    "LOTS": {
+      "TITLE": "The lots",
+      "TEXT": "Each row is a coffee lot with its score, origin and current bid. Use the button above to switch between cards and table."
+    },
+    "DETAIL": {
+      "TITLE": "Lot details",
+      "TEXT": "Open the details to read the cupping notes, altitude, producer and the lot's full bidding history."
+    },
+    "BID": {
+      "TITLE": "How to bid",
+      "TEXT": "When you bid, the minimum amount is already filled in. Raise it with the increment buttons or type your own, then confirm."
+    },
+    "WINNING": {
+      "TITLE": "When you're winning",
+      "TEXT": "Your lot is highlighted in green while you are the top bidder. If someone outbids you, the screen updates by itself and the mobile app notifies you."
+    },
+    "MENU": {
+      "TITLE": "Your menu",
+      "TEXT": "Purchases holds the lots you won and their payment, and My details is where you fix your information. You can also replay this tutorial from here."
+    }
   }
 }

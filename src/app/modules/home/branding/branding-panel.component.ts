@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, signal, computed, ChangeDetectionStrategy
 import { CommonModule, UpperCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BrandingService, BrandingConfig } from '../../../core/branding/branding.service';
+import { CONTRASTE_MINIMO, contraste, textoSobre, tonosDeMarca } from '../../../core/branding/contraste';
 import { GeneralService } from '../../../core/gerneral.service';
 import { finalize, Subscription } from 'rxjs';
 
@@ -45,6 +46,7 @@ export class BrandingPanelComponent implements OnInit, OnDestroy {
     borderRadius: '4px',
     institutionName: 'Cáritas Bolivia',
     institutionShortName: 'Cáritas',
+    showWinnersSection: false,
   };
 
   saving = signal(false);
@@ -103,6 +105,33 @@ export class BrandingPanelComponent implements OnInit, OnDestroy {
   }
 
   /** Valida formato hex (#RGB o #RRGGBB) para feedback visual en el input. */
+  /** Texto (blanco u oscuro) para la vista previa sobre `color`, igual que en la app. */
+  sobre(color: string | undefined): string {
+    return this.isValidHex(color) ? textoSobre(color!) : '#ffffff';
+  }
+
+  /** El color tal como se verá usado COMO texto sobre la superficie. */
+  tinta(color: string | undefined): string {
+    if (!this.isValidHex(color)) return color || '';
+    const superficie = this.isValidHex(this.draft.surfaceColor) ? this.draft.surfaceColor! : '#FFFFFF';
+    return tonosDeMarca(color!, superficie).tinta;
+  }
+
+  /**
+   * Explica al admin cómo se verá el color elegido: qué texto va encima
+   * (se elige solo, blanco u oscuro) y si se oscurecerá al usarlo como texto.
+   */
+  infoContraste(color: string): string {
+    const superficie = this.isValidHex(this.draft.surfaceColor) ? this.draft.surfaceColor! : '#FFFFFF';
+    const t = tonosDeMarca(color, superficie);
+    const encima = t.textoEncima === '#ffffff' ? 'blanco' : 'oscuro';
+    const ratio = contraste(color, t.textoEncima).toFixed(1);
+    const comoTexto = contraste(color, superficie) >= CONTRASTE_MINIMO
+      ? 'Como texto se usa tal cual.'
+      : 'Es claro para texto: en textos se usará una versión más oscura.';
+    return `Texto encima: ${encima} (contraste ${ratio}:1). ${comoTexto}`;
+  }
+
   isValidHex(value: string | undefined): boolean {
     return !!value && /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(value);
   }

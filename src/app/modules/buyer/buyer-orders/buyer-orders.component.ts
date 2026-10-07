@@ -5,10 +5,11 @@ import { GeneralService } from '../../../core/gerneral.service';
 import { TranslateDirective } from '../../../project/directive/translate.directive';
 
 
+import { ProcesoCafePipe } from '../../../project/pipe/proceso-cafe.pipe';
 @Component({
   selector: 'app-buyer-orders',
   standalone: true,
-  imports: [CommonModule, TranslateDirective],
+  imports: [ProcesoCafePipe, CommonModule, TranslateDirective],
   templateUrl: './buyer-orders.component.html',
   styleUrls: ['./buyer-orders.component.scss']
 })

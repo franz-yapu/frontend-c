@@ -4,7 +4,7 @@
     <div class="mb-10">
       <div class="flex items-center gap-4 mb-4">
         <div class="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center shadow-lg">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-on-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
         </div>
@@ -22,19 +22,19 @@
           <div class="group bg-surface shadow-xl hover:shadow-2xl transition-all duration-500 border border-surface-200 hover:border-primary/30 overflow-hidden hover:-translate-y-1">
             
             <!-- Cabecera Premium -->
-            <div class="relative p-6 bg-primary text-white overflow-hidden">
+            <div class="relative p-6 bg-primary text-on-primary overflow-hidden">
              <div class="flex justify-between items-start relative z-10">
                <div class="mr-2">
-                <p class="text-4xl font-bold text-white leading-tight truncate">#{{ tx.lot.position }}</p>
+                <p class="text-4xl font-bold text-on-primary leading-tight truncate">#{{ tx.lot.position }}</p>
                </div>
                 <div class="flex-1 min-w-0 pr-4">
-                  <h2 class="text-xl font-bold text-white leading-tight truncate">{{ tx.lot.name }}</h2>
-                  <p class="text-white/90 text-sm font-medium mt-2 truncate">
+                  <h2 class="text-xl font-bold text-on-primary leading-tight truncate">{{ tx.lot.name }}</h2>
+                  <p class="text-on-primary text-sm font-medium mt-2 truncate">
                     <span appTranslate="TRANSACTIONS.AUCTION">Subasta</span>: {{ tx.auction.title }}
                   </p>
                 </div>
                  <div>
-                <h1 class="text-2xl font-bold text-white leading-tight truncate">{{ tx.lot.cupScore }} <span appTranslate="COMMON.POINTS">pts</span></h1>
+                <h1 class="text-2xl font-bold text-on-primary leading-tight truncate">{{ tx.lot.cupScore }} <span appTranslate="COMMON.POINTS">pts</span></h1>
                </div>
                <!--  <div class="flex-shrink-0">
                   <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-white/20 backdrop-blur-sm text-white border border-white/30">
@@ -52,7 +52,7 @@
                 <div class="grid grid-cols-3 gap-3 text-sm">
                   <div class="flex items-center text-content">
                     <div class="w-6 h-6 bg-primary/10 rounded-lg flex items-center justify-center mr-2">
-                      <svg class="w-3 h-3 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                      <svg class="w-3 h-3 text-primary-ink" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd"></path>
                       </svg>
                     </div>
@@ -61,17 +61,17 @@
                   
                   <div class="flex items-center text-content">
                     <div class="w-6 h-6 bg-primary/10 rounded-lg flex items-center justify-center mr-2">
-                      <svg class="w-3 h-3 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                      <svg class="w-3 h-3 text-primary-ink" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
                         <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path>
                       </svg>
                     </div>
-                    <span class="truncate">{{ tx.lot.process }}</span>
+                    <span class="truncate">{{ tx.lot.process | procesoCafe }}</span>
                   </div>
                   
                   <div class="flex items-center text-content">
                     <div class="w-6 h-6 bg-primary/10 rounded-lg flex items-center justify-center mr-2">
-                      <svg class="w-3 h-3 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                      <svg class="w-3 h-3 text-primary-ink" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
                       </svg>
                     </div>
@@ -81,8 +81,8 @@
                
                 </div>
                 
-                <div class="flex items-center text-sm text-primary bg-primary/5 p-3 rounded-xl border border-primary/20">
-                  <svg class="w-4 h-4 text-primary mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <div class="flex items-center text-sm text-primary-ink bg-primary/5 p-3 rounded-xl border border-primary/20">
+                  <svg class="w-4 h-4 text-primary-ink mr-2" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
                   </svg>
                   <span class="truncate">{{ tx.lot.region }} ({{ tx.lot.community }})</span>
@@ -91,7 +91,7 @@
 
               <!-- Puntaje Destacado -->
          <!--      <div class="flex justify-center">
-                <div class="bg-primary text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
+                <div class="bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-bold shadow-lg">
                   <span appTranslate="TRANSACTIONS.SCORE">Puntaje</span>: {{ tx.lot.cupScore }} <span appTranslate="COMMON.POINTS">pts</span>
                 </div>
               </div> -->
@@ -99,7 +99,7 @@
               <!-- Vendedor y Comprador -->
               <div class="grid grid-cols-2 gap-4">
                 <div class="bg-primary/10 rounded-xl p-4 border border-primary/20 text-content">
-                  <p class="text-xs font-bold text-primary uppercase tracking-wider mb-2" appTranslate="COMMON.PRODUCER">Productor</p>
+                  <p class="text-xs font-bold text-primary-ink uppercase tracking-wider mb-2" appTranslate="COMMON.PRODUCER">Productor</p>
                   <p class="text-sm font-semibold truncate">{{ tx.lot.seller }}</p>
                 </div>
                 <div class="bg-surface-50 rounded-xl p-4 border border-surface-200 text-content">
@@ -117,7 +117,7 @@
                   </div>
                   <div class="flex justify-between items-center">
                     <span class="text-sm text-content/70 font-medium" appTranslate="TRANSACTIONS.FINAL_PRICE">Precio Final</span>
-                    <span class="font-bold text-primary text-lg">${{ tx.pricing.finalPrice | number:'1.2-2' }}</span>
+                    <span class="font-bold text-primary-ink text-lg">${{ tx.pricing.finalPrice | number:'1.2-2' }}</span>
                   </div>
                   <div class="flex justify-between items-center">
                     <span class="text-sm text-content/70 font-medium" appTranslate="TRANSACTIONS.PRICE_PER_LB">Precio x Lb</span>
@@ -133,7 +133,7 @@
 
               <!-- Fecha de pago -->
               <!-- <div class="flex items-center text-sm text-gray-600 bg-gray-50 p-3 rounded-xl border border-gray-200">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary-ink mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
                 <span class="font-medium" appTranslate="TRANSACTIONS.PAYMENT">Pago</span>: {{ tx.paymentDate | date:'dd MMM yyyy HH:mm':undefined:'es' }}
@@ -146,7 +146,7 @@
                   (click)="toggleBids(tx)"
                 >
                   <span class="font-semibold text-content flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-primary-ink" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                     </svg>
                     <span appTranslate="TRANSACTIONS.BID_HISTORY">Historial de Pujas</span> ({{ tx.auction.bids.length }})
@@ -166,7 +166,7 @@
                           <div class="w-2 h-2 rounded-full bg-primary"></div>
                           <span class="text-sm font-medium text-content/80 truncate max-w-[120px]">{{ bid.bidder.name }}</span>
                         </div>
-                        <span class="font-bold text-primary">${{ bid.amount | number:'1.2-2' }}</span>
+                        <span class="font-bold text-primary-ink">${{ bid.amount | number:'1.2-2' }}</span>
                       </div>
                     }
                   </div>
@@ -180,7 +180,7 @@
       <!-- Estado vacío mejorado -->
       <div class="text-center py-20 bg-surface rounded-2xl shadow-xl border border-surface-200">
         <div class="w-20 h-20 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm border border-primary/20">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-primary-ink" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
         </div>

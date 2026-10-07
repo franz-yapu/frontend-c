@@ -27,7 +27,7 @@ import { ViewMode } from './view-mode.service';
       <button type="button" (click)="elegir('cards')" [attr.aria-pressed]="mode === 'cards'"
         [title]="'AUCTION-BUYER.VIEW_CARDS' | translate"
         class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors"
-        [class]="mode === 'cards' ? 'bg-primary text-white' : 'text-content/60 hover:text-primary hover:bg-primary/10'">
+        [class]="mode === 'cards' ? 'bg-primary text-on-primary' : 'text-content/60 hover:text-primary-ink hover:bg-primary/10'">
         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
           <path d="M3 3h6v6H3V3zm8 0h6v6h-6V3zM3 11h6v6H3v-6zm8 0h6v6h-6v-6z" />
         </svg>
@@ -36,7 +36,7 @@ import { ViewMode } from './view-mode.service';
       <button type="button" (click)="elegir('table')" [attr.aria-pressed]="mode === 'table'"
         [title]="'AUCTION-BUYER.VIEW_TABLE' | translate"
         class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors"
-        [class]="mode === 'table' ? 'bg-primary text-white' : 'text-content/60 hover:text-primary hover:bg-primary/10'">
+        [class]="mode === 'table' ? 'bg-primary text-on-primary' : 'text-content/60 hover:text-primary-ink hover:bg-primary/10'">
         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
           <path d="M3 4h14v3H3V4zm0 5h14v2.5H3V9zm0 4.5h14V16H3v-2.5z" />
         </svg>

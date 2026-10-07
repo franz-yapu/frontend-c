@@ -1,5 +1,5 @@
 import { Injectable, signal, computed, inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 
@@ -19,6 +19,7 @@ export interface Language {
 export class TranslationService {
   private http = inject(HttpClient);
   private platformId = inject(PLATFORM_ID);
+  private document = inject(DOCUMENT);
   private apiBase = `${environment.backend}/v1/translations`;
 
   private availableLanguages: Language[] = [
@@ -56,6 +57,9 @@ export class TranslationService {
       next: (translations) => {
         this.translations.set(translations);
         this.currentLang.set(lang);
+        // <html lang> manda en lectores de pantalla (pronunciación) y en el
+        // traductor del navegador; antes quedaba fijo en "en".
+        this.document.documentElement.lang = lang;
         if (isPlatformBrowser(this.platformId)) {
           localStorage.setItem('preferred-language', lang);
         }
