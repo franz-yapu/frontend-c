@@ -67,7 +67,9 @@
     "TERMS": "Terms",
     "CONTACT_TITLE": "Contact",
     "LOCATION": "La Paz, Bolivia",
-    "COPYRIGHT": "© 2026 {{institutionName}}. All rights reserved."
+    "COPYRIGHT": "© {{year}} {{institutionName}} · Auction content",
+    "POWERED_BY": "Platform developed by",
+    "PLATFORM_RIGHTS": "© {{year}} VertexAll. All rights reserved on the platform."
   },
   "WINNERS": {
     "HERO": {
@@ -314,6 +316,8 @@
     }
   },
   "AUCTION-BUYER": {
+    "ANONYMOUS_BIDDER": "Unnamed buyer",
+    "STARTING_PRICE_TAG": "Starting price",
     "PREMIUM_AUCTIONS": "{{institutionName}} 2026 Auction",
     "EXCLUSIVE_LOTS": "The best producers of Bolivia 2026",
     "AUCTION_ENDED": "Auction Ended",
@@ -606,7 +610,8 @@
     },
     "CLOCK": {
       "TITLE": "Time remaining",
-      "TEXT": "This is how long is left before closing. Note: if someone bids in the last 3 minutes, the auction is extended by 3 more minutes, so it may end later than planned."
+      "TEXT": "This is how long is left before closing. Note: if someone bids in the last {{minutos}} minutes, the auction is extended by {{minutos}} more minutes, so it may end later than planned.",
+      "TEXT_NO_EXTENSION": "This is how long is left before closing. The auction ends at exactly that time, even if there are last-minute bids."
     },
     "LOTS": {
       "TITLE": "The lots",

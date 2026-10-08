@@ -1,5 +1,9 @@
-<div class="fixed top-5 right-5 flex flex-col space-y-2 z-50">
-      <div *ngFor="let toast of toasts" [ngClass]="toastClasses(toast.severity)" class="max-w-xs p-4 rounded shadow-md">
+<!-- Debajo de la cabecera (top-20), no encima: arriba a la derecha tapaba
+     "Ingresar / Crear cuenta". pointer-events-none para que, mientras se ve,
+     no bloquee los clics de lo que haya debajo. -->
+<div class="fixed top-20 inset-x-4 sm:inset-x-auto sm:right-5 flex flex-col items-stretch sm:items-end space-y-2 z-50 pointer-events-none"
+  role="status" aria-live="polite">
+      <div *ngFor="let toast of toasts" [ngClass]="toastClasses(toast.severity)" class="sm:max-w-xs p-4 rounded shadow-md">
         <strong class="block">{{toast.summary}}</strong>
         <p class="text-sm">{{toast.detail}}</p>
       </div>

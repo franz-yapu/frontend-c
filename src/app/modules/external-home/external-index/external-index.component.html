@@ -1,13 +1,19 @@
 <div class="min-h-screen bg-surface text-content font-sans">
   <!-- HERO -->
   <!-- HERO -->
+  <!-- Celular/tablet: el alto sale del contenido (antes, con alto fijo, el
+       logo quedaba cortado arriba) y pb-40 deja sitio a los granos debajo de
+       los botones. Escritorio (lg): pantalla completa como antes. -->
   <section
-    class="relative w-full h-[calc(100vh-64px)] min-h-[700px] flex items-center justify-center overflow-hidden font-sans"
+    class="relative w-full min-h-[calc(100vh-64px)] pt-6 pb-40 lg:py-0 lg:h-[calc(100vh-64px)] lg:min-h-[700px] flex items-center justify-center overflow-hidden font-sans"
   >
     <!-- Background Image -->
+    <!-- El banner es largo y bajito (1400×170): con bg-cover en una pantalla
+         alta de celular se estiraba ~5 veces y los granos salían gigantes. En
+         el celular va abajo, a su tamaño, repetido a lo ancho; en escritorio (lg) más grande, a un 60 % del alto (con cover salía enorme). -->
     <div
-      class="absolute inset-0 z-0 bg-cover bg-center"
-      style="background-image: url(&quot;assets/img/2.png&quot;)"
+      class="absolute inset-0 z-0 bg-repeat-x bg-bottom bg-[length:auto_150px] lg:bg-repeat-x lg:bg-bottom lg:bg-[length:auto_60%]"
+      style="background-image: url(&quot;assets/img/granos-banner.svg&quot;)"
     ></div>
     <!-- Overlay gradiente oscuro para asegurar legibilidad -->
     <div
@@ -331,12 +337,31 @@
           </ul>
         </div>
       </div>
+      <!-- Dos titulares distintos: la institución es dueña del contenido de su
+           subasta; la plataforma (el software) es de VertexAll, que la alquila. -->
       <div
-        class="text-center text-gray-500 mt-16 pt-6 border-t border-gray-200 text-xs tracking-wider"
+        class="flex flex-col items-center gap-3 text-center text-gray-500 mt-16 pt-6 border-t border-gray-200 text-xs tracking-wider"
       >
         <p>
-          © {{ currentYear }} {{ institutionName() }}. Todos los derechos
-          reservados.
+          {{ 'FOOTER.COPYRIGHT' | translate: { year: currentYear.toString(), institutionName: institutionName() } }}
+        </p>
+        <a
+          href="https://vertexall.com"
+          target="_blank"
+          rel="noopener"
+          class="flex flex-col sm:flex-row items-center gap-2 hover:text-gray-700 transition-colors"
+        >
+          <span>{{ 'FOOTER.POWERED_BY' | translate }}</span>
+          <img
+            src="assets/img/vertexall-logo.png"
+            alt="VertexAll"
+            width="141"
+            height="24"
+            class="h-6 w-auto"
+          />
+        </a>
+        <p class="text-[11px] text-gray-500">
+          {{ 'FOOTER.PLATFORM_RIGHTS' | translate: { year: currentYear.toString() } }}
         </p>
       </div>
     </div>

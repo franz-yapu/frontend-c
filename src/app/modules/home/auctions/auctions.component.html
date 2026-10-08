@@ -65,13 +65,16 @@
       <div class="p-4 sm:p-6">
         <!-- Título y estado -->
         <div class="flex justify-between items-start mb-3 sm:mb-4">
-          <h3 class="text-lg sm:text-xl font-bold text-gray-800 truncate max-w-[65%]">{{ auction.title }}</h3>
+          <!-- Hasta 2 líneas y el título entero al pasar el ratón: con una sola línea
+               "QA cier…" y "Subast…" no se distinguían. -->
+          <h3 class="text-lg sm:text-xl font-bold text-gray-800 line-clamp-2 break-words min-w-0 flex-1 mr-2"
+            [attr.title]="auction.title">{{ auction.title }}</h3>
           <span [class.bg-primary-50]="auction.status === 'DRAFT'" [class.text-primary-700]="auction.status === 'DRAFT'"
             [class.border-primary-200]="auction.status === 'DRAFT'" [class.bg-success-50]="auction.status === 'ACTIVE'"
             [class.text-success-700]="auction.status === 'ACTIVE'" [class.border-success-200]="auction.status === 'ACTIVE'"
             [class.bg-gray-50]="auction.status === 'CLOSED'" [class.text-gray-700]="auction.status === 'CLOSED'"
             [class.border-gray-200]="auction.status === 'CLOSED'"
-            class="px-2 py-0.5 sm:px-3 sm:py-1 text-xs rounded-full border flex items-center">
+            class="shrink-0 px-2 py-0.5 sm:px-3 sm:py-1 text-xs rounded-full border flex items-center">
             @if (auction.status === 'DRAFT') {
             <svg class="w-3 h-3 mr-1 hidden sm:block" fill="currentColor" viewBox="0 0 20 20">
               <path

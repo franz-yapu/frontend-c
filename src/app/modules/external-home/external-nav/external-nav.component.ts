@@ -49,7 +49,7 @@ export class ExternalNavComponent implements OnInit, OnDestroy {
   navItems: NavItem[] = [
     {
       name: 'Inicio',
-      route: '/index',
+      route: '/',
       isActive: false,
       translateKey: 'NAV.HOME',
     },

@@ -27,6 +27,7 @@ import { ViewModeToggleComponent } from '../lots-view/view-mode-toggle.component
 import { CoffeeLoaderComponent } from '../coffee-loader/coffee-loader.component';
 import { ViewMode, ViewModeService } from '../lots-view/view-mode.service';
 
+import { nombrePostor } from '../../../core/nombre-usuario';
 @Component({
   selector: 'app-auction-view',
   standalone: true,
@@ -46,6 +47,8 @@ import { ViewMode, ViewModeService } from '../lots-view/view-mode.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AuctionViewComponent implements OnInit, OnDestroy {
+  /** Para la plantilla (ver core/nombre-usuario). */
+  readonly nombrePostor = nombrePostor;
   // ---------------------------------------------------------- vista tabla --
   private viewModeService = inject(ViewModeService);
   readonly viewMode = signal<ViewMode>(
@@ -85,7 +88,9 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
       .map((x: any) => (x || '').trim())
       .filter((x: string) => x.length > 0)
       .join(' ');
-    return persona || null;
+    // Hay puja pero el postor no dejó empresa ni nombre: que no parezca un
+    // lote sin pujas (antes salía el mismo guion).
+    return persona || this.translationService.translate('AUCTION-BUYER.ANONYMOUS_BIDDER');
   }
 
   /** Municipio/region/pais saltandose los vacios. */
@@ -132,6 +137,7 @@ export class AuctionViewComponent implements OnInit, OnDestroy {
         value: precio ? precio * (lote.quantityLbs || 0) : null,
         bidsCount: null,
         leaderName: this.nombreLider(lote.id),
+        sinPujas: !(this.lastBids.get(lote.id) || []).length,
         raw: detail,
       } as LotRow;
     });
@@ -560,7 +566,7 @@ private handleAuctionExtension(extensionData: any) {
     
     this.showExtensionNotification = true;
     const newEndTime = new Date(extensionData.newEndDate);
-    const formattedTime = newEndTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const formattedTime = newEndTime.toLocaleTimeString('es-ES', { hour12: false, hour: '2-digit', minute: '2-digit' });
     this.extensionMessage = this.translationService.translate('NOTIFICATIONS.AUCTION_EXTENDED').replace('{{time}}', formattedTime);
     
     if (this.notificationTimeout) {

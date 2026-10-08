@@ -6,6 +6,7 @@ import { environment } from '../../../environments/environment';
 import { GeneralService } from '../gerneral.service';
 import { TranslationService } from '../../project/services/translate.service';
 
+import { nombrePila } from '../nombre-usuario';
 /**
  * Tour guiado del comprador.
  *
@@ -26,8 +27,13 @@ export class TourService {
   /** Si falta menos que esto para el cierre, NO se interrumpe a nadie. */
   private static readonly MINUTOS_DE_RESPETO = 5;
 
+  /** Extensión de la subasta en pantalla (la pone la sala de subasta). */
+  extension = { activa: true, minutos: 3 };
+
   private recorrido: Driver | null = null;
   private yaContado = false;
+  /** El usuario llegó al último paso: ya lo vio entero. */
+  private llegoAlFinal = false;
 
   /** Lanza el tour si toca (comprador, con veces pendientes y sin prisa). */
   async arrancarSiToca(opciones: { subastaActiva: boolean; cierra?: Date | null }) {
@@ -35,11 +41,15 @@ export class TourService {
     if (!usuario || this.rol(usuario) !== 'BUYER') return;
     if (this.apagadoEnEsteNavegador()) return;
     if (this.quedaPoco(opciones.cierra)) return;
+    // Una vez por inicio de sesión: antes salía cada vez que se volvía a la
+    // sala de subasta, y la cuenta de "tres veces" se gastaba en una sola visita.
+    if (this.yaSalioEnEstaSesion()) return;
 
     const estado = await this.estadoDelServidor();
     if (estado.tourDismissed) return;
     if (estado.tourSeenCount >= TourService.VECES) return;
 
+    this.recuerdaEstaSesion();
     this.arrancar(opciones);
   }
 
@@ -62,6 +72,7 @@ export class TourService {
     if (!pasos.length) return;
 
     this.yaContado = false;
+    this.llegoAlFinal = false;
     this.recorrido = driver({
       showProgress: true,
       allowClose: true,
@@ -72,8 +83,16 @@ export class TourService {
       doneBtnText: this.t('TOUR.DONE'),
       progressText: this.t('TOUR.PROGRESS'),
       steps: pasos,
-      // Cerrar con el aspa, con Esc o llegando al final cuenta como una vez.
-      onDestroyed: () => this.contarUnaVez(),
+      onHighlighted: () => {
+        if (this.recorrido?.isLastStep()) this.llegoAlFinal = true;
+      },
+      // Cerrar con el aspa o con Esc cuenta como una vez; terminarlo entero
+      // lo da por visto y no vuelve a salir solo ("Ver tutorial" sigue).
+      onDestroyed: () => {
+        if (!this.llegoAlFinal) return this.contarUnaVez();
+        this.recorrido = null;                   // ya está cerrado: no repetir destroy()
+        void this.apagar();
+      },
     });
     this.recorrido.drive();
     this.pintarBotonDeApagar();
@@ -166,6 +185,29 @@ export class TourService {
     }
   }
 
+  /** ¿Ya salió solo con el token de esta sesión? (cambia en cada login) */
+  private yaSalioEnEstaSesion(): boolean {
+    try {
+      const token = localStorage.getItem(`${environment.appCode}.token`) || '';
+      return !!token && localStorage.getItem(this.claveSesion()) === token.slice(-24);
+    } catch {
+      return false;
+    }
+  }
+
+  private recuerdaEstaSesion() {
+    try {
+      const token = localStorage.getItem(`${environment.appCode}.token`) || '';
+      localStorage.setItem(this.claveSesion(), token.slice(-24));
+    } catch {
+      /* almacenamiento bloqueado: como mucho vuelve a salir */
+    }
+  }
+
+  private claveSesion(): string {
+    return `${environment.appCode}.tourSesion`;
+  }
+
   private claveLocal(): string {
     return `${environment.appCode}.tourApagado`;
   }
@@ -204,7 +246,7 @@ export class TourService {
    */
   private pasos(subastaActiva: boolean): DriveStep[] {
     const usuario = this.general.getUser();
-    const nombre = usuario?.firstName || '';
+    const nombre = nombrePila(usuario);
     const bienvenida: DriveStep = {
       popover: {
         title: this.t('TOUR.WELCOME.TITLE').replace('{{nombre}}', nombre),
@@ -232,7 +274,9 @@ export class TourService {
         element: '[data-tour="reloj"]',
         popover: {
           title: this.t('TOUR.CLOCK.TITLE'),
-          description: this.t('TOUR.CLOCK.TEXT'),
+          description: this.extension.activa
+            ? this.t('TOUR.CLOCK.TEXT').replace(/\{\{minutos\}\}/g, String(this.extension.minutos))
+            : this.t('TOUR.CLOCK.TEXT_NO_EXTENSION'),
         },
       },
       {

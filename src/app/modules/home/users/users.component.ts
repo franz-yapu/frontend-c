@@ -35,7 +35,7 @@ export class UsersComponent implements OnInit {
       key: 'createdAt',
       label: 'Fecha Registro',
       sortable: true,
-      format: (value) => new Date(value).toLocaleDateString()
+      format: (value) => new Date(value).toLocaleDateString('es-ES')
     },
     {
       key: 'roleId',

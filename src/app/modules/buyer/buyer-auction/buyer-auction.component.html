@@ -24,19 +24,20 @@
     </div>
     }
 
-    <!-- Header Principal -->
-    <div class="relative  shadow p-3 mb-6 overflow-hidden">
+    <!-- Header Principal. En el celular va compacto (márgenes, reloj y fechas
+         más chicos): antes ocupaba más de una pantalla antes del primer lote. -->
+    <div class="relative  shadow p-3 mb-3 sm:mb-6 overflow-hidden">
       <div class="relative z-10">
-        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8">
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-3 lg:gap-8">
           <div class="flex-1">
-            <div class="flex items-center gap-5 mb-5">
+            <div class="flex items-center gap-5 sm:mb-5">
 
               <div>
                 <h1 class="text-2xl sm:text-3xl md:text-5xl font-bold text-content mb-2 sm:mb-3 tracking-tight leading-tight"
                   appTranslate="AUCTION-BUYER.PREMIUM_AUCTIONS">
                   Subastas de Café Premium
                 </h1>
-                <p class="text-content text-base sm:text-lg md:text-xl font-light"
+                <p class="text-content text-sm sm:text-lg md:text-xl font-light"
                   appTranslate="AUCTION-BUYER.EXCLUSIVE_LOTS">
                   Lotes exclusivos de productores especializados
                 </p>
@@ -48,7 +49,7 @@
           <!-- En el contador regresivo, agregar indicador de sincronización -->
           @if (auctionData.length > 0) {
           <div data-tour="reloj"
-            class="bg-primary rounded-lg p-5 sm:p-7 border border-white/20 shadow-2xl w-full lg:w-auto lg:min-w-[320px]">
+            class="bg-primary rounded-lg p-3 sm:p-7 border border-white/20 shadow-2xl w-full lg:w-auto lg:min-w-[320px]">
             @if (timeLeft.hasEnded || auctionEnded) {
             <div class="text-center">
               <div
@@ -72,47 +73,47 @@
             } @else {
             <div class="flex flex-col items-center">
               @if(timeLeft.hasStarted){
-              <span class="text-sm text-on-primary mb-4 uppercase tracking-wider font-medium"
+              <span class="text-xs sm:text-sm text-on-primary mb-2 sm:mb-4 uppercase tracking-wider font-medium"
                 appTranslate="AUCTION-BUYER.ENDS_IN">
                 Finaliza en
               </span>
               }
               @if(!timeLeft.hasStarted){
-              <span class="text-sm text-on-primary mb-4 uppercase tracking-wider font-medium"
+              <span class="text-xs sm:text-sm text-on-primary mb-2 sm:mb-4 uppercase tracking-wider font-medium"
                 appTranslate="AUCTION-BUYER.STARTS_IN">
                 Comienza en
               </span>
               }
 
-              <div class="grid grid-cols-4 gap-3">
+              <div class="grid grid-cols-4 gap-2 sm:gap-3">
                 <div
-                  class="bg-white text-primary-ink px-4 py-5 text-center min-w-[75px] backdrop-blur-sm border border-white/20 shadow-lg">
-                  <span class="block text-3xl font-bold tracking-tight">{{ timeLeft.days
+                  class="bg-white text-primary-ink px-2 py-2 sm:px-4 sm:py-5 text-center min-w-[64px] sm:min-w-[75px] backdrop-blur-sm border border-white/20 shadow-lg">
+                  <span class="block text-2xl sm:text-3xl font-bold tracking-tight">{{ timeLeft.days
                     }}</span>
-                  <span class="block text-xs mt-2 font-medium" appTranslate="COMMON.DAYS">Días</span>
+                  <span class="block text-xs mt-1 sm:mt-2 font-medium" appTranslate="COMMON.DAYS">Días</span>
                 </div>
                 <div
-                  class="bg-white text-primary-ink px-4 py-5 text-center min-w-[75px] backdrop-blur-sm border border-white/20 shadow-lg">
-                  <span class="block text-3xl font-bold tracking-tight">{{ timeLeft.hours
+                  class="bg-white text-primary-ink px-2 py-2 sm:px-4 sm:py-5 text-center min-w-[64px] sm:min-w-[75px] backdrop-blur-sm border border-white/20 shadow-lg">
+                  <span class="block text-2xl sm:text-3xl font-bold tracking-tight">{{ timeLeft.hours
                     | number:'2.0' }}</span>
-                  <span class="block text-xs mt-2 font-medium" appTranslate="COMMON.HOURS">Horas</span>
+                  <span class="block text-xs mt-1 sm:mt-2 font-medium" appTranslate="COMMON.HOURS">Horas</span>
                 </div>
                 <div
-                  class="bg-white text-primary-ink px-4 py-5 text-center min-w-[75px] backdrop-blur-sm border border-white/20 shadow-lg">
-                  <span class="block text-3xl font-bold tracking-tight">{{
+                  class="bg-white text-primary-ink px-2 py-2 sm:px-4 sm:py-5 text-center min-w-[64px] sm:min-w-[75px] backdrop-blur-sm border border-white/20 shadow-lg">
+                  <span class="block text-2xl sm:text-3xl font-bold tracking-tight">{{
                     timeLeft.minutes | number:'2.0' }}</span>
-                  <span class="block text-xs mt-2 font-medium" appTranslate="COMMON.MINUTES">Min</span>
+                  <span class="block text-xs mt-1 sm:mt-2 font-medium" appTranslate="COMMON.MINUTES">Min</span>
                 </div>
                 <div
-                  class="bg-white text-primary-ink px-4 py-5 text-center min-w-[75px] backdrop-blur-sm border border-white/20 shadow-lg">
-                  <span class="block text-3xl font-bold tracking-tight">{{
+                  class="bg-white text-primary-ink px-2 py-2 sm:px-4 sm:py-5 text-center min-w-[64px] sm:min-w-[75px] backdrop-blur-sm border border-white/20 shadow-lg">
+                  <span class="block text-2xl sm:text-3xl font-bold tracking-tight">{{
                     timeLeft.seconds | number:'2.0' }}</span>
-                  <span class="block text-xs mt-2 font-medium" appTranslate="COMMON.SECONDS">Seg</span>
+                  <span class="block text-xs mt-1 sm:mt-2 font-medium" appTranslate="COMMON.SECONDS">Seg</span>
                 </div>
               </div>
 
               <!-- Indicador de tiempo sincronizado -->
-               <span class="text-xs font-semibold uppercase tracking-wider text-on-primary" appTranslate="AUCTION_SYNC.TIME_SYNCED">
+               <span class="mt-2 text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-on-primary" appTranslate="AUCTION_SYNC.TIME_SYNCED">
                 Tiempo sincronizado con servidor
               </span>
             </div>
@@ -122,12 +123,12 @@
         </div>
       </div>
       <div class="absolute bottom-0 left-0 w-full z-1">
-        <img src="assets/img/2.png" alt="Taza de café" class="w-full h-auto" />
+        <img src="assets/img/granos-banner.svg" alt="" aria-hidden="true" class="w-full h-auto" />
       </div>
     </div>
 
     <!-- Reemplazar el indicador de conexión actual con este: -->
-    <div class="mb-4">
+    <div class="mb-3 sm:mb-4">
       <div class="flex items-center justify-between">
         <!-- Indicador de conexión mejorado -->
         <div class="flex flex-wrap items-center gap-2">
@@ -158,36 +159,36 @@
 
     <!-- Información de la subasta -->
     @if (auctionData.length > 0) {
-    <div class="mb-10">
+    <div class="mb-4 sm:mb-10">
       <!-- El titulo de la subasta se quito a pedido de Franz (2026-08-18): ya lo
            encabeza el bloque de arriba y salian dos titulos seguidos. -->
-      <div class="bg-surface shadow-xl p-5 border border-surface-200 backdrop-blur-sm">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-7">
+      <div class="bg-surface shadow-xl p-3 sm:p-5 border border-surface-200 backdrop-blur-sm">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-7">
           <div class="flex items-center text-content">
             <div
-              class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mr-4 shadow-sm border border-primary/20">
+              class="hidden sm:flex w-12 h-12 bg-primary/10 rounded-xl items-center justify-center mr-4 shadow-sm border border-primary/20 shrink-0">
               <svg class="w-6 h-6 text-primary-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
               </svg>
             </div>
             <div>
-              <p class="text-content/60 text-sm font-medium mb-1" appTranslate="AUCTION-BUYER.START_DATE">Inicio</p>
-              <p class="font-semibold text-content">{{ auctionData[0].startDate | date:'dd MMM yyyy HH:mm':undefined:'es' }}</p>
+              <p class="text-content/60 text-xs sm:text-sm font-medium mb-0.5 sm:mb-1" appTranslate="AUCTION-BUYER.START_DATE">Inicio</p>
+              <p class="text-sm sm:text-base font-semibold text-content">{{ auctionData[0].startDate | date:'dd MMM yyyy HH:mm':undefined:'es' }}</p>
             </div>
           </div>
 
           <div class="flex items-center text-content">
             <div
-              class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mr-4 shadow-sm border border-primary/20">
+              class="hidden sm:flex w-12 h-12 bg-primary/10 rounded-xl items-center justify-center mr-4 shadow-sm border border-primary/20 shrink-0">
               <svg class="w-6 h-6 text-primary-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>
             </div>
             <div>
-              <p class="text-content/60 text-sm font-medium mb-1" appTranslate="AUCTION-BUYER.END_DATE">Fin</p>
-              <p class="font-semibold text-content">{{ auctionData[0].endDate | date:'dd MMM yyyy HH:mm':undefined:'es' }}</p>
+              <p class="text-content/60 text-xs sm:text-sm font-medium mb-0.5 sm:mb-1" appTranslate="AUCTION-BUYER.END_DATE">Fin</p>
+              <p class="text-sm sm:text-base font-semibold text-content">{{ auctionData[0].endDate | date:'dd MMM yyyy HH:mm':undefined:'es' }}</p>
             </div>
           </div>
         </div>
@@ -404,11 +405,7 @@
                 <div class="bg-surface rounded-md px-2 py-1 border border-surface-100 flex items-center gap-2 text-[11px]">
                   <span class="font-bold text-primary-ink shrink-0">{{ bid.amount | currency:'USD':'symbol':'1.2-2' }}</span>
                   <span class="text-content/80 font-semibold truncate flex-1 min-w-0">
-                    @if (bid.user?.companyName) {
-                    {{ bid.user.companyName }}
-                    } @else {
-                    {{ bid.user?.firstName }} {{ bid.user?.lastName?.charAt(0) }}.
-                    }
+                    {{ nombrePostor(bid.user) || ('AUCTION-BUYER.ANONYMOUS_BIDDER' | translate) }}
                   </span>
                   <span class="text-content/50 font-medium shrink-0">{{ bid.createdAt | date:'shortTime':undefined:'es' }}</span>
                 </div>
@@ -612,8 +609,10 @@
           appTranslate="AUCTION-BUYER.STEP_TYPE">2. O escribe tu monto</label>
         <div class="relative">
           <span class="absolute left-4 top-1/2 -translate-y-1/2 text-primary-ink font-bold">$</span>
-          <input id="montoPuja" type="number" inputmode="decimal" [step]="auctionData[0].minIncrement || 0.01"
-            [min]="minBidForSelected" [(ngModel)]="bidAmount" (input)="onManualBidChange()"
+          <!-- type="text": con type="number" el navegador en español enseñaba "9,75"
+               mientras el resto de la pantalla dice "$9.75". -->
+          <input id="montoPuja" type="text" inputmode="decimal" autocomplete="off"
+            [(ngModel)]="bidAmount" (input)="onManualBidChange()"
             class="w-full py-3 pl-8 pr-14 text-lg border bg-surface text-content rounded-xl focus:ring-2 focus:ring-primary/50 focus:border-primary font-semibold shadow-sm"
             [class]="isBidValid() ? 'border-primary/20' : 'border-danger-500'" placeholder="0.00" />
           <span class="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-content/40 font-medium"
@@ -657,7 +656,7 @@
         </div>
         <p class="mt-1 text-xs text-content/50">
           {{ selectedLot.coffeeLot.quantityLbs }} {{ 'COMMON.LBS' | translate }} ×
-          {{ bidAmount | currency:'USD':'symbol':'1.2-2' }}
+          {{ (montoPuja || 0) | currency:'USD':'symbol':'1.2-2' }}
         </p>
       </div>
       }
@@ -688,7 +687,7 @@
         <button type="button" (click)="placeBid()" [disabled]="!canConfirmBid()"
           class="flex-1 py-3 px-4 bg-primary text-on-primary rounded-xl hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-bold shadow-lg whitespace-nowrap">
           @if (!isPlacingBid) {
-          <span>{{ 'AUCTION-BUYER.CONFIRM_SHORT' | translate }} {{ bidAmount | currency:'USD':'symbol':'1.2-2' }}</span>
+          <span>{{ 'AUCTION-BUYER.CONFIRM_SHORT' | translate }} {{ (montoPuja || 0) | currency:'USD':'symbol':'1.2-2' }}</span>
           } @else {
           <span class="flex items-center justify-center">
             <span class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>

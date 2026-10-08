@@ -15,6 +15,7 @@ import { TranslateDirective } from '../../directive/translate.directive';
 import { GeneralService } from '../../../core/gerneral.service';
 
 
+import { iniciales, nombreCompleto } from '../../../core/nombre-usuario';
 @Component({
   selector: 'app-setting',
   imports: [CommonModule, FormsModule,TranslateDirective],
@@ -23,6 +24,9 @@ import { GeneralService } from '../../../core/gerneral.service';
   providers: [DialogService],
 })
 export class SettingComponent implements OnInit {
+  /** Para la plantilla (ver core/nombre-usuario). */
+  readonly iniciales = iniciales;
+  readonly nombreCompleto = nombreCompleto;
   ref!: DynamicDialogRef;
   @Input() user: any;
   @Output() reload = new EventEmitter<any>();

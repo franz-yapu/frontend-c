@@ -52,6 +52,8 @@ export interface LotRow {
   /** Quien va ganando el lote: la empresa del mejor postor y, si no tiene,
    *  su nombre y apellido. Null si todavia no hay pujas. */
   leaderName?: string | null;
+  /** Nadie pujó todavía: el precio que se ve es el inicial, no una oferta. */
+  sinPujas?: boolean;
   /** El mejor postor es el propio usuario (se enseña "Vas ganando"). */
   destacada?: boolean;
   destacadaTexto?: string | null;

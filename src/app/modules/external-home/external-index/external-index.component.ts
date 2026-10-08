@@ -3,10 +3,11 @@ import { Router, RouterModule } from '@angular/router';
 import { TranslateDirective } from '../../../project/directive/translate.directive';
 import { BrandingService } from '../../../core/branding/branding.service';
 
+import { TranslatePipe } from '../../../project/pipe/translate.pipe';
 @Component({
   selector: 'app-external-index',
   standalone: true,
-  imports: [RouterModule, TranslateDirective],
+  imports: [RouterModule, TranslateDirective, TranslatePipe],
   templateUrl: './external-index.component.html',
   styleUrl: './external-index.component.scss'
 })

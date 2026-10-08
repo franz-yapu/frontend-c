@@ -91,13 +91,13 @@
           <!-- Avatar -->
           <div class="relative">
             <div class="h-9 w-9 rounded-full bg-primary flex items-center justify-center text-on-primary font-semibold text-sm shadow-md">
-              {{ (user?.firstName?.charAt(0) || '') + (user?.lastName?.charAt(0) || '') }}
+              {{ iniciales(user) }}
             </div>
             <div class="absolute -bottom-1 -right-1 h-3 w-3 rounded-full bg-success-500 border-2 border-white"></div>
           </div>
           <!-- Name -->
           <span class="font-semibold text-gray-800 text-sm">
-            {{ user?.firstName + ' ' + user?.lastName }}
+            {{ nombreCompleto(user) }}
           </span>
           <!-- Volver a ver el tour guiado, aunque se haya apagado -->
           <button
@@ -151,10 +151,10 @@
     <div class="px-3 py-3 border-t border-gray-100">
       <div class="flex items-center space-x-3 px-2 py-2 mb-2">
         <div class="h-9 w-9 rounded-full bg-primary flex items-center justify-center text-on-primary font-semibold text-sm shadow">
-          {{ (user?.firstName?.charAt(0) || '') + (user?.lastName?.charAt(0) || '') }}
+          {{ iniciales(user) }}
         </div>
         <span class="font-semibold text-gray-800 text-sm">
-          {{ user?.firstName + ' ' + user?.lastName }}
+          {{ nombreCompleto(user) }}
         </span>
       </div>
       <button

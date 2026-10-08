@@ -4,12 +4,12 @@
   <div class="bg-primary px-6 py-8 text-center">
     <div class="mx-auto h-24 w-24 rounded-full bg-white flex items-center justify-center mb-4">
       <span class="text-3xl font-bold text-primary-ink">
-        {{ user?.firstName?.charAt(0) }}{{ user?.lastName?.charAt(0) }}
+        {{ iniciales(user) }}
       </span>
     </div>
 
     <h2 class="text-2xl font-bold text-on-primary">
-      {{ user?.firstName }} {{ user?.lastName }}
+      {{ nombreCompleto(user) }}
     </h2>
 
     <!-- Estado del usuario -->

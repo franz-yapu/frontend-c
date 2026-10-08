@@ -58,6 +58,9 @@
               @if (pide('price') && row.price) {
               <span class="font-bold text-primary-ink tabular-nums">
                 {{ row.price | currency:'USD':'symbol':'1.2-2' }}</span>
+              @if (row.sinPujas) {
+              <span class="text-content/60"> ({{ 'AUCTION-BUYER.STARTING_PRICE_TAG' | translate }})</span>
+              }
               }
               @if (pide('score') && row.score !== null) {
               <span class="text-content/50"> · {{ row.score }} pts</span>
@@ -107,6 +110,11 @@
           <span class="font-bold text-primary-ink whitespace-nowrap">
             {{ row.price ? (row.price | currency:'USD':'symbol':'1.2-2') : '—' }}
           </span>
+          <!-- Sin pujas el número es el precio de salida, no una oferta. -->
+          @if (row.sinPujas && row.price) {
+          <span class="block text-[11px] font-normal text-content/60 whitespace-nowrap">
+            {{ 'AUCTION-BUYER.STARTING_PRICE_TAG' | translate }}</span>
+          }
           }
           @case ('value') {
           <span class="text-content/80 whitespace-nowrap">

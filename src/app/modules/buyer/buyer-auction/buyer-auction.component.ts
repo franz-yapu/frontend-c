@@ -37,6 +37,7 @@ import {
 } from '../../../project/components/lots-view/view-mode.service';
 
 import { ProcesoCafePipe } from '../../../project/pipe/proceso-cafe.pipe';
+import { nombrePostor } from '../../../core/nombre-usuario';
 interface CoffeeLot {
   id: string;
   name: string;
@@ -73,6 +74,8 @@ interface Auction {
   endDate: string;
   status: string;
   minIncrement: number;
+  extensionEnabled?: boolean;
+  extensionMinutes?: number;
   auctionDetails: AuctionDetail[];
 }
 
@@ -110,6 +113,8 @@ interface Bid {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BuyerAuctionComponent implements OnInit, OnDestroy {
+  /** Para la plantilla (ver core/nombre-usuario). */
+  readonly nombrePostor = nombrePostor;
   userId: string = '';
 
   // ---------------------------------------------------------- vista tabla --
@@ -179,6 +184,7 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
         value: precio ? precio * (lote.quantityLbs || 0) : null,
         bidsCount: null,
         leaderName: this.nombreLider(detail),
+        sinPujas: !this.mejorPuja(lote.id),
         destacada: ganando,
         // Mientras corre, "Vas ganando"; cuando ya terminó, "Ganaste".
         destacadaTexto: ganando
@@ -221,7 +227,9 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
       .map((x: any) => (x || '').trim())
       .filter((x: string) => x.length > 0)
       .join(' ');
-    return persona || null;
+    // Hay puja pero el postor no dejó empresa ni nombre: que no parezca un
+    // lote sin pujas (antes salía el mismo guion).
+    return persona || this.translationService.translate('AUCTION-BUYER.ANONYMOUS_BIDDER');
   }
 
   /** Contexto que necesita el tour: si hay subasta en curso y cuándo cierra. */
@@ -273,7 +281,16 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
 
   showBidModal: boolean = false;
   selectedLot: AuctionDetail | null = null;
-  bidAmount: number = 0;
+  /** Lo que hay en el campo del monto: número si lo puso el programa, texto
+   *  si lo escribió la persona (puede traer coma decimal). Leer con montoPuja. */
+  bidAmount: number | string = 0;
+
+  /** El monto como número. El campo es de texto para que no salga "9,75" en
+   *  un sitio y "$9.75" en el resto; aquí se acepta coma o punto. */
+  get montoPuja(): number {
+    const texto = String(this.bidAmount ?? '').trim().replace(',', '.');
+    return texto === '' ? NaN : Number(texto);
+  }
   bidError: string = '';
   isLoading: boolean = false;
   /**
@@ -419,6 +436,11 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
       this.isLoading = true;
       const data = await this.buyerService.getAuctionsLotsActive().toPromise();
       this.auctionData = data || [];
+      // El tour explica la extensión con los minutos reales de esta subasta.
+      this.tour.extension = {
+        activa: this.auctionData[0]?.extensionEnabled !== false,
+        minutos: Number(this.auctionData[0]?.extensionMinutes) || 3,
+      };
 
       // Si el servidor dice que la subasta sigue viva —porque le corrieron la
       // hora de cierre— hay que salir del estado "finalizada" que el contador
@@ -692,7 +714,7 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
     }
 
     if (opciones.avisar) {
-      const hora = new Date(nuevo).toLocaleTimeString([], {
+      const hora = new Date(nuevo).toLocaleTimeString('es-ES', { hour12: false,
         hour: '2-digit',
         minute: '2-digit',
       });
@@ -718,7 +740,7 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
         extensionData.newEndDate,
       );
       const newEndTime = new Date(extensionData.newEndDate);
-      const formattedTime = newEndTime.toLocaleTimeString([], {
+      const formattedTime = newEndTime.toLocaleTimeString('es-ES', { hour12: false,
         hour: '2-digit',
         minute: '2-digit',
       });
@@ -788,7 +810,7 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
     // Se precarga el minimo valido en vez del precio actual: asi la puja mas
     // habitual (subir lo justo) es un solo clic y el boton nace habilitado, en
     // lugar de aparecer gris sin explicar por que.
-    this.bidAmount = this.roundMoney(this.calculateMinBidAmount(lot));
+    this.bidAmount = (this.roundMoney(this.calculateMinBidAmount(lot))).toFixed(2);
     this.selectedIncrement = null;
     this.showManualBidInput = true;
     this.modalStep = 'select';
@@ -847,7 +869,7 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
   get bidIncreaseOverCurrent(): number {
     if (!this.selectedLot) return 0;
     return this.roundMoney(
-      Number(this.bidAmount) - this.currentHighestFor(this.selectedLot),
+      this.montoPuja - this.currentHighestFor(this.selectedLot),
     );
   }
 
@@ -864,7 +886,7 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
   }
 
   isBidValid(): boolean {
-    const monto = Number(this.bidAmount);
+    const monto = this.montoPuja;
     return (
       !!this.selectedLot && !isNaN(monto) && monto >= this.minBidForSelected
     );
@@ -879,7 +901,7 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
 
   selectQuickIncrement(increment: number): void {
     if (!this.selectedLot) return;
-    this.bidAmount = this.quickIncrementResult(increment);
+    this.bidAmount = (this.quickIncrementResult(increment)).toFixed(2);
     this.selectedIncrement = increment;
     this.showManualBidInput = true;
     this.bidError = '';
@@ -891,7 +913,7 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
     this.showManualBidInput = true;
     this.selectedIncrement = null;
     if (this.selectedLot) {
-      this.bidAmount = this.calculateMinBidAmount(this.selectedLot);
+      this.bidAmount = (this.calculateMinBidAmount(this.selectedLot)).toFixed(2);
     }
     this.calculateTotalValue();
     this.cdr.markForCheck();
@@ -904,7 +926,7 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
     // resaltado para que no queden dos cosas marcadas a la vez.
     if (
       this.selectedIncrement !== null &&
-      Number(this.bidAmount) !== this.quickIncrementResult(this.selectedIncrement)
+      this.montoPuja !== this.quickIncrementResult(this.selectedIncrement)
     ) {
       this.selectedIncrement = null;
     }
@@ -917,9 +939,9 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
   }
 
   calculateTotalValue(): void {
-    if (this.selectedLot && Number(this.bidAmount) > 0) {
+    if (this.selectedLot && this.montoPuja > 0) {
       this.totalLotValue =
-        Number(this.bidAmount) * this.selectedLot.coffeeLot.quantityLbs;
+        this.montoPuja * this.selectedLot.coffeeLot.quantityLbs;
     } else {
       this.totalLotValue = 0;
     }
@@ -968,7 +990,7 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
     this.bidError = '';
 
     const bidData = {
-      amount: this.bidAmount,
+      amount: this.montoPuja,
       auctionId: this.selectedLot.auctionId,
       coffeeLotId: this.selectedLot.coffeeLot.id,
       userId: this.userId,
@@ -977,7 +999,7 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
     this.buyerService.placeBid(bidData).subscribe({
       next: (response) => {
         this.loadAuctionData();
-        this.userBidAmounts.set(this.selectedLot!.coffeeLot.id, this.bidAmount);
+        this.userBidAmounts.set(this.selectedLot!.coffeeLot.id, this.montoPuja);
         this.showNotification(
           this.translationService.translate('NOTIFICATIONS.BID_SUCCESS'),
           'success',

@@ -10,6 +10,7 @@ import { TranslateDirective } from '../../project/directive/translate.directive'
 import { TranslatePipe } from '../../project/pipe/translate.pipe';
 import { TourService } from '../../core/tour/tour.service';
 
+import { iniciales, nombreCompleto } from '../../core/nombre-usuario';
 interface NavItem {
   name: string;
   route: string;
@@ -24,6 +25,9 @@ interface NavItem {
   styleUrl: './buyer.component.scss'
 })
 export class BuyerComponent implements OnInit, OnDestroy {
+  /** Para la plantilla (ver core/nombre-usuario). */
+  readonly iniciales = iniciales;
+  readonly nombreCompleto = nombreCompleto;
   private translationService = inject(TranslationService);
   private generalService = inject(GeneralService);
   private service = inject(ApiService);

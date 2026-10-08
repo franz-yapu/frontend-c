@@ -55,10 +55,19 @@ export class AuctionsComponent implements OnInit {
 
   async ngOnInit() {
     const auctions: any = await this.service.getAuctions()
-    console.log(auctions,'sssss');
-    
-    this.auctions = auctions.data;
+    this.auctions = this.ordenar(auctions.data || []);
     this.filteredAuctions = [...this.auctions];
+  }
+
+  /** La activa primero, luego borradores y al final las cerradas; dentro de
+   *  cada grupo, la más reciente arriba. Antes la activa podía quedar al final. */
+  private ordenar(lista: Auction[]): Auction[] {
+    const peso: Record<string, number> = { ACTIVE: 0, DRAFT: 1, CLOSED: 2 };
+    const fecha = (a: any) => new Date(a.startDate || a.createdAt || 0).getTime();
+    return [...lista].sort(
+      (a: any, b: any) =>
+        (peso[a.status] ?? 3) - (peso[b.status] ?? 3) || fecha(b) - fecha(a),
+    );
   }
 
   filterAuctions(): void {

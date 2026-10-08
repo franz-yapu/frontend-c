@@ -417,12 +417,7 @@
                             <span
                               class="text-[10px] font-bold text-primary-ink bg-primary/10 px-2.5 py-1 rounded-full truncate max-w-[100px] md:max-w-[120px]"
                             >
-                              @if (bid.user?.companyName) {
-                                {{ bid.user.companyName }}
-                              } @else {
-                                {{ bid.user?.firstName }}
-                                {{ bid.user?.lastName?.charAt(0) }}.
-                              }
+                              {{ nombrePostor(bid.user) || ('AUCTION-BUYER.ANONYMOUS_BIDDER' | translate) }}
                             </span>
                           </div>
                         }

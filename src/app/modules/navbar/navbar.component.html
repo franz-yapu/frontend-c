@@ -94,7 +94,7 @@
         </div>
         <div class="ml-3">
           <p class="text-sm font-medium text-white">
-            {{ user?.firstName }} {{ user?.lastName }}
+            {{ nombreCompleto(user) }}
           </p>
           <button
             (click)="logout()"

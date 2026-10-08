@@ -17,6 +17,7 @@ interface MenuItem {
 import { TranslateDirective } from '../../project/directive/translate.directive';
 import { TranslatePipe } from '../../project/pipe/translate.pipe';
 
+import { iniciales, nombreCompleto } from '../../core/nombre-usuario';
 @Component({
   selector: 'app-navbar',
   standalone: true,
@@ -25,6 +26,8 @@ import { TranslatePipe } from '../../project/pipe/translate.pipe';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
+  /** Para la plantilla (ver core/nombre-usuario). */
+  readonly nombreCompleto = nombreCompleto;
   private brandingService = inject(BrandingService);
   public branding$ = this.brandingService.config$;
   
@@ -113,9 +116,7 @@ export class NavbarComponent implements OnInit {
 
   getUserInitials(): string {
     if (!this.user) return 'US';
-    const first = this.user.firstName?.charAt(0) || 'U';
-    const last = this.user.lastName?.charAt(0) || 'S';
-    return `${first}${last}`;
+    return iniciales(this.user);
   }
 
   logout() {

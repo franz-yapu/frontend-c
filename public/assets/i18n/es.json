@@ -67,7 +67,9 @@
     "TERMS": "Términos",
     "CONTACT_TITLE": "Contacto",
     "LOCATION": "La Paz, Bolivia",
-    "COPYRIGHT": "© 2026 {{institutionName}}. Todos los derechos reservados."
+    "COPYRIGHT": "© {{year}} {{institutionName}} · Contenido de la subasta",
+    "POWERED_BY": "Plataforma desarrollada por",
+    "PLATFORM_RIGHTS": "© {{year}} VertexAll. Todos los derechos reservados sobre la plataforma."
   },
   "WINNERS": {
     "HERO": {
@@ -313,6 +315,8 @@
     }
   },
   "AUCTION-BUYER": {
+    "ANONYMOUS_BIDDER": "Comprador sin nombre",
+    "STARTING_PRICE_TAG": "Precio inicial",
     "PREMIUM_AUCTIONS": "Subasta de {{institutionName}} 2026",
     "EXCLUSIVE_LOTS": "Los mejores productores de Bolivia 2026",
     "AUCTION_ENDED": "Subasta Finalizada",
@@ -605,7 +609,8 @@
     },
     "CLOCK": {
       "TITLE": "El tiempo que queda",
-      "TEXT": "Aquí ves cuánto falta para el cierre. Ojo: si alguien puja en los últimos 3 minutos, la subasta se alarga 3 minutos más, así que puede terminar más tarde de lo previsto."
+      "TEXT": "Aquí ves cuánto falta para el cierre. Ojo: si alguien puja en los últimos {{minutos}} minutos, la subasta se alarga {{minutos}} minutos más, así que puede terminar más tarde de lo previsto.",
+      "TEXT_NO_EXTENSION": "Aquí ves cuánto falta para el cierre. La subasta termina a esa hora exacta, aunque haya pujas al final."
     },
     "LOTS": {
       "TITLE": "Los lotes",

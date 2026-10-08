@@ -21,8 +21,10 @@ export const routes: Routes = [
     component: ExternalHomeComponent,
     children: [
         {
+        // La portada se sirve directo en "/": el salto a /index costaba ~2 s
+        // en el celular según Lighthouse. /index sigue funcionando.
         path: '',
-        redirectTo: 'index',
+        component: ExternalIndexComponent,
         pathMatch: 'full' // importante
       },
         {
