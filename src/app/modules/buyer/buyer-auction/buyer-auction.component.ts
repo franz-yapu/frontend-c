@@ -596,6 +596,12 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
     });
   }
 
+  /** El socket ya conectó al menos una vez en esta pantalla. */
+  private yaConecto = false;
+  private avisoSinConexion?: ReturnType<typeof setTimeout>;
+  /** Margen para la primera conexión antes de avisar "Sin conexión". */
+  private static readonly MARGEN_CONEXION_MS = 10000;
+
   private setupConnectionQuality() {
     this.buyerService.getConnectionQuality().subscribe((quality) => {
       this.connectionQuality = quality as any;
@@ -614,11 +620,32 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
     });
 
     this.buyerService.getConnectionStatus().subscribe((isConnected) => {
+      if (isConnected) {
+        this.yaConecto = true;
+        clearTimeout(this.avisoSinConexion);
+      }
       if (!isConnected) {
-        this.showNotification(
-          this.translationService.translate('AUCTION_SYNC.OFFLINE_BID'),
-          'error',
-        );
+        // El estado arranca en "desconectado" hasta que el socket termina de
+        // conectar (en producción, con https, unos segundos): avisar ahí
+        // enseñaba "Sin conexión" al entrar con todo funcionando. Si ya había
+        // conectado, el corte es real y se avisa al momento; si no, se da un
+        // margen y solo se avisa si sigue sin conectar.
+        const avisar = () =>
+          this.showNotification(
+            this.translationService.translate('AUCTION_SYNC.OFFLINE_BID'),
+            'error',
+          );
+        if (this.yaConecto) {
+          avisar();
+        } else {
+          clearTimeout(this.avisoSinConexion);
+          this.avisoSinConexion = setTimeout(() => {
+            if (!this.yaConecto) {
+              avisar();
+              this.cdr.markForCheck();
+            }
+          }, BuyerAuctionComponent.MARGEN_CONEXION_MS);
+        }
       } else if (this.connectionQuality === 'offline') {
         this.showNotification(
           this.translationService.translate(
@@ -1160,6 +1187,7 @@ export class BuyerAuctionComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    clearTimeout(this.avisoSinConexion);
     this.lockPageScroll(false);
     if (this.pulsoTimeout) clearTimeout(this.pulsoTimeout);
     if (isPlatformBrowser(this.platformId)) {
